@@ -2,7 +2,8 @@ import React from 'react';
 import { HashRouter as Router, Routes, Route, Link, useParams } from 'react-router-dom';
 
 import Dashboard from './components/Dashboard';
-import ACMEAccounts from './components/ACMEAccounts';
+import AllACMEAccounts from './components/ACMEAccounts/AllACMEAccounts';
+import OneACMEAccount from './components/ACMEAccounts/OneACMEAccount';
 import PrivateKeys from './components/PrivateKeys'
 
 const App = () => {
@@ -38,8 +39,8 @@ const App = () => {
 
           <div className='col-md-9'>
             <Routes>
-              <Route path='/acmeaccounts/:id' element={<ACMEAccounts />} />
-              <Route path='/acmeaccounts' element={<ACMEAccounts />} />
+              <Route path='/acmeaccounts/:id' element={<OneACMEAccount />} />
+              <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
               <Route path='/privatekeys/:id' element={<PrivateKeys />} />
               <Route path='/privatekeys' element={<PrivateKeys />} />
 
