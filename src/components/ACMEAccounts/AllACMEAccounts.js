@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const AllACMEAccounts = () => {
   
@@ -61,7 +62,7 @@ const AllACMEAccounts = () => {
         <tbody>
           {acmeAccounts.acme_accounts.map((m) => (
             <tr key={m.id}>
-              <th scope='row'>{m.name}</th>
+              <th scope='row'><Link to={"/acmeaccounts/" + m.id}>{m.name}</Link></th>
               <td>{m.email}</td>
               <td>{m.description}</td>
               <td>{m.key_id}</td>
