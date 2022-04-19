@@ -1,10 +1,12 @@
 //import { Link } from 'react-router-dom';
 
 import InputText from '../UI/Form/InputText';
-
-import Button from '../UI/Button/Button';
 import InputSelect from '../UI/Form/InputSelect';
 import InputCheckbox from '../UI/Form/InputCheckbox';
+import FormInformation from '../UI/Form/FormInformation';
+
+import Button from '../UI/Button/Button';
+
 
 const OneACMEAccountForm = (props) => {
   const dummyKeys = {
@@ -17,6 +19,7 @@ const OneACMEAccountForm = (props) => {
   const dummyCurrentKeyId = 1;
 
   // create options array to display in our dropdown for key selection
+  // Perhaps change this to name and some kind of hash or name and common name (CN)
   const privateKeyOptions = dummyKeys.private_keys.map((m) => ({
     optionValue: m.id,
     optionName: m.name + ' (' + m.email + ')',
@@ -35,6 +38,9 @@ const OneACMEAccountForm = (props) => {
       />
       <InputCheckbox id="acceptTos">Accept Let's Encrypt Terms of Service</InputCheckbox>
       <InputCheckbox id="acceptTos">Staging Account</InputCheckbox>
+
+      <FormInformation><small>Created: {props.acmeAccount.created_at}</small></FormInformation>
+      <FormInformation><small>Last Updated: {props.acmeAccount.updated_at}</small></FormInformation>
 
       <Button type='submit'>Submit</Button>
       <Button type='reset'>Reset</Button>
