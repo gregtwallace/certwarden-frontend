@@ -23,7 +23,6 @@ const AllACMEAccounts = () => {
     return <p>Loading...</p>
   };
 
-  // TO-DO: Change 'm.key_id' to return actual key info
   return (
     <>
       <h2>ACME Accounts</h2>
@@ -43,7 +42,7 @@ const AllACMEAccounts = () => {
               <th scope='row'><Link to={"/acmeaccounts/" + m.id}>{m.name}</Link></th>
               <td>{m.email}</td>
               <td>{m.description}</td>
-              <td>{m.key_id}</td>
+              <td>{m.private_key_name}</td>
               <td>{m.is_staging ? "Staging" : "Production"}</td>
             </tr>
           ))}
