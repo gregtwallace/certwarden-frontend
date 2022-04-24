@@ -22,10 +22,10 @@ const App = () => {
                   <Link to='/'>Dashboard</Link>
                 </li>
                 <li className='list-group-item'>
-                  <Link to='/acmeaccounts'>ACME Accounts</Link>
+                  <Link to='/privatekeys'>Private Keys</Link>
                 </li>
                 <li className='list-group-item'>
-                  <Link to='/privatekeys'>Private Keys</Link>
+                  <Link to='/acmeaccounts'>ACME Accounts</Link>
                 </li>
                 <li className='list-group-item'>
                   <Link to='/certificates'>Certificates</Link>
@@ -39,9 +39,9 @@ const App = () => {
 
           <div className='col-md-9'>
             <Routes>
+              <Route path='/privatekeys/:id' element={<PrivateKeys />} />
               <Route path='/acmeaccounts/:id' element={<OneACMEAccount />} />
               <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
-              <Route path='/privatekeys/:id' element={<PrivateKeys />} />
               <Route path='/privatekeys' element={<PrivateKeys />} />
 
               `// TODO: Other Pages //`
