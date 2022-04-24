@@ -1,6 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+import Table from '../UI/Table/Table';
+import TableBody from '../UI/Table/TableBody';
+import TableData from '../UI/Table/TableData';
+import TableHead from '../UI/Table/TableHead';
+import TableHeader from '../UI/Table/TableHeader';
+import TableRow from '../UI/Table/TableRow';
+
 const AllACMEAccounts = () => {
   
   const [acmeAccounts, setAcmeAccounts] = useState({
@@ -26,28 +33,28 @@ const AllACMEAccounts = () => {
   return (
     <>
       <h2>ACME Accounts</h2>
-      <table className='table'>
-        <thead>
-          <tr>
-            <th scope='col'>Name</th>
-            <th scope='col'>E-Mail</th>
-            <th scope='col'>Description</th>
-            <th scope='col'>Key</th>
-            <th scope='col'>Type</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableHeader scope='col'>Name</TableHeader>
+            <TableHeader scope='col'>E-Mail</TableHeader>
+            <TableHeader scope='col'>Description</TableHeader>
+            <TableHeader scope='col'>Key</TableHeader>
+            <TableHeader scope='col'>Type</TableHeader>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {acmeAccounts.accounts.map((m) => (
-            <tr key={m.id}>
-              <th scope='row'><Link to={"/acmeaccounts/" + m.id}>{m.name}</Link></th>
-              <td>{m.email}</td>
-              <td>{m.description}</td>
-              <td>{m.private_key_name}</td>
-              <td>{m.is_staging ? "Staging" : "Production"}</td>
-            </tr>
+            <TableRow key={m.id}>
+              <TableHeader scope='row'><Link to={"/acmeaccounts/" + m.id}>{m.name}</Link></TableHeader>
+              <TableData>{m.email}</TableData>
+              <TableData>{m.description}</TableData>
+              <TableData>{m.private_key_name}</TableData>
+              <TableData>{m.is_staging ? "Staging" : "Production"}</TableData>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </>
   );
 };
