@@ -28,20 +28,9 @@ const OneACMEAccount = () => {
   const { id } = useParams();
   const [acmeAccount, setAcmeAccount] = useState({
     account: [],
+    origAccount: [],
     isLoaded: false,
   });
-
-  // function that fetches the account from the API
-  const fetchAcmeAccount = () => {
-    fetch(`http://localhost:4050/v1/acmeaccounts/${id}`)
-      .then((response) => response.json())
-      .then((json) => {
-        setAcmeAccount({
-          account: json.acme_account,
-          isLoaded: true,
-        });
-      });
-  };
 
   // form field updates
   const nameChangeHandler = (event) => {
@@ -93,10 +82,36 @@ const OneACMEAccount = () => {
     });
   };
 
-  useEffect(() => {
-    fetchAcmeAccount();
-  }, []);
+  // button handlers
+  const resetClickHandler = (event) => {
+    event.preventDefault();
+    setAcmeAccount((prevState) => {
+      return {
+        ...prevState,
+        account: { ...prevState.origAccount },
+      };
+    });
+  };
 
+  // fetch info when id changes
+  useEffect(() => {
+    setAcmeAccount({
+      account: [],
+      origAccount: [],
+      isLoaded: false
+    });
+    fetch(`http://localhost:4050/v1/acmeaccounts/${id}`)
+      .then((response) => response.json())
+      .then((json) => {
+        setAcmeAccount({
+          account: json.acme_account,
+          origAccount: json.acme_account,
+          isLoaded: true,
+        });
+      });
+  }, [id]);
+
+  
   if (!acmeAccount.isLoaded) {
     return <p>Loading...</p>;
   }
@@ -108,29 +123,26 @@ const OneACMEAccount = () => {
         <InputText
           label='Account Name'
           id='name'
-          defaultValue={acmeAccount.account.name}
-          value={acmeAccount.name}
+          value={acmeAccount.account.name}
           onChange={nameChangeHandler}
         />
         <InputText
           label='E-Mail Address'
           id='email'
-          defaultValue={acmeAccount.account.email}
-          value={acmeAccount.email}
+          value={acmeAccount.account.email}
           onChange={emailChangeHandler}
         />
         <InputText
           label='Description'
           id='description'
-          defaultValue={acmeAccount.account.description}
-          value={acmeAccount.description}
+          value={acmeAccount.account.description}
           onChange={descriptionChangeHandler}
         />
         <InputSelect
           label='Private Key'
           id='privateKey'
           options={privateKeyOptions}
-          defaultValue={acmeAccount.account.private_key_id}
+          value={acmeAccount.account.private_key_id}
           onChange={privateKeyChangeHandler}
         />
         <InputCheckbox
@@ -156,7 +168,7 @@ const OneACMEAccount = () => {
         </FormInformation>
 
         <Button type='submit'>Submit</Button>
-        <Button type='reset'>Reset</Button>
+        <Button type='reset' onClick={resetClickHandler}>Reset</Button>
         <Button type='cancel'>Cancel</Button>
       </form>
     </>
