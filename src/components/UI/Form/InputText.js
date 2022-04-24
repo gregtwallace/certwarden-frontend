@@ -6,7 +6,9 @@ const InputText = (props) => {
         type='text'
         className='form-control'
         id={props.id}
+        defaultValue={props.defaultValue}
         value={props.value}
+        onChange={props.onChange}
       />
     </div>
   );
