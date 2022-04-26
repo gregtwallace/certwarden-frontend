@@ -1,10 +1,9 @@
-import React from 'react';
-import { HashRouter as Router, Routes, Route, Link, } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 import Dashboard from './components/Dashboard';
 import AllACMEAccounts from './components/ACMEAccounts/AllACMEAccounts';
 import OneACMEAccount from './components/ACMEAccounts/OneACMEAccount';
-import PrivateKeys from './components/PrivateKeys'
+import AllPrivateKeys from './components/PrivateKeys/AllPrivateKeys';
 
 const App = () => {
   return (
@@ -15,7 +14,7 @@ const App = () => {
 
       <Router>
         <div className='row'>
-          <div className="col-md-3">
+          <div className='col-md-3'>
             <nav>
               <ul className='list-group'>
                 <li className='list-group-item'>
@@ -39,19 +38,15 @@ const App = () => {
 
           <div className='col-md-9'>
             <Routes>
-              <Route path='/privatekeys/:id' element={<PrivateKeys />} />
+              <Route path='/privatekeys/:id' element={<AllPrivateKeys />} />
+              <Route path='/privatekeys' element={<AllPrivateKeys />} />
               <Route path='/acmeaccounts/:id' element={<OneACMEAccount />} />
               <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
-              <Route path='/privatekeys' element={<PrivateKeys />} />
-
               `// TODO: Other Pages //`
-
               <Route path='/' element={<Dashboard />} />
             </Routes>
-
           </div>
         </div>
-
       </Router>
     </div>
   );
