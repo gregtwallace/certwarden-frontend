@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import ApiError from '../UI/ApiError/Error';
+import useApiRequest from '../../hooks/useApiRequest';
 
+import ApiLoading from '../UI/Api/ApiLoading'
+import ApiError from '../UI/Api/ApiError';
 import Table from '../UI/Table/Table';
 import TableBody from '../UI/Table/TableBody';
 import TableData from '../UI/Table/TableData';
@@ -9,45 +10,15 @@ import TableHead from '../UI/Table/TableHead';
 import TableHeader from '../UI/Table/TableHeader';
 import TableRow from '../UI/Table/TableRow';
 
+
 const AllPrivateKeys = () => {
-  const [state, setState] = useState({
-    jsonData: [],
-    error: [],
-    isLoaded: false,
-  });
+  const state = useApiRequest("/v1/privatekeys", "private_keys");
 
-  useEffect(() => {
-    setState({
-      jsonData: [],
-      error: null,
-      isLoaded: false,
-    });
-    fetch(`${process.env.REACT_APP_API_NODE}/v1/privatekeys`)
-      .then((response) => response.json())
-      .then((json) => {
-        if (!json.private_keys) {
-          if (!json.error) {
-            json.error = {message: "unknown error"}
-          };
-          setState({
-            jsonData: null,
-            error: json.error,
-            isLoaded: true,
-          });
-        } else {
-          setState({
-            jsonData: json.private_keys,
-            error: null,
-            isLoaded: true,
-          });
-        }
-      });
-  }, []);
 
-  if (!state.jsonData || state.error) {
-    return <ApiError message={state.error.message} />;
-  } else if (!state.isLoaded) {
-    return <p>Loading...</p>;
+  if (!state.isLoaded) {
+    return <ApiLoading />
+  } else if (state.errorMessage) {
+    return <ApiError message={state.errorMessage} />;
   } else {
     return (
       <>
