@@ -1,8 +1,8 @@
 const ApiError = (props) => {
   return (
     <>
-      <p>API error has occurred.</p>
-      <p>Message: {props.message}</p>
+      <p>An API error has occurred.</p>
+      <p>{props.message}</p>
     </>
   );
 };

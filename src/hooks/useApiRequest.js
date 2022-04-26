@@ -26,11 +26,13 @@ const useApiRequest = (apiNode, expectedJsonName) => {
           if (!json.error) {
             json.error = {message: "unknown error"}
           };
+          // set error state
           setState({
-            jsonData: json.error,
+            jsonData: [],
             errorMessage: json.error.message,
             isLoaded: true,
           });
+        // things worked, return json data from our expected name
         } else {
           setState({
             jsonData: json[expectedJsonName],
@@ -38,6 +40,13 @@ const useApiRequest = (apiNode, expectedJsonName) => {
             isLoaded: true,
           });
         }
+      })
+      .catch((error) => {
+        setState({
+          jsonData: [],
+          errorMessage: error.name + " " + error.message,
+          isLoaded: true,
+        });
       });
   }, [apiNode, expectedJsonName]);
 
