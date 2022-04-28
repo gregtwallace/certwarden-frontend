@@ -12,8 +12,7 @@ import TableRow from '../UI/Table/TableRow';
 
 
 const AllPrivateKeys = () => {
-  const [ state ] = useApiRequest("/v1/privatekeys", "private_keys");
-
+  const [ state ] = useApiRequest("/v1/privatekeys/keys", "private_keys");
 
   if (!state.isLoaded) {
     return <ApiLoading />
@@ -32,13 +31,13 @@ const AllPrivateKeys = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {state.private_keys.map((item) => (
-              <TableRow key={item.id}>
+            {state.private_keys.map((m) => (
+              <TableRow key={m.id}>
                 <TableHeader scope='row'>
-                  <Link to={'/privatekeys/' + item.id}>{item.name}</Link>
+                  <Link to={'/privatekeys/' + m.id}>{m.name}</Link>
                 </TableHeader>
-                <TableData>{item.description}</TableData>
-                <TableData>{item.algorithm}</TableData>
+                <TableData>{m.description}</TableData>
+                <TableData>{m.algorithm.name}</TableData>
               </TableRow>
             ))}
           </TableBody>
