@@ -7,22 +7,15 @@ import InputCheckbox from '../UI/Form/InputCheckbox';
 import FormInformation from '../UI/Form/FormInformation';
 
 import Button from '../UI/Button/Button';
+import Form from '../UI/Form/Form';
 
 const OneACMEAccount = () => {
   //dummy stuff
-  const dummyKeys = {
-    private_keys: [
-      { id: 0, name: 'Key Name', email: 'some@name.com' },
-      { id: 1, name: 'Some key name', email: 'greg@gtw86.com' },
-      { id: 2, name: 'My key', email: 'temp@temp.net' },
-    ],
-  };
-  // create options array to display in our dropdown for key selection
-  // Perhaps change this to name and some kind of hash or name and common name (CN)
-  const privateKeyOptions = dummyKeys.private_keys.map((m) => ({
-    optionValue: m.id,
-    optionName: m.name + ' (' + m.email + ')',
-  }));
+  const dummyKeys = [
+    { id: 0, name: 'Key Name' },
+    { id: 1, name: 'Some key name' },
+    { id: 2, name: 'My key' },
+  ];
   // end dummy stuff
 
   const { id } = useParams();
@@ -98,9 +91,9 @@ const OneACMEAccount = () => {
     setAcmeAccount({
       account: [],
       origAccount: [],
-      isLoaded: false
+      isLoaded: false,
     });
-    fetch(`http://localhost:4050/v1/acmeaccounts/${id}`)
+    fetch(`http://localhost:4050/api/v1/acmeaccounts/${id}`)
       .then((response) => response.json())
       .then((json) => {
         setAcmeAccount({
@@ -111,7 +104,6 @@ const OneACMEAccount = () => {
       });
   }, [id]);
 
-  
   if (!acmeAccount.isLoaded) {
     return <p>Loading...</p>;
   }
@@ -119,7 +111,7 @@ const OneACMEAccount = () => {
   return (
     <>
       <h2>ACME Account - Edit</h2>
-      <form>
+      <Form>
         <InputText
           label='Account Name'
           id='name'
@@ -141,7 +133,7 @@ const OneACMEAccount = () => {
         <InputSelect
           label='Private Key'
           id='privateKey'
-          options={privateKeyOptions}
+          options={dummyKeys}
           value={acmeAccount.account.private_key_id}
           onChange={privateKeyChangeHandler}
         />
@@ -168,9 +160,11 @@ const OneACMEAccount = () => {
         </FormInformation>
 
         <Button type='submit'>Submit</Button>
-        <Button type='reset' onClick={resetClickHandler}>Reset</Button>
+        <Button type='reset' onClick={resetClickHandler}>
+          Reset
+        </Button>
         <Button type='cancel'>Cancel</Button>
-      </form>
+      </Form>
     </>
   );
 };

@@ -16,7 +16,7 @@ const AllACMEAccounts = () => {
   });
 
   useEffect(() => {
-    fetch("http://localhost:4050/v1/acmeaccounts")
+    fetch("http://localhost:4050/api/v1/acmeaccounts")
     .then((response) => response.json())
     .then((json) => {
       setAcmeAccounts({
