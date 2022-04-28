@@ -12,7 +12,7 @@ import TableRow from '../UI/Table/TableRow';
 
 
 const AllPrivateKeys = () => {
-  const state = useApiRequest("/v1/privatekeys", "private_keys");
+  const [ state ] = useApiRequest("/v1/privatekeys", "private_keys");
 
 
   if (!state.isLoaded) {
@@ -32,7 +32,7 @@ const AllPrivateKeys = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {state.jsonData.map((item) => (
+            {state.private_keys.map((item) => (
               <TableRow key={item.id}>
                 <TableHeader scope='row'>
                   <Link to={'/privatekeys/' + item.id}>{item.name}</Link>

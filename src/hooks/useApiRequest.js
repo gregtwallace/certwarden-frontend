@@ -1,19 +1,27 @@
 import { useEffect, useState } from "react";
 
 // Hook to query the API and return a state based on the query
-//    jsonData is the json data from the expectJsonName
-//    errorMessage is a string if there was an error getting the expected data from the api
-//    isLoaded is a bool that indicates if the api has sent data back yet
+//    [expectedJsonName] is the json data from the expectedJsonName, named as expected
+//    [origJsonDataName] is the json data from the expectedJsonName, and is not expected to be changed
+//      This is to provide access to the data originally returned by the API, even if the state has been
+//      subsequently updated.  Intention is to avoid subsequent API calls if not needed.
+//    errorMessage is a string that is null if no error or a string containing the error if an error occurred
+//    isLoaded is a bool that indicates if the api fetch has completed (either successfully or failed)
 const useApiRequest = (apiNode, expectedJsonName) => {
+  // make a variable for original api fetch for things like 'reset' function
+  const origJsonDataName = "orig_" + expectedJsonName;
+
   const [state, setState] = useState({
-    jsonData: [],
+    [expectedJsonName]: [],
+    [origJsonDataName]: [],
     errorMessage: null,
     isLoaded: false,
   });
 
   useEffect(() => {
     setState({
-      jsonData: [],
+      [expectedJsonName]: [],
+      [origJsonDataName]: [],
       errorMessage: null,
       isLoaded: false,
     });
@@ -28,14 +36,16 @@ const useApiRequest = (apiNode, expectedJsonName) => {
           };
           // set error state
           setState({
-            jsonData: [],
+            [expectedJsonName]: [],
+            [origJsonDataName]: [],
             errorMessage: json.error.message,
             isLoaded: true,
           });
         // things worked, return json data from our expected name
         } else {
           setState({
-            jsonData: json[expectedJsonName],
+            [expectedJsonName]: json[expectedJsonName],
+            [origJsonDataName]: json[expectedJsonName],
             errorMessage: null,
             isLoaded: true,
           });
@@ -43,14 +53,15 @@ const useApiRequest = (apiNode, expectedJsonName) => {
       })
       .catch((error) => {
         setState({
-          jsonData: [],
+          [expectedJsonName]: [],
+          [origJsonDataName]: [],
           errorMessage: error.name + " " + error.message,
           isLoaded: true,
         });
       });
-  }, [apiNode, expectedJsonName]);
+  }, [apiNode, expectedJsonName, origJsonDataName]);
 
-  return state
+  return [ state, setState ];
 };
 
 export default useApiRequest;
