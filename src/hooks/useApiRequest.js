@@ -18,7 +18,7 @@ const useApiRequest = (apiNode, expectedJsonName) => {
       isLoaded: false,
     });
     
-    fetch(`${process.env.REACT_APP_API_NODE}${apiNode}`)
+    fetch(`${process.env.REACT_APP_API_NODE}/api${apiNode}`)
       .then((response) => response.json())
       .then((json) => {
         if (!json[expectedJsonName]) {
