@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import useApiRequest from '../../hooks/useApiRequest';
 import ApiError from '../UI/Api/ApiError';
@@ -18,11 +19,33 @@ const OnePrivateKey = () => {
     'private_key'
   );
 
+  useEffect(() => {
+    // if we're making a new key, need to create a blank object in state for the form to populate
+    if (parseInt(id) === -1) {
+      setState((prevState) => ({
+        ...prevState,
+        private_key: {
+          id: '',
+          name: '',
+          description: '',
+          algorithm: {
+            value: '',
+            name: '',
+          },
+          pem: '',
+          api_key: '',
+          created_at: '',
+          updated_at: '',
+        },
+      }));
+    }
+  }, [id, setState]);
+
   // algorithm list
   // MUST keep in sync with list on the backend
   const keyAlgorithms = [
-    { value: 'rsa2048', name: 'RSA 2048'},
-    { value: 'ecdsa256', name: 'ECDSA P-256'}
+    { value: 'rsa2048', name: 'RSA 2048' },
+    { value: 'ecdsa256', name: 'ECDSA P-256' },
   ];
 
   // data change handlers
@@ -70,7 +93,7 @@ const OnePrivateKey = () => {
   };
 
   if (state.errorMessage) {
-    return <ApiError>{state.errorMessage}</ApiError>
+    return <ApiError>{state.errorMessage}</ApiError>;
   } else if (!state.isLoaded) {
     return <ApiLoading />;
   } else {
@@ -95,11 +118,12 @@ const OnePrivateKey = () => {
             id='algorithm'
             options={keyAlgorithms}
             value={state.private_key.algorithm.value}
-            readOnly
+            onChange={algorithmChangeHandler}
+            disabled
           />
 
           <InputTextArea
-            label='PEM Content (Read Only)'
+            label='PEM Content'
             id='pemcontent'
             rows='8'
             value={state.private_key.pem}
@@ -107,7 +131,7 @@ const OnePrivateKey = () => {
           />
 
           <InputText
-            label='API Key (Read Only)'
+            label='API Key'
             id='apikey'
             value={state.private_key.api_key}
             readOnly
@@ -117,9 +141,7 @@ const OnePrivateKey = () => {
             <small>Created: {state.private_key.created_at}</small>
           </FormInformation>
           <FormInformation>
-            <small>
-              Last Updated: {state.private_key.updated_at}
-            </small>
+            <small>Last Updated: {state.private_key.updated_at}</small>
           </FormInformation>
 
           <Button type='submit'>Submit</Button>

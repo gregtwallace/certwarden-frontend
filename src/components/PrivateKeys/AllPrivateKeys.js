@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import useApiRequest from '../../hooks/useApiRequest';
 
-import ApiLoading from '../UI/Api/ApiLoading'
+import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
 import Table from '../UI/Table/Table';
 import TableBody from '../UI/Table/TableBody';
@@ -10,12 +10,11 @@ import TableHead from '../UI/Table/TableHead';
 import TableHeader from '../UI/Table/TableHeader';
 import TableRow from '../UI/Table/TableRow';
 
-
 const AllPrivateKeys = () => {
-  const [ state ] = useApiRequest("/v1/privatekeys", "private_keys");
+  const [state] = useApiRequest('/v1/privatekeys', 'private_keys');
 
   if (state.errorMessage) {
-    return <ApiError>{state.errorMessage}</ApiError>
+    return <ApiError>{state.errorMessage}</ApiError>;
   } else if (!state.isLoaded) {
     return <ApiLoading />;
   } else {

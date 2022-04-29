@@ -7,7 +7,7 @@ const InputSelect = (props) => {
         value={props.value}
         id={props.id}
         onChange={props.onChange}
-        readOnly={props.readOnly && true}
+        disabled={props.disabled && true}
       >
         {props.options.map((m) => (
           <option key={m.value} value={m.value}>
