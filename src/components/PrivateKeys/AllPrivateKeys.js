@@ -14,10 +14,10 @@ import TableRow from '../UI/Table/TableRow';
 const AllPrivateKeys = () => {
   const [ state ] = useApiRequest("/v1/privatekeys", "private_keys");
 
-  if (!state.isLoaded) {
-    return <ApiLoading />
-  } else if (state.errorMessage) {
-    return <ApiError message={state.errorMessage} />;
+  if (state.errorMessage) {
+    return <ApiError>{state.errorMessage}</ApiError>
+  } else if (!state.isLoaded) {
+    return <ApiLoading />;
   } else {
     return (
       <>

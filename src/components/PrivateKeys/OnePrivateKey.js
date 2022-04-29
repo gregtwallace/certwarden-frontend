@@ -70,11 +70,7 @@ const OnePrivateKey = () => {
   };
 
   if (state.errorMessage) {
-    return (
-      <>
-        <ApiError>{state.errorMessage}</ApiError>
-      </>
-    );
+    return <ApiError>{state.errorMessage}</ApiError>
   } else if (!state.isLoaded) {
     return <ApiLoading />;
   } else {
