@@ -1,17 +1,18 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import useApiRequest from '../../hooks/useApiRequest';
-import ApiError from '../UI/Api/ApiError';
-import ApiLoading from '../UI/Api/ApiLoading';
-import Button from '../UI/Button/Button';
-import Form from '../UI/Form/Form';
-import FormInformation from '../UI/Form/FormInformation';
-import InputSelect from '../UI/Form/InputSelect';
-import InputText from '../UI/Form/InputText';
-import InputTextArea from '../UI/Form/InputTextArea';
+import useApiRequest from '../../../hooks/useApiRequest';
+import ApiError from '../../UI/Api/ApiError';
+import ApiLoading from '../../UI/Api/ApiLoading';
+import Button from '../../UI/Button/Button';
+import Form from '../../UI/Form/Form';
+import FormInformation from '../../UI/Form/FormInformation';
+import InputSelect from '../../UI/Form/InputSelect';
+import InputText from '../../UI/Form/InputText';
+import InputTextArea from '../../UI/Form/InputTextArea';
+import H2Header from '../../UI/Header/H2Header';
 
-const OnePrivateKey = () => {
+const EditOnePrivateKey = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -19,35 +20,6 @@ const OnePrivateKey = () => {
     `/v1/privatekeys/${id}`,
     'private_key'
   );
-
-  useEffect(() => {
-    // if we're making a new key, need to create a blank object in state for the form to populate
-    if (parseInt(id) === -1) {
-      setState((prevState) => ({
-        ...prevState,
-        private_key: {
-          id: '',
-          name: '',
-          description: '',
-          algorithm: {
-            value: '',
-            name: '',
-          },
-          pem: '',
-          api_key: '',
-          created_at: '',
-          updated_at: '',
-        },
-      }));
-    }
-  }, [id, setState]);
-
-  // algorithm list
-  // MUST keep in sync with list on the backend
-  const keyAlgorithms = [
-    { value: 'rsa2048', name: 'RSA 2048' },
-    { value: 'ecdsa256', name: 'ECDSA P-256' },
-  ];
 
   // data change handlers
   const inputChangeHandler = (event) => {
@@ -60,11 +32,10 @@ const OnePrivateKey = () => {
     }));
   };
 
-  const algorithmChangeHandler = (event) => {
-    // TODO
-  };
-
   // button handlers
+  const submitClickHandler = (event) => {
+    event.preventDefault();
+  };
   const resetClickHandler = (event) => {
     event.preventDefault();
     setState((prevState) => {
@@ -79,9 +50,6 @@ const OnePrivateKey = () => {
     //navigate('.');
     navigate('/privatekeys');
   };
-  const submitClickHandler = (event) => {
-    event.preventDefault();
-  };
 
   if (state.errorMessage) {
     return <ApiError>{state.errorMessage}</ApiError>;
@@ -90,7 +58,7 @@ const OnePrivateKey = () => {
   } else {
     return (
       <>
-        <h2>Private Key - Edit</h2>
+        <H2Header h2='Private Key - Edit' />
         <Form>
           <InputText
             label='Name'
@@ -107,9 +75,9 @@ const OnePrivateKey = () => {
           <InputSelect
             label='Algorithm'
             id='algorithm'
-            options={keyAlgorithms}
+            options={[{ value: state.private_key.algorithm.value, name: state.private_key.algorithm.name}]}
             value={state.private_key.algorithm.value}
-            onChange={algorithmChangeHandler}
+
             disabled
           />
 
@@ -118,6 +86,7 @@ const OnePrivateKey = () => {
             id='pemcontent'
             rows='8'
             value={state.private_key.pem}
+            onChange={inputChangeHandler}
             readOnly
           />
 
@@ -150,4 +119,4 @@ const OnePrivateKey = () => {
   }
 };
 
-export default OnePrivateKey;
+export default EditOnePrivateKey;

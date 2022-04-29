@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
-import useApiRequest from '../../hooks/useApiRequest';
+import { Link, useNavigate } from 'react-router-dom';
 
+import useApiRequest from '../../hooks/useApiRequest';
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
 import Table from '../UI/Table/Table';
@@ -9,9 +9,18 @@ import TableData from '../UI/Table/TableData';
 import TableHead from '../UI/Table/TableHead';
 import TableHeader from '../UI/Table/TableHeader';
 import TableRow from '../UI/Table/TableRow';
+import Button from '../UI/Button/Button';
+import H2Header from '../UI/Header/H2Header';
 
 const AllPrivateKeys = () => {
+  const navigate = useNavigate();
+
   const [state] = useApiRequest('/v1/privatekeys', 'private_keys');
+
+  const newClickHandler = (event) => {
+    event.preventDefault();
+    navigate('-1');
+  };
 
   if (state.errorMessage) {
     return <ApiError>{state.errorMessage}</ApiError>;
@@ -20,7 +29,12 @@ const AllPrivateKeys = () => {
   } else {
     return (
       <>
-        <h2>Private Keys</h2>
+        <H2Header h2='Private Keys'>
+          <Button type='submit' onClick={newClickHandler}>
+            New
+          </Button>
+        </H2Header>
+
         <Table>
           <TableHead>
             <TableRow>

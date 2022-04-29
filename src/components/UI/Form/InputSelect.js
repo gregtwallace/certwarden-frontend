@@ -9,6 +9,11 @@ const InputSelect = (props) => {
         onChange={props.onChange}
         disabled={props.disabled && true}
       >
+        {props.emptyValue && (
+          <option value='' disabled={props.disableEmptyValue && true}>
+            {props.emptyValue}
+          </option>
+        )}
         {props.options.map((m) => (
           <option key={m.value} value={m.value}>
             {m.name}

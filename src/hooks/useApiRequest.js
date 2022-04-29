@@ -36,8 +36,6 @@ const useApiRequest = (apiNode, expectedJsonName) => {
       isLoaded: false,
     });
 
-    console.log('Effect triggered');
-
     // use -1 as a signifier we want to add a new item
     if (parseInt(id) === -1) {
       setState({

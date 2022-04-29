@@ -4,7 +4,8 @@ import Dashboard from './components/Dashboard';
 import AllACMEAccounts from './components/ACMEAccounts/AllACMEAccounts';
 import OneACMEAccount from './components/ACMEAccounts/OneACMEAccount';
 import AllPrivateKeys from './components/PrivateKeys/AllPrivateKeys';
-import OnePrivateKey from './components/PrivateKeys/OnePrivateKey';
+import AddOnePrivateKey from './components/PrivateKeys/OnePrivateKey/AddOnePrivateKey';
+import EditOnePrivateKey from './components/PrivateKeys/OnePrivateKey/EditOnePrivateKey';
 
 const App = () => {
   return (
@@ -39,7 +40,8 @@ const App = () => {
 
           <div className='col-md-9'>
             <Routes>
-              <Route path='/privatekeys/:id' element={<OnePrivateKey />} />
+              <Route path='/privatekeys/-1' element={<AddOnePrivateKey />} />
+              <Route path='/privatekeys/:id' element={<EditOnePrivateKey />} />
               <Route path='/privatekeys' element={<AllPrivateKeys />} />
               <Route path='/acmeaccounts/:id' element={<OneACMEAccount />} />
               <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
