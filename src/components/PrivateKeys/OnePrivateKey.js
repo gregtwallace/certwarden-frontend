@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+
 import useApiRequest from '../../hooks/useApiRequest';
 import ApiError from '../UI/Api/ApiError';
 import ApiLoading from '../UI/Api/ApiLoading';
 import Button from '../UI/Button/Button';
-
 import Form from '../UI/Form/Form';
 import FormInformation from '../UI/Form/FormInformation';
 import InputSelect from '../UI/Form/InputSelect';
@@ -13,6 +13,7 @@ import InputTextArea from '../UI/Form/InputTextArea';
 
 const OnePrivateKey = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [state, setState] = useApiRequest(
     `/v1/privatekeys/${id}`,
@@ -49,36 +50,18 @@ const OnePrivateKey = () => {
   ];
 
   // data change handlers
-  const nameChangeHandler = (event) => {
-    setState((prevState) => {
-      return {
-        ...prevState,
-        private_key: { ...prevState.private_key, name: event.target.value },
-      };
-    });
+  const inputChangeHandler = (event) => {
+    setState((prevState) => ({
+      ...prevState,
+      private_key: {
+        ...prevState.private_key,
+        [event.target.id]: event.target.value,
+      },
+    }));
   };
-  const descriptionChangeHandler = (event) => {
-    setState((prevState) => {
-      return {
-        ...prevState,
-        private_key: {
-          ...prevState.private_key,
-          description: event.target.value,
-        },
-      };
-    });
-  };
-  // TODO: Update this to properly handle new vs. old keys
+
   const algorithmChangeHandler = (event) => {
-    setState((prevState) => {
-      return {
-        ...prevState,
-        private_key: {
-          ...prevState.private_key,
-          algorithm: event.target.value,
-        },
-      };
-    });
+    // TODO
   };
 
   // button handlers
@@ -90,6 +73,14 @@ const OnePrivateKey = () => {
         private_key: { ...prevState.orig_private_key },
       };
     });
+  };
+  const cancelClickHandler = (event) => {
+    event.preventDefault();
+    //navigate('.');
+    navigate('/privatekeys');
+  };
+  const submitClickHandler = (event) => {
+    event.preventDefault();
   };
 
   if (state.errorMessage) {
@@ -105,13 +96,13 @@ const OnePrivateKey = () => {
             label='Name'
             id='name'
             value={state.private_key.name}
-            onChange={nameChangeHandler}
+            onChange={inputChangeHandler}
           />
           <InputText
             label='Description'
             id='description'
             value={state.private_key.description}
-            onChange={descriptionChangeHandler}
+            onChange={inputChangeHandler}
           />
           <InputSelect
             label='Algorithm'
@@ -144,11 +135,15 @@ const OnePrivateKey = () => {
             <small>Last Updated: {state.private_key.updated_at}</small>
           </FormInformation>
 
-          <Button type='submit'>Submit</Button>
+          <Button type='submit' onClick={submitClickHandler}>
+            Submit
+          </Button>
           <Button type='reset' onClick={resetClickHandler}>
             Reset
           </Button>
-          <Button type='cancel'>Cancel</Button>
+          <Button type='cancel' onClick={cancelClickHandler}>
+            Cancel
+          </Button>
         </Form>
       </>
     );
