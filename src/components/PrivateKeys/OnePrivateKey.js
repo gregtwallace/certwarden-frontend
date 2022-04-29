@@ -13,20 +13,21 @@ import InputTextArea from '../UI/Form/InputTextArea';
 const OnePrivateKey = () => {
   const { id } = useParams();
 
-  const [privateKeyState, setPrivateKeysState] = useApiRequest(
-    `/v1/privatekeys/keys/${id}`,
+  const [state, setState] = useApiRequest(
+    `/v1/privatekeys/${id}`,
     'private_key'
   );
 
-  // needed to fetch valid key algorithms
-  const [algorithmsState] = useApiRequest(
-    `/v1/privatekeys/algorithms`,
-    'key_algorithms'
-  );
+  // algorithm list
+  // MUST keep in sync with list on the backend
+  const keyAlgorithms = [
+    { value: 'rsa2048', name: 'RSA 2048'},
+    { value: 'ecdsa256', name: 'ECDSA P-256'}
+  ];
 
   // data change handlers
   const nameChangeHandler = (event) => {
-    setPrivateKeysState((prevState) => {
+    setState((prevState) => {
       return {
         ...prevState,
         private_key: { ...prevState.private_key, name: event.target.value },
@@ -34,7 +35,7 @@ const OnePrivateKey = () => {
     });
   };
   const descriptionChangeHandler = (event) => {
-    setPrivateKeysState((prevState) => {
+    setState((prevState) => {
       return {
         ...prevState,
         private_key: {
@@ -46,7 +47,7 @@ const OnePrivateKey = () => {
   };
   // TODO: Update this to properly handle new vs. old keys
   const algorithmChangeHandler = (event) => {
-    setPrivateKeysState((prevState) => {
+    setState((prevState) => {
       return {
         ...prevState,
         private_key: {
@@ -60,7 +61,7 @@ const OnePrivateKey = () => {
   // button handlers
   const resetClickHandler = (event) => {
     event.preventDefault();
-    setPrivateKeysState((prevState) => {
+    setState((prevState) => {
       return {
         ...prevState,
         private_key: { ...prevState.orig_private_key },
@@ -68,14 +69,13 @@ const OnePrivateKey = () => {
     });
   };
 
-  if (privateKeyState.errorMessage || algorithmsState.errorMessage) {
+  if (state.errorMessage) {
     return (
       <>
-        <ApiError>{privateKeyState.errorMessage}</ApiError>
-        <ApiError>{algorithmsState.errorMessage}</ApiError>
+        <ApiError>{state.errorMessage}</ApiError>
       </>
     );
-  } else if (!privateKeyState.isLoaded || !algorithmsState.isLoaded) {
+  } else if (!state.isLoaded) {
     return <ApiLoading />;
   } else {
     return (
@@ -85,20 +85,20 @@ const OnePrivateKey = () => {
           <InputText
             label='Name'
             id='name'
-            value={privateKeyState.private_key.name}
+            value={state.private_key.name}
             onChange={nameChangeHandler}
           />
           <InputText
             label='Description'
             id='description'
-            value={privateKeyState.private_key.description}
+            value={state.private_key.description}
             onChange={descriptionChangeHandler}
           />
           <InputSelect
             label='Algorithm'
             id='algorithm'
-            options={algorithmsState.key_algorithms}
-            value={privateKeyState.private_key.algorithm.id}
+            options={keyAlgorithms}
+            value={state.private_key.algorithm.value}
             readOnly
           />
 
@@ -106,23 +106,23 @@ const OnePrivateKey = () => {
             label='PEM Content (Read Only)'
             id='pemcontent'
             rows='8'
-            value={privateKeyState.private_key.pem}
+            value={state.private_key.pem}
             readOnly
           />
 
           <InputText
             label='API Key (Read Only)'
             id='apikey'
-            value={privateKeyState.private_key.api_key}
+            value={state.private_key.api_key}
             readOnly
           />
 
           <FormInformation>
-            <small>Created: {privateKeyState.private_key.created_at}</small>
+            <small>Created: {state.private_key.created_at}</small>
           </FormInformation>
           <FormInformation>
             <small>
-              Last Updated: {privateKeyState.private_key.updated_at}
+              Last Updated: {state.private_key.updated_at}
             </small>
           </FormInformation>
 

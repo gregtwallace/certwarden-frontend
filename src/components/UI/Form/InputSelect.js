@@ -10,7 +10,7 @@ const InputSelect = (props) => {
         readOnly={props.readOnly && true}
       >
         {props.options.map((m) => (
-          <option key={m.id} value={m.id}>
+          <option key={m.value} value={m.value}>
             {m.name}
           </option>
         ))}

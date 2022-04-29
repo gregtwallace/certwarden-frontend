@@ -12,7 +12,7 @@ import TableRow from '../UI/Table/TableRow';
 
 
 const AllPrivateKeys = () => {
-  const [ state ] = useApiRequest("/v1/privatekeys/keys", "private_keys");
+  const [ state ] = useApiRequest("/v1/privatekeys", "private_keys");
 
   if (!state.isLoaded) {
     return <ApiLoading />
