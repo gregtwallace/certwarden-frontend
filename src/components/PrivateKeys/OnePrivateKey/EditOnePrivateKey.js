@@ -73,22 +73,18 @@ const EditOnePrivateKey = () => {
       validationErrors.name = true;
       console.log("bad name", formState.private_key.name);
     }
-
     setFormState((prevState) => ({ ...prevState, validationErrors: validationErrors, }));
-    if (validationErrors.length > 0) {
-      console.log(validationErrors);
+    if (Object.keys(validationErrors).length > 0) {
       return false;
     }
     ///
 
     const data = new FormData(event.target);
     const payload = Object.fromEntries(data.entries());
-    // console.log(payload);
 
     const requestOptions = {
       method: 'PUT',
       body: JSON.stringify(payload),
-      'Content-Type': 'application/json',
     };
 
     fetch(
@@ -97,7 +93,7 @@ const EditOnePrivateKey = () => {
     )
       .then((response) => response.json())
       .then((responseJson) => {
-        // console.log(responseJson);
+        console.log(responseJson);
       });
   };
 
