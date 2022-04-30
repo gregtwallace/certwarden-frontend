@@ -19,20 +19,20 @@ const EditOnePrivateKey = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const apiState = useApiGet(`/v1/privatekeys/${id}`, 'private_key');
+  const apiGetState = useApiGet(`/v1/privatekeys/${id}`, 'private_key');
   const [formState, setFormState] = useState({
     isLoaded: false,
   });
 
   useEffect(() => {
-    if (apiState.isLoaded && !apiState.errorMessage) {
+    if (apiGetState.isLoaded && !apiGetState.errorMessage) {
       setFormState({
-        private_key: apiState.private_key,
+        private_key: apiGetState.private_key,
         validationErrors: {},
-        isLoaded: apiState.isLoaded,
+        isLoaded: apiGetState.isLoaded,
       });
     }
-  }, [apiState]);
+  }, [apiGetState]);
 
   // data change handlers
   const inputChangeHandler = (event) => {
@@ -51,7 +51,7 @@ const EditOnePrivateKey = () => {
     setFormState((prevState) => {
       return {
         ...prevState,
-        private_key: apiState.private_key,
+        private_key: apiGetState.private_key,
         validationErrors: {}
       };
     });
@@ -101,8 +101,8 @@ const EditOnePrivateKey = () => {
       });
   };
 
-  if (apiState.errorMessage) {
-    return <ApiError>{apiState.errorMessage}</ApiError>;
+  if (apiGetState.errorMessage) {
+    return <ApiError>{apiGetState.errorMessage}</ApiError>;
   } else if (!formState.isLoaded) {
     return <ApiLoading />;
   } else {
