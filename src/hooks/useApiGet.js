@@ -2,15 +2,11 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 // Hook to query the API and return a state based on the query
-const useApiRequest = (apiNode, expectedJsonName) => {
-  // make a variable for original api fetch for things like 'reset' function
-  const origJsonDataName = 'orig_' + expectedJsonName;
-
+const useApiGet = (apiNode, expectedJsonName) => {
   const { id } = useParams();
 
   const [state, setState] = useState({
     [expectedJsonName]: {},
-    [origJsonDataName]: {},
     errorMessage: null,
     isLoaded: false,
   });
@@ -31,20 +27,11 @@ const useApiRequest = (apiNode, expectedJsonName) => {
   useEffect(() => {
     setState({
       [expectedJsonName]: {},
-      [origJsonDataName]: {},
       errorMessage: null,
       isLoaded: false,
     });
 
-    // use -1 as a signifier we want to add a new item
-    if (parseInt(id) === -1) {
-      setState({
-        [expectedJsonName]: {},
-        [origJsonDataName]: {},
-        errorMessage: null,
-        isLoaded: true,
-      });
-    } else if (parseInt(id) >= 0 || !id) {
+    if (parseInt(id) >= 0 || !id) {
       // if there is an id, verify it is a valid integer or don't bother calling the API
       fetch(`${process.env.REACT_APP_API_NODE}/api${apiNode}`)
         .then((response) => response.json())
@@ -57,7 +44,6 @@ const useApiRequest = (apiNode, expectedJsonName) => {
             // set error state
             setState({
               [expectedJsonName]: {},
-              [origJsonDataName]: {},
               errorMessage: json.error.message,
               isLoaded: true,
             });
@@ -78,7 +64,6 @@ const useApiRequest = (apiNode, expectedJsonName) => {
 
             setState({
               [expectedJsonName]: json[expectedJsonName],
-              [origJsonDataName]: json[expectedJsonName],
               errorMessage: null,
               isLoaded: true,
             });
@@ -87,7 +72,6 @@ const useApiRequest = (apiNode, expectedJsonName) => {
         .catch((error) => {
           setState({
             [expectedJsonName]: {},
-            [origJsonDataName]: {},
             errorMessage: error.name + ' ' + error.message,
             isLoaded: true,
           });
@@ -95,14 +79,13 @@ const useApiRequest = (apiNode, expectedJsonName) => {
     } else {
       setState({
         [expectedJsonName]: {},
-        [origJsonDataName]: {},
         errorMessage: 'id is not valid',
         isLoaded: true,
       });
     }
-  }, [apiNode, expectedJsonName, origJsonDataName, id]);
+  }, [apiNode, expectedJsonName, id]);
 
-  return [state, setState];
+  return state;
 };
 
-export default useApiRequest;
+export default useApiGet;

@@ -4,8 +4,9 @@ const InputSelect = (props) => {
       <label htmlFor={props.id}>{props.label}</label>
       <select
         className='form-control'
-        value={props.value}
         id={props.id}
+        name={props.name}
+        value={props.value}
         onChange={props.onChange}
         disabled={props.disabled && true}
       >

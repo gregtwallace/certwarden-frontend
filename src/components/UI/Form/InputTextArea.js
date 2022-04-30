@@ -5,8 +5,9 @@ const InputTextArea = (props) => {
       <textarea
         className='form-control'
         id={props.id}
-        rows={props.rows}
+        name={props.name}
         value={props.value}
+        rows={props.rows}
         onChange={props.onChange}
         readOnly={props.readOnly && true}
       ></textarea>

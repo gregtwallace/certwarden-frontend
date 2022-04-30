@@ -16,10 +16,9 @@ const Button = (props) => {
   };
 
   buttonClasses = buttonClasses + " " + props.className;
-
   
   return (
-    <button type='Submit' className={buttonClasses} onClick={props.onClick}>
+    <button type={props.type} className={buttonClasses} onClick={props.onClick}>
       {props.children}
     </button>
   );

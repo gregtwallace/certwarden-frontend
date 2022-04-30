@@ -1,5 +1,5 @@
 const Form = (props) => {
-  return <form>{props.children}</form>
+  return <form onSubmit={props.onSubmit}>{props.children}</form>;
 };
 
 export default Form;

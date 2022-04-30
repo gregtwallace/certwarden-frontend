@@ -1,12 +1,15 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import useApiRequest from '../../../hooks/useApiRequest';
+import { isFieldError, isNameValid } from '../../../helpers/form-validation';
+
+import useApiGet from '../../../hooks/useApiGet';
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
 import Button from '../../UI/Button/Button';
 import Form from '../../UI/Form/Form';
 import FormInformation from '../../UI/Form/FormInformation';
+import InputHidden from '../../UI/Form/InputHidden';
 import InputSelect from '../../UI/Form/InputSelect';
 import InputText from '../../UI/Form/InputText';
 import InputTextArea from '../../UI/Form/InputTextArea';
@@ -16,14 +19,24 @@ const EditOnePrivateKey = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [state, setState] = useApiRequest(
-    `/v1/privatekeys/${id}`,
-    'private_key'
-  );
+  const apiState = useApiGet(`/v1/privatekeys/${id}`, 'private_key');
+  const [formState, setFormState] = useState({
+    isLoaded: false,
+  });
+
+  useEffect(() => {
+    if (apiState.isLoaded && !apiState.errorMessage) {
+      setFormState({
+        private_key: apiState.private_key,
+        validationErrors: {},
+        isLoaded: apiState.isLoaded,
+      });
+    }
+  }, [apiState]);
 
   // data change handlers
   const inputChangeHandler = (event) => {
-    setState((prevState) => ({
+    setFormState((prevState) => ({
       ...prevState,
       private_key: {
         ...prevState.private_key,
@@ -33,15 +46,13 @@ const EditOnePrivateKey = () => {
   };
 
   // button handlers
-  const submitClickHandler = (event) => {
-    event.preventDefault();
-  };
   const resetClickHandler = (event) => {
     event.preventDefault();
-    setState((prevState) => {
+    setFormState((prevState) => {
       return {
         ...prevState,
-        private_key: { ...prevState.orig_private_key },
+        private_key: apiState.private_key,
+        validationErrors: {}
       };
     });
   };
@@ -51,41 +62,89 @@ const EditOnePrivateKey = () => {
     navigate('/privatekeys');
   };
 
-  if (state.errorMessage) {
-    return <ApiError>{state.errorMessage}</ApiError>;
-  } else if (!state.isLoaded) {
+  // form submission handler
+  const submitFormHandler = (event) => {
+    event.preventDefault();
+
+    /// client side validation
+    let validationErrors = {};
+    // check name
+    if (!isNameValid(formState.private_key.name)) {
+      validationErrors.name = true;
+      console.log("bad name", formState.private_key.name);
+    }
+
+    setFormState((prevState) => ({ ...prevState, validationErrors: validationErrors, }));
+    if (validationErrors.length > 0) {
+      console.log(validationErrors);
+      return false;
+    }
+    ///
+
+    const data = new FormData(event.target);
+    const payload = Object.fromEntries(data.entries());
+    // console.log(payload);
+
+    const requestOptions = {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+      'Content-Type': 'application/json',
+    };
+
+    fetch(
+      `${process.env.REACT_APP_API_NODE}/api/v1/privatekeys/${formState.private_key.id}`,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        // console.log(responseJson);
+      });
+  };
+
+  if (apiState.errorMessage) {
+    return <ApiError>{apiState.errorMessage}</ApiError>;
+  } else if (!formState.isLoaded) {
     return <ApiLoading />;
   } else {
     return (
       <>
         <H2Header h2='Private Key - Edit' />
-        <Form>
+        <Form onSubmit={submitFormHandler}>
+          <InputHidden id='id' name='id' value={formState.private_key.id} />
+
           <InputText
             label='Name'
             id='name'
-            value={state.private_key.name}
+            name='name'
+            value={formState.private_key.name}
             onChange={inputChangeHandler}
+            invalid={formState.validationErrors.name && true}
           />
           <InputText
             label='Description'
             id='description'
-            value={state.private_key.description}
+            name='description'
+            value={formState.private_key.description}
             onChange={inputChangeHandler}
           />
           <InputSelect
             label='Algorithm'
             id='algorithm'
-            options={[{ value: state.private_key.algorithm.value, name: state.private_key.algorithm.name}]}
-            value={state.private_key.algorithm.value}
-
+            options={[
+              {
+                value: formState.private_key.algorithm.value,
+                name: formState.private_key.algorithm.name,
+              },
+            ]}
+            value={formState.private_key.algorithm.value}
             disabled
           />
 
           <InputTextArea
             label='PEM Content'
-            id='pemcontent'
+            id='pem'
+            value={formState.private_key.pem}
             rows='8'
-            value={state.private_key.pem}
             onChange={inputChangeHandler}
             readOnly
           />
@@ -93,20 +152,18 @@ const EditOnePrivateKey = () => {
           <InputText
             label='API Key'
             id='apikey'
-            value={state.private_key.api_key}
+            value={formState.private_key.api_key}
             readOnly
           />
 
           <FormInformation>
-            <small>Created: {state.private_key.created_at}</small>
+            <small>Created: {formState.private_key.created_at}</small>
           </FormInformation>
           <FormInformation>
-            <small>Last Updated: {state.private_key.updated_at}</small>
+            <small>Last Updated: {formState.private_key.updated_at}</small>
           </FormInformation>
 
-          <Button type='submit' onClick={submitClickHandler}>
-            Submit
-          </Button>
+          <Button type='submit'>Submit</Button>
           <Button type='reset' onClick={resetClickHandler}>
             Reset
           </Button>
