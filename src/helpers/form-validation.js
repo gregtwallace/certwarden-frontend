@@ -1,6 +1,3 @@
-// return if the input field is valid
-export const isFieldError = (errors, key) => errors.indexOf(key) !== -1;
-
 // check if name is valid (only permitted to contain URL path chars)
 export const isNameValid = (name) => {
   // don't allow blank name

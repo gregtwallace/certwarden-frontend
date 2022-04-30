@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { isFieldError, isNameValid } from '../../../helpers/form-validation';
+import { isNameValid } from '../../../helpers/form-validation';
 
 import useApiGet from '../../../hooks/useApiGet';
 import ApiError from '../../UI/Api/ApiError';
