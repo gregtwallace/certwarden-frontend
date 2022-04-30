@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 
-import useApiRequest from '../../hooks/useApiRequest';
+import useApiGet from '../../hooks/useApiGet';
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
 import Table from '../UI/Table/Table';
@@ -15,16 +15,16 @@ import H2Header from '../UI/Header/H2Header';
 const AllPrivateKeys = () => {
   const navigate = useNavigate();
 
-  const [state] = useApiRequest('/v1/privatekeys', 'private_keys');
+  const apiGetState = useApiGet('/v1/privatekeys', 'private_keys');
 
   const newClickHandler = (event) => {
     event.preventDefault();
     navigate('-1');
   };
 
-  if (state.errorMessage) {
-    return <ApiError>{state.errorMessage}</ApiError>;
-  } else if (!state.isLoaded) {
+  if (apiGetState.errorMessage) {
+    return <ApiError>{apiGetState.errorMessage}</ApiError>;
+  } else if (!apiGetState.isLoaded) {
     return <ApiLoading />;
   } else {
     return (
@@ -44,7 +44,7 @@ const AllPrivateKeys = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {state.private_keys.map((m) => (
+            {apiGetState.private_keys.map((m) => (
               <TableRow key={m.id}>
                 <TableHeader scope='row'>
                   <Link to={'/privatekeys/' + m.id}>{m.name}</Link>
