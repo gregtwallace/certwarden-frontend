@@ -71,8 +71,8 @@ const EditOnePrivateKey = () => {
     // check name
     if (!isNameValid(formState.private_key.name)) {
       validationErrors.name = true;
-      console.log("bad name", formState.private_key.name);
     }
+    
     setFormState((prevState) => ({ ...prevState, validationErrors: validationErrors, }));
     if (Object.keys(validationErrors).length > 0) {
       return false;

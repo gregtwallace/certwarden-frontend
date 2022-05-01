@@ -1,9 +1,19 @@
 const InputSelect = (props) => {
+  let errorMessage = '';
+  switch (props.name) {
+    case 'algorithm':
+      errorMessage =
+        'Select an algorithm to generate a key.';
+      break;
+    default:
+      errorMessage = 'This field has an error.';
+  }
+
   return (
     <div className='form-group'>
       <label htmlFor={props.id}>{props.label}</label>
       <select
-        className='form-control'
+        className={`form-control ${props.invalid && 'is-invalid'}`}
         id={props.id}
         name={props.name}
         value={props.value}
@@ -21,6 +31,7 @@ const InputSelect = (props) => {
           </option>
         ))}
       </select>
+      {props.invalid && <div className='text-danger'>{errorMessage}</div>}
     </div>
   );
 };
