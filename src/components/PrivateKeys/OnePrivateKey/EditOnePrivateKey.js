@@ -14,6 +14,7 @@ import InputSelect from '../../UI/Form/InputSelect';
 import InputText from '../../UI/Form/InputText';
 import InputTextArea from '../../UI/Form/InputTextArea';
 import H2Header from '../../UI/Header/H2Header';
+import Modal from '../../UI/Modal/Modal';
 
 const EditOnePrivateKey = () => {
   const { id } = useParams();
@@ -23,6 +24,7 @@ const EditOnePrivateKey = () => {
   const [formState, setFormState] = useState({
     isLoaded: false,
   });
+  const [deleteModal, setDeleteModal] = useState(false);
 
   useEffect(() => {
     if (apiGetState.isLoaded && !apiGetState.errorMessage) {
@@ -52,7 +54,7 @@ const EditOnePrivateKey = () => {
       return {
         ...prevState,
         private_key: apiGetState.private_key,
-        validationErrors: {}
+        validationErrors: {},
       };
     });
   };
@@ -60,6 +62,33 @@ const EditOnePrivateKey = () => {
     event.preventDefault();
     //navigate('.');
     navigate('/privatekeys');
+  };
+
+  // delete handlers
+  const deleteClickHandler = () => {
+    setDeleteModal(true);
+  };
+  const deleteCancelHandler = () => {
+    setDeleteModal(false);
+  };
+  const deleteConfirmHandler = () => {
+    const requestOptions = {
+      method: 'DELETE',
+    };
+
+    fetch(
+      `${process.env.REACT_APP_API_NODE}/api/v1/privatekeys/${formState.private_key.id}`,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+      })
+      .then(
+        // back to the private keys page
+        //navigate('.');
+        navigate('/privatekeys')
+      );
   };
 
   // form submission handler
@@ -72,8 +101,11 @@ const EditOnePrivateKey = () => {
     if (!isNameValid(formState.private_key.name)) {
       validationErrors.name = true;
     }
-    
-    setFormState((prevState) => ({ ...prevState, validationErrors: validationErrors, }));
+
+    setFormState((prevState) => ({
+      ...prevState,
+      validationErrors: validationErrors,
+    }));
     if (Object.keys(validationErrors).length > 0) {
       return false;
     }
@@ -94,7 +126,12 @@ const EditOnePrivateKey = () => {
       .then((response) => response.json())
       .then((responseJson) => {
         console.log(responseJson);
-      });
+      })
+      .then(
+        // back to the private keys page
+        //navigate('.');
+        navigate('/privatekeys')
+      );
   };
 
   if (apiGetState.errorMessage) {
@@ -104,7 +141,27 @@ const EditOnePrivateKey = () => {
   } else {
     return (
       <>
-        <H2Header h2='Private Key - Edit' />
+        {deleteModal && (
+          <Modal
+            title={`Delete Key - ${formState.private_key.name}`}
+            hasCancel
+            onClickCancel={deleteCancelHandler}
+            hasConfirm
+            onClickConfirm={deleteConfirmHandler}
+          >
+            Are you sure you want to delete the key named '
+            {formState.private_key.name}' ?<br />
+            This action cannot be undone and{' '}
+            <strong className='text-danger'>
+              the key will not be recoverable!
+            </strong>
+          </Modal>
+        )}
+        <H2Header h2='Private Key - Edit'>
+          <Button type='delete' onClick={deleteClickHandler}>
+            Delete
+          </Button>
+        </H2Header>
         <Form onSubmit={submitFormHandler}>
           <InputHidden id='id' name='id' value={formState.private_key.id} />
 
@@ -159,13 +216,13 @@ const EditOnePrivateKey = () => {
             <small>Last Updated: {formState.private_key.updated_at}</small>
           </FormInformation>
 
-          <Button type='submit'>Submit</Button>
-          <Button type='reset' onClick={resetClickHandler}>
-            Reset
-          </Button>
           <Button type='cancel' onClick={cancelClickHandler}>
             Cancel
           </Button>
+          <Button type='reset' onClick={resetClickHandler}>
+            Reset
+          </Button>
+          <Button type='submit'>Submit</Button>
         </Form>
       </>
     );
