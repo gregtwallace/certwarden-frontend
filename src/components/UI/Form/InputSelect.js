@@ -18,6 +18,7 @@ const InputSelect = (props) => {
         name={props.name}
         value={props.value}
         onChange={props.onChange}
+        // doesn't really support readOnly
         disabled={props.disabled && true}
       >
         {props.emptyValue && (

@@ -10,6 +10,7 @@ const InputTextArea = (props) => {
         rows={props.rows}
         onChange={props.onChange}
         readOnly={props.readOnly && true}
+        disabled={props.disabled && true}
       ></textarea>
     </div>
   );

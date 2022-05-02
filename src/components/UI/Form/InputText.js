@@ -20,6 +20,7 @@ const InputText = (props) => {
         value={props.value}
         onChange={props.onChange}
         readOnly={props.readOnly && true}
+        disabled={props.disabled && true}
       />
       {props.invalid && <div className='text-danger'>{errorMessage}</div>}
     </div>

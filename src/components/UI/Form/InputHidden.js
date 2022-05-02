@@ -7,6 +7,7 @@ const InputHidden = (props) => {
       value={props.value}
       onChange={props.onChange}
       readOnly={props.readOnly && true}
+      disabled={props.disabled && true}
     />
   );
 };
