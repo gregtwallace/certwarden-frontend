@@ -17,8 +17,11 @@ const AddOnePrivateKey = () => {
   // algorithm list
   // MUST keep in sync with list on the backend
   const keyAlgorithms = [
-    { value: 'rsa2048', name: 'RSA 2048' },
-    { value: 'ecdsa256', name: 'ECDSA P-256' },
+    { value: 'rsa2048', name: 'RSA 2048-bit' },
+    { value: 'rsa3072', name: 'RSA 3072-bit' },
+    { value: 'rsa4096', name: 'RSA 4096-bit' },
+    { value: 'ecdsap256', name: 'ECDSA P-256' },
+    { value: 'ecdsap384', name: 'ECDSA P-384' },
   ];
 
   const navigate = useNavigate();
@@ -112,7 +115,12 @@ const AddOnePrivateKey = () => {
       requestOptions
     )
       .then((response) => response.json())
-      .then((responseJson) => console.log(responseJson));
+      .then((responseJson) => console.log(responseJson))
+      .then(
+        // back to the private keys page
+        //navigate('.');
+        navigate('/privatekeys')
+      );
   };
 
   return (
@@ -160,8 +168,8 @@ const AddOnePrivateKey = () => {
           rows='8'
           value={formState.private_key.pem}
           onChange={inputChangeHandler}
-          readOnly
-          // readOnly={formState.private_key.algorithm.value && true}
+          disabled
+          // disabled={formState.private_key.algorithm.value && true}
         />
         <FormInformation>
           <strong>- OR -</strong>
