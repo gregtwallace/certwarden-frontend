@@ -1,22 +1,28 @@
 const Button = (props) => {
-  var buttonClasses;
+  var buttonClasses = 'btn mr-2';
 
   switch (props.type) {
     case 'submit':
-      buttonClasses = 'btn btn-primary mr-2';
+      buttonClasses += ' btn-primary';
+      break;
+    case 'primary':
+      buttonClasses += ' btn-primary';
       break;
     case 'reset':
-      buttonClasses = 'btn btn-warning mr-2';
+      buttonClasses += ' btn-warning';
       break;
     case 'cancel':
-      buttonClasses = 'btn btn-secondary mr-2';
+      buttonClasses += ' btn-secondary';
+      break;
+    case 'delete':
+      buttonClasses += ' btn-danger';
       break;
     default:
-        break;
-  };
+      break;
+  }
 
-  buttonClasses = buttonClasses + " " + props.className;
-  
+  buttonClasses = buttonClasses + ' ' + props.className;
+
   return (
     <button type={props.type} className={buttonClasses} onClick={props.onClick}>
       {props.children}
