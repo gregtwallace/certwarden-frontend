@@ -12,6 +12,7 @@ import InputSelect from '../../UI/Form/InputSelect';
 import InputText from '../../UI/Form/InputText';
 import InputTextArea from '../../UI/Form/InputTextArea';
 import InputHidden from '../../UI/Form/InputHidden';
+import FormError from '../../UI/Form/FormError';
 
 const AddOnePrivateKey = () => {
   // algorithm list
@@ -26,7 +27,7 @@ const AddOnePrivateKey = () => {
 
   const navigate = useNavigate();
 
-  const blankStateObject = {
+  const blankFormState = {
     private_key: {
       id: '-1',
       name: '',
@@ -37,8 +38,10 @@ const AddOnePrivateKey = () => {
       pem: '',
     },
     validationErrors: {},
+    postError: '',
+    buttonsDisabled: false,
   };
-  const [formState, setFormState] = useState(blankStateObject);
+  const [formState, setFormState] = useState(blankFormState);
 
   // data change handlers
   const inputChangeHandler = (event) => {
@@ -66,7 +69,7 @@ const AddOnePrivateKey = () => {
   // button handlers
   const resetClickHandler = (event) => {
     event.preventDefault();
-    setFormState((prevState) => blankStateObject);
+    setFormState((prevState) => blankFormState);
   };
   const cancelClickHandler = (event) => {
     event.preventDefault();
@@ -94,16 +97,20 @@ const AddOnePrivateKey = () => {
     setFormState((prevState) => ({
       ...prevState,
       validationErrors: validationErrors,
+      postError: '',
     }));
     if (Object.keys(validationErrors).length > 0) {
       return false;
     }
     //
 
+    setFormState((prevState) => ({
+      ...prevState,
+      buttonsDisabled: true,
+    }));
+
     const data = new FormData(event.target);
     const payload = Object.fromEntries(data.entries());
-
-    console.log(payload);
 
     const requestOptions = {
       method: 'POST',
@@ -114,19 +121,34 @@ const AddOnePrivateKey = () => {
       `${process.env.REACT_APP_API_NODE}/api/v1/privatekeys`,
       requestOptions
     )
-      .then((response) => response.json())
-      .then((responseJson) => console.log(responseJson))
-      .then(
+      .then((response) => (response.json().then(responseJson => ({ok: response.ok, status: response.status, json: responseJson}))))
+      .then((responseJsonObj) => {
+        if ((responseJsonObj.ok !== true) || (responseJsonObj.status !== 200) || (responseJsonObj.json.error !== undefined)) {
+          throw new Error(`Status: ${responseJsonObj.status}, Message: ${responseJsonObj.json.error.message}`)
+        }
+        return null;
+      })
+      .then(() => {
         // back to the private keys page
         //navigate('.');
         navigate('/privatekeys')
-      );
+        return null
+      })
+      .catch((error) => {
+        setFormState((prevState) => ({
+          ...prevState,
+          postError: `Status: ${error}`,
+          buttonsDisabled: false
+        }))
+      });
   };
 
   return (
     <>
       <H2Header h2='Private Keys - Add' />
       <Form onSubmit={submitFormHandler}>
+        {formState.postError && <FormError>Error Posting -- {formState.postError}</FormError>}
+
         <InputHidden id='id' name='id' value={formState.private_key.id} />
 
         <InputText
@@ -176,11 +198,21 @@ const AddOnePrivateKey = () => {
         </FormInformation>
         <FormInformation>3) TODO: Upload PEM File</FormInformation>
 
-        <Button type='submit'>Submit</Button>
-        <Button type='reset' onClick={resetClickHandler}>
+        <Button type='submit' disabled={formState.buttonsDisabled}>
+          Submit
+        </Button>
+        <Button
+          type='reset'
+          onClick={resetClickHandler}
+          disabled={formState.buttonsDisabled}
+        >
           Reset
         </Button>
-        <Button type='cancel' onClick={cancelClickHandler}>
+        <Button
+          type='cancel'
+          onClick={cancelClickHandler}
+          disabled={formState.buttonsDisabled}
+        >
           Cancel
         </Button>
       </Form>

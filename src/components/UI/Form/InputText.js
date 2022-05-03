@@ -1,3 +1,5 @@
+import FormError from "./FormError";
+
 const InputText = (props) => {
   let errorMessage = '';
   switch (props.name) {
@@ -22,7 +24,7 @@ const InputText = (props) => {
         readOnly={props.readOnly && true}
         disabled={props.disabled && true}
       />
-      {props.invalid && <div className='text-danger'>{errorMessage}</div>}
+      {props.invalid && <FormError>{errorMessage}</FormError>}
     </div>
   );
 };
