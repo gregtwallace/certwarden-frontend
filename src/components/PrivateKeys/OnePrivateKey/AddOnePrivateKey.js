@@ -66,7 +66,7 @@ const AddOnePrivateKey = () => {
   };
 
   // button handlers
-  const resetClickHandler = async (event) => {
+  const resetClickHandler = (event) => {
     event.preventDefault();
     setFormState(blankFormState);
   };
