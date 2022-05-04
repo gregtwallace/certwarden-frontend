@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import useApiGet from '../../../hooks/useApiGet';
+import useApiSend from '../../../hooks/useApiSend';
 import { isNameValid } from '../../../helpers/form-validation';
 
-import useApiGet from '../../../hooks/useApiGet';
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
 import Button from '../../UI/Button/Button';
 import Form from '../../UI/Form/Form';
+import FormError from '../../UI/Form/FormError';
 import FormInformation from '../../UI/Form/FormInformation';
 import InputHidden from '../../UI/Form/InputHidden';
 import InputSelect from '../../UI/Form/InputSelect';
@@ -21,6 +23,8 @@ const EditOnePrivateKey = () => {
   const navigate = useNavigate();
 
   const apiGetState = useApiGet(`/v1/privatekeys/${id}`, 'private_key');
+  const [ sendApiState, sendData ] = useApiSend();
+
   const [formState, setFormState] = useState({
     isLoaded: false,
   });
@@ -72,23 +76,15 @@ const EditOnePrivateKey = () => {
     setDeleteModal(false);
   };
   const deleteConfirmHandler = () => {
-    const requestOptions = {
-      method: 'DELETE',
-    };
-
-    fetch(
-      `${process.env.REACT_APP_API_NODE}/api/v1/privatekeys/${formState.private_key.id}`,
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson);
-      })
-      .then(
+    setDeleteModal(false);
+    sendData(`/v1/privatekeys/${formState.private_key.id}`, 'DELETE')
+    .then((success) => {
+      if (success) {
         // back to the private keys page
         //navigate('.');
         navigate('/privatekeys')
-      );
+      }
+    });
   };
 
   // form submission handler
@@ -111,27 +107,14 @@ const EditOnePrivateKey = () => {
     }
     ///
 
-    const data = new FormData(event.target);
-    const payload = Object.fromEntries(data.entries());
-
-    const requestOptions = {
-      method: 'PUT',
-      body: JSON.stringify(payload),
-    };
-
-    fetch(
-      `${process.env.REACT_APP_API_NODE}/api/v1/privatekeys/${formState.private_key.id}`,
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson);
-      })
-      .then(
+    sendData(`/v1/privatekeys/${formState.private_key.id}`, 'PUT', event)
+    .then((success) => {
+      if (success) {
         // back to the private keys page
         //navigate('.');
-        navigate('/privatekeys')
-      );
+        navigate('/privatekeys');
+      }
+    });
   };
 
   if (apiGetState.errorMessage) {
@@ -158,11 +141,13 @@ const EditOnePrivateKey = () => {
           </Modal>
         )}
         <H2Header h2='Private Key - Edit'>
-          <Button type='delete' onClick={deleteClickHandler}>
+          <Button type='delete' onClick={deleteClickHandler} disabled={sendApiState.isSending}>
             Delete
           </Button>
         </H2Header>
         <Form onSubmit={submitFormHandler}>
+          {sendApiState.apiError && <FormError>Error Posting -- {sendApiState.apiError}</FormError>}
+
           <InputHidden id='id' name='id' value={formState.private_key.id} />
 
           <InputText
@@ -216,13 +201,13 @@ const EditOnePrivateKey = () => {
             <small>Last Updated: {formState.private_key.updated_at}</small>
           </FormInformation>
 
-          <Button type='cancel' onClick={cancelClickHandler}>
+          <Button type='cancel' onClick={cancelClickHandler} disabled={sendApiState.isSending}>
             Cancel
           </Button>
-          <Button type='reset' onClick={resetClickHandler}>
+          <Button type='reset' onClick={resetClickHandler} disabled={sendApiState.isSending}>
             Reset
           </Button>
-          <Button type='submit'>Submit</Button>
+          <Button type='submit' disabled={sendApiState.isSending}>Submit</Button>
         </Form>
       </>
     );

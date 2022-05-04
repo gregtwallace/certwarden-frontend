@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import useApiSend from '../../../hooks/useApiSend';
 import { isNameValid } from '../../../helpers/form-validation';
 
 import H2Header from '../../UI/Header/H2Header';
 import Button from '../../UI/Button/Button';
 import Form from '../../UI/Form/Form';
-
 import FormInformation from '../../UI/Form/FormInformation';
 import InputSelect from '../../UI/Form/InputSelect';
 import InputText from '../../UI/Form/InputText';
@@ -25,6 +25,7 @@ const AddOnePrivateKey = () => {
     { value: 'ecdsap384', name: 'ECDSA P-384' },
   ];
 
+  const [ sendApiState, sendData ] = useApiSend();
   const navigate = useNavigate();
 
   const blankFormState = {
@@ -38,8 +39,6 @@ const AddOnePrivateKey = () => {
       pem: '',
     },
     validationErrors: {},
-    postError: '',
-    buttonsDisabled: false,
   };
   const [formState, setFormState] = useState(blankFormState);
 
@@ -67,9 +66,9 @@ const AddOnePrivateKey = () => {
   };
 
   // button handlers
-  const resetClickHandler = (event) => {
+  const resetClickHandler = async (event) => {
     event.preventDefault();
-    setFormState((prevState) => blankFormState);
+    setFormState(blankFormState);
   };
   const cancelClickHandler = (event) => {
     event.preventDefault();
@@ -97,57 +96,27 @@ const AddOnePrivateKey = () => {
     setFormState((prevState) => ({
       ...prevState,
       validationErrors: validationErrors,
-      postError: '',
     }));
     if (Object.keys(validationErrors).length > 0) {
       return false;
     }
     //
 
-    setFormState((prevState) => ({
-      ...prevState,
-      buttonsDisabled: true,
-    }));
-
-    const data = new FormData(event.target);
-    const payload = Object.fromEntries(data.entries());
-
-    const requestOptions = {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    };
-
-    fetch(
-      `${process.env.REACT_APP_API_NODE}/api/v1/privatekeys`,
-      requestOptions
-    )
-      .then((response) => (response.json().then(responseJson => ({ok: response.ok, status: response.status, json: responseJson}))))
-      .then((responseJsonObj) => {
-        if ((responseJsonObj.ok !== true) || (responseJsonObj.status !== 200) || (responseJsonObj.json.error !== undefined)) {
-          throw new Error(`Status: ${responseJsonObj.status}, Message: ${responseJsonObj.json.error.message}`)
-        }
-        return null;
-      })
-      .then(() => {
+    sendData(`/v1/privatekeys`, 'POST', event)
+    .then((success) => {
+      if (success) {
         // back to the private keys page
         //navigate('.');
         navigate('/privatekeys')
-        return null
-      })
-      .catch((error) => {
-        setFormState((prevState) => ({
-          ...prevState,
-          postError: `Status: ${error}`,
-          buttonsDisabled: false
-        }))
-      });
+      }
+    });
   };
 
   return (
     <>
       <H2Header h2='Private Keys - Add' />
       <Form onSubmit={submitFormHandler}>
-        {formState.postError && <FormError>Error Posting -- {formState.postError}</FormError>}
+        {sendApiState.apiError && <FormError>Error Posting -- {sendApiState.apiError}</FormError>}
 
         <InputHidden id='id' name='id' value={formState.private_key.id} />
 
@@ -198,20 +167,20 @@ const AddOnePrivateKey = () => {
         </FormInformation>
         <FormInformation>3) TODO: Upload PEM File</FormInformation>
 
-        <Button type='submit' disabled={formState.buttonsDisabled}>
+        <Button type='submit' disabled={sendApiState.isSending}>
           Submit
         </Button>
         <Button
           type='reset'
           onClick={resetClickHandler}
-          disabled={formState.buttonsDisabled}
+          disabled={sendApiState.isSending}
         >
           Reset
         </Button>
         <Button
           type='cancel'
           onClick={cancelClickHandler}
-          disabled={formState.buttonsDisabled}
+          disabled={sendApiState.isSending}
         >
           Cancel
         </Button>
