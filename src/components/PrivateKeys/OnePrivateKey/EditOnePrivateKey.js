@@ -146,7 +146,7 @@ const EditOnePrivateKey = () => {
           </Button>
         </H2Header>
         <Form onSubmit={submitFormHandler}>
-          {sendApiState.apiError && <FormError>Error Posting -- {sendApiState.apiError}</FormError>}
+          {sendApiState.errorMessage && <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>}
 
           <InputHidden id='id' name='id' value={formState.private_key.id} />
 

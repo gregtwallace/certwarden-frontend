@@ -116,7 +116,7 @@ const AddOnePrivateKey = () => {
     <>
       <H2Header h2='Private Keys - Add' />
       <Form onSubmit={submitFormHandler}>
-        {sendApiState.apiError && <FormError>Error Posting -- {sendApiState.apiError}</FormError>}
+        {sendApiState.errorMessage && <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>}
 
         <InputHidden id='id' name='id' value={formState.private_key.id} />
 

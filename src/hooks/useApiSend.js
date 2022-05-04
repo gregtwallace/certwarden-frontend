@@ -3,7 +3,7 @@ import { useState } from 'react';
 const useApiSend = () => {
   const [state, setState] = useState({
     isSending: false,
-    apiError: null,
+    errorMessage: null,
   });
 
   // Send data to the node using the specified method and a payload from the specified event
@@ -11,7 +11,7 @@ const useApiSend = () => {
   const sendData = async (apiNode, method, event = '') => {
     setState({
       isSending: true,
-      apiError: null,
+      errorMessage: null,
     });
 
     const data = new FormData(event.target);
@@ -43,14 +43,14 @@ const useApiSend = () => {
 
       setState({
         isSending: false,
-        apiError: null,
+        errorMessage: null,
       });
       return true;
 
     } catch (error) {
       setState({
         isSending: false,
-        apiError: error.toString(),
+        errorMessage: error.toString(),
       });
       return false;
     }
