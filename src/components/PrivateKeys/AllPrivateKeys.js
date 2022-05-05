@@ -44,7 +44,7 @@ const AllPrivateKeys = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {apiGetState.private_keys.map((m) => (
+            {apiGetState.private_keys && apiGetState.private_keys.map((m) => (
               <TableRow key={m.id}>
                 <TableHeader scope='row'>
                   <Link to={'/privatekeys/' + m.id}>{m.name}</Link>
