@@ -43,7 +43,7 @@ const useApiGet = (apiNode, expectedJsonName) => {
           if (
             response.ok !== true ||
             response.status !== 200 ||
-            !responseJson[expectedJsonName] ||
+            !(expectedJsonName in responseJson) ||
             responseJson.error !== undefined
           ) {
             throw new Error(
@@ -52,15 +52,17 @@ const useApiGet = (apiNode, expectedJsonName) => {
           }
 
           // If there are created or update timestamps, convert them from Unix to something friendly.
-          if (responseJson[expectedJsonName].created_at) {
-            responseJson[expectedJsonName].created_at = convertUnixTime(
-              responseJson[expectedJsonName].created_at
-            );
-          }
-          if (responseJson[expectedJsonName].updated_at) {
-            responseJson[expectedJsonName].updated_at = convertUnixTime(
-              responseJson[expectedJsonName].updated_at
-            );
+          if (responseJson[expectedJsonName] != null) {
+            if (responseJson[expectedJsonName].created_at) {
+              responseJson[expectedJsonName].created_at = convertUnixTime(
+                responseJson[expectedJsonName].created_at
+              );
+            }
+            if (responseJson[expectedJsonName].updated_at) {
+              responseJson[expectedJsonName].updated_at = convertUnixTime(
+                responseJson[expectedJsonName].updated_at
+              );
+            }
           }
 
           setState({
