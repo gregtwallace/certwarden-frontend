@@ -9,6 +9,7 @@ const InputText = (props) => {
       break;
     default:
       errorMessage = 'This field has an error.';
+      break;
   }
 
   return (

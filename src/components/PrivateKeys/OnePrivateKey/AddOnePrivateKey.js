@@ -25,7 +25,7 @@ const AddOnePrivateKey = () => {
     { value: 'ecdsap384', name: 'ECDSA P-384' },
   ];
 
-  const [ sendApiState, sendData ] = useApiSend();
+  const [sendApiState, sendData] = useApiSend();
   const navigate = useNavigate();
 
   const blankFormState = {
@@ -86,12 +86,17 @@ const AddOnePrivateKey = () => {
     if (!isNameValid(formState.private_key.name)) {
       validationErrors.name = true;
     }
-    // TODO: Ensure only 1 of the 3 options is in use
-    // algorithm - since this is limited to a list, assume valid unless blank
-    if (formState.private_key.algorithm.value === '') {
-      validationErrors.algorithm = true;
-    }
-    // TODO: PEM Content & PEM File Upload
+    // algorithm (if selected)
+    if (formState.private_key.algorithm.value) {
+      if (
+        !keyAlgorithms.some((element) => {
+          return element.value === formState.private_key.algorithm.value;
+        })
+      ) {
+        validationErrors.algorithm = true;
+      };
+    };
+    // pem (TODO)
 
     setFormState((prevState) => ({
       ...prevState,
@@ -102,12 +107,11 @@ const AddOnePrivateKey = () => {
     }
     //
 
-    sendData(`/v1/privatekeys`, 'POST', event)
-    .then((success) => {
+    sendData(`/v1/privatekeys`, 'POST', event).then((success) => {
       if (success) {
         // back to the private keys page
         //navigate('.');
-        navigate('/privatekeys')
+        navigate('/privatekeys');
       }
     });
   };
@@ -116,7 +120,9 @@ const AddOnePrivateKey = () => {
     <>
       <H2Header h2='Private Keys - Add' />
       <Form onSubmit={submitFormHandler}>
-        {sendApiState.errorMessage && <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>}
+        {sendApiState.errorMessage && (
+          <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>
+        )}
 
         <InputHidden id='id' name='id' value={formState.private_key.id} />
 
@@ -153,19 +159,15 @@ const AddOnePrivateKey = () => {
           <strong>- OR -</strong>
         </FormInformation>
         <InputTextArea
-          label='2) TODO: Paste PEM Content'
+          label='2) Paste PEM Content'
           id='pem'
           name='pem'
           rows='8'
           value={formState.private_key.pem}
           onChange={inputChangeHandler}
-          disabled
-          // disabled={formState.private_key.algorithm.value && true}
+          disabled={formState.private_key.algorithm.value && true}
+          invalid={formState.validationErrors.pem && true}
         />
-        <FormInformation>
-          <strong>- OR -</strong>
-        </FormInformation>
-        <FormInformation>3) TODO: Upload PEM File</FormInformation>
 
         <Button type='submit' disabled={sendApiState.isSending}>
           Submit

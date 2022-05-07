@@ -3,12 +3,13 @@ import FormError from "./FormError";
 const InputSelect = (props) => {
   let errorMessage = '';
   switch (props.name) {
-    case 'algorithm':
+    case 'algorithm.value':
       errorMessage =
         'Select an algorithm to generate a key.';
       break;
     default:
       errorMessage = 'This field has an error.';
+      break;
   }
 
   return (
