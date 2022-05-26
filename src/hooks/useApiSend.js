@@ -22,22 +22,33 @@ const useApiSend = () => {
       body: JSON.stringify(payload),
     };
 
+    // for troubleshooting - TODO: Comment out
+    console.log(requestOptions.body);
+
     try {
       let response = await fetch(
         `${process.env.REACT_APP_API_NODE}/api${apiNode}`,
         requestOptions
       );
 
-      let responseJson = await response.json();
-
+      let errorMessage, responseJson
+      try {
+        responseJson = await response.json();
+        if (responseJson.error) {
+          errorMessage = responseJson.error.message
+        }
+      } catch(err) {
+        errorMessage = "no json returned"
+      }
+      
       // check for response errors
       if (
         response.ok !== true ||
         response.status !== 200 ||
-        responseJson.error !== undefined
+        errorMessage !== undefined
       ) {
         throw new Error(
-          `Status: ${response.status}, Message: ${responseJson.error.message}`
+          `Status: ${response.status}, Message: ${errorMessage}`
         );
       }
 
