@@ -7,6 +7,10 @@ const InputText = (props) => {
       errorMessage =
         'The name cannot be blank and must only contain these symbols - _ . ~ letters and numbers.';
       break;
+    case 'email':
+      errorMessage =
+        'Email address must be in a valid format.';
+      break;
     default:
       errorMessage = 'This field has an error.';
       break;

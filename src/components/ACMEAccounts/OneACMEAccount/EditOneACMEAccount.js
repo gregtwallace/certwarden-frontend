@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import useApiGet from '../../../hooks/useApiGet';
 import useApiSend from '../../../hooks/useApiSend';
-import { isNameValid } from '../../../helpers/form-validation';
+import { isEmailValidOrBlank, isNameValid } from '../../../helpers/form-validation';
 
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
@@ -113,6 +113,10 @@ const EditOneACMEAccount = () => {
     if (!isNameValid(formState.acme_account.name)) {
       validationErrors.name = true;
     }
+    // check email format (if present)
+    if (!isEmailValidOrBlank(formState.acme_account.email)) {
+      validationErrors.email = true;
+    }
 
     setFormState((prevState) => ({
       ...prevState,
@@ -188,6 +192,15 @@ const EditOneACMEAccount = () => {
             value={formState.acme_account.description}
             onChange={inputChangeHandler}
           />
+          {/* TODO: Allow multiple email addresses */}
+          <InputText
+            label='E-Mail Address'
+            id='email'
+            name='email'
+            value={formState.acme_account.email}
+            onChange={inputChangeHandler}
+            invalid={formState.validationErrors.email && true}
+          />
 
           <FormInformation>
             Status: {formState.acme_account.status}
@@ -208,12 +221,6 @@ const EditOneACMEAccount = () => {
             value={formState.acme_account.private_key_id}
             disabled
           />
-          <InputText
-            label='E-Mail Address'
-            id='email'
-            value={formState.acme_account.email}
-            disabled
-          />
 
           <InputCheckbox
             id='acceptedTos'
@@ -226,11 +233,7 @@ const EditOneACMEAccount = () => {
           </InputCheckbox>
           {/* Since checkbox doesn't have readonly and we want to send tos accept if already accepted */}
           {apiGetState.acme_account.accepted_tos && (
-            <InputHidden
-              id='acceptedTos'
-              name='accepted_tos'
-              value='on'
-            />
+            <InputHidden id='acceptedTos' name='accepted_tos' value='on' />
           )}
 
           <FormInformation>
