@@ -20,7 +20,10 @@ import FormError from '../../UI/Form/FormError';
 
 const AddOnePrivateKey = () => {
   // fetch valid options (for private keys this is the algorithms list)
-  const apiGetState = useApiGet(`/v1/privatekeys/${newId}`, 'private_key_options');
+  const apiGetState = useApiGet(
+    `/v1/privatekeys/${newId}`,
+    'private_key_options'
+  );
 
   const [sendApiState, sendData] = useApiSend();
   const navigate = useNavigate();
@@ -40,26 +43,27 @@ const AddOnePrivateKey = () => {
   const [formState, setFormState] = useState(blankFormState);
 
   // data change handlers
+  // inputs
   const inputChangeHandler = (event) => {
-    if (event.target.id === 'algorithm') {
-      setFormState((prevState) => ({
-        ...prevState,
-        private_key: {
-          ...prevState.private_key,
-          algorithm: {
-            value: event.target.value,
-          },
+    setFormState((prevState) => ({
+      ...prevState,
+      private_key: {
+        ...prevState.private_key,
+        [event.target.id]: event.target.value,
+      },
+    }));
+  };
+  // algorithm
+  const algoChangeHandler = (event) => {
+    setFormState((prevState) => ({
+      ...prevState,
+      private_key: {
+        ...prevState.private_key,
+        algorithm: {
+          value: event.target.value,
         },
-      }));
-    } else {
-      setFormState((prevState) => ({
-        ...prevState,
-        private_key: {
-          ...prevState.private_key,
-          [event.target.id]: event.target.value,
-        },
-      }));
-    }
+      },
+    }));
   };
 
   // button handlers
@@ -143,7 +147,7 @@ const AddOnePrivateKey = () => {
             name='algorithm.value'
             options={apiGetState.private_key_options.key_algorithms}
             value={formState.private_key.algorithm.value}
-            onChange={inputChangeHandler}
+            onChange={algoChangeHandler}
             emptyValue='- Select an Algorithm / Do Not Generate -'
             disabled={formState.private_key.pem && true}
             invalid={formState.validationErrors.algorithm && true}
