@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 import Dashboard from './components/Dashboard';
 import AllACMEAccounts from './components/ACMEAccounts/AllACMEAccounts';
-import OneACMEAccount from './components/ACMEAccounts/OneACMEAccount';
+import EditOneACMEAccount from './components/ACMEAccounts/OneACMEAccount/EditOneACMEAccount';
 import AllPrivateKeys from './components/PrivateKeys/AllPrivateKeys';
 import AddOnePrivateKey from './components/PrivateKeys/OnePrivateKey/AddOnePrivateKey';
 import EditOnePrivateKey from './components/PrivateKeys/OnePrivateKey/EditOnePrivateKey';
@@ -43,7 +43,7 @@ const App = () => {
               <Route path='/privatekeys/-1' element={<AddOnePrivateKey />} />
               <Route path='/privatekeys/:id' element={<EditOnePrivateKey />} />
               <Route path='/privatekeys' element={<AllPrivateKeys />} />
-              <Route path='/acmeaccounts/:id' element={<OneACMEAccount />} />
+              <Route path='/acmeaccounts/:id' element={<EditOneACMEAccount />} />
               <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
               `// TODO: Other Pages //`
               <Route path='/' element={<Dashboard />} />

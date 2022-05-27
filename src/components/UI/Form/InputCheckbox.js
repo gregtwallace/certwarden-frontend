@@ -4,7 +4,7 @@ const InputCheckbox = (props) => {
       <input
         className='form-check-input'
         type='checkbox'
-        name={props.id}
+        name={props.name}
         id={props.id}
         onChange={props.onChange}
         checked={props.checked && true}
