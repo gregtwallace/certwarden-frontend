@@ -16,17 +16,7 @@ import InputSelect from '../../UI/Form/InputSelect';
 import InputCheckbox from '../../UI/Form/InputCheckbox';
 import FormInformation from '../../UI/Form/FormInformation';
 
-
 const AddOneACMEAccount = () => {
-    //dummy stuff
-    const dummyKeys = [
-      { id: 0, name: 'Key Name' },
-      { id: 1, name: 'Some key name' },
-      { id: 2, name: 'My key' },
-    ];
-    // end dummy stuff
-  
-  
   // fetch valid options (for private keys this is the algorithms list)
   const apiGetState = useApiGet(
     `/v1/acmeaccounts/${newId}`,
@@ -57,7 +47,10 @@ const AddOneACMEAccount = () => {
     setFormState((prevState) => {
       return {
         ...prevState,
-        acme_account: { ...prevState.acme_account, name: event.target.value },
+        acme_account: {
+          ...prevState.acme_account,
+          [event.target.id]: event.target.value,
+        },
       };
     });
   };
@@ -65,7 +58,10 @@ const AddOneACMEAccount = () => {
     setFormState((prevState) => {
       return {
         ...prevState,
-        acme_account: { ...prevState.acme_account, email: event.target.value },
+        acme_account: {
+          ...prevState.acme_account,
+          [event.target.id]: event.target.checked,
+        },
       };
     });
   };
@@ -81,6 +77,27 @@ const AddOneACMEAccount = () => {
     // });
   };
 
+  /// Logic for some of the components so JSX is cleaner
+  var tos_url;
+  var availableKeys;
+
+  if (apiGetState.isLoaded && !apiGetState.errorMessage) {
+    // tos URL (prod vs. staging)
+    if (!formState.acme_account.is_staging) {
+      tos_url = apiGetState.acme_account_options.tos_url;
+    } else {
+      tos_url = apiGetState.acme_account_options.staging_tos_url;
+    }
+
+    // build options for available keys
+    if (apiGetState.isLoaded) {
+      availableKeys = apiGetState.acme_account_options.available_keys.map(
+        (m) => ({ value: m.id, name: m.name + " (" + m.algorithm.name + ")" })
+      );
+    }
+  }
+  ///
+
   if (apiGetState.errorMessage) {
     return <ApiError>{apiGetState.errorMessage}</ApiError>;
   } else if (!apiGetState.isLoaded) {
@@ -88,10 +105,7 @@ const AddOneACMEAccount = () => {
   } else {
     return (
       <>
-        <h2>ACME Account - Edit</h2>
-        Adding an account with a key that already has an associated account will
-        cause the below fields to be overwritten with the existing account
-        information.
+        <H2Header h2='ACME Accounts - Add' />
         <Form>
           <InputText
             label='Account Name'
@@ -100,37 +114,50 @@ const AddOneACMEAccount = () => {
             onChange={inputChangeHandler}
           />
           <InputText
-            label='E-Mail Address'
-            id='email'
-            value={formState.acme_account.email}
-            onChange={inputChangeHandler}
-          />
-          <InputText
             label='Description'
             id='description'
             value={formState.acme_account.description}
             onChange={inputChangeHandler}
           />
+          <InputText
+            label='E-Mail Address'
+            id='email'
+            value={formState.acme_account.email}
+            onChange={inputChangeHandler}
+          />
           <InputSelect
             label='Private Key'
             id='privateKey'
-            options={dummyKeys}
+            options={availableKeys}
             value={formState.acme_account.private_key_id}
             onChange={inputChangeHandler}
           />
+
+          <FormInformation>
+            Adding an account with a key that already has an associated account
+            will cause the fields below to behave no effect.
+          </FormInformation>
+
           <InputCheckbox
-            id='acceptTos'
-            checked={formState.acme_account.accepted_tos}
-            onChange={checkChangeHandler}
-          >
-            Accept Let's Encrypt Terms of Service
-          </InputCheckbox>
-          <InputCheckbox
-            id='isStaging'
-            checked={formState.acme_account.is_staging}
+            id='is_staging'
+            checked={formState.acme_account.is_staging ? true : ''}
             onChange={checkChangeHandler}
           >
             Staging Account
+          </InputCheckbox>
+
+          <FormInformation>
+            Terms of Service:{' '}
+            <a href={tos_url} target='_blank' rel='noreferrer'>
+              {tos_url}
+            </a>
+          </FormInformation>
+          <InputCheckbox
+            id='accepted_tos'
+            checked={formState.acme_account.accepted_tos ? true : ''}
+            onChange={checkChangeHandler}
+          >
+            Accept Let's Encrypt Terms of Service
           </InputCheckbox>
 
           <FormInformation>

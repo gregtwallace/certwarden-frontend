@@ -201,14 +201,6 @@ const EditOneACMEAccount = () => {
             onChange={inputChangeHandler}
             invalid={formState.validationErrors.email && true}
           />
-
-          <FormInformation>
-            Status: {formState.acme_account.status}
-          </FormInformation>
-          <FormInformation>
-            Type: {formState.acme_account.is_staging ? 'Staging' : 'Production'}
-          </FormInformation>
-
           <InputSelect
             label='Private Key'
             id='privateKey'
@@ -221,6 +213,13 @@ const EditOneACMEAccount = () => {
             value={formState.acme_account.private_key_id}
             disabled
           />
+
+          <FormInformation>
+            Status: {formState.acme_account.status}
+          </FormInformation>
+          <FormInformation>
+            Type: {formState.acme_account.is_staging ? 'Staging' : 'Production'}
+          </FormInformation>
 
           <InputCheckbox
             id='acceptedTos'
