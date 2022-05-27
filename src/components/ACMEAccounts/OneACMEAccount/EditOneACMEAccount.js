@@ -52,7 +52,7 @@ const EditOneACMEAccount = () => {
       },
     }));
   };
-  const tosChangeHandler = (event) => {
+  const checkChangeHandler = (event) => {
     setFormState((prevState) => {
       return {
         ...prevState,
@@ -226,7 +226,7 @@ const EditOneACMEAccount = () => {
             id='acceptedTos'
             name='accepted_tos'
             checked={formState.acme_account.accepted_tos ? true : ''}
-            onChange={tosChangeHandler}
+            onChange={checkChangeHandler}
             disabled={apiGetState.acme_account.accepted_tos}
           >
             Accept Let's Encrypt Terms of Service

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import useApiGet from '../../../hooks/useApiGet';
 import useApiSend from '../../../hooks/useApiSend';
 import { isNameValid } from '../../../helpers/form-validation';
+import { newId } from '../../../App';
 
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
@@ -19,14 +20,14 @@ import FormError from '../../UI/Form/FormError';
 
 const AddOnePrivateKey = () => {
   // fetch valid options (for private keys this is the algorithms list)
-  const apiGetState = useApiGet(`/v1/privatekeys/-1`, 'private_key_options');
+  const apiGetState = useApiGet(`/v1/privatekeys/${newId}`, 'private_key_options');
 
   const [sendApiState, sendData] = useApiSend();
   const navigate = useNavigate();
 
   const blankFormState = {
     private_key: {
-      id: '-1',
+      id: newId,
       name: '',
       description: '',
       algorithm: {
