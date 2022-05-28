@@ -201,13 +201,14 @@ const EditOnePrivateKey = () => {
             <small>Last Updated: {formState.private_key.updated_at}</small>
           </FormInformation>
 
-          <Button type='cancel' onClick={cancelClickHandler} disabled={sendApiState.isSending}>
-            Cancel
-          </Button>
+          <Button type='submit' disabled={sendApiState.isSending}>Submit</Button>
           <Button type='reset' onClick={resetClickHandler} disabled={sendApiState.isSending}>
             Reset
           </Button>
-          <Button type='submit' disabled={sendApiState.isSending}>Submit</Button>
+          <Button type='cancel' onClick={cancelClickHandler} disabled={sendApiState.isSending}>
+            Cancel
+          </Button>
+
         </Form>
       </>
     );
