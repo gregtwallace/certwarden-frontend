@@ -3,7 +3,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import useApiGet from '../../../hooks/useApiGet';
 import useApiSend from '../../../hooks/useApiSend';
-import { isEmailValidOrBlank, isNameValid } from '../../../helpers/form-validation';
+import {
+  isEmailValidOrBlank,
+  isNameValid,
+} from '../../../helpers/form-validation';
 
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
@@ -41,7 +44,6 @@ const EditOneACMEAccount = () => {
     }
   }, [apiGetState]);
 
-  // form field updates
   // data change handlers
   const inputChangeHandler = (event) => {
     setFormState((prevState) => ({
@@ -53,12 +55,13 @@ const EditOneACMEAccount = () => {
     }));
   };
   const checkChangeHandler = (event) => {
+    console.log(event.target.id);
     setFormState((prevState) => {
       return {
         ...prevState,
         acme_account: {
           ...prevState.acme_account,
-          accepted_tos: event.target.checked,
+          [event.target.id]: event.target.checked,
         },
       };
     });
@@ -95,7 +98,7 @@ const EditOneACMEAccount = () => {
     sendData(`/v1/acmeaccounts/${formState.acme_account.id}`, 'DELETE').then(
       (success) => {
         if (success) {
-          // back to the private keys page
+          // back to the accounts page
           //navigate('.');
           navigate('/acmeaccounts');
         }
@@ -116,6 +119,10 @@ const EditOneACMEAccount = () => {
     // check email format (if present)
     if (!isEmailValidOrBlank(formState.acme_account.email)) {
       validationErrors.email = true;
+    }
+    // ToS must be accepted
+    if (formState.acme_account.accepted_tos !== true) {
+      validationErrors.accepted_tos = true;
     }
 
     setFormState((prevState) => ({
@@ -222,18 +229,20 @@ const EditOneACMEAccount = () => {
           </FormInformation>
 
           <InputCheckbox
-            id='acceptedTos'
-            name='accepted_tos'
-            checked={formState.acme_account.accepted_tos ? true : ''}
+            id='accepted_tos'
+            checked={formState.acme_account.accepted_tos ? true : false}
             onChange={checkChangeHandler}
             disabled={apiGetState.acme_account.accepted_tos}
+            invalid={formState.validationErrors.accepted_tos}
           >
             Accept Let's Encrypt Terms of Service
           </InputCheckbox>
-          {/* Since checkbox doesn't have readonly and we want to send tos accept if already accepted */}
-          {apiGetState.acme_account.accepted_tos && (
-            <InputHidden id='acceptedTos' name='accepted_tos' value='on' />
-          )}
+          {/* Since checkbox doesn't send if off, use hidden field instead */}
+          <InputHidden
+            id='accepted_tos_input'
+            name='accepted_tos'
+            value={formState.acme_account.accepted_tos ? true : false}
+          />
 
           <FormInformation>
             <small>Created: {formState.acme_account.created_at}</small>
@@ -242,12 +251,8 @@ const EditOneACMEAccount = () => {
             <small>Last Updated: {formState.acme_account.updated_at}</small>
           </FormInformation>
 
-          <Button
-            type='cancel'
-            onClick={cancelClickHandler}
-            disabled={sendApiState.isSending}
-          >
-            Cancel
+          <Button type='submit' disabled={sendApiState.isSending}>
+            Submit
           </Button>
           <Button
             type='reset'
@@ -256,8 +261,12 @@ const EditOneACMEAccount = () => {
           >
             Reset
           </Button>
-          <Button type='submit' disabled={sendApiState.isSending}>
-            Submit
+          <Button
+            type='cancel'
+            onClick={cancelClickHandler}
+            disabled={sendApiState.isSending}
+          >
+            Cancel
           </Button>
         </Form>
       </>
