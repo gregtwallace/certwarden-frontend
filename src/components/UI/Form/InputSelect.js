@@ -2,10 +2,14 @@ import FormError from "./FormError";
 
 const InputSelect = (props) => {
   let errorMessage = '';
-  switch (props.name) {
-    case 'algorithm.value':
+  switch (props.id) {
+    case 'algorithm_value':
       errorMessage =
         'Select an algorithm to generate a key.';
+      break;
+    case 'private_key_id':
+      errorMessage = 
+        'Select an available private key.';
       break;
     default:
       errorMessage = 'This field has an error.';

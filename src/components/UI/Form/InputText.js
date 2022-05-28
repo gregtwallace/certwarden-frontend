@@ -2,7 +2,7 @@ import FormError from "./FormError";
 
 const InputText = (props) => {
   let errorMessage = '';
-  switch (props.name) {
+  switch (props.id) {
     case 'name':
       errorMessage =
         'The name cannot be blank and must only contain these symbols - _ . ~ letters and numbers.';

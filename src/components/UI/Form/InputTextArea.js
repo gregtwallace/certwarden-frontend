@@ -2,7 +2,7 @@ import FormError from "./FormError";
 
 const InputTextArea = (props) => {
   let errorMessage = '';
-  switch (props.name) {
+  switch (props.id) {
     case 'pem':
       errorMessage = 'PEM content is not valid.'
       break;
