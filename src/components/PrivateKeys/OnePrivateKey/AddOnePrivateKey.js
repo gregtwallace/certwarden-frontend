@@ -33,35 +33,20 @@ const AddOnePrivateKey = () => {
       id: newId,
       name: '',
       description: '',
-      algorithm: {
-        value: '',
-      },
+      algorithm_value: '',
       pem: '',
     },
     validationErrors: {},
   };
   const [formState, setFormState] = useState(blankFormState);
 
-  // data change handlers
-  // inputs
+  // data change handler
   const inputChangeHandler = (event) => {
     setFormState((prevState) => ({
       ...prevState,
       private_key: {
         ...prevState.private_key,
         [event.target.id]: event.target.value,
-      },
-    }));
-  };
-  // algorithm
-  const algoChangeHandler = (event) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      private_key: {
-        ...prevState.private_key,
-        algorithm: {
-          value: event.target.value,
-        },
       },
     }));
   };
@@ -143,11 +128,11 @@ const AddOnePrivateKey = () => {
           </FormInformation>
           <InputSelect
             label='1) Generate Using Algorithm'
-            id='algorithm'
-            name='algorithm.value'
+            id='algorithm_value'
+            name='algorithm_value'
             options={apiGetState.private_key_options.key_algorithms}
-            value={formState.private_key.algorithm.value}
-            onChange={algoChangeHandler}
+            value={formState.private_key.algorithm_value}
+            onChange={inputChangeHandler}
             emptyValue='- Select an Algorithm / Do Not Generate -'
             disabled={formState.private_key.pem && true}
             invalid={formState.validationErrors.algorithm && true}
@@ -162,7 +147,7 @@ const AddOnePrivateKey = () => {
             rows='8'
             value={formState.private_key.pem}
             onChange={inputChangeHandler}
-            disabled={formState.private_key.algorithm.value && true}
+            disabled={formState.private_key.algorithm_value && true}
             invalid={formState.validationErrors.pem && true}
           />
 
