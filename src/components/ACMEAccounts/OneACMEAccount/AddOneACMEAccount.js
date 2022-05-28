@@ -1,9 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import useApiGet from '../../../hooks/useApiGet';
 import useApiSend from '../../../hooks/useApiSend';
-import { isNameValid } from '../../../helpers/form-validation';
+import {
+  isNameValid,
+  isEmailValidOrBlank,
+} from '../../../helpers/form-validation';
 import { newId } from '../../../App';
 
 import ApiError from '../../UI/Api/ApiError';
@@ -14,6 +17,7 @@ import Form from '../../UI/Form/Form';
 import InputText from '../../UI/Form/InputText';
 import InputSelect from '../../UI/Form/InputSelect';
 import InputCheckbox from '../../UI/Form/InputCheckbox';
+import InputHidden from '../../UI/Form/InputHidden';
 import FormInformation from '../../UI/Form/FormInformation';
 
 const AddOneACMEAccount = () => {
@@ -31,17 +35,16 @@ const AddOneACMEAccount = () => {
       id: newId,
       name: '',
       description: '',
-      algorithm: {
-        value: '',
-      },
-      pem: '',
+      email: '',
+      private_key_id: '',
+      is_staging: false,
+      accepted_tos: false,
     },
     validationErrors: {},
   };
   const [formState, setFormState] = useState(blankFormState);
 
   // data change handlers
-
   // form field updates
   const inputChangeHandler = (event) => {
     setFormState((prevState) => {
@@ -54,6 +57,7 @@ const AddOneACMEAccount = () => {
       };
     });
   };
+  // checkbox updates
   const checkChangeHandler = (event) => {
     setFormState((prevState) => {
       return {
@@ -69,12 +73,53 @@ const AddOneACMEAccount = () => {
   // button handlers
   const resetClickHandler = (event) => {
     event.preventDefault();
-    // setAcmeAccount((prevState) => {
-    //   return {
-    //     ...prevState,
-    //     account: { ...prevState.origAccount },
-    //   };
-    // });
+    setFormState(blankFormState);
+  };
+  const cancelClickHandler = (event) => {
+    event.preventDefault();
+    // navigate('.');
+    navigate('/acmeaccounts');
+  };
+
+  // submit handler
+  const submitFormHandler = (event) => {
+    event.preventDefault();
+
+    /// form validation
+    let validationErrors = [];
+    // name
+    if (!isNameValid(formState.acme_account.name)) {
+      validationErrors.name = true;
+    }
+    // check email format (if present)
+    if (!isEmailValidOrBlank(formState.acme_account.email)) {
+      validationErrors.email = true;
+    }
+    // check private key is selected
+    if (formState.acme_account.private_key_id === '') {
+      validationErrors.private_key_id = true;
+    }
+    // ToS must be accepted
+    if (formState.acme_account.accepted_tos !== true) {
+      validationErrors.accepted_tos = true;
+    }
+
+    setFormState((prevState) => ({
+      ...prevState,
+      validationErrors: validationErrors,
+    }));
+    if (Object.keys(validationErrors).length > 0) {
+      return false;
+    }
+    ///
+
+    sendData(`/v1/acmeaccounts`, 'POST', event).then((success) => {
+      if (success) {
+        // back to the acme accounts page
+        //navigate('.');
+        navigate('/acmeaccounts');
+      }
+    });
   };
 
   /// Logic for some of the components so JSX is cleaner
@@ -90,11 +135,9 @@ const AddOneACMEAccount = () => {
     }
 
     // build options for available keys
-    if (apiGetState.isLoaded) {
-      availableKeys = apiGetState.acme_account_options.available_keys.map(
-        (m) => ({ value: m.id, name: m.name + " (" + m.algorithm.name + ")" })
-      );
-    }
+    availableKeys = apiGetState.acme_account_options.available_keys.map(
+      (m) => ({ value: m.id, name: m.name + ' (' + m.algorithm.name + ')' })
+    );
   }
   ///
 
@@ -106,72 +149,88 @@ const AddOneACMEAccount = () => {
     return (
       <>
         <H2Header h2='ACME Accounts - Add' />
-        <Form>
+        <Form onSubmit={submitFormHandler}>
           <InputText
             label='Account Name'
             id='name'
+            name='name'
             value={formState.acme_account.name}
             onChange={inputChangeHandler}
+            invalid={formState.validationErrors.name && true}
           />
           <InputText
             label='Description'
             id='description'
+            name='description'
             value={formState.acme_account.description}
             onChange={inputChangeHandler}
           />
           <InputText
             label='E-Mail Address'
             id='email'
+            name='email'
             value={formState.acme_account.email}
             onChange={inputChangeHandler}
+            invalid={formState.validationErrors.email && true}
           />
           <InputSelect
             label='Private Key'
-            id='privateKey'
+            id='private_key_id'
+            name='private_key_id'
             options={availableKeys}
             value={formState.acme_account.private_key_id}
             onChange={inputChangeHandler}
+            emptyValue='- Select a Key -'
+            invalid={formState.validationErrors.private_key_id}
           />
-
-          <FormInformation>
-            Adding an account with a key that already has an associated account
-            will cause the fields below to behave no effect.
-          </FormInformation>
 
           <InputCheckbox
             id='is_staging'
-            checked={formState.acme_account.is_staging ? true : ''}
+            checked={formState.acme_account.is_staging ? true : false}
             onChange={checkChangeHandler}
           >
             Staging Account
           </InputCheckbox>
+          <InputHidden
+            id='is_staging_input'
+            name='is_staging'
+            value={formState.acme_account.is_staging ? true : false}
+          />
 
-          <FormInformation>
-            Terms of Service:{' '}
-            <a href={tos_url} target='_blank' rel='noreferrer'>
-              {tos_url}
-            </a>
-          </FormInformation>
           <InputCheckbox
             id='accepted_tos'
-            checked={formState.acme_account.accepted_tos ? true : ''}
+            checked={formState.acme_account.accepted_tos ? true : false}
             onChange={checkChangeHandler}
+            invalid={formState.validationErrors.accepted_tos}
           >
-            Accept Let's Encrypt Terms of Service
+            Accept{' '}
+            <a href={tos_url} target='_blank' rel='noreferrer'>
+              Let's Encrypt Terms of Service
+            </a>
           </InputCheckbox>
+          <InputHidden
+            id='accepted_tos_input'
+            name='accepted_tos'
+            value={formState.acme_account.accepted_tos ? true : false}
+          />
 
-          <FormInformation>
-            <small>Created: {formState.acme_account.created_at}</small>
-          </FormInformation>
-          <FormInformation>
-            <small>Last Updated: {formState.acme_account.updated_at}</small>
-          </FormInformation>
-
-          <Button type='submit'>Submit</Button>
-          <Button type='reset' onClick={resetClickHandler}>
+          <Button type='submit' disabled={sendApiState.isSending}>
+            Submit
+          </Button>
+          <Button
+            type='reset'
+            onClick={resetClickHandler}
+            disabled={sendApiState.isSending}
+          >
             Reset
           </Button>
-          <Button type='cancel'>Cancel</Button>
+          <Button
+            type='cancel'
+            onClick={cancelClickHandler}
+            disabled={sendApiState.isSending}
+          >
+            Cancel
+          </Button>
         </Form>
       </>
     );
