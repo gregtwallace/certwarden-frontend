@@ -150,6 +150,8 @@ const AddOneACMEAccount = () => {
       <>
         <H2Header h2='ACME Accounts - Add' />
         <Form onSubmit={submitFormHandler}>
+          <InputHidden id='id' name='id' value={formState.acme_account.id} />
+
           <InputText
             label='Account Name'
             id='name'
@@ -166,7 +168,7 @@ const AddOneACMEAccount = () => {
             onChange={inputChangeHandler}
           />
           <InputText
-            label='E-Mail Address'
+            label='E-Mail Address (will be overwritten if account already exists with Let&apos;s Encrypt)'
             id='email'
             name='email'
             value={formState.acme_account.email}
