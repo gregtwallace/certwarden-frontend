@@ -33,7 +33,7 @@ const InputSelect = (props) => {
             {props.emptyValue}
           </option>
         )}
-        {props.options.map((m) => (
+        {(!props.disabled && props.options) && props.options.map((m) => (
           <option key={m.value} value={m.value}>
             {m.name}
           </option>
