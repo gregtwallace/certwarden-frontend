@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import useApiGet from '../../../hooks/useApiGet';
@@ -23,26 +23,41 @@ import H2Header from '../../UI/Header/H2Header';
 
 const EditOneACMEAccount = () => {
   const { id } = useParams();
+  const apiGetState = useApiGet(`/v1/acmeaccounts/${id}`, 'acme_account');
+
+  const [sendApiState, sendData] = useApiSend();
   const navigate = useNavigate();
 
-  const apiGetState = useApiGet(`/v1/acmeaccounts/${id}`, 'acme_account');
-  const [sendApiState, sendData] = useApiSend();
-
+  // set dummy state prior to apiGet loading
+  // only includes values that will be used in payload
   const [formState, setFormState] = useState({
-    isLoaded: false,
+    acme_account: {
+      id: -2, // dummy value
+      name: '',
+      description: '',
+    },
+    validationErrors: {},
   });
+
+  // Function to set the form equal to the current API state
+  const setFormToApi = useCallback(() => {
+    setFormState({
+      acme_account: {
+        id: apiGetState.acme_account.id,
+        name: apiGetState.acme_account.name,
+        description: apiGetState.acme_account.description,
+      },
+      validationErrors: {},
+    });
+  }, [apiGetState]);
 
   const [deleteModal, setDeleteModal] = useState(false);
 
   useEffect(() => {
     if (apiGetState.isLoaded && !apiGetState.errorMessage) {
-      setFormState({
-        acme_account: apiGetState.acme_account,
-        validationErrors: {},
-        isLoaded: apiGetState.isLoaded,
-      });
+      setFormToApi();
     }
-  }, [apiGetState]);
+  }, [apiGetState, setFormToApi]);
 
   // data change handlers
   const inputChangeHandler = (event) => {
@@ -54,28 +69,12 @@ const EditOneACMEAccount = () => {
       },
     }));
   };
-  const checkChangeHandler = (event) => {
-    console.log(event.target.id);
-    setFormState((prevState) => {
-      return {
-        ...prevState,
-        acme_account: {
-          ...prevState.acme_account,
-          [event.target.id]: event.target.checked,
-        },
-      };
-    });
-  };
 
   // button handlers
   const resetClickHandler = (event) => {
     event.preventDefault();
-    setFormState((prevState) => {
-      return {
-        ...prevState,
-        acme_account: { ...apiGetState.acme_account },
-      };
-    });
+
+    setFormToApi();
   };
   const cancelClickHandler = (event) => {
     event.preventDefault();
@@ -116,14 +115,6 @@ const EditOneACMEAccount = () => {
     if (!isNameValid(formState.acme_account.name)) {
       validationErrors.name = true;
     }
-    // check email format (if present)
-    if (!isEmailValidOrBlank(formState.acme_account.email)) {
-      validationErrors.email = true;
-    }
-    // ToS must be accepted
-    if (formState.acme_account.accepted_tos !== true) {
-      validationErrors.accepted_tos = true;
-    }
 
     setFormState((prevState) => ({
       ...prevState,
@@ -137,7 +128,7 @@ const EditOneACMEAccount = () => {
     sendData(
       `/v1/acmeaccounts/${formState.acme_account.id}`,
       'PUT',
-      event
+      formState.acme_account
     ).then((success) => {
       if (success) {
         // back to the previous page
@@ -149,7 +140,7 @@ const EditOneACMEAccount = () => {
 
   if (apiGetState.errorMessage) {
     return <ApiError>{apiGetState.errorMessage}</ApiError>;
-  } else if (!formState.isLoaded) {
+  } else if (!apiGetState.isLoaded) {
     return <ApiLoading />;
   } else {
     return (
@@ -204,51 +195,37 @@ const EditOneACMEAccount = () => {
             label='E-Mail Address'
             id='email'
             name='email'
-            value={formState.acme_account.email}
+            value={apiGetState.acme_account.email}
             onChange={inputChangeHandler}
-            invalid={formState.validationErrors.email && true}
+            disabled
           />
           <InputSelect
             label='Private Key'
             id='privateKey'
-            options={[
-              {
-                value: formState.acme_account.private_key_id,
-                name: formState.acme_account.private_key_name,
-              },
-            ]}
-            value={formState.acme_account.private_key_id}
+            emptyValue={apiGetState.acme_account.private_key_name}
             disabled
           />
 
           <FormInformation>
-            Status: {formState.acme_account.status}
+            Status: {apiGetState.acme_account.status}
           </FormInformation>
           <FormInformation>
-            Type: {formState.acme_account.is_staging ? 'Staging' : 'Production'}
+            Account Type: {apiGetState.acme_account.is_staging ? 'Staging' : 'Production'}
           </FormInformation>
 
           <InputCheckbox
             id='accepted_tos'
-            checked={formState.acme_account.accepted_tos ? true : false}
-            onChange={checkChangeHandler}
-            disabled={apiGetState.acme_account.accepted_tos}
-            invalid={formState.validationErrors.accepted_tos}
+            checked
+            disabled
           >
             Accept Let's Encrypt Terms of Service
           </InputCheckbox>
-          {/* Since checkbox doesn't send if off, use hidden field instead */}
-          <InputHidden
-            id='accepted_tos_input'
-            name='accepted_tos'
-            value={formState.acme_account.accepted_tos ? true : false}
-          />
 
           <FormInformation>
-            <small>Created: {formState.acme_account.created_at}</small>
+            <small>Created: {apiGetState.acme_account.created_at}</small>
           </FormInformation>
           <FormInformation>
-            <small>Last Updated: {formState.acme_account.updated_at}</small>
+            <small>Last Updated: {apiGetState.acme_account.updated_at}</small>
           </FormInformation>
 
           <Button type='submit' disabled={sendApiState.isSending}>
