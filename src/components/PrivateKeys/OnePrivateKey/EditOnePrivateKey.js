@@ -44,7 +44,6 @@ const EditOnePrivateKey = () => {
         description: apiGetState.private_key.description,
       },
       validationErrors: {},
-      isLoaded: true,
     });
   }, [apiGetState]);
 
