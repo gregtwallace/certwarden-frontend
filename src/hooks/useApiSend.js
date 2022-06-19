@@ -8,18 +8,15 @@ const useApiSend = () => {
 
   // Send data to the node using the specified method and a payload from the specified event
   // return true if success and no error, return false if something goes wrong
-  const sendData = async (apiNode, method, event = '') => {
+  const sendData = async (apiNode, method, payloadObj) => {
     setState({
       isSending: true,
       errorMessage: null,
     });
 
-    const data = new FormData(event.target);
-    const payload = Object.fromEntries(data.entries());
-
     const requestOptions = {
       method: method,
-      body: JSON.stringify(payload),
+      body: JSON.stringify(payloadObj),
     };
 
     // for troubleshooting - TODO: Comment out

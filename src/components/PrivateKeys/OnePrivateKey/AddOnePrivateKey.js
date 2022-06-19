@@ -73,7 +73,7 @@ const AddOnePrivateKey = () => {
       validationErrors.name = true;
     }
     // don't bother checking algorithm, as it is a dropdown select
-    // pem (TODO)
+    // TODO: Pem check?
 
     setFormState((prevState) => ({
       ...prevState,
@@ -84,7 +84,7 @@ const AddOnePrivateKey = () => {
     }
     //
 
-    sendData(`/v1/privatekeys`, 'POST', event).then((success) => {
+    sendData(`/v1/privatekeys`, 'POST', formState.private_key).then((success) => {
       if (success) {
         // back to the private keys page
         //navigate('.');
