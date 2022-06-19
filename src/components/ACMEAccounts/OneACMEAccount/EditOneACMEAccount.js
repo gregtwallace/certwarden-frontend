@@ -3,10 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import useApiGet from '../../../hooks/useApiGet';
 import useApiSend from '../../../hooks/useApiSend';
-import {
-  isEmailValidOrBlank,
-  isNameValid,
-} from '../../../helpers/form-validation';
+import { isNameValid } from '../../../helpers/form-validation';
 
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
@@ -20,6 +17,9 @@ import Button from '../../UI/Button/Button';
 import Form from '../../UI/Form/Form';
 import Modal from '../../UI/Modal/Modal';
 import H2Header from '../../UI/Header/H2Header';
+
+// TODO
+// Add: deactivate button, edit email button, rotate key button, refresh LE status button
 
 const EditOneACMEAccount = () => {
   const { id } = useParams();
@@ -210,14 +210,11 @@ const EditOneACMEAccount = () => {
             Status: {apiGetState.acme_account.status}
           </FormInformation>
           <FormInformation>
-            Account Type: {apiGetState.acme_account.is_staging ? 'Staging' : 'Production'}
+            Account Type:{' '}
+            {apiGetState.acme_account.is_staging ? 'Staging' : 'Production'}
           </FormInformation>
 
-          <InputCheckbox
-            id='accepted_tos'
-            checked
-            disabled
-          >
+          <InputCheckbox id='accepted_tos' checked disabled>
             Accept Let's Encrypt Terms of Service
           </InputCheckbox>
 
