@@ -14,6 +14,8 @@ const useApiSend = () => {
       errorMessage: null,
     });
 
+    console.log(payloadObj);
+
     const requestOptions = {
       method: method,
       body: JSON.stringify(payloadObj),
