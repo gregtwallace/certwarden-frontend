@@ -83,9 +83,6 @@ const EditOneACMEAccount = () => {
   };
 
   // delete handlers
-  // TODO: Deactivate account?
-  //  either as a separate button to deactivate/delete
-  //  or just one button that does both??
   const deleteClickHandler = () => {
     setDeleteModal(true);
   };
