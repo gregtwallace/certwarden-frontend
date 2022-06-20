@@ -118,15 +118,17 @@ const EditOnePrivateKey = () => {
     }
     ///
 
-    sendData(`/v1/privatekeys/${formState.private_key.id}`, 'PUT', formState.private_key).then(
-      (success) => {
-        if (success) {
-          // back to the private keys page
-          //navigate('.');
-          navigate('/privatekeys');
-        }
+    sendData(
+      `/v1/privatekeys/${formState.private_key.id}`,
+      'PUT',
+      formState.private_key
+    ).then((success) => {
+      if (success) {
+        // back to the private keys page
+        //navigate('.');
+        navigate('/privatekeys');
       }
-    );
+    });
   };
 
   if (apiGetState.errorMessage) {
@@ -149,6 +151,10 @@ const EditOnePrivateKey = () => {
             This action cannot be undone and{' '}
             <strong className='text-danger'>
               the key will not be recoverable!
+            </strong>{' '}
+            If you do not have a backup of the key,{' '}
+            <strong className='text-danger'>
+              any associated accounts will also not be recoverable!
             </strong>
           </Modal>
         )}
@@ -183,7 +189,7 @@ const EditOnePrivateKey = () => {
             value={formState.private_key.description}
             onChange={inputChangeHandler}
           />
-          
+
           <FormInformation>
             Algorithm: {apiGetState.private_key.algorithm.name}
           </FormInformation>
