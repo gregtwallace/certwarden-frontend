@@ -18,7 +18,7 @@ import InputText from '../../UI/Form/InputText';
 import InputSelect from '../../UI/Form/InputSelect';
 import InputCheckbox from '../../UI/Form/InputCheckbox';
 import InputHidden from '../../UI/Form/InputHidden';
-import FormInformation from '../../UI/Form/FormInformation';
+import FormError from '../../UI/Form/FormError';
 
 const AddOneACMEAccount = () => {
   // fetch valid options (for private keys this is the algorithms list)
@@ -36,7 +36,7 @@ const AddOneACMEAccount = () => {
       name: '',
       description: '',
       email: '',
-      private_key_id: '',
+      private_key_id: -2,
       is_staging: false,
       accepted_tos: false,
     },
@@ -45,8 +45,8 @@ const AddOneACMEAccount = () => {
   const [formState, setFormState] = useState(blankFormState);
 
   // data change handlers
-  // form field updates
-  const inputChangeHandler = (event) => {
+  // string form field updates
+  const stringInputChangeHandler = (event) => {
     setFormState((prevState) => {
       return {
         ...prevState,
@@ -57,6 +57,20 @@ const AddOneACMEAccount = () => {
       };
     });
   };
+
+  // int form field updates
+  const intInputChangeHandler = (event) => {
+    setFormState((prevState) => {
+      return {
+        ...prevState,
+        acme_account: {
+          ...prevState.acme_account,
+          [event.target.id]: parseInt(event.target.value),
+        },
+      };
+    });
+  };
+
   // checkbox updates
   const checkChangeHandler = (event) => {
     setFormState((prevState) => {
@@ -113,13 +127,15 @@ const AddOneACMEAccount = () => {
     }
     ///
 
-    sendData(`/v1/acmeaccounts`, 'POST', event).then((success) => {
-      if (success) {
-        // back to the acme accounts page
-        //navigate('.');
-        navigate('/acmeaccounts');
+    sendData(`/v1/acmeaccounts`, 'POST', formState.acme_account).then(
+      (success) => {
+        if (success) {
+          // back to the acme accounts page
+          //navigate('.');
+          navigate('/acmeaccounts');
+        }
       }
-    });
+    );
   };
 
   /// Logic for some of the components so JSX is cleaner
@@ -136,7 +152,10 @@ const AddOneACMEAccount = () => {
 
     // build options for available keys
     availableKeys = apiGetState.acme_account_options.available_keys.map(
-      (m) => ({ value: m.id, name: m.name + ' (' + m.algorithm.name + ')' })
+      (m) => ({
+        value: parseInt(m.id),
+        name: m.name + ' (' + m.algorithm.name + ')',
+      })
     );
   }
   ///
@@ -149,6 +168,10 @@ const AddOneACMEAccount = () => {
     return (
       <>
         <H2Header h2='ACME Accounts - Add' />
+        {sendApiState.errorMessage && (
+          <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>
+        )}
+
         <Form onSubmit={submitFormHandler}>
           <InputHidden id='id' name='id' value={formState.acme_account.id} />
 
@@ -157,7 +180,7 @@ const AddOneACMEAccount = () => {
             id='name'
             name='name'
             value={formState.acme_account.name}
-            onChange={inputChangeHandler}
+            onChange={stringInputChangeHandler}
             invalid={formState.validationErrors.name && true}
           />
           <InputText
@@ -165,14 +188,14 @@ const AddOneACMEAccount = () => {
             id='description'
             name='description'
             value={formState.acme_account.description}
-            onChange={inputChangeHandler}
+            onChange={stringInputChangeHandler}
           />
           <InputText
-            label='E-Mail Address (will be overwritten if account already exists with Let&apos;s Encrypt)'
+            label="E-Mail Address (will be overwritten if account already exists with Let's Encrypt)"
             id='email'
             name='email'
             value={formState.acme_account.email}
-            onChange={inputChangeHandler}
+            onChange={stringInputChangeHandler}
             invalid={formState.validationErrors.email && true}
           />
           <InputSelect
@@ -181,7 +204,7 @@ const AddOneACMEAccount = () => {
             name='private_key_id'
             options={availableKeys}
             value={formState.acme_account.private_key_id}
-            onChange={inputChangeHandler}
+            onChange={intInputChangeHandler}
             emptyValue='- Select a Key -'
             invalid={formState.validationErrors.private_key_id}
           />
@@ -191,13 +214,8 @@ const AddOneACMEAccount = () => {
             checked={formState.acme_account.is_staging ? true : false}
             onChange={checkChangeHandler}
           >
-            Staging Account
+            Staging Environment Account
           </InputCheckbox>
-          <InputHidden
-            id='is_staging_input'
-            name='is_staging'
-            value={formState.acme_account.is_staging ? true : false}
-          />
 
           <InputCheckbox
             id='accepted_tos'
@@ -210,11 +228,6 @@ const AddOneACMEAccount = () => {
               Let's Encrypt Terms of Service
             </a>
           </InputCheckbox>
-          <InputHidden
-            id='accepted_tos_input'
-            name='accepted_tos'
-            value={formState.acme_account.accepted_tos ? true : false}
-          />
 
           <Button type='submit' disabled={sendApiState.isSending}>
             Submit
