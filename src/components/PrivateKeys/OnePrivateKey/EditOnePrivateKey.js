@@ -193,6 +193,13 @@ const EditOnePrivateKey = () => {
           <FormInformation>
             Algorithm: {apiGetState.private_key.algorithm.name}
           </FormInformation>
+          <InputTextArea
+            label='PEM Content'
+            id='pem'
+            value={apiGetState.private_key.pem}
+            rows='8'
+            readOnly
+          />
           <FormInformation>
             API Key: {apiGetState.private_key.api_key}
           </FormInformation>
