@@ -21,7 +21,7 @@ const useApiSend = () => {
       body: JSON.stringify(payloadObj),
     };
 
-    // for troubleshooting - TODO: Comment out
+    // for troubleshooting (what is being posted) - TODO: Comment out
     console.log(requestOptions.body);
 
     try {
@@ -30,25 +30,27 @@ const useApiSend = () => {
         requestOptions
       );
 
-      let errorMessage, responseJson
+      let errorMessage, responseJson;
       try {
         responseJson = await response.json();
+
+        // for troubleshooting (returned content from backend) - TODO: Comment out
+        console.log(responseJson);
+
         if (responseJson.error) {
-          errorMessage = responseJson.error.message
+          errorMessage = responseJson.error.message;
         }
-      } catch(err) {
-        errorMessage = "no json returned"
+      } catch (err) {
+        errorMessage = 'no json returned';
       }
-      
+
       // check for response errors
       if (
         response.ok !== true ||
         response.status !== 200 ||
         errorMessage !== undefined
       ) {
-        throw new Error(
-          `Status: ${response.status}, Message: ${errorMessage}`
-        );
+        throw new Error(`Status: ${response.status}, Message: ${errorMessage}`);
       }
 
       setState({
@@ -56,7 +58,6 @@ const useApiSend = () => {
         errorMessage: null,
       });
       return true;
-
     } catch (error) {
       setState({
         isSending: false,
