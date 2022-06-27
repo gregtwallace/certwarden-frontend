@@ -102,6 +102,22 @@ const EditOneACMEAccount = () => {
     );
   };
 
+  // register ACME account handler
+  const registerClickHandler = (event) => {
+    event.preventDefault();
+
+    sendData(
+      `/v1/acmeaccounts/${formState.acme_account.id}/register`,
+      'POST'
+    ).then((success) => {
+      if (success) {
+        // back to the previous page
+        //navigate('.');
+        navigate('/acmeaccounts');
+      }
+    });
+  };
+
   // form submission handler
   const submitFormHandler = (event) => {
     event.preventDefault();
@@ -199,13 +215,36 @@ const EditOneACMEAccount = () => {
           <InputSelect
             label='Private Key'
             id='privateKey'
-            emptyValue={apiGetState.acme_account.private_key_name}
+            emptyValue={
+              apiGetState.acme_account.private_key.name +
+              ' (' +
+              apiGetState.acme_account.private_key.algorithm.name +
+              ')'
+            }
             disabled
           />
 
           <FormInformation>
             Status: {apiGetState.acme_account.status}
+            {(apiGetState.acme_account.status === 'unknown' ||
+              apiGetState.acme_account.status === '') && (
+              <Button
+                className='ml-2'
+                type='primary'
+                onClick={registerClickHandler}
+                disabled={sendApiState.isSending}
+              >
+                Register
+              </Button>
+            )}
           </FormInformation>
+
+          {apiGetState.acme_account.kid && (
+            <FormInformation>
+              Kid: {apiGetState.acme_account.kid}
+            </FormInformation>
+          )}
+
           <FormInformation>
             Account Type:{' '}
             {apiGetState.acme_account.is_staging ? 'Staging' : 'Production'}
