@@ -110,7 +110,7 @@ const EditOneACMEAccount = () => {
     event.preventDefault();
 
     sendData(
-      `/v1/acmeaccounts/${formState.acme_account.id}/register`,
+      `/v1/acmeaccounts/${formState.acme_account.id}/new-account`,
       'POST'
     ).then((success) => {
       if (success) {
