@@ -22,7 +22,7 @@ import FormError from '../../UI/Form/FormError';
 
 const AddOneACMEAccount = () => {
   // fetch valid options (for private keys this is the algorithms list)
-  const apiGetState = useApiGet(
+  const [ apiGetState ] = useApiGet(
     `/v1/acmeaccounts/${newId}`,
     'acme_account_options'
   );

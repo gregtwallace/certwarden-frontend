@@ -23,7 +23,10 @@ import H2Header from '../../UI/Header/H2Header';
 
 const EditOneACMEAccount = () => {
   const { id } = useParams();
-  const apiGetState = useApiGet(`/v1/acmeaccounts/${id}`, 'acme_account');
+  const [apiGetState, updateGet] = useApiGet(
+    `/v1/acmeaccounts/${id}`,
+    'acme_account'
+  );
 
   const [sendApiState, sendData] = useApiSend();
   const navigate = useNavigate();
@@ -111,9 +114,8 @@ const EditOneACMEAccount = () => {
       'POST'
     ).then((success) => {
       if (success) {
-        // back to the previous page
-        //navigate('.');
-        navigate('/acmeaccounts');
+        // update account from backend
+        updateGet();
       }
     });
   };

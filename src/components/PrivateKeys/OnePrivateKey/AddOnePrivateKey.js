@@ -20,7 +20,7 @@ import FormError from '../../UI/Form/FormError';
 
 const AddOnePrivateKey = () => {
   // fetch valid options (for private keys this is the algorithms list)
-  const apiGetState = useApiGet(
+  const [ apiGetState ] = useApiGet(
     `/v1/privatekeys/${newId}`,
     'private_key_options'
   );

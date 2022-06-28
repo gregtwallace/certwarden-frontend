@@ -16,7 +16,7 @@ import H2Header from '../UI/Header/H2Header';
 const AllACMEAccounts = () => {
   const navigate = useNavigate();
 
-  const apiGetState = useApiGet('/v1/acmeaccounts', 'acme_accounts');
+  const [ apiGetState ] = useApiGet('/v1/acmeaccounts', 'acme_accounts');
 
   const newClickHandler = (event) => {
     event.preventDefault();

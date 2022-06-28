@@ -16,7 +16,7 @@ import H2Header from '../UI/Header/H2Header';
 const AllPrivateKeys = () => {
   const navigate = useNavigate();
 
-  const apiGetState = useApiGet('/v1/privatekeys', 'private_keys');
+  const [ apiGetState ] = useApiGet('/v1/privatekeys', 'private_keys');
 
   const newClickHandler = (event) => {
     event.preventDefault();

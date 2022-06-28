@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 
 // function to convert unix time to something friendlier
@@ -24,72 +24,72 @@ const useApiGet = (apiNode, expectedJsonName) => {
     errorMessage: null,
   });
 
-  useEffect(() => {
-    const fetchApi = async () => {
-      setState({
-        [expectedJsonName]: {},
-        isLoaded: false,
-        errorMessage: null,
-      });
+  const updateGet = useCallback(async () => {
+    setState({
+      [expectedJsonName]: {},
+      isLoaded: false,
+      errorMessage: null,
+    });
 
-      // if there is an id, verify it is a valid integer or don't bother calling the API
-      if (parseInt(id) >= 0 || !id) {
-        try {
-          let response = await fetch(
-            `${process.env.REACT_APP_API_NODE}/api${apiNode}`
+    // if there is an id, verify it is a valid integer or don't bother calling the API
+    if (parseInt(id) >= 0 || !id) {
+      try {
+        let response = await fetch(
+          `${process.env.REACT_APP_API_NODE}/api${apiNode}`
+        );
+        let responseJson = await response.json();
+
+        if (
+          response.ok !== true ||
+          response.status !== 200 ||
+          !(expectedJsonName in responseJson) ||
+          responseJson.error !== undefined
+        ) {
+          throw new Error(
+            `Status: ${response.status}, Message: ${responseJson.error.message}`
           );
-          let responseJson = await response.json();
+        }
 
-          if (
-            response.ok !== true ||
-            response.status !== 200 ||
-            !(expectedJsonName in responseJson) ||
-            responseJson.error !== undefined
-          ) {
-            throw new Error(
-              `Status: ${response.status}, Message: ${responseJson.error.message}`
+        // If there are created or update timestamps, convert them from Unix to something friendly.
+        if (responseJson[expectedJsonName] != null) {
+          if (responseJson[expectedJsonName].created_at) {
+            responseJson[expectedJsonName].created_at = convertUnixTime(
+              responseJson[expectedJsonName].created_at
             );
           }
-
-          // If there are created or update timestamps, convert them from Unix to something friendly.
-          if (responseJson[expectedJsonName] != null) {
-            if (responseJson[expectedJsonName].created_at) {
-              responseJson[expectedJsonName].created_at = convertUnixTime(
-                responseJson[expectedJsonName].created_at
-              );
-            }
-            if (responseJson[expectedJsonName].updated_at) {
-              responseJson[expectedJsonName].updated_at = convertUnixTime(
-                responseJson[expectedJsonName].updated_at
-              );
-            }
+          if (responseJson[expectedJsonName].updated_at) {
+            responseJson[expectedJsonName].updated_at = convertUnixTime(
+              responseJson[expectedJsonName].updated_at
+            );
           }
-
-          setState({
-            [expectedJsonName]: responseJson[expectedJsonName],
-            isLoaded: true,
-            errorMessage: null,
-          });
-        } catch (error) {
-          setState({
-            [expectedJsonName]: {},
-            isLoaded: true,
-            errorMessage: error.toString(),
-          });
         }
-      } else {
+
+        setState({
+          [expectedJsonName]: responseJson[expectedJsonName],
+          isLoaded: true,
+          errorMessage: null,
+        });
+      } catch (error) {
         setState({
           [expectedJsonName]: {},
           isLoaded: true,
-          errorMessage: 'Message: id is not valid',
+          errorMessage: error.toString(),
         });
       }
-    };
+    } else {
+      setState({
+        [expectedJsonName]: {},
+        isLoaded: true,
+        errorMessage: 'Message: id is not valid',
+      });
+    }
+  }, [id, apiNode, expectedJsonName]);
 
-    fetchApi();
-  }, [apiNode, expectedJsonName, id]);
+  useEffect(() => {
+    updateGet();
+  }, [updateGet]);
 
-  return state;
+  return [state, updateGet];
 };
 
 export default useApiGet;

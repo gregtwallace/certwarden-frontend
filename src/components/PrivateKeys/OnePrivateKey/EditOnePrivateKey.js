@@ -19,7 +19,7 @@ import Modal from '../../UI/Modal/Modal';
 
 const EditOnePrivateKey = () => {
   const { id } = useParams();
-  const apiGetState = useApiGet(`/v1/privatekeys/${id}`, 'private_key');
+  const [ apiGetState ] = useApiGet(`/v1/privatekeys/${id}`, 'private_key');
 
   const [sendApiState, sendData] = useApiSend();
   const navigate = useNavigate();
