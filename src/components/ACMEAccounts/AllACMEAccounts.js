@@ -39,8 +39,8 @@ const AllACMEAccounts = () => {
         <TableHead>
           <TableRow>
             <TableHeader scope='col'>Name</TableHeader>
-            <TableHeader scope='col'>Key Name</TableHeader>
             <TableHeader scope='col'>Description</TableHeader>
+            <TableHeader scope='col'>Key</TableHeader>
             <TableHeader scope='col'>Status</TableHeader>
             <TableHeader scope='col'>Email</TableHeader>
             <TableHeader scope='col'>Type</TableHeader>
@@ -50,8 +50,8 @@ const AllACMEAccounts = () => {
           {apiGetState.acme_accounts && apiGetState.acme_accounts.map((m) => (
             <TableRow key={m.id}>
               <TableHeader scope='row'><Link to={"/acmeaccounts/" + m.id}>{m.name}</Link></TableHeader>
-              <TableData><Link to={"/privatekeys/" + m.private_key_id}>{m.private_key_name}</Link></TableData>
               <TableData>{m.description}</TableData>
+              <TableData><Link to={"/privatekeys/" + m.private_key.id}>{m.private_key.name}</Link></TableData>
               <TableData>{m.status}</TableData>
               <TableData>{m.email}</TableData>
               <TableData>{m.is_staging ? "Staging" : "Production"}</TableData>
