@@ -22,7 +22,7 @@ import FormError from '../../UI/Form/FormError';
 
 const AddOneACMEAccount = () => {
   // fetch valid options (for private keys this is the algorithms list)
-  const [ apiGetState ] = useApiGet(
+  const [apiGetState] = useApiGet(
     `/v1/acmeaccounts/${newId}`,
     'acme_account_options'
   );
@@ -110,7 +110,7 @@ const AddOneACMEAccount = () => {
       validationErrors.email = true;
     }
     // check private key is selected
-    if (formState.acme_account.private_key_id === '') {
+    if (formState.acme_account.private_key_id === -2) {
       validationErrors.private_key_id = true;
     }
     // ToS must be accepted
@@ -138,11 +138,17 @@ const AddOneACMEAccount = () => {
     );
   };
 
-  /// Logic for some of the components so JSX is cleaner
-  var tos_url;
-  var availableKeys;
+  if (apiGetState.errorMessage) {
+    return <ApiError>{apiGetState.errorMessage}</ApiError>;
+  } else if (!apiGetState.isLoaded) {
+    return <ApiLoading />;
+  } else {
+    /// Logic for some of the components so JSX is cleaner
+    var tos_url;
+    var emptyKeysValue;
+    var availableKeys;
 
-  if (apiGetState.isLoaded && !apiGetState.errorMessage) {
+
     // tos URL (prod vs. staging)
     if (!formState.acme_account.is_staging) {
       tos_url = apiGetState.acme_account_options.tos_url;
@@ -151,20 +157,22 @@ const AddOneACMEAccount = () => {
     }
 
     // build options for available keys
-    availableKeys = apiGetState.acme_account_options.available_keys.map(
-      (m) => ({
-        value: parseInt(m.id),
-        name: m.name + ' (' + m.algorithm.name + ')',
-      })
-    );
-  }
-  ///
+    // if there are available keys, populate them
+    if (apiGetState.acme_account_options.available_keys) {
+      emptyKeysValue = '- Select a Key -';
+      availableKeys = apiGetState.acme_account_options.available_keys.map(
+        (m) => ({
+          value: parseInt(m.id),
+          name: m.name + ' (' + m.algorithm.name + ')',
+        })
+      );
+    } else {
+      // if no available keys, populate some generic info
+      emptyKeysValue = ''
+      availableKeys = [{ value: -2, name: '- No Keys Available -' }];
+    }
+    ///
 
-  if (apiGetState.errorMessage) {
-    return <ApiError>{apiGetState.errorMessage}</ApiError>;
-  } else if (!apiGetState.isLoaded) {
-    return <ApiLoading />;
-  } else {
     return (
       <>
         <H2Header h2='ACME Accounts - Add' />
@@ -205,7 +213,7 @@ const AddOneACMEAccount = () => {
             options={availableKeys}
             value={formState.acme_account.private_key_id}
             onChange={intInputChangeHandler}
-            emptyValue='- Select a Key -'
+            emptyValue={emptyKeysValue}
             invalid={formState.validationErrors.private_key_id}
           />
 
