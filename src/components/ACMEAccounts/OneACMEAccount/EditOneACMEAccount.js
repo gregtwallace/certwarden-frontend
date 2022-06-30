@@ -19,7 +19,7 @@ import Modal from '../../UI/Modal/Modal';
 import H2Header from '../../UI/Header/H2Header';
 
 // TODO
-// Add: deactivate button, edit email button, rotate key button, refresh LE status button
+// Add: deactivate button, rotate key button, refresh LE status button
 
 const EditOneACMEAccount = () => {
   const { id } = useParams();
@@ -120,6 +120,12 @@ const EditOneACMEAccount = () => {
     });
   };
 
+  // change email handler
+  const changeEmailClickHandler = (event) => {
+    event.preventDefault();
+    navigate(`/acmeaccounts/${formState.acme_account.id}/email`);
+  };
+
   // form submission handler
   const submitFormHandler = (event) => {
     event.preventDefault();
@@ -214,6 +220,17 @@ const EditOneACMEAccount = () => {
             onChange={inputChangeHandler}
             disabled
           />
+          {(apiGetState.acme_account.status === 'valid' &&
+            apiGetState.acme_account.kid !== '') && (
+            <Button
+              type='primary'
+              onClick={changeEmailClickHandler}
+              disabled={sendApiState.isSending}
+            >
+              Change Email
+            </Button>
+          )}
+
           <InputSelect
             label='Private Key'
             id='privateKey'
@@ -229,7 +246,8 @@ const EditOneACMEAccount = () => {
           <FormInformation>
             Status: {apiGetState.acme_account.status}
             {(apiGetState.acme_account.status === 'unknown' ||
-              apiGetState.acme_account.status === '') && (
+              apiGetState.acme_account.status === '' ||
+              apiGetState.acme_account.kid === '') && (
               <Button
                 className='ml-2'
                 type='primary'

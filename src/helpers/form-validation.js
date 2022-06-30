@@ -15,15 +15,25 @@ export const isNameValid = (name) => {
 };
 
 // check if an email address is in a valid email address format
+export const isEmailValid = (email) => {
+  // valid email regex
+  const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  if (email.match(regex)) {
+    return true;
+  };
+
+  return false;
+}
+
+// check if an email address is in a valid email address format
 export const isEmailValidOrBlank = (email) => {
   // blank is permissible
   if (email === "") {
     return true;
   };
 
-  // valid email regex
-  const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  if (email.match(regex)) {
+  // check email regex
+  if (isEmailValid(email)) {
     return true;
   };
 

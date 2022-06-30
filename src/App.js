@@ -4,6 +4,7 @@ import Dashboard from './components/Dashboard';
 import AllACMEAccounts from './components/ACMEAccounts/AllACMEAccounts';
 import AddOneACMEAccount from './components/ACMEAccounts/OneACMEAccount/AddOneACMEAccount';
 import EditOneACMEAccount from './components/ACMEAccounts/OneACMEAccount/EditOneACMEAccount';
+import ChangeAccountEmail from './components/ACMEAccounts/OneACMEAccount/Edit/ChangeAccountEmail';
 import AllPrivateKeys from './components/PrivateKeys/AllPrivateKeys';
 import AddOnePrivateKey from './components/PrivateKeys/OnePrivateKey/AddOnePrivateKey';
 import EditOnePrivateKey from './components/PrivateKeys/OnePrivateKey/EditOnePrivateKey';
@@ -48,6 +49,7 @@ const App = () => {
               <Route path='/privatekeys' element={<AllPrivateKeys />} />
               <Route path={`/acmeaccounts/${newId}`} element={<AddOneACMEAccount />} />
               <Route path='/acmeaccounts/:id' element={<EditOneACMEAccount />} />
+              <Route path='/acmeaccounts/:id/email' element={<ChangeAccountEmail />} />
               <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
               `// TODO: Other Pages //`
               <Route path='/' element={<Dashboard />} />
