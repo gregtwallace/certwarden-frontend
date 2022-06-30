@@ -17,6 +17,9 @@ const Button = (props) => {
     case 'delete':
       buttonClasses += ' btn-danger';
       break;
+    case 'deactivate':
+      buttonClasses += ' btn-warning';
+      break;
     default:
       break;
   }
@@ -24,7 +27,12 @@ const Button = (props) => {
   buttonClasses = buttonClasses + ' ' + props.className;
 
   return (
-    <button type={props.type} className={buttonClasses} onClick={props.onClick} disabled={props.disabled}>
+    <button
+      type={props.type}
+      className={buttonClasses}
+      onClick={props.onClick}
+      disabled={props.disabled}
+    >
       {props.children}
     </button>
   );

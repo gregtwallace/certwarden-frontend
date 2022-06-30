@@ -54,6 +54,7 @@ const EditOneACMEAccount = () => {
     });
   }, [apiGetState]);
 
+  const [deactivateModal, setDeactivateModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
 
   useEffect(() => {
@@ -103,6 +104,27 @@ const EditOneACMEAccount = () => {
         }
       }
     );
+  };
+
+  // deactivate handlers
+  const deactivateClickHandler = () => {
+    setDeactivateModal(true);
+  };
+  const deactivateCancelHandler = () => {
+    setDeactivateModal(false);
+  };
+  const deactivateConfirmHandler = () => {
+    setDeactivateModal(false);
+
+    sendData(
+      `/v1/acmeaccounts/${formState.acme_account.id}/deactivate`,
+      'POST'
+    ).then((success) => {
+      if (success) {
+        // update account from backend
+        updateGet();
+      }
+    });
   };
 
   // register ACME account handler
@@ -166,21 +188,46 @@ const EditOneACMEAccount = () => {
   } else {
     return (
       <>
+        {deactivateModal && (
+          <Modal
+            title={`Deactivate Account - ${formState.acme_account.name}`}
+            hasCancel
+            onClickCancel={deactivateCancelHandler}
+            hasConfirm
+            onClickConfirm={deactivateConfirmHandler}
+          >
+            Are you sure you want to deactivate the acme account '
+            {formState.acme_account.name}' ?<br />
+            <strong className='text-danger'>
+              This process cannot be reversed! Ensure you understand all
+              consequences of this action before confirming!
+            </strong>
+          </Modal>
+        )}
         {deleteModal && (
           <Modal
-            title={`Delete Key - ${formState.acme_account.name}`}
+            title={`Delete Account - ${formState.acme_account.name}`}
             hasCancel
             onClickCancel={deleteCancelHandler}
             hasConfirm
             onClickConfirm={deleteConfirmHandler}
           >
-            Are you sure you want to delete the acme account named '
+            Are you sure you want to delete the acme account '
             {formState.acme_account.name}' ?<br />
             The account can be recovered as long as the associated key is not
             deleted.
           </Modal>
         )}
         <H2Header h2='ACME Account - Edit'>
+          {apiGetState.acme_account.status === 'valid' && (
+            <Button
+              type='deactivate'
+              onClick={deactivateClickHandler}
+              disabled={sendApiState.isSending}
+            >
+              Deactivate
+            </Button>
+          )}
           <Button
             type='delete'
             onClick={deleteClickHandler}
@@ -220,16 +267,16 @@ const EditOneACMEAccount = () => {
             onChange={inputChangeHandler}
             disabled
           />
-          {(apiGetState.acme_account.status === 'valid' &&
-            apiGetState.acme_account.kid !== '') && (
-            <Button
-              type='primary'
-              onClick={changeEmailClickHandler}
-              disabled={sendApiState.isSending}
-            >
-              Change Email
-            </Button>
-          )}
+          {apiGetState.acme_account.status === 'valid' &&
+            apiGetState.acme_account.kid !== '' && (
+              <Button
+                type='primary'
+                onClick={changeEmailClickHandler}
+                disabled={sendApiState.isSending}
+              >
+                Change Email
+              </Button>
+            )}
 
           <InputSelect
             label='Private Key'

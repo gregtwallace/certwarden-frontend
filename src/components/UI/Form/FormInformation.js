@@ -6,5 +6,4 @@ const FormInformation = (props) => {
   );
 };
 
-
 export default FormInformation;
