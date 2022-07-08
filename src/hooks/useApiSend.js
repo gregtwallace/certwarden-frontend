@@ -47,7 +47,8 @@ const useApiSend = () => {
       // check for response errors
       if (
         response.ok !== true ||
-        response.status !== 200 ||
+        response.status < 200 ||
+        response.status >= 300 ||
         errorMessage !== undefined
       ) {
         throw new Error(`Status: ${response.status}, Message: ${errorMessage}`);
