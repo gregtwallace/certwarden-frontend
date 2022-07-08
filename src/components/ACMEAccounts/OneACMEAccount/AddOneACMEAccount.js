@@ -148,7 +148,6 @@ const AddOneACMEAccount = () => {
     var emptyKeysValue;
     var availableKeys;
 
-
     // tos URL (prod vs. staging)
     if (!formState.acme_account.is_staging) {
       tos_url = apiGetState.acme_account_options.tos_url;
@@ -168,7 +167,7 @@ const AddOneACMEAccount = () => {
       );
     } else {
       // if no available keys, populate some generic info
-      emptyKeysValue = ''
+      emptyKeysValue = '';
       availableKeys = [{ value: -2, name: '- No Keys Available -' }];
     }
     ///
@@ -237,7 +236,13 @@ const AddOneACMEAccount = () => {
             </a>
           </InputCheckbox>
 
-          <Button type='submit' disabled={sendApiState.isSending}>
+          <Button
+            type='submit'
+            disabled={
+              sendApiState.isSending ||
+              !apiGetState.acme_account_options.available_keys
+            }
+          >
             Submit
           </Button>
           <Button
