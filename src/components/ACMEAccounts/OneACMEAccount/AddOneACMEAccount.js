@@ -27,7 +27,7 @@ const AddOneACMEAccount = () => {
     'acme_account_options'
   );
 
-  const [sendApiState, sendData] = useApiSend();
+  const [apiSendState, sendData] = useApiSend();
   const navigate = useNavigate();
 
   const blankFormState = {
@@ -128,11 +128,10 @@ const AddOneACMEAccount = () => {
     ///
 
     sendData(`/v1/acmeaccounts`, 'POST', formState.acme_account).then(
-      (success) => {
-        if (success) {
-          // back to the acme accounts page
-          //navigate('.');
-          navigate('/acmeaccounts');
+      (response) => {
+        if (response) {
+          // go to the new account
+          navigate(`/acmeaccounts/${response.record_id}`);
         }
       }
     );
@@ -175,8 +174,8 @@ const AddOneACMEAccount = () => {
     return (
       <>
         <H2Header h2='ACME Accounts - Add' />
-        {sendApiState.errorMessage && (
-          <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>
+        {apiSendState.errorMessage && (
+          <FormError>Error Posting -- {apiSendState.errorMessage}</FormError>
         )}
 
         <Form onSubmit={submitFormHandler}>
@@ -239,7 +238,7 @@ const AddOneACMEAccount = () => {
           <Button
             type='submit'
             disabled={
-              sendApiState.isSending ||
+              apiSendState.isSending ||
               !apiGetState.acme_account_options.available_keys
             }
           >
@@ -248,14 +247,14 @@ const AddOneACMEAccount = () => {
           <Button
             type='reset'
             onClick={resetClickHandler}
-            disabled={sendApiState.isSending}
+            disabled={apiSendState.isSending}
           >
             Reset
           </Button>
           <Button
             type='cancel'
             onClick={cancelClickHandler}
-            disabled={sendApiState.isSending}
+            disabled={apiSendState.isSending}
           >
             Cancel
           </Button>
