@@ -58,7 +58,7 @@ const useApiSend = () => {
         isSending: false,
         errorMessage: null,
       });
-      return true;
+      return responseJson.response;
     } catch (error) {
       setState({
         isSending: false,
