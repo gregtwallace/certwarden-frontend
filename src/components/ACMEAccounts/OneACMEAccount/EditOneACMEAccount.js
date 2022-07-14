@@ -328,7 +328,15 @@ const EditOneACMEAccount = () => {
             <small>Last Updated: {apiGetState.acme_account.updated_at}</small>
           </FormInformation>
 
-          <Button type='submit' disabled={sendApiState.isSending}>
+          <Button
+            type='submit'
+            disabled={
+              sendApiState.isSending ||
+              (apiGetState.acme_account.name === formState.acme_account.name &&
+                apiGetState.acme_account.description ===
+                  formState.acme_account.description)
+            }
+          >
             Submit
           </Button>
           <Button

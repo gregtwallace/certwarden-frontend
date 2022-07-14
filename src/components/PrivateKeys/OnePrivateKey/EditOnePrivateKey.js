@@ -19,7 +19,7 @@ import Modal from '../../UI/Modal/Modal';
 
 const EditOnePrivateKey = () => {
   const { id } = useParams();
-  const [ apiGetState ] = useApiGet(`/v1/privatekeys/${id}`, 'private_key');
+  const [apiGetState] = useApiGet(`/v1/privatekeys/${id}`, 'private_key');
 
   const [sendApiState, sendData] = useApiSend();
   const navigate = useNavigate();
@@ -211,7 +211,15 @@ const EditOnePrivateKey = () => {
             <small>Last Updated: {apiGetState.private_key.updated_at}</small>
           </FormInformation>
 
-          <Button type='submit' disabled={sendApiState.isSending}>
+          <Button
+            type='submit'
+            disabled={
+              sendApiState.isSending ||
+              (apiGetState.private_key.name === formState.private_key.name &&
+                apiGetState.private_key.description ===
+                  formState.private_key.description)
+            }
+          >
             Submit
           </Button>
           <Button
