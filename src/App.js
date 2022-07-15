@@ -8,6 +8,7 @@ import ChangeAccountEmail from './components/ACMEAccounts/OneACMEAccount/Edit/Ch
 import AllPrivateKeys from './components/PrivateKeys/AllPrivateKeys';
 import AddOnePrivateKey from './components/PrivateKeys/OnePrivateKey/AddOnePrivateKey';
 import EditOnePrivateKey from './components/PrivateKeys/OnePrivateKey/EditOnePrivateKey';
+import AllCertificates from './components/Certificates/AllCertificates';
 
 export const newId = -1;
 
@@ -51,6 +52,7 @@ const App = () => {
               <Route path='/acmeaccounts/:id' element={<EditOneACMEAccount />} />
               <Route path='/acmeaccounts/:id/email' element={<ChangeAccountEmail />} />
               <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
+              <Route path='/certificates' element={<AllCertificates />} />
               `// TODO: Other Pages //`
               <Route path='/' element={<Dashboard />} />
             </Routes>
