@@ -9,6 +9,8 @@ import AllPrivateKeys from './components/PrivateKeys/AllPrivateKeys';
 import AddOnePrivateKey from './components/PrivateKeys/OnePrivateKey/AddOnePrivateKey';
 import EditOnePrivateKey from './components/PrivateKeys/OnePrivateKey/EditOnePrivateKey';
 import AllCertificates from './components/Certificates/AllCertificates';
+import AddOneCert from './components/Certificates/OneCert/AddOneCert';
+import EditOneCert from './components/Certificates/OneCert/EditOneCert';
 
 export const newId = -1;
 
@@ -48,11 +50,16 @@ const App = () => {
               <Route path={`/privatekeys/${newId}`} element={<AddOnePrivateKey />} />
               <Route path='/privatekeys/:id' element={<EditOnePrivateKey />} />
               <Route path='/privatekeys' element={<AllPrivateKeys />} />
+
               <Route path={`/acmeaccounts/${newId}`} element={<AddOneACMEAccount />} />
               <Route path='/acmeaccounts/:id' element={<EditOneACMEAccount />} />
               <Route path='/acmeaccounts/:id/email' element={<ChangeAccountEmail />} />
               <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
+
               <Route path='/certificates' element={<AllCertificates />} />
+              <Route path={`/certificates/${newId}`} element={<AddOneCert />} />
+              <Route path='/certificates/:id' element={<EditOneCert />} />
+
               `// TODO: Other Pages //`
               <Route path='/' element={<Dashboard />} />
             </Routes>
