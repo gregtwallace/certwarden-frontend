@@ -156,9 +156,9 @@ const AddOneACMEAccount = () => {
 
     // build options for available keys
     // if there are available keys, populate them
-    if (apiGetState.acme_account_options.available_keys) {
+    if (apiGetState.acme_account_options.private_keys) {
       emptyKeysValue = '- Select a Key -';
-      availableKeys = apiGetState.acme_account_options.available_keys.map(
+      availableKeys = apiGetState.acme_account_options.private_keys.map(
         (m) => ({
           value: parseInt(m.id),
           name: m.name + ' (' + m.algorithm.name + ')',
@@ -239,7 +239,7 @@ const AddOneACMEAccount = () => {
             type='submit'
             disabled={
               apiSendState.isSending ||
-              !apiGetState.acme_account_options.available_keys
+              !apiGetState.acme_account_options.private_keys
             }
           >
             Submit
