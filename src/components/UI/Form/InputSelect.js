@@ -28,9 +28,9 @@ const InputSelect = (props) => {
         // doesn't really support readOnly
         disabled={props.disabled && true}
       >
-        {props.emptyValue && (
-          <option value='' disabled={props.disableEmptyValue && true}>
-            {props.emptyValue}
+        {props.defaultName && (
+          <option value={props.defaultValue}>
+            {props.defaultName}
           </option>
         )}
         {(!props.disabled && props.options) && props.options.map((m) => (

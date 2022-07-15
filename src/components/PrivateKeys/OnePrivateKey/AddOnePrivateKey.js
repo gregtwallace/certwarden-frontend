@@ -133,7 +133,8 @@ const AddOnePrivateKey = () => {
             options={apiGetState.private_key_options.key_algorithms}
             value={formState.private_key.algorithm_value}
             onChange={inputChangeHandler}
-            emptyValue='- Select an Algorithm / Do Not Generate -'
+            defaultValue=''
+            defaultName='- Select an Algorithm / Do Not Generate -'
             disabled={formState.private_key.pem && true}
             invalid={formState.validationErrors.algorithm && true}
           />

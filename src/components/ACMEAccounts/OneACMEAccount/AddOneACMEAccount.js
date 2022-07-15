@@ -144,7 +144,8 @@ const AddOneACMEAccount = () => {
   } else {
     /// Logic for some of the components so JSX is cleaner
     var tos_url;
-    var emptyKeysValue;
+    var defaultKeysName;
+    var defaultKeysValue;
     var availableKeys;
 
     // tos URL (prod vs. staging)
@@ -157,7 +158,8 @@ const AddOneACMEAccount = () => {
     // build options for available keys
     // if there are available keys, populate them
     if (apiGetState.acme_account_options.private_keys) {
-      emptyKeysValue = '- Select a Key -';
+      defaultKeysName = '- Select a Key -'
+      defaultKeysValue = -2
       availableKeys = apiGetState.acme_account_options.private_keys.map(
         (m) => ({
           value: parseInt(m.id),
@@ -166,8 +168,8 @@ const AddOneACMEAccount = () => {
       );
     } else {
       // if no available keys, populate some generic info
-      emptyKeysValue = '';
-      availableKeys = [{ value: -2, name: '- No Keys Available -' }];
+      defaultKeysName = '- Select a Key -'
+      defaultKeysValue = -2
     }
     ///
 
@@ -211,7 +213,9 @@ const AddOneACMEAccount = () => {
             options={availableKeys}
             value={formState.acme_account.private_key_id}
             onChange={intInputChangeHandler}
-            emptyValue={emptyKeysValue}
+            defaultValue={defaultKeysValue}
+            defaultName={defaultKeysName}
+            disableEmptyValue
             invalid={formState.validationErrors.private_key_id}
           />
 
