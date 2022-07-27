@@ -9,8 +9,9 @@ import AllPrivateKeys from './components/PrivateKeys/AllPrivateKeys';
 import AddOnePrivateKey from './components/PrivateKeys/OnePrivateKey/AddOnePrivateKey';
 import EditOnePrivateKey from './components/PrivateKeys/OnePrivateKey/EditOnePrivateKey';
 import AllCertificates from './components/Certificates/AllCertificates';
-import AddOneCert from './components/Certificates/OneCert/AddOneCert';
+import ViewOneCert from './components/Certificates/OneCert/ViewOneCert';
 import EditOneCert from './components/Certificates/OneCert/EditOneCert';
+import AddOneCert from './components/Certificates/OneCert/AddOneCert';
 
 export const newId = -1;
 
@@ -57,10 +58,11 @@ const App = () => {
               <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
 
               <Route path='/certificates' element={<AllCertificates />} />
+              <Route path='/certificates/:id' element={<ViewOneCert />} />
+              <Route path='/certificates/:id/edit' element={<EditOneCert />} />
               <Route path={`/certificates/${newId}`} element={<AddOneCert />} />
-              <Route path='/certificates/:id' element={<EditOneCert />} />
 
-              `// TODO: Other Pages //`
+              `// TODO: Dashboard, Settings //`
               <Route path='/' element={<Dashboard />} />
             </Routes>
           </div>

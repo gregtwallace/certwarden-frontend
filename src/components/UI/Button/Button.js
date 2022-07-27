@@ -2,23 +2,21 @@ const Button = (props) => {
   var buttonClasses = 'btn mr-2';
 
   switch (props.type) {
+    case 'primary':
     case 'submit':
       buttonClasses += ' btn-primary';
       break;
-    case 'primary':
-      buttonClasses += ' btn-primary';
+    case 'cancel':
+    case 'back':
+      buttonClasses += ' btn-secondary';
       break;
     case 'reset':
+    case 'deactivate':
+    case 'edit':
       buttonClasses += ' btn-warning';
-      break;
-    case 'cancel':
-      buttonClasses += ' btn-secondary';
       break;
     case 'delete':
       buttonClasses += ' btn-danger';
-      break;
-    case 'deactivate':
-      buttonClasses += ' btn-warning';
       break;
     default:
       break;
