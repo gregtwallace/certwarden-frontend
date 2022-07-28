@@ -4,6 +4,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useApiGet from '../../../hooks/useApiGet';
 import useApiSend from '../../../hooks/useApiSend';
 
+import { convertUnixTime } from '../../../helpers/unix-time';
+
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
 import FormInformation from '../../UI/Form/FormInformation';
@@ -149,10 +151,10 @@ const ViewOneCert = () => {
           <Orders certId={id} />
 
           <FormInformation>
-            <small>Created: {apiGetState.certificate.created_at}</small>
+            <small>Created: {convertUnixTime(apiGetState.certificate.created_at)}</small>
           </FormInformation>
           <FormInformation>
-            <small>Last Updated: {apiGetState.certificate.updated_at}</small>
+            <small>Last Updated: {convertUnixTime(apiGetState.certificate.updated_at)}</small>
           </FormInformation>
         </Form>
       </>
