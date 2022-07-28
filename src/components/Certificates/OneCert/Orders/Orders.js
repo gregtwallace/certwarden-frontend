@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 
 import useApiGet from '../../../../hooks/useApiGet';
+import { convertUnixTime } from '../../../../helpers/unix-time';
 
 import ApiLoading from '../../../UI/Api/ApiLoading';
 import ApiError from '../../../UI/Api/ApiError';
@@ -13,10 +14,14 @@ import TableRow from '../../../UI/Table/TableRow';
 import H2Header from '../../../UI/Header/H2Header';
 
 const Orders = (props) => {
-  const [apiGetState] = useApiGet(`/v1/certificates/${props.id}/orders`, 'orders');
+  const [apiGetState] = useApiGet(
+    `/v1/certificates/${props.certId}/orders`,
+    'orders'
+  );
 
-  // logic for orders
-  // TODO
+  // TODO: New order button
+  // TODO for existing orders: refresh option if state is ready or processing (tries to advance order)
+  // & revoke button if the order is valid
 
   if (apiGetState.errorMessage) {
     return <ApiError>{apiGetState.errorMessage}</ApiError>;
@@ -25,31 +30,24 @@ const Orders = (props) => {
   } else {
     return (
       <>
-        <H2Header h2='Orders'>
-        </H2Header>
+        <H2Header h2='Orders'></H2Header>
         <Table>
           <TableHead>
             <TableRow>
-              <TableHeader scope='col'>TODO</TableHeader>
-              <TableHeader scope='col'>TODO</TableHeader>
-              <TableHeader scope='col'>TODO</TableHeader>
-              <TableHeader scope='col'>TODO</TableHeader>
+              <TableHeader scope='col'>Created At</TableHeader>
+              <TableHeader scope='col'>Expires</TableHeader>
+              <TableHeader scope='col'>Status</TableHeader>
+              <TableHeader scope='col'>Actions</TableHeader>
             </TableRow>
           </TableHead>
           <TableBody>
             {apiGetState.orders &&
               apiGetState.orders.map((m) => (
                 <TableRow key={m.id}>
-                  <TableHeader scope='row'>
-
-                  </TableHeader>
-                  <TableData>{m.subject}</TableData>
-                  <TableData>
-
-                  </TableData>
-                  <TableData>
-
-                  </TableData>
+                  <TableHeader scope='row'>{convertUnixTime(m.created_at)}</TableHeader>
+                  <TableData>{convertUnixTime(m.expires)}</TableData>
+                  <TableData>{m.status}</TableData>
+                  <TableData>Button TODO</TableData>
                 </TableRow>
               ))}
           </TableBody>
