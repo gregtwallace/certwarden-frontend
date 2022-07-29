@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import useApiGet from '../../../../hooks/useApiGet';
 import { convertUnixTime } from '../../../../helpers/unix-time';
@@ -37,6 +37,7 @@ const Orders = (props) => {
               <TableHeader scope='col'>Created At</TableHeader>
               <TableHeader scope='col'>Expires</TableHeader>
               <TableHeader scope='col'>Status</TableHeader>
+              <TableHeader scope='col'>Private Key</TableHeader>
               <TableHeader scope='col'>Actions</TableHeader>
             </TableRow>
           </TableHead>
@@ -44,9 +45,18 @@ const Orders = (props) => {
             {apiGetState.orders &&
               apiGetState.orders.map((m) => (
                 <TableRow key={m.id}>
-                  <TableHeader scope='row'>{convertUnixTime(m.created_at)}</TableHeader>
+                  <TableHeader scope='row'>
+                    {convertUnixTime(m.created_at)}
+                  </TableHeader>
                   <TableData>{convertUnixTime(m.expires)}</TableData>
                   <TableData>{m.status}</TableData>
+                  <TableData>
+                    {m.finalized_key && (
+                      <Link to={`/privatekeys/${m.finalized_key.id}`}>
+                        {m.finalized_key.name}
+                      </Link>
+                    )}
+                  </TableData>
                   <TableData>Button TODO</TableData>
                 </TableRow>
               ))}
