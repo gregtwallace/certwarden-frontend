@@ -1,5 +1,9 @@
 // function to convert unix time to something friendlier
 export const convertUnixTime = (unixTime) => {
+  if (!unixTime) {
+    return ""
+  }
+
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: '2-digit',
