@@ -35,7 +35,7 @@ const Orders = (props) => {
           <TableHead>
             <TableRow>
               <TableHeader scope='col'>Created At</TableHeader>
-              <TableHeader scope='col'>Expires</TableHeader>
+              <TableHeader scope='col'>Valid To</TableHeader>
               <TableHeader scope='col'>Status</TableHeader>
               <TableHeader scope='col'>Private Key</TableHeader>
               <TableHeader scope='col'>Actions</TableHeader>
@@ -48,7 +48,7 @@ const Orders = (props) => {
                   <TableHeader scope='row'>
                     {convertUnixTime(m.created_at)}
                   </TableHeader>
-                  <TableData>{convertUnixTime(m.expires)}</TableData>
+                  <TableData>{convertUnixTime(m.valid_to)}</TableData>
                   <TableData>{m.status}</TableData>
                   <TableData>
                     {m.finalized_key && (
