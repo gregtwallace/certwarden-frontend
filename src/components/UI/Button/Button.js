@@ -6,12 +6,14 @@ const Button = (props) => {
     case 'submit':
       buttonClasses += ' btn-primary';
       break;
+    case 'secondary':
     case 'cancel':
     case 'back':
       buttonClasses += ' btn-secondary';
       break;
     case 'reset':
     case 'deactivate':
+    case 'revoke':
     case 'edit':
       buttonClasses += ' btn-warning';
       break;

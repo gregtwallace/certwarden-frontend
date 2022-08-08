@@ -12,16 +12,49 @@ import TableHead from '../../../UI/Table/TableHead';
 import TableHeader from '../../../UI/Table/TableHeader';
 import TableRow from '../../../UI/Table/TableRow';
 import H2Header from '../../../UI/Header/H2Header';
+import Button from '../../../UI/Button/Button';
 
 const Orders = (props) => {
-  const [apiGetState] = useApiGet(
+  const [apiGetState, updateGet] = useApiGet(
     `/v1/certificates/${props.certId}/orders`,
     'orders'
   );
 
-  // TODO: New order button
-  // TODO for existing orders: refresh option if state is ready or processing (tries to advance order)
-  // & revoke button if the order is valid
+  // Rather than making another sendApi, use the parent component's.
+  // This allows disabling the parent's buttons also
+  const [sendApiState, sendData] = [props.sendApiState, props.sendData];
+
+  // handler to place a new order
+  const newOrderHandler = (event) => {
+    sendData(`/v1/certificates/${props.certId}/orders`, 'POST').then(
+      (success) => {
+        updateGet();
+      }
+    );
+  };
+
+  // handler to retry an existing order that isn't valid or invalid
+  const retryOrderHandler = (event, orderId) => {
+    event.preventDefault();
+
+    sendData(`/v1/certificates/${props.certId}/orders/${orderId}`, 'POST').then(
+      (success) => {
+        updateGet();
+      }
+    );
+  };
+
+  // handler to revoke a valid order's certificate
+  const revokeCertHandler = (event, orderId) => {
+    event.preventDefault();
+
+    // TODO: add ability to specify revocation reason
+    sendData(`/v1/certificates/${props.certId}/orders/${orderId}/revoke`, 'POST').then(
+      (success) => {
+        updateGet();
+      }
+    );
+  };
 
   if (apiGetState.errorMessage) {
     return <ApiError>{apiGetState.errorMessage}</ApiError>;
@@ -30,7 +63,15 @@ const Orders = (props) => {
   } else {
     return (
       <>
-        <H2Header h2='Orders'></H2Header>
+        <H2Header h2='Orders'>
+          <Button
+            type='primary'
+            disabled={sendApiState.isSending}
+            onClick={newOrderHandler}
+          >
+            Place New Order
+          </Button>
+        </H2Header>
         <Table>
           <TableHead>
             <TableRow>
@@ -57,7 +98,26 @@ const Orders = (props) => {
                       </Link>
                     )}
                   </TableData>
-                  <TableData>Button TODO</TableData>
+                  <TableData>
+                    {(m.status !== 'valid' && m.status !== 'invalid') && (
+                      <Button
+                        type='secondary'
+                        disabled={sendApiState.isSending}
+                        onClick={(event) => retryOrderHandler(event, m.id)}
+                      >
+                        Retry
+                      </Button>
+                    )}
+                    {(m.status === 'valid' && (Date.now() / 1000) < m.valid_to) && (
+                      <Button
+                        type='revoke'
+                        disabled={sendApiState.isSending}
+                        onClick={(event) => revokeCertHandler(event, m.id)}
+                      >
+                        Revoke
+                      </Button>
+                    )}
+                  </TableData>
                 </TableRow>
               ))}
           </TableBody>

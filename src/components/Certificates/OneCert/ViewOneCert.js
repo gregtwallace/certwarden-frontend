@@ -158,7 +158,7 @@ const ViewOneCert = () => {
           <strong>City:</strong> {apiGetState.certificate.city}
           </FormInformation>
 
-          <Orders certId={id}/>
+          <Orders certId={id} sendApiState={sendApiState} sendData={sendData}/>
 
           <FormInformation>
             <small>Created: {convertUnixTime(apiGetState.certificate.created_at)}</small>
