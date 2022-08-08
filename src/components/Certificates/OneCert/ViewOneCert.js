@@ -141,14 +141,24 @@ const ViewOneCert = () => {
             {subjectAlts}
           </FormInformation>
           <FormInformation>
-            <strong>TODO: </strong>CSR Stuff
-          </FormInformation>
-
-          <FormInformation>
           <strong>API Key:</strong> {apiGetState.certificate.api_key}
           </FormInformation>
 
-          <Orders certId={id} />
+          <strong>CSR</strong>
+          <FormInformation>
+          <strong>Organization:</strong> {apiGetState.certificate.organization}
+          </FormInformation>
+          <FormInformation>
+          <strong>Organizational Unit:</strong> {apiGetState.certificate.organizational_unit}
+          </FormInformation>
+          <FormInformation>
+          <strong>Country Code (2 Letter):</strong> {apiGetState.certificate.country}
+          </FormInformation>
+          <FormInformation>
+          <strong>City:</strong> {apiGetState.certificate.city}
+          </FormInformation>
+
+          <Orders certId={id}/>
 
           <FormInformation>
             <small>Created: {convertUnixTime(apiGetState.certificate.created_at)}</small>
