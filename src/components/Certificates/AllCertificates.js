@@ -30,7 +30,7 @@ const AllCertificates = () => {
   } else {
     return (
       <>
-        <H2Header h2='ACME Accounts'>
+        <H2Header h2='Certificates'>
           <Button type='submit' onClick={newClickHandler}>
             New
           </Button>
