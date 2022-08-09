@@ -49,11 +49,12 @@ const Orders = (props) => {
     event.preventDefault();
 
     // TODO: add ability to specify revocation reason
-    sendData(`/v1/certificates/${props.certId}/orders/${orderId}/revoke`, 'POST').then(
-      (success) => {
-        updateGet();
-      }
-    );
+    sendData(
+      `/v1/certificates/${props.certId}/orders/${orderId}/revoke`,
+      'POST'
+    ).then((success) => {
+      updateGet();
+    });
   };
 
   if (apiGetState.errorMessage) {
@@ -90,7 +91,9 @@ const Orders = (props) => {
                     {convertUnixTime(m.created_at)}
                   </TableHeader>
                   <TableData>{convertUnixTime(m.valid_to)}</TableData>
-                  <TableData>{m.status}</TableData>
+                  <TableData>
+                    {m.known_revoked ? 'revoked' : m.status}
+                  </TableData>
                   <TableData>
                     {m.finalized_key && (
                       <Link to={`/privatekeys/${m.finalized_key.id}`}>
@@ -99,7 +102,7 @@ const Orders = (props) => {
                     )}
                   </TableData>
                   <TableData>
-                    {(m.status !== 'valid' && m.status !== 'invalid') && (
+                    {m.status !== 'valid' && m.status !== 'invalid' && (
                       <Button
                         type='secondary'
                         disabled={sendApiState.isSending}
@@ -108,15 +111,17 @@ const Orders = (props) => {
                         Retry
                       </Button>
                     )}
-                    {(m.status === 'valid' && (Date.now() / 1000) < m.valid_to) && (
-                      <Button
-                        type='revoke'
-                        disabled={sendApiState.isSending}
-                        onClick={(event) => revokeCertHandler(event, m.id)}
-                      >
-                        Revoke
-                      </Button>
-                    )}
+                    {m.status === 'valid' &&
+                      !m.known_revoked &&
+                      Date.now() / 1000 < m.valid_to && (
+                        <Button
+                          type='revoke'
+                          disabled={sendApiState.isSending}
+                          onClick={(event) => revokeCertHandler(event, m.id)}
+                        >
+                          Revoke
+                        </Button>
+                      )}
                   </TableData>
                 </TableRow>
               ))}
