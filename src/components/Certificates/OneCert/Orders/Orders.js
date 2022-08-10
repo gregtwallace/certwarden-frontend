@@ -15,7 +15,7 @@ import H2Header from '../../../UI/Header/H2Header';
 import Button from '../../../UI/Button/Button';
 
 const Orders = (props) => {
-  const [apiGetState, updateGet] = useApiGet(
+  const [apiGetState] = useApiGet(
     `/v1/certificates/${props.certId}/orders`,
     'orders'
   );
@@ -28,7 +28,7 @@ const Orders = (props) => {
   const newOrderHandler = (event) => {
     sendData(`/v1/certificates/${props.certId}/orders`, 'POST').then(
       (success) => {
-        updateGet();
+        props.updateGet();
       }
     );
   };
@@ -39,7 +39,7 @@ const Orders = (props) => {
 
     sendData(`/v1/certificates/${props.certId}/orders/${orderId}`, 'POST').then(
       (success) => {
-        updateGet();
+        props.updateGet();
       }
     );
   };
@@ -53,7 +53,7 @@ const Orders = (props) => {
       `/v1/certificates/${props.certId}/orders/${orderId}/revoke`,
       'POST'
     ).then((success) => {
-      updateGet();
+      props.updateGet();
     });
   };
 

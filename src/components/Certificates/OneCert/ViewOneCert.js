@@ -22,7 +22,7 @@ import Orders from './Orders/Orders';
 const ViewOneCert = () => {
   const { id } = useParams();
 
-  const [apiGetState] = useApiGet(
+  const [apiGetState, updateGet] = useApiGet(
     `/v1/certificates/${id}`,
     'certificate'
   );
@@ -158,7 +158,7 @@ const ViewOneCert = () => {
           <strong>City:</strong> {apiGetState.certificate.city}
           </FormInformation>
 
-          <Orders certId={id} sendApiState={sendApiState} sendData={sendData}/>
+          <Orders certId={id} sendApiState={sendApiState} sendData={sendData} updateGet={updateGet}/>
 
           <FormInformation>
             <small>Created: {convertUnixTime(apiGetState.certificate.created_at)}</small>
