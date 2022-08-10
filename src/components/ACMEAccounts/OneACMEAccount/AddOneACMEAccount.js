@@ -143,12 +143,8 @@ const AddOneACMEAccount = () => {
     return <ApiLoading />;
   } else {
     /// Logic for some of the components so JSX is cleaner
-    var tos_url;
-    var defaultKeysName;
-    var defaultKeysValue;
-    var availableKeys;
-
     // tos URL (prod vs. staging)
+    var tos_url;
     if (!formState.acme_account.is_staging) {
       tos_url = apiGetState.acme_account_options.tos_url;
     } else {
@@ -157,9 +153,11 @@ const AddOneACMEAccount = () => {
 
     // build options for available keys
     // if there are available keys, populate them
+    var availableKeys;
+    var defaultKeysName;
+    var defaultKeysValue = -2;
     if (apiGetState.acme_account_options.private_keys) {
-      defaultKeysName = '- Select a Key -'
-      defaultKeysValue = -2
+      defaultKeysName = '- Select a Key -';
       availableKeys = apiGetState.acme_account_options.private_keys.map(
         (m) => ({
           value: parseInt(m.id),
@@ -167,9 +165,7 @@ const AddOneACMEAccount = () => {
         })
       );
     } else {
-      // if no available keys, populate some generic info
-      defaultKeysName = '- Select a Key -'
-      defaultKeysValue = -2
+      defaultKeysName = '- No Keys Available -'
     }
     ///
 
