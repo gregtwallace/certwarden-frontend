@@ -131,6 +131,9 @@ const ViewOneCert = () => {
               : 'Production'}
           </FormInformation>
           <FormInformation>
+          <strong>Private Key:</strong> {apiGetState.certificate.private_key.name}
+          </FormInformation>
+          <FormInformation>
           <strong>Challenge Method:</strong> {apiGetState.certificate.challenge_method.name}
           </FormInformation>
           <FormInformation>
