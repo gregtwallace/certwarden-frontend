@@ -11,12 +11,16 @@ const Button = (props) => {
     case 'back':
       buttonClasses += ' btn-secondary';
       break;
+    case 'success':
+      buttonClasses += ' btn-success';
+      break;
     case 'reset':
     case 'deactivate':
     case 'revoke':
     case 'edit':
       buttonClasses += ' btn-warning';
       break;
+    case 'danger':
     case 'delete':
       buttonClasses += ' btn-danger';
       break;

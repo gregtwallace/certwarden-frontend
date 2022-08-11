@@ -14,6 +14,7 @@ import Form from '../../UI/Form/Form';
 import FormInformation from '../../UI/Form/FormInformation';
 import InputSelect from '../../UI/Form/InputSelect';
 import InputText from '../../UI/Form/InputText';
+import InputTextArray from '../../UI/Form/InputTextArray';
 import InputHidden from '../../UI/Form/InputHidden';
 import FormError from '../../UI/Form/FormError';
 
@@ -249,7 +250,13 @@ const AddOneCert = () => {
             invalid={formState.validationErrors.subject && true}
           />
 
-          {/* TODO: Subject alts array */}
+          <InputTextArray
+            label='Subject Alt. Names'
+            id='subject_alts'
+            name='subject_alts'
+            value={formState.certificate.subject_alts}
+            onChange={stringInputChangeHandler}
+          />
 
           <FormInformation>
             <strong>CSR</strong>
