@@ -72,8 +72,12 @@ const AddOnePrivateKey = () => {
     if (!isNameValid(formState.private_key.name)) {
       validationErrors.name = true;
     }
-    // don't bother checking algorithm, as it is a dropdown select
-    // TODO: Pem check?
+    
+    // ensure algo or pem
+    if (formState.private_key.algorithm_value === '' && formState.private_key.pem === '') {
+      validationErrors.algorithm_value = true;
+      validationErrors.pem = true;
+    }
 
     setFormState((prevState) => ({
       ...prevState,
@@ -136,7 +140,7 @@ const AddOnePrivateKey = () => {
             defaultValue=''
             defaultName='- Select an Algorithm / Do Not Generate -'
             disabled={formState.private_key.pem && true}
-            invalid={formState.validationErrors.algorithm && true}
+            invalid={formState.validationErrors.algorithm_value && true}
           />
           <FormInformation>
             <strong>- OR -</strong>
