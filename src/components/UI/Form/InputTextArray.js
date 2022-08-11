@@ -65,9 +65,11 @@ const InputTextArray = (props) => {
       <Button type='success' onClick={addFieldHandler}>
         Add
       </Button>
-      <Button type='danger' onClick={removeFieldHandler}>
-        Rem
-      </Button>
+      {props.value.length !== 0 && (
+        <Button type='danger' onClick={removeFieldHandler}>
+          Rem
+        </Button>
+      )}
     </div>
   );
 };
