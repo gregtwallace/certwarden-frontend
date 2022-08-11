@@ -64,7 +64,7 @@ const ViewOneCert = () => {
 
   // logic for subject alt names
   var subjectAlts = '<none>'
-  if (apiGetState.certificate.subject_alts) {
+  if (apiGetState.certificate.subject_alts && apiGetState.certificate.subject_alts.length !== 0) {
     subjectAlts = apiGetState.certificate.subject_alts.map((altName) => altName).join(', ')
   }
 
