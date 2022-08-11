@@ -49,7 +49,7 @@ const InputTextArray = (props) => {
     <div className='form-group'>
       <label htmlFor={props.id}>{props.label}</label>
       {props.value.length === 0 ? (
-        <FormInformation>None</FormInformation>
+        <FormInformation>{`<none>`}</FormInformation>
       ) : (
         props.value.map((m, i) => (
           <InputText
