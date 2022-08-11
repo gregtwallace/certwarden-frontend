@@ -238,8 +238,7 @@ const AddOneACMEAccount = () => {
           <Button
             type='submit'
             disabled={
-              apiSendState.isSending ||
-              !apiGetState.acme_account_options.private_keys
+              apiSendState.isSending
             }
           >
             Submit
