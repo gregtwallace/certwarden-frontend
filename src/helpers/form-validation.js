@@ -39,3 +39,14 @@ export const isEmailValidOrBlank = (email) => {
 
   return false;
 }
+
+// check if string is a valid domain format
+export const isDomainValid = (domain) => {
+  // valid domain regex
+  const regex = /^(([A-Za-z0-9][A-Za-z0-9-]{0,61}\.)*([A-Za-z0-9][A-Za-z0-9-]{0,61}\.)[A-Za-z][A-Za-z0-9-]{0,61}[A-Za-z0-9])$/;
+  if (domain.match(regex)) {
+    return true;
+  }
+
+  return false;
+}

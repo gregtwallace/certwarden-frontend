@@ -3,7 +3,6 @@ import FormInformation from './FormInformation';
 import Button from '../Button/Button';
 
 const InputTextArray = (props) => {
-  
   // instead of a state update, send the new array
   // to parent (parent should have state)
   // emulate event object so handlers can treat
@@ -16,14 +15,14 @@ const InputTextArray = (props) => {
     event.target.value = newArray;
 
     props.onChange(event);
-  }
+  };
 
   // input handler
   const inputHandler = (event, i) => {
     var newArray = [...props.value];
     newArray[i] = event.target.value;
-  
-    updateParent(newArray)
+
+    updateParent(newArray);
   };
 
   // add another input field
@@ -32,8 +31,8 @@ const InputTextArray = (props) => {
 
     var newArray = [...props.value];
     newArray.push('');
-    
-    updateParent(newArray)
+
+    updateParent(newArray);
   };
 
   // remove a string
@@ -43,7 +42,7 @@ const InputTextArray = (props) => {
     var newArray = [...props.value];
     newArray.pop();
 
-    updateParent(newArray)
+    updateParent(newArray);
   };
 
   return (
@@ -54,11 +53,12 @@ const InputTextArray = (props) => {
       ) : (
         props.value.map((m, i) => (
           <InputText
-            id={i}
-            name={i}
+            id={'subject_alts_' + i}
+            name={'subject_alts_' + i}
             key={i}
             value={m}
             onChange={(event) => inputHandler(event, i)}
+            invalid={props.invalid && props.invalid.includes(i) && true}
           />
         ))
       )}

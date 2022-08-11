@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import useApiGet from '../../../hooks/useApiGet';
 import useApiSend from '../../../hooks/useApiSend';
-import { isNameValid } from '../../../helpers/form-validation';
+import { isDomainValid, isNameValid } from '../../../helpers/form-validation';
 import { newId } from '../../../App';
 
 import ApiError from '../../UI/Api/ApiError';
@@ -96,6 +96,26 @@ const AddOneCert = () => {
       validationErrors.name = true;
     }
 
+    // subject
+    if (!isDomainValid(formState.certificate.subject)) {
+      validationErrors.subject = true;
+    }
+
+    // subject alts (use an array to record which specific
+    // alts are not valid)
+    var subject_alts = []
+    formState.certificate.subject_alts.forEach(
+      (alt, i) => {
+        if (!isDomainValid(alt)) {
+          subject_alts.push(i);
+        }
+      }
+    );
+    // if any alts invalid, create the error array
+    if (subject_alts.length !== 0) {
+      validationErrors.subject_alts = subject_alts
+    }
+    
     //TODO: other validation
 
     setFormState((prevState) => ({
@@ -256,6 +276,7 @@ const AddOneCert = () => {
             name='subject_alts'
             value={formState.certificate.subject_alts}
             onChange={stringInputChangeHandler}
+            invalid={formState.validationErrors.subject_alts}
           />
 
           <FormInformation>
