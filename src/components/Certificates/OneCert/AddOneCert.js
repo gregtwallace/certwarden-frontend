@@ -190,23 +190,15 @@ const AddOneCert = () => {
       defaultKeysName = '- No Keys Available -';
     }
 
-    // build challenge method options
+    // build challenge method options (must be returned by backend)
     var defaultMethodValue = -2;
-    var defaultMethodName;
-    var availableMethodss;
-    // if there are available keys, populate them
-    if (apiGetState.certificate_options.challenge_methods) {
-      defaultMethodName = '- Select Challenge Method -';
-      availableMethodss = apiGetState.certificate_options.challenge_methods.map(
-        (m) => ({
-          value: m.value,
-          name: m.name + ' (' + m.type + ')',
-        })
-      );
-    } else {
-      // change text if no keys available
-      defaultMethodName = '- No Challenge Methods Available -';
-    }
+    var defaultMethodName = '- Select Challenge Method -';
+    var availableMethods =
+      apiGetState.certificate_options.challenge_methods.map((m) => ({
+        value: m.value,
+        name: m.name + ' (' + m.type + ')',
+      }));
+
     ///
 
     return (
@@ -265,7 +257,7 @@ const AddOneCert = () => {
             label='Challenge Method'
             id='challenge_method_value'
             name='challenge_method_value'
-            options={availableMethodss}
+            options={availableMethods}
             value={formState.certificate.challenge_method_value}
             onChange={stringInputChangeHandler}
             defaultValue={defaultMethodValue}
