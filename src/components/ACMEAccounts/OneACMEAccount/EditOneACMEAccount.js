@@ -282,7 +282,7 @@ const EditOneACMEAccount = () => {
           <InputSelect
             label='Private Key'
             id='privateKey'
-            emptyValue={
+            defaultName={
               apiGetState.acme_account.private_key.name +
               ' (' +
               apiGetState.acme_account.private_key.algorithm.name +
