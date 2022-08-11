@@ -96,6 +96,21 @@ const AddOneCert = () => {
       validationErrors.name = true;
     }
 
+    // check account is selected
+    if (formState.certificate.acme_account_id === -2) {
+      validationErrors.acme_account_id = true;
+    }
+
+    // check private key is selected
+    if (formState.certificate.private_key_id === -2) {
+      validationErrors.private_key_id = true;
+    }
+
+    // check challenge method is selected
+    if (formState.certificate.challenge_method_value === '') {
+      validationErrors.challenge_method_value = true;
+    }
+
     // subject
     if (!isDomainValid(formState.certificate.subject)) {
       validationErrors.subject = true;
@@ -103,20 +118,18 @@ const AddOneCert = () => {
 
     // subject alts (use an array to record which specific
     // alts are not valid)
-    var subject_alts = []
-    formState.certificate.subject_alts.forEach(
-      (alt, i) => {
-        if (!isDomainValid(alt)) {
-          subject_alts.push(i);
-        }
+    var subject_alts = [];
+    formState.certificate.subject_alts.forEach((alt, i) => {
+      if (!isDomainValid(alt)) {
+        subject_alts.push(i);
       }
-    );
+    });
     // if any alts invalid, create the error array
     if (subject_alts.length !== 0) {
-      validationErrors.subject_alts = subject_alts
+      validationErrors.subject_alts = subject_alts;
     }
-    
-    //TODO: other validation
+
+    //TODO: CSR validation?
 
     setFormState((prevState) => ({
       ...prevState,

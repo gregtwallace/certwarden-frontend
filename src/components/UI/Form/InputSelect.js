@@ -1,15 +1,19 @@
-import FormError from "./FormError";
+import FormError from './FormError';
 
 const InputSelect = (props) => {
   let errorMessage = '';
   switch (props.id) {
     case 'algorithm_value':
-      errorMessage =
-        'Select an algorithm to generate a key.';
+      errorMessage = 'Select an algorithm to generate a key.';
       break;
     case 'private_key_id':
-      errorMessage = 
-        'Select an available private key.';
+      errorMessage = 'Select an available private key.';
+      break;
+    case 'acme_account_id':
+      errorMessage = 'Select an available account.';
+      break;
+    case 'challenge_method_value':
+      errorMessage = 'Select an available challenge method.';
       break;
     default:
       errorMessage = 'This field has an error.';
@@ -29,15 +33,15 @@ const InputSelect = (props) => {
         disabled={props.disabled && true}
       >
         {props.defaultName && (
-          <option value={props.defaultValue}>
-            {props.defaultName}
-          </option>
+          <option value={props.defaultValue}>{props.defaultName}</option>
         )}
-        {(!props.disabled && props.options) && props.options.map((m) => (
-          <option key={m.value} value={m.value}>
-            {m.name}
-          </option>
-        ))}
+        {!props.disabled &&
+          props.options &&
+          props.options.map((m) => (
+            <option key={m.value} value={m.value}>
+              {m.name}
+            </option>
+          ))}
       </select>
       {props.invalid && <FormError>{errorMessage}</FormError>}
     </div>
