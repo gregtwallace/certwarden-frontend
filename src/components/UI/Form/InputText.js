@@ -21,11 +21,16 @@ const InputText = (props) => {
       break;
   }
 
+  let type = 'text';
+  if (props.type === 'password') {
+    type = 'password'
+  }
+
   return (
     <div className='form-group'>
       <label htmlFor={props.id}>{props.label}</label>
       <input
-        type='text'
+        type={type}
         className={`form-control ${props.invalid && 'is-invalid'}`}
         id={props.id}
         name={props.name}
