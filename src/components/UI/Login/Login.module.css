@@ -1,10 +1,16 @@
+.login_container {
+  height: 300px;
+  position: relative;
+}
 
-body {
-  height: 100%;
+.login {
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   position: relative;
 }
-
