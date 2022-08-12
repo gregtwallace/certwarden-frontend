@@ -1,16 +1,24 @@
 .login_container {
-  height: 300px;
-  position: relative;
+  position: absolute;
+  height: 100%;
+  width: 100%;
 }
 
 .login {
-  top: 50%;
+  top: 150px;
+  width: 100%;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
-
   display: flex;
   align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  position: relative;
+}
+
+.login_error {
+  top: 60px;
+  display: flex;
+  align-items: center;
   flex-direction: column;
   position: relative;
 }

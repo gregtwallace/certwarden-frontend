@@ -3,6 +3,7 @@ import { useState } from 'react';
 import useApiSend from '../../../hooks/useApiSend';
 
 import Form from '../Form/Form';
+import FormError from '../Form/FormError';
 import InputText from '../Form/InputText';
 import Button from '../Button/Button';
 
@@ -37,32 +38,38 @@ const Login = (props) => {
 
   return (
     <div className={styles.login_container}>
-      <Form className={styles.login}>
-        <InputText
-          label='Username'
-          id='username'
-          name='username'
-          value={formState.username}
-          onChange={inputChangeHandler}
-        />
+      <div className={styles.login}>
+        <Form>
+          <InputText
+            label='Username'
+            id='username'
+            name='username'
+            value={formState.username}
+            onChange={inputChangeHandler}
+          />
 
-        <InputText
-          label='Password'
-          id='password'
-          name='password'
-          type='password'
-          value={formState.password}
-          onChange={inputChangeHandler}
-        />
+          <InputText
+            label='Password'
+            id='password'
+            name='password'
+            type='password'
+            value={formState.password}
+            onChange={inputChangeHandler}
+          />
 
-        <Button
-          type='submit'
-          onClick={submitLogin}
-          disabled={sendApiState.isSending}
-        >
-          Login
-        </Button>
-      </Form>
+          <Button
+            type='submit'
+            onClick={submitLogin}
+            disabled={sendApiState.isSending}
+          >
+            Login
+          </Button>
+        </Form>
+
+      </div>
+      {sendApiState.errorMessage && (
+          <FormError className={styles.login_error}>{sendApiState.errorMessage}</FormError>
+        )}
     </div>
   );
 };
