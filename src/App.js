@@ -21,6 +21,10 @@ export const newId = -1;
 const App = () => {
   var [jwt, setJwt] = useState('');
 
+  const logoutHandler = () => {
+    setJwt('');
+  };
+
   // if not logged in
   if (jwt === '') {
     return <Login setJwt={setJwt} />;
@@ -49,6 +53,11 @@ const App = () => {
                   </li>
                   <li className='list-group-item'>
                     <Link to='/settings'>Settings</Link>
+                  </li>
+                  <li className='list-group-item'>
+                    <a href={'#'} onClick={logoutHandler}>
+                      Logout
+                    </a>
                   </li>
                 </ul>
               </nav>
