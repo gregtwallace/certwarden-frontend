@@ -36,7 +36,6 @@ const Login = (props) => {
     sendData(LOGIN_URL, 'POST', formState, true).then((success) => {
       if (success) {
         setAuth({
-          username: formState.username,
           accessToken: success?.access_token,
         });
       } else {
