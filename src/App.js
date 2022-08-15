@@ -35,8 +35,6 @@ const App = () => {
   const logoutHandler = () => {
     sendData(`/v1/auth/logout`, 'POST', null, true).then((success) => {
       if (success) {
-        // set cookie to immediately expire
-        document.cookie = 'logged_in=; Max-Age=0';
         // update auth state
         setAuth({});
       }
