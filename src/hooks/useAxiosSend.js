@@ -13,10 +13,10 @@ const useAxiosSend = () => {
 
   // Send data to the node using the specified method and a payload from the specified event
   // return true if success and no error, return false if something goes wrong
-  const sendData = async (apiNode, method, payloadObj, secureRoute = false) => {
+  const sendData = async (apiNode, method, payloadObj, withCredentials = false) => {
     // select instance based on if route is secured
     var axiosInstance;
-    if (secureRoute) {
+    if (withCredentials) {
       axiosInstance = axiosPrivate;
     } else {
       axiosInstance = axios;

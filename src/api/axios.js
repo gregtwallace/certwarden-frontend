@@ -6,5 +6,12 @@ const BASE_URL = process.env.REACT_APP_API_NODE + "/api"
 // default, insecure
 export default axios.create({
   baseURL: BASE_URL,
-  headers: { 'Content-Type': 'application/json'}
+  headers: { 'Content-Type': 'application/json'},
+});
+
+// with credentials (cookies)
+export const axiosPrivate = axios.create({
+  baseURL: BASE_URL,
+  headers: { 'Content-Type': 'application/json'},
+  withCredentials: true,
 });

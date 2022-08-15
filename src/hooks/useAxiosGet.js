@@ -4,12 +4,12 @@ import axios from '../api/axios';
 import useAxiosPrivate from './useAxiosPrivate';
 
 // Hook to query the API and return a state based on the query
-const useAxiosGet = (apiNode, expectedJsonName, secureRoute = false) => {
+const useAxiosGet = (apiNode, expectedJsonName, withCredentials = false) => {
   const axiosPrivate = useAxiosPrivate();
 
   // select instance based on if route is secured
   var axiosInstance;
-  if (secureRoute) {
+  if (withCredentials) {
     axiosInstance = axiosPrivate;
   } else {
     axiosInstance = axios;

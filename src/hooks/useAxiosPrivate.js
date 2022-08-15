@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
 
-import axios from '../api/axios';
+import { axiosPrivate } from '../api/axios';
 
 import useRefreshToken from './useRefreshToken';
 import useAuth from './useAuth';
+
+const NO_RETRY_HEADER = 'x-no-retry'
 
 const useAxiosPrivate = () => {
   const refresh = useRefreshToken();
@@ -11,7 +13,7 @@ const useAxiosPrivate = () => {
 
   useEffect(() => {
     // add the Authorization header to all Private requests
-    const requestIntercept = axios.interceptors.request.use(
+    const requestIntercept = axiosPrivate.interceptors.request.use(
       (config) => {
         if (!config.headers['Authorization']) {
           config.headers['Authorization'] = auth?.accessToken;
@@ -23,31 +25,33 @@ const useAxiosPrivate = () => {
   
     // if response is 401, try refreshing access token and then retry
     // original request again
-    // also add a "retried" flag so this won't endlessly loop (i.e. 
+    // also add a retry header so this won't endlessly loop (i.e. 
     // if it retries a second time, it won't proceed because the flag
     // already shows a retry)
-    const responseIntercept = axios.interceptors.response.use(
+    const responseIntercept = axiosPrivate.interceptors.response.use(
       (response) => response,
       async (error) => {
-        const prevRequest = error?.config;
-        if (error?.response?.status === 401 && !prevRequest?.retried) {
-          prevRequest.retried = true;
+        var prevRequest = error?.config;
+        if (error?.response?.status === 401 && !prevRequest?.headers[NO_RETRY_HEADER]) {
           const newAccessToken = await refresh();
+
           prevRequest.headers['Authorization'] = newAccessToken;
-          return axios(prevRequest);
+          prevRequest.headers[NO_RETRY_HEADER] = 'true';
+
+          return axiosPrivate(prevRequest);
         }
         return Promise.reject(error);
       }
     );
 
     return (() => {
-      axios.interceptors.request.eject(requestIntercept);
-      axios.interceptors.response.eject(responseIntercept);
+      axiosPrivate.interceptors.request.eject(requestIntercept);
+      axiosPrivate.interceptors.response.eject(responseIntercept);
     })
   })
 
 
-  return axios;
+  return axiosPrivate;
 };
 
 export default useAxiosPrivate;
