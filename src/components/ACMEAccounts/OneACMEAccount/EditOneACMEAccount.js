@@ -26,7 +26,8 @@ const EditOneACMEAccount = () => {
   const { id } = useParams();
   const [apiGetState, updateGet] = useAxiosGet(
     `/v1/acmeaccounts/${id}`,
-    'acme_account'
+    'acme_account',
+    true
   );
 
   const [sendApiState, sendData] = useAxiosSend();
@@ -96,7 +97,7 @@ const EditOneACMEAccount = () => {
   };
   const deleteConfirmHandler = () => {
     setDeleteModal(false);
-    sendData(`/v1/acmeaccounts/${formState.acme_account.id}`, 'DELETE', true).then(
+    sendData(`/v1/acmeaccounts/${formState.acme_account.id}`, 'DELETE', null, true).then(
       (success) => {
         if (success) {
           // back to the accounts page
@@ -120,6 +121,7 @@ const EditOneACMEAccount = () => {
     sendData(
       `/v1/acmeaccounts/${formState.acme_account.id}/deactivate`,
       'POST',
+      null,
       true
     ).then((success) => {
       if (success) {
@@ -136,6 +138,7 @@ const EditOneACMEAccount = () => {
     sendData(
       `/v1/acmeaccounts/${formState.acme_account.id}/new-account`,
       'POST',
+      null,
       true
     ).then((success) => {
       if (success) {

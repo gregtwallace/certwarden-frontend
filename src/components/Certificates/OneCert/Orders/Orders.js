@@ -27,7 +27,7 @@ const Orders = (props) => {
 
   // handler to place a new order
   const newOrderHandler = (event) => {
-    sendData(`/v1/certificates/${props.certId}/orders`, 'POST', true).then(
+    sendData(`/v1/certificates/${props.certId}/orders`, 'POST', null, true).then(
       (success) => {
         props.updateGet();
       }
@@ -38,7 +38,7 @@ const Orders = (props) => {
   const retryOrderHandler = (event, orderId) => {
     event.preventDefault();
 
-    sendData(`/v1/certificates/${props.certId}/orders/${orderId}`, 'POST', true).then(
+    sendData(`/v1/certificates/${props.certId}/orders/${orderId}`, 'POST', null, true).then(
       (success) => {
         props.updateGet();
       }
@@ -53,6 +53,7 @@ const Orders = (props) => {
     sendData(
       `/v1/certificates/${props.certId}/orders/${orderId}/revoke`,
       'POST',
+      null,
       true
     ).then((success) => {
       props.updateGet();

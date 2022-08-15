@@ -22,7 +22,8 @@ const AddOneCert = () => {
   // fetch valid options (for private keys this is the algorithms list)
   const [apiGetState] = useAxiosGet(
     `/v1/certificates/${newId}`,
-    'certificate_options'
+    'certificate_options',
+    true
   );
 
   const [sendApiState, sendData] = useAxiosSend();

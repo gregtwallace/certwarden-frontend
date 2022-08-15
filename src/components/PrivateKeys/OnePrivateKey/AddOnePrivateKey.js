@@ -22,7 +22,8 @@ const AddOnePrivateKey = () => {
   // fetch valid options (for private keys this is the algorithms list)
   const [ apiGetState ] = useAxiosGet(
     `/v1/privatekeys/${newId}`,
-    'private_key_options'
+    'private_key_options',
+    true
   );
 
   const [sendApiState, sendData] = useAxiosSend();

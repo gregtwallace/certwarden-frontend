@@ -52,7 +52,7 @@ const ViewOneCert = () => {
   };
   const deleteConfirmHandler = () => {
     setDeleteModal(false);
-    sendData(`/v1/certificates/${apiGetState.certificate.id}`, 'DELETE', true).then(
+    sendData(`/v1/certificates/${apiGetState.certificate.id}`, 'DELETE', null, true).then(
       (success) => {
         if (success) {
           // back to the accounts page

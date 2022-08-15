@@ -88,7 +88,7 @@ const EditOnePrivateKey = () => {
   };
   const deleteConfirmHandler = () => {
     setDeleteModal(false);
-    sendData(`/v1/privatekeys/${formState.private_key.id}`, 'DELETE', true).then(
+    sendData(`/v1/privatekeys/${formState.private_key.id}`, 'DELETE', null, true).then(
       (success) => {
         if (success) {
           // back to the private keys page
