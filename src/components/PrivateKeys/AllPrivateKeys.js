@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 
-import useApiGet from '../../hooks/useApiGet';
+import useAxiosGet from '../../hooks/useAxiosGet';
 
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
@@ -16,7 +16,7 @@ import H2Header from '../UI/Header/H2Header';
 const AllPrivateKeys = () => {
   const navigate = useNavigate();
 
-  const [ apiGetState ] = useApiGet('/v1/privatekeys', 'private_keys');
+  const [apiGetState] = useAxiosGet('/v1/privatekeys', 'private_keys', true);
 
   const newClickHandler = (event) => {
     event.preventDefault();
@@ -45,15 +45,16 @@ const AllPrivateKeys = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {apiGetState.private_keys && apiGetState.private_keys.map((m) => (
-              <TableRow key={m.id}>
-                <TableHeader scope='row'>
-                  <Link to={'/privatekeys/' + m.id}>{m.name}</Link>
-                </TableHeader>
-                <TableData>{m.description}</TableData>
-                <TableData>{m.algorithm.name}</TableData>
-              </TableRow>
-            ))}
+            {apiGetState.private_keys &&
+              apiGetState.private_keys.map((m) => (
+                <TableRow key={m.id}>
+                  <TableHeader scope='row'>
+                    <Link to={'/privatekeys/' + m.id}>{m.name}</Link>
+                  </TableHeader>
+                  <TableData>{m.description}</TableData>
+                  <TableData>{m.algorithm.name}</TableData>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </>

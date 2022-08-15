@@ -1,8 +1,8 @@
 import { useCallback, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import useApiGet from '../../../hooks/useApiGet';
-import useApiSend from '../../../hooks/useApiSend';
+import useAxiosGet from '../../../hooks/useAxiosGet';
+import useAxiosSend from '../../../hooks/useAxiosSend';
 import { isNameValid } from '../../../helpers/form-validation';
 import { convertUnixTime } from '../../../helpers/unix-time';
 
@@ -24,12 +24,12 @@ import H2Header from '../../UI/Header/H2Header';
 
 const EditOneACMEAccount = () => {
   const { id } = useParams();
-  const [apiGetState, updateGet] = useApiGet(
+  const [apiGetState, updateGet] = useAxiosGet(
     `/v1/acmeaccounts/${id}`,
     'acme_account'
   );
 
-  const [sendApiState, sendData] = useApiSend();
+  const [sendApiState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
   // set dummy state prior to apiGet loading
@@ -96,7 +96,7 @@ const EditOneACMEAccount = () => {
   };
   const deleteConfirmHandler = () => {
     setDeleteModal(false);
-    sendData(`/v1/acmeaccounts/${formState.acme_account.id}`, 'DELETE').then(
+    sendData(`/v1/acmeaccounts/${formState.acme_account.id}`, 'DELETE', true).then(
       (success) => {
         if (success) {
           // back to the accounts page
@@ -119,7 +119,8 @@ const EditOneACMEAccount = () => {
 
     sendData(
       `/v1/acmeaccounts/${formState.acme_account.id}/deactivate`,
-      'POST'
+      'POST',
+      true
     ).then((success) => {
       if (success) {
         // update account from backend
@@ -134,7 +135,8 @@ const EditOneACMEAccount = () => {
 
     sendData(
       `/v1/acmeaccounts/${formState.acme_account.id}/new-account`,
-      'POST'
+      'POST',
+      true
     ).then((success) => {
       if (success) {
         // update account from backend
@@ -172,7 +174,8 @@ const EditOneACMEAccount = () => {
     sendData(
       `/v1/acmeaccounts/${formState.acme_account.id}`,
       'PUT',
-      formState.acme_account
+      formState.acme_account,
+      true
     ).then((success) => {
       if (success) {
         // back to the previous page

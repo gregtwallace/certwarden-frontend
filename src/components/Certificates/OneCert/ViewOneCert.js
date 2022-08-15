@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import useApiGet from '../../../hooks/useApiGet';
-import useApiSend from '../../../hooks/useApiSend';
+import useAxiosGet from '../../../hooks/useAxiosGet';
+import useAxiosSend from '../../../hooks/useAxiosSend';
 
 import { convertUnixTime } from '../../../helpers/unix-time';
 
@@ -22,12 +22,13 @@ import Orders from './Orders/Orders';
 const ViewOneCert = () => {
   const { id } = useParams();
 
-  const [apiGetState, updateGet] = useApiGet(
+  const [apiGetState, updateGet] = useAxiosGet(
     `/v1/certificates/${id}`,
-    'certificate'
+    'certificate',
+    true
   );
 
-  const [sendApiState, sendData] = useApiSend();
+  const [sendApiState, sendData] = useAxiosSend();
   const [deleteModal, setDeleteModal] = useState(false);
   const navigate = useNavigate();
 
@@ -51,7 +52,7 @@ const ViewOneCert = () => {
   };
   const deleteConfirmHandler = () => {
     setDeleteModal(false);
-    sendData(`/v1/certificates/${apiGetState.certificate.id}`, 'DELETE').then(
+    sendData(`/v1/certificates/${apiGetState.certificate.id}`, 'DELETE', true).then(
       (success) => {
         if (success) {
           // back to the accounts page

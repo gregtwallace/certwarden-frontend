@@ -33,7 +33,7 @@ const Login = (props) => {
   const submitLogin = (event) => {
     event.preventDefault();
 
-    sendData(LOGIN_URL, 'POST', true, formState).then((success) => {
+    sendData(LOGIN_URL, 'POST', formState, true).then((success) => {
       if (success) {
         setAuth({
           username: formState.username,

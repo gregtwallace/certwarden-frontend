@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import useApiGet from '../../../hooks/useApiGet';
-import useApiSend from '../../../hooks/useApiSend';
+import useAxiosGet from '../../../hooks/useAxiosGet';
+import useAxiosSend from '../../../hooks/useAxiosSend';
 import { isNameValid } from '../../../helpers/form-validation';
 import { newId } from '../../../App';
 
@@ -20,12 +20,12 @@ import FormError from '../../UI/Form/FormError';
 
 const AddOnePrivateKey = () => {
   // fetch valid options (for private keys this is the algorithms list)
-  const [ apiGetState ] = useApiGet(
+  const [ apiGetState ] = useAxiosGet(
     `/v1/privatekeys/${newId}`,
     'private_key_options'
   );
 
-  const [sendApiState, sendData] = useApiSend();
+  const [sendApiState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
   const blankFormState = {
@@ -88,7 +88,7 @@ const AddOnePrivateKey = () => {
     }
     //
 
-    sendData(`/v1/privatekeys`, 'POST', formState.private_key).then((success) => {
+    sendData(`/v1/privatekeys`, 'POST', formState.private_key, true).then((success) => {
       if (success) {
         // back to the private keys page
         //navigate('.');

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 
-import useApiGet from '../../hooks/useApiGet';
+import useAxiosGet from '../../hooks/useAxiosGet';
 
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
@@ -16,7 +16,7 @@ import H2Header from '../UI/Header/H2Header';
 const AllACMEAccounts = () => {
   const navigate = useNavigate();
 
-  const [ apiGetState ] = useApiGet('/v1/acmeaccounts', 'acme_accounts');
+  const [ apiGetState ] = useAxiosGet('/v1/acmeaccounts', 'acme_accounts', true);
 
   const newClickHandler = (event) => {
     event.preventDefault();

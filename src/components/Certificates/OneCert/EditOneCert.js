@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import useApiGet from '../../../hooks/useApiGet';
-import useApiSend from '../../../hooks/useApiSend';
+import useAxiosGet from '../../../hooks/useAxiosGet';
+import useAxiosSend from '../../../hooks/useAxiosSend';
 import { isDomainValid, isNameValid } from '../../../helpers/form-validation';
 import { newId } from '../../../App';
 
@@ -21,15 +21,16 @@ import FormError from '../../UI/Form/FormError';
 const EditOneCert = () => {
   // fetch current state
   const { id } = useParams();
-  const [apiGetState] = useApiGet(`/v1/certificates/${id}`, 'certificate');
+  const [apiGetState] = useAxiosGet(`/v1/certificates/${id}`, 'certificate', true);
 
   // get config options
-  const [optionsState] = useApiGet(
+  const [optionsState] = useAxiosGet(
     `/v1/certificates/${newId}`,
-    'certificate_options'
+    'certificate_options',
+    true
   );
 
-  const [sendApiState, sendData] = useApiSend();
+  const [sendApiState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
   // initialize dummy values
@@ -148,7 +149,7 @@ const EditOneCert = () => {
     }
     //
 
-    sendData(`/v1/certificates/${id}`, 'PUT', formState.certificate).then(
+    sendData(`/v1/certificates/${id}`, 'PUT', formState.certificate, true).then(
       (success) => {
         if (success) {
           // back to certificate view

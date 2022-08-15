@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import useApiGet from '../../../hooks/useApiGet';
-import useApiSend from '../../../hooks/useApiSend';
+import useAxiosGet from '../../../hooks/useAxiosGet';
+import useAxiosSend from '../../../hooks/useAxiosSend';
 import {
   isNameValid,
   isEmailValidOrBlank,
@@ -22,12 +22,13 @@ import FormError from '../../UI/Form/FormError';
 
 const AddOneACMEAccount = () => {
   // fetch valid options (for private keys this is the algorithms list)
-  const [apiGetState] = useApiGet(
+  const [apiGetState] = useAxiosGet(
     `/v1/acmeaccounts/${newId}`,
-    'acme_account_options'
+    'acme_account_options',
+    true
   );
 
-  const [apiSendState, sendData] = useApiSend();
+  const [apiSendState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
   const blankFormState = {
@@ -127,7 +128,7 @@ const AddOneACMEAccount = () => {
     }
     ///
 
-    sendData(`/v1/acmeaccounts`, 'POST', formState.acme_account).then(
+    sendData(`/v1/acmeaccounts`, 'POST', formState.acme_account, true).then(
       (response) => {
         if (response) {
           // go to the new account

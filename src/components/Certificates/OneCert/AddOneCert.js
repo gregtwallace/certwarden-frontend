@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import useApiGet from '../../../hooks/useApiGet';
-import useApiSend from '../../../hooks/useApiSend';
+import useAxiosGet from '../../../hooks/useAxiosGet';
+import useAxiosSend from '../../../hooks/useAxiosSend';
 import { isDomainValid, isNameValid } from '../../../helpers/form-validation';
 import { newId } from '../../../App';
 
@@ -20,12 +20,12 @@ import FormError from '../../UI/Form/FormError';
 
 const AddOneCert = () => {
   // fetch valid options (for private keys this is the algorithms list)
-  const [apiGetState] = useApiGet(
+  const [apiGetState] = useAxiosGet(
     `/v1/certificates/${newId}`,
     'certificate_options'
   );
 
-  const [sendApiState, sendData] = useApiSend();
+  const [sendApiState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
   const blankFormState = {
@@ -140,7 +140,7 @@ const AddOneCert = () => {
     }
     //
 
-    sendData(`/v1/certificates`, 'POST', formState.certificate).then(
+    sendData(`/v1/certificates`, 'POST', formState.certificate, true).then(
       (success) => {
         if (success) {
           // back to the certificates page

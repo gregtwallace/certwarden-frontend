@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import useApiGet from '../../../../hooks/useApiGet';
+import useAxiosGet from '../../../../hooks/useAxiosGet';
 import { convertUnixTime } from '../../../../helpers/unix-time';
 
 import ApiLoading from '../../../UI/Api/ApiLoading';
@@ -15,9 +15,10 @@ import H2Header from '../../../UI/Header/H2Header';
 import Button from '../../../UI/Button/Button';
 
 const Orders = (props) => {
-  const [apiGetState] = useApiGet(
+  const [apiGetState] = useAxiosGet(
     `/v1/certificates/${props.certId}/orders`,
-    'orders'
+    'orders',
+    true
   );
 
   // Rather than making another sendApi, use the parent component's.
@@ -26,7 +27,7 @@ const Orders = (props) => {
 
   // handler to place a new order
   const newOrderHandler = (event) => {
-    sendData(`/v1/certificates/${props.certId}/orders`, 'POST').then(
+    sendData(`/v1/certificates/${props.certId}/orders`, 'POST', true).then(
       (success) => {
         props.updateGet();
       }
@@ -37,7 +38,7 @@ const Orders = (props) => {
   const retryOrderHandler = (event, orderId) => {
     event.preventDefault();
 
-    sendData(`/v1/certificates/${props.certId}/orders/${orderId}`, 'POST').then(
+    sendData(`/v1/certificates/${props.certId}/orders/${orderId}`, 'POST', true).then(
       (success) => {
         props.updateGet();
       }
@@ -51,7 +52,8 @@ const Orders = (props) => {
     // TODO: add ability to specify revocation reason
     sendData(
       `/v1/certificates/${props.certId}/orders/${orderId}/revoke`,
-      'POST'
+      'POST',
+      true
     ).then((success) => {
       props.updateGet();
     });

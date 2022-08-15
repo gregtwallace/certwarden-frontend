@@ -1,8 +1,8 @@
 import { useCallback, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import useApiGet from '../../../../hooks/useApiGet';
-import useApiSend from '../../../../hooks/useApiSend';
+import useAxiosGet from '../../../../hooks/useAxiosGet';
+import useAxiosSend from '../../../../hooks/useAxiosSend';
 import { isEmailValid } from '../../../../helpers/form-validation';
 
 import ApiError from '../../../UI/Api/ApiError';
@@ -17,12 +17,13 @@ import H2Header from '../../../UI/Header/H2Header';
 
 const ChangeAccountEmail = () => {
   const { id } = useParams();
-  const [ apiGetState ] = useApiGet(
+  const [ apiGetState ] = useAxiosGet(
     `/v1/acmeaccounts/${id}`,
-    'acme_account'
+    'acme_account',
+    true
   );
 
-  const [sendApiState, sendData] = useApiSend();
+  const [sendApiState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
   // set dummy state prior to apiGet loading
@@ -105,7 +106,8 @@ const ChangeAccountEmail = () => {
     sendData(
       `/v1/acmeaccounts/${formState.acme_account.id}/email`,
       'PUT',
-      formState.acme_account
+      formState.acme_account,
+      true
     ).then((success) => {
       if (success) {
         navigate(`/acmeaccounts/${formState.acme_account.id}`);

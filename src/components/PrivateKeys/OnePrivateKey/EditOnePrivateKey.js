@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import useApiGet from '../../../hooks/useApiGet';
-import useApiSend from '../../../hooks/useApiSend';
+import useAxiosGet from '../../../hooks/useAxiosGet';
+import useAxiosSend from '../../../hooks/useAxiosSend';
 import { isNameValid } from '../../../helpers/form-validation';
 import { convertUnixTime } from '../../../helpers/unix-time';
 
@@ -20,9 +20,9 @@ import Modal from '../../UI/Modal/Modal';
 
 const EditOnePrivateKey = () => {
   const { id } = useParams();
-  const [apiGetState] = useApiGet(`/v1/privatekeys/${id}`, 'private_key');
+  const [apiGetState] = useAxiosGet(`/v1/privatekeys/${id}`, 'private_key');
 
-  const [sendApiState, sendData] = useApiSend();
+  const [sendApiState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
   // set dummy state prior to apiGet loading
@@ -88,7 +88,7 @@ const EditOnePrivateKey = () => {
   };
   const deleteConfirmHandler = () => {
     setDeleteModal(false);
-    sendData(`/v1/privatekeys/${formState.private_key.id}`, 'DELETE').then(
+    sendData(`/v1/privatekeys/${formState.private_key.id}`, 'DELETE', true).then(
       (success) => {
         if (success) {
           // back to the private keys page
@@ -122,7 +122,8 @@ const EditOnePrivateKey = () => {
     sendData(
       `/v1/privatekeys/${formState.private_key.id}`,
       'PUT',
-      formState.private_key
+      formState.private_key,
+      true
     ).then((success) => {
       if (success) {
         // back to the private keys page
