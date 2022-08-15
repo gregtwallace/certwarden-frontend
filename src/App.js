@@ -1,7 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
+import useAuth from './hooks/useAuth';
+
 import Dashboard from './components/Dashboard';
-import Login from './components/UI/Login/Login';
+import Login from './components/Authentication/Login';
 import AllACMEAccounts from './components/ACMEAccounts/AllACMEAccounts';
 import AddOneACMEAccount from './components/ACMEAccounts/OneACMEAccount/AddOneACMEAccount';
 import EditOneACMEAccount from './components/ACMEAccounts/OneACMEAccount/EditOneACMEAccount';
@@ -13,21 +15,20 @@ import AllCertificates from './components/Certificates/AllCertificates';
 import ViewOneCert from './components/Certificates/OneCert/ViewOneCert';
 import EditOneCert from './components/Certificates/OneCert/EditOneCert';
 import AddOneCert from './components/Certificates/OneCert/AddOneCert';
-import { useState } from 'react';
 import H1Header from './components/UI/Header/H1Header';
 
 export const newId = -1;
 
 const App = () => {
-  var [jwt, setJwt] = useState('');
+  const { auth, setAuth } = useAuth();
 
   const logoutHandler = () => {
-    setJwt('');
+    setAuth({});
   };
 
   // if not logged in
-  if (jwt === '') {
-    return <Login setJwt={setJwt} />;
+  if (!auth?.username) {
+    return <Login />;
   } else {
     // if logged in
     return (

@@ -1,18 +1,22 @@
 import { useState } from 'react';
 
-import useApiSend from '../../../hooks/useApiSend';
+import useAxiosSend from '../../hooks/useAxiosSend';
+import useAuth from '../../hooks/useAuth';
 
-import Form from '../Form/Form';
-import FormError from '../Form/FormError';
-import InputText from '../Form/InputText';
-import Button from '../Button/Button';
+import Form from '../UI/Form/Form';
+import FormError from '../UI/Form/FormError';
+import InputText from '../UI/Form/InputText';
+import Button from '../UI/Button/Button';
 
 import styles from './Login.module.css';
 
-const Login = (props) => {
-  var [sendApiState, sendData] = useApiSend();
+const LOGIN_URL = '/v1/auth/login';
 
-  var [formState, setFormState] = useState({
+const Login = (props) => {
+  const [sendState, sendData] = useAxiosSend();
+  const { setAuth } = useAuth();
+
+  const [formState, setFormState] = useState({
     username: '',
     password: '',
   });
@@ -29,9 +33,13 @@ const Login = (props) => {
   const submitLogin = (event) => {
     event.preventDefault();
 
-    sendData(`/v1/login`, 'POST', formState).then((success) => {
+    sendData(LOGIN_URL, 'POST', true, formState).then((success) => {
       if (success) {
-        props.setJwt(success.jwt);
+        setAuth({
+          username: formState.username,
+          accessToken: success?.access_token,
+        });
+      } else {
       }
     });
   };
@@ -60,16 +68,17 @@ const Login = (props) => {
           <Button
             type='submit'
             onClick={submitLogin}
-            disabled={sendApiState.isSending}
+            disabled={sendState.isSending}
           >
             Login
           </Button>
         </Form>
-
       </div>
-      {sendApiState.errorMessage && (
-          <FormError className={styles.login_error}>{sendApiState.errorMessage}</FormError>
-        )}
+      {sendState.errorMessage && (
+        <FormError className={styles.login_error}>
+          {sendState.errorMessage}
+        </FormError>
+      )}
     </div>
   );
 };
