@@ -4,7 +4,7 @@ import axios from '../api/axios';
 import useAxiosPrivate from './useAxiosPrivate';
 
 // Hook to query the API and return a state based on the query
-const useApiGet = (apiNode, expectedJsonName, secureRoute = false) => {
+const useAxiosGet = (apiNode, expectedJsonName, secureRoute = false) => {
   const axiosPrivate = useAxiosPrivate();
 
   // select instance based on if route is secured
@@ -68,4 +68,4 @@ const useApiGet = (apiNode, expectedJsonName, secureRoute = false) => {
   return [state, updateGet];
 };
 
-export default useApiGet;
+export default useAxiosGet;
