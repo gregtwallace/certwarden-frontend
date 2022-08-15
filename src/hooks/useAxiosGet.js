@@ -59,7 +59,7 @@ const useAxiosGet = (apiNode, expectedJsonName, secureRoute = false) => {
         errorMessage: errorMessage,
       });
     }
-  }, [axiosInstance, apiNode, expectedJsonName, secureRoute]);
+  }, [axiosInstance, apiNode, expectedJsonName]);
 
   useEffect(() => {
     updateGet();
