@@ -20,7 +20,7 @@ import Modal from '../../UI/Modal/Modal';
 
 const EditOnePrivateKey = () => {
   const { id } = useParams();
-  const [apiGetState] = useAxiosGet(`/v1/privatekeys/${id}`, 'private_key');
+  const [apiGetState] = useAxiosGet(`/v1/privatekeys/${id}`, 'private_key', true);
 
   const [sendApiState, sendData] = useAxiosSend();
   const navigate = useNavigate();
