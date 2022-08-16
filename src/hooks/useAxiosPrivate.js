@@ -32,13 +32,17 @@ const useAxiosPrivate = () => {
       (response) => response,
       async (error) => {
         var prevRequest = error?.config;
-        if (error?.response?.status === 401 && !prevRequest?.headers[NO_RETRY_HEADER]) {
-          const newAccessToken = await refresh();
+        if (error?.response?.status === 401 && prevRequest?.headers[NO_RETRY_HEADER] == null) {
+          // get new token, return error if refresh errors
+          try {
+            const newAccessToken = await refresh();
 
-          prevRequest.headers['Authorization'] = newAccessToken;
-          prevRequest.headers[NO_RETRY_HEADER] = 'true';
+            // retry with new token
+            prevRequest.headers[NO_RETRY_HEADER] = 'true';
+            prevRequest.headers['Authorization'] = newAccessToken;
+            return axiosPrivate(prevRequest);
 
-          return axiosPrivate(prevRequest);
+          } catch (error) {/* no-op */}
         }
         return Promise.reject(error);
       }
@@ -48,8 +52,7 @@ const useAxiosPrivate = () => {
       axiosPrivate.interceptors.request.eject(requestIntercept);
       axiosPrivate.interceptors.response.eject(responseIntercept);
     })
-  })
-
+  },[auth.accessToken, refresh])
 
   return axiosPrivate;
 };

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 import useAuth from './hooks/useAuth';
@@ -21,17 +22,23 @@ import H1Header from './components/UI/Header/H1Header';
 export const newId = -1;
 
 const App = () => {
-  const { setAuth } = useAuth();
-  const [, sendData ] = useAxiosSend();
+  const { auth, setAuth } = useAuth();
+  const [, sendData] = useAxiosSend();
 
-  // check for 'logged_in' cookie
-  const loggedIn = document.cookie.match(
-    /^(.*;)?\s*logged_in\s*=\s*[^;]+(.*)?$/
-  );
+  // check for 'logged_in' cookie to set the initial login state
+  useEffect(() => {
+    const loggedIn = document.cookie.match(
+      /^(.*;)?\s*logged_in\s*=\s*[^;]+(.*)?$/
+    );
+
+    setAuth((prevState) => ({
+      ...prevState,
+      loggedIn: loggedIn,
+    }));
+  }, [setAuth]);
 
   // logout handler
-  // clear 'logged_in' cookie on front end (NOTE: does NOT clear the refresh_token cookie!)
-  // send logout to backend so backend deletes the refresh_token on its end
+  // backend clears cookie on the call to /logout
   const logoutHandler = () => {
     sendData(`/v1/auth/logout`, 'POST', null, true).then((success) => {
       if (success) {
@@ -42,7 +49,7 @@ const App = () => {
   };
 
   // if not logged in
-  if (!loggedIn) {
+  if (!auth.loggedIn) {
     return <Login />;
   } else {
     // if logged in

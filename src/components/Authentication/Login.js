@@ -36,9 +36,9 @@ const Login = (props) => {
     sendData(LOGIN_URL, 'POST', formState, true).then((success) => {
       if (success) {
         setAuth({
-          accessToken: success?.access_token,
+          loggedIn: true,
+          accessToken: success.access_token,
         });
-      } else {
       }
     });
   };
