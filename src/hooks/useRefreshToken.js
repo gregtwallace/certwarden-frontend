@@ -19,8 +19,8 @@ const useRefreshToken = () => {
         withCredentials: true
       });
 
-      // error if no access_token
-      if (response?.data?.response?.access_token == null) {
+      // error if no access_token or blank
+      if (response?.data?.response?.access_token == null || response?.data?.response?.access_token === "") {
         throw new Error(
           `Status: ${response.status}, Message: ${response?.error?.message}`
         );
