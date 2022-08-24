@@ -18,6 +18,7 @@ import ViewOneCert from './components/Certificates/OneCert/ViewOneCert';
 import EditOneCert from './components/Certificates/OneCert/EditOneCert';
 import AddOneCert from './components/Certificates/OneCert/AddOneCert';
 import H1Header from './components/UI/Header/H1Header';
+import Settings from './components/Settings/Settings';
 
 export const newId = -1;
 
@@ -120,6 +121,7 @@ const App = () => {
                   path={`/certificates/${newId}`}
                   element={<AddOneCert />}
                 />
+                <Route path={'/settings'} element={<Settings />} />
                 `// TODO: Dashboard, Settings //`
                 <Route path='/' element={<Dashboard />} />
               </Routes>
