@@ -46,7 +46,17 @@ const ChangePassword = () => {
 
     /// form validation
     let validationErrors = [];
-    // TODO: Password requirements?
+    // TODO: Additional password complexity requirements?
+    // new password
+    if (formState.payload.new_password.length < 10) {
+      validationErrors.new_password = true;
+    }
+
+    // confirm password
+    if (formState.payload.new_password !== formState.payload.confirm_new_password) {
+      validationErrors.confirm_new_password = true;
+    }
+
     // TODO: Confirm passwords match
 
     setFormState((prevState) => ({
@@ -85,7 +95,6 @@ const ChangePassword = () => {
           type='password'
           value={formState.payload.current_password}
           onChange={inputChangeHandler}
-          invalid={formState.validationErrors.name && true}
         />
         <InputText
           label='New Password'
@@ -94,6 +103,7 @@ const ChangePassword = () => {
           type='password'
           value={formState.payload.new_password}
           onChange={inputChangeHandler}
+          invalid={formState.validationErrors.new_password && true}
         />
         <InputText
           label='Confirm New Password'
@@ -102,6 +112,7 @@ const ChangePassword = () => {
           type='password'
           value={formState.payload.confirm_new_password}
           onChange={inputChangeHandler}
+          invalid={formState.validationErrors.confirm_new_password && true}
         />
 
         {!sendApiState.errorMessage && formState.apiMessage && (

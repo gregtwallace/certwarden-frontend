@@ -1,4 +1,4 @@
-import FormError from "./FormError";
+import FormError from './FormError';
 
 const InputText = (props) => {
   let errorMessage = '';
@@ -8,13 +8,17 @@ const InputText = (props) => {
         'The name cannot be blank and must only contain these symbols - _ . ~ letters and numbers.';
       break;
     case 'email':
-      errorMessage =
-        'Email address must be in a valid format.';
+      errorMessage = 'Email address must be in a valid format.';
       break;
     case 'subject':
     case props.id.match(/^subject_alts/)?.input:
-      errorMessage = 
-        'Subject must be a valid (sub)domain name.';
+      errorMessage = 'Subject must be a valid (sub)domain name.';
+      break;
+    case 'new_password':
+      errorMessage = 'New password must be at least 10 characters long.';
+      break;
+    case 'confirm_new_password':
+      errorMessage = 'Password confirmation must match new password.';
       break;
     default:
       errorMessage = 'This field has an error.';
@@ -23,7 +27,7 @@ const InputText = (props) => {
 
   let type = 'text';
   if (props.type === 'password') {
-    type = 'password'
+    type = 'password';
   }
 
   return (
