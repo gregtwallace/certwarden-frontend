@@ -1,15 +1,22 @@
 import axios from 'axios';
 
+// set API URL via env if not in prod, otherwise prod server will
+// update env.js appropriately
+const API_URL =
+  process.env.NODE_ENV === 'production'
+    ? window.env.API_URL
+    : process.env.REACT_APP_API_URL;
+
 // base config
 export const axiosConfig = {
-  baseURL: process.env.REACT_APP_API_NODE + "/api",
-  headers: { 'Content-Type': 'application/json'},
-}
+  baseURL: API_URL + '/api',
+  headers: { 'Content-Type': 'application/json' },
+};
 
 // insecure axios (no token sent)
 // default, insecure
 export default axios.create({
-  ...axiosConfig
+  ...axiosConfig,
 });
 
 // with credentials (cookies)
