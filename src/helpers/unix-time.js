@@ -15,3 +15,12 @@ export const convertUnixTime = (unixTime) => {
   }).format(unixTime * 1000);
   // Note: *1000 due to millisecond conversion
 };
+
+// function to return number of days until the specified time
+export const daysUntil = (unixTime) => {
+  if (!unixTime) {
+    return ""
+  }
+
+  return Math.floor(((unixTime) - (Date.now() / 1000)) / (( 3600 * 24)))
+};
