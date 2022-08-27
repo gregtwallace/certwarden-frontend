@@ -59,6 +59,7 @@ const Dashboard = () => {
           <TableHead>
             <TableRow>
               <TableHeader scope='col'>Subject</TableHeader>
+              <TableHeader scope='col'></TableHeader>
               <TableHeader scope='col'>Name</TableHeader>
               <TableHeader scope='col'>Expiration (Until)</TableHeader>
             </TableRow>
@@ -69,10 +70,12 @@ const Dashboard = () => {
                 <TableRow key={m.id}>
                   <TableHeader>
                     {m.certificate.subject}{' '}
-                    {m.certificate.acme_account.is_staging && (
+                  </TableHeader>
+                  <TableData>
+                  {m.certificate.acme_account.is_staging && (
                       <span className='text-info'>(Staging)</span>
                     )}
-                  </TableHeader>
+                  </TableData>
                   <TableData scope='row'>
                     <Link to={'/certificates/' + m.certificate.id}>
                       {m.certificate.name}
