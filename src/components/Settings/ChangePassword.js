@@ -82,7 +82,7 @@ const ChangePassword = () => {
   };
 
   return (
-    <>
+    <div className="container mb-5">
       <H5Header h5="Change Password" />
       <Form onSubmit={submitFormHandler}>
         {/* {sendApiState.errorMessage && (
@@ -130,7 +130,7 @@ const ChangePassword = () => {
           Reset
         </Button>
       </Form>
-    </>
+    </div>
   );
 };
 
