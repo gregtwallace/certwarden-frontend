@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { devMode } from '../App';
 import axios from '../api/axios';
 import useAxiosPrivate from './useAxiosPrivate';
 
@@ -34,11 +35,7 @@ const useAxiosSend = () => {
     });
 
     // debugging
-    if (
-      !process.env.NODE_ENV ||
-      process.env.NODE_ENV === 'development' ||
-      window.env.DEV_MODE
-    ) {
+    if (devMode) {
       console.log(payloadObj);
     }
 
@@ -50,11 +47,7 @@ const useAxiosSend = () => {
       });
 
       // debugging
-      if (
-        !process.env.NODE_ENV ||
-        process.env.NODE_ENV === 'development' ||
-        window.env.DEV_MODE
-      ) {
+      if (devMode) {
         console.log(response?.data);
       }
 
@@ -66,7 +59,9 @@ const useAxiosSend = () => {
       return response?.data?.response;
     } catch (error) {
       // debugging
-      console.log(error);
+      if (devMode) {
+        console.log(error);
+      }
 
       // if received a response error, set that in error state
       // otherwise use Axios' error

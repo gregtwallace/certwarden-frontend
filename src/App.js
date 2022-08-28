@@ -20,6 +20,15 @@ import AddOneCert from './components/Certificates/OneCert/AddOneCert';
 import H1Header from './components/UI/Header/H1Header';
 import Settings from './components/Settings/Settings';
 
+// react app version
+export const frontendVersion = '0.3.0';
+// dev mode
+export const devMode =
+  !process.env.NODE_ENV ||
+  process.env.NODE_ENV === 'development' ||
+  window.env.DEV_MODE;
+
+    // value for new records on backend
 export const newId = -1;
 
 const App = () => {

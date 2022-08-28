@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 
+import { devMode } from '../App';
 import axios from '../api/axios';
 import useAxiosPrivate from './useAxiosPrivate';
 
@@ -35,11 +36,7 @@ const useAxiosGet = (apiNode, expectedJsonName, withCredentials = false) => {
       });
 
       // debugging
-      if (
-        !process.env.NODE_ENV ||
-        process.env.NODE_ENV === 'development' ||
-        window.env.DEV_MODE
-      ) {
+      if (devMode) {
         console.log(response?.data);
       }
 

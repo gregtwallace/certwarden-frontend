@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // set API URL via env if not in prod, otherwise prod server will
 // update env.js appropriately
-const API_URL =
+export const API_URL =
   process.env.NODE_ENV === 'production'
     ? window.env.API_URL
     : process.env.REACT_APP_API_URL;
