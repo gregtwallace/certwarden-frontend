@@ -14,7 +14,6 @@ import FormError from '../../UI/Form/FormError';
 import FormInformation from '../../UI/Form/FormInformation';
 import InputHidden from '../../UI/Form/InputHidden';
 import InputText from '../../UI/Form/InputText';
-import InputTextArea from '../../UI/Form/InputTextArea';
 import H2Header from '../../UI/Header/H2Header';
 import Modal from '../../UI/Modal/Modal';
 
