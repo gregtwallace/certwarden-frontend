@@ -13,7 +13,12 @@ const useAxiosSend = () => {
 
   // Send data to the node using the specified method and a payload from the specified event
   // return true if success and no error, return false if something goes wrong
-  const sendData = async (apiNode, method, payloadObj, withCredentials = false) => {
+  const sendData = async (
+    apiNode,
+    method,
+    payloadObj,
+    withCredentials = false
+  ) => {
     // select instance based on if route is secured
     var axiosInstance;
     if (withCredentials) {
@@ -29,7 +34,13 @@ const useAxiosSend = () => {
     });
 
     // debugging
-    console.log(payloadObj);
+    if (
+      !process.env.NODE_ENV ||
+      process.env.NODE_ENV === 'development' ||
+      window.env.DEV_MODE
+    ) {
+      console.log(payloadObj);
+    }
 
     try {
       let response = await axiosInstance({
@@ -39,7 +50,13 @@ const useAxiosSend = () => {
       });
 
       // debugging
-      console.log(response?.data);
+      if (
+        !process.env.NODE_ENV ||
+        process.env.NODE_ENV === 'development' ||
+        window.env.DEV_MODE
+      ) {
+        console.log(response?.data);
+      }
 
       // done sending, success
       setState({
@@ -47,7 +64,6 @@ const useAxiosSend = () => {
         errorMessage: null,
       });
       return response?.data?.response;
-
     } catch (error) {
       // debugging
       console.log(error);

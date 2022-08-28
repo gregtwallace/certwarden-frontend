@@ -35,7 +35,13 @@ const useAxiosGet = (apiNode, expectedJsonName, withCredentials = false) => {
       });
 
       // debugging
-      console.log(response?.data);
+      if (
+        !process.env.NODE_ENV ||
+        process.env.NODE_ENV === 'development' ||
+        window.env.DEV_MODE
+      ) {
+        console.log(response?.data);
+      }
 
       setState({
         [expectedJsonName]: response?.data[expectedJsonName],
