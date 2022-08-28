@@ -128,6 +128,13 @@ const App = () => {
             </div>
           </div>
         </Router>
+
+        <footer className='my-4'>
+          <div className='text-center'>
+            <hr />
+            <p>Copyright © 2022 Greg T. Wallace</p>
+          </div>
+        </footer>
       </div>
     );
   }
