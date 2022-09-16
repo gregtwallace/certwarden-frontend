@@ -17,11 +17,16 @@ import InputText from '../../UI/Form/InputText';
 import InputTextArray from '../../UI/Form/InputTextArray';
 import InputHidden from '../../UI/Form/InputHidden';
 import FormError from '../../UI/Form/FormError';
+import InputCheckbox from '../../UI/Form/InputCheckbox';
 
 const EditOneCert = () => {
   // fetch current state
   const { id } = useParams();
-  const [apiGetState] = useAxiosGet(`/v1/certificates/${id}`, 'certificate', true);
+  const [apiGetState] = useAxiosGet(
+    `/v1/certificates/${id}`,
+    'certificate',
+    true
+  );
 
   // get config options
   const [optionsState] = useAxiosGet(
@@ -42,6 +47,7 @@ const EditOneCert = () => {
       private_key_id: -2,
       challenge_method_value: '',
       subject_alts: [],
+      api_key_via_url: null,
       organization: '',
       organizational_unit: '',
       country: '',
@@ -60,6 +66,7 @@ const EditOneCert = () => {
         private_key_id: apiGetState.certificate.private_key.id,
         challenge_method_value: apiGetState.certificate.challenge_method.value,
         subject_alts: apiGetState.certificate.subject_alts,
+        api_key_via_url: apiGetState.certificate.api_key_via_url,
         organization: apiGetState.certificate.organization,
         organizational_unit: apiGetState.certificate.organizational_unit,
         country: apiGetState.certificate.country,
@@ -84,6 +91,18 @@ const EditOneCert = () => {
         certificate: {
           ...prevState.certificate,
           [event.target.id]: event.target.value,
+        },
+      };
+    });
+  };
+  // checkbox updates
+  const checkChangeHandler = (event) => {
+    setFormState((prevState) => {
+      return {
+        ...prevState,
+        certificate: {
+          ...prevState.certificate,
+          [event.target.id]: event.target.checked,
         },
       };
     });
@@ -199,7 +218,9 @@ const EditOneCert = () => {
         name: m.name + ' (' + m.type + ')',
       }));
     // remove default from available options so it isn't listed twice
-    availableMethods = availableMethods.filter(method => method.value !== defaultMethodValue)
+    availableMethods = availableMethods.filter(
+      (method) => method.value !== defaultMethodValue
+    );
     ///
 
     return (
@@ -279,6 +300,17 @@ const EditOneCert = () => {
             onChange={stringInputChangeHandler}
             invalid={formState.validationErrors.subject_alts}
           />
+
+          <InputCheckbox
+            id='api_key_via_url'
+            checked={formState.certificate.api_key_via_url ? true : false}
+            onChange={checkChangeHandler}
+          >
+            Allow API Key via URL{' '}
+            <span className='text-danger'>
+              (This should only be used for clients that absolutely need it.)
+            </span>
+          </InputCheckbox>
 
           <FormInformation>
             <strong>CSR</strong>

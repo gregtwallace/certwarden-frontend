@@ -52,21 +52,29 @@ const ViewOneCert = () => {
   };
   const deleteConfirmHandler = () => {
     setDeleteModal(false);
-    sendData(`/v1/certificates/${apiGetState.certificate.id}`, 'DELETE', null, true).then(
-      (success) => {
-        if (success) {
-          // back to the accounts page
-          //navigate('.');
-          navigate('/certificates');
-        }
+    sendData(
+      `/v1/certificates/${apiGetState.certificate.id}`,
+      'DELETE',
+      null,
+      true
+    ).then((success) => {
+      if (success) {
+        // back to the accounts page
+        //navigate('.');
+        navigate('/certificates');
       }
-    );
+    });
   };
 
   // logic for subject alt names
-  var subjectAlts = '<none>'
-  if (apiGetState.certificate.subject_alts && apiGetState.certificate.subject_alts.length !== 0) {
-    subjectAlts = apiGetState.certificate.subject_alts.map((altName) => altName).join(', ')
+  var subjectAlts = '<none>';
+  if (
+    apiGetState.certificate.subject_alts &&
+    apiGetState.certificate.subject_alts.length !== 0
+  ) {
+    subjectAlts = apiGetState.certificate.subject_alts
+      .map((altName) => altName)
+      .join(', ');
   }
 
   if (apiGetState.errorMessage) {
@@ -120,55 +128,77 @@ const ViewOneCert = () => {
             <strong>Name:</strong> {apiGetState.certificate.name}
           </FormInformation>
           <FormInformation>
-          <strong>Description:</strong> {apiGetState.certificate.description}
+            <strong>Description:</strong> {apiGetState.certificate.description}
           </FormInformation>
           <FormInformation>
-          <strong>Account Name:</strong> {apiGetState.certificate.acme_account.name}
+            <strong>Account Name:</strong>{' '}
+            {apiGetState.certificate.acme_account.name}
           </FormInformation>
           <FormInformation>
-          <strong>Account Type:</strong>{' '}
+            <strong>Account Type:</strong>{' '}
             {apiGetState.certificate.acme_account.is_staging
               ? 'Staging'
               : 'Production'}
           </FormInformation>
           <FormInformation>
-          <strong>Private Key:</strong> {apiGetState.certificate.private_key.name}
+            <strong>Private Key:</strong>{' '}
+            {apiGetState.certificate.private_key.name}
           </FormInformation>
           <FormInformation>
-          <strong>Challenge Method:</strong> {apiGetState.certificate.challenge_method.name}
+            <strong>Challenge Method:</strong>{' '}
+            {apiGetState.certificate.challenge_method.name}
           </FormInformation>
           <FormInformation>
-          <strong>Subject:</strong> {apiGetState.certificate.subject}
+            <strong>Subject:</strong> {apiGetState.certificate.subject}
           </FormInformation>
           <FormInformation>
-          <strong>Subject (Alternates):</strong>{' '}
-            {subjectAlts}
+            <strong>Subject (Alternates):</strong> {subjectAlts}
           </FormInformation>
           <FormInformation>
-          <strong>API Key:</strong> {apiGetState.certificate.api_key}
+            <strong>API Key:</strong> {apiGetState.certificate.api_key}
           </FormInformation>
+          {apiGetState.certificate.api_key_via_url && (
+            <FormInformation>
+              <span className='text-danger'>
+                Warning: API Key allowed via URL.
+              </span>
+            </FormInformation>
+          )}
 
           <strong>CSR</strong>
           <FormInformation>
-          <strong>Organization:</strong> {apiGetState.certificate.organization}
+            <strong>Organization:</strong>{' '}
+            {apiGetState.certificate.organization}
           </FormInformation>
           <FormInformation>
-          <strong>Organizational Unit:</strong> {apiGetState.certificate.organizational_unit}
+            <strong>Organizational Unit:</strong>{' '}
+            {apiGetState.certificate.organizational_unit}
           </FormInformation>
           <FormInformation>
-          <strong>Country Code (2 Letter):</strong> {apiGetState.certificate.country}
+            <strong>Country Code (2 Letter):</strong>{' '}
+            {apiGetState.certificate.country}
           </FormInformation>
           <FormInformation>
-          <strong>City:</strong> {apiGetState.certificate.city}
+            <strong>City:</strong> {apiGetState.certificate.city}
           </FormInformation>
 
-          <Orders certId={id} sendApiState={sendApiState} sendData={sendData} updateGet={updateGet}/>
+          <Orders
+            certId={id}
+            sendApiState={sendApiState}
+            sendData={sendData}
+            updateGet={updateGet}
+          />
 
           <FormInformation>
-            <small>Created: {convertUnixTime(apiGetState.certificate.created_at)}</small>
+            <small>
+              Created: {convertUnixTime(apiGetState.certificate.created_at)}
+            </small>
           </FormInformation>
           <FormInformation>
-            <small>Last Updated: {convertUnixTime(apiGetState.certificate.updated_at)}</small>
+            <small>
+              Last Updated:{' '}
+              {convertUnixTime(apiGetState.certificate.updated_at)}
+            </small>
           </FormInformation>
         </Form>
       </>
