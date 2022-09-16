@@ -16,10 +16,15 @@ import InputHidden from '../../UI/Form/InputHidden';
 import InputText from '../../UI/Form/InputText';
 import H2Header from '../../UI/Header/H2Header';
 import Modal from '../../UI/Modal/Modal';
+import InputCheckbox from '../../UI/Form/InputCheckbox';
 
 const EditOnePrivateKey = () => {
   const { id } = useParams();
-  const [apiGetState] = useAxiosGet(`/v1/privatekeys/${id}`, 'private_key', true);
+  const [apiGetState] = useAxiosGet(
+    `/v1/privatekeys/${id}`,
+    'private_key',
+    true
+  );
 
   const [sendApiState, sendData] = useAxiosSend();
   const navigate = useNavigate();
@@ -31,6 +36,7 @@ const EditOnePrivateKey = () => {
       id: -2, // dummy value
       name: '',
       description: '',
+      api_key_via_url: null,
     },
     validationErrors: {},
   });
@@ -42,6 +48,7 @@ const EditOnePrivateKey = () => {
         id: apiGetState.private_key.id,
         name: apiGetState.private_key.name,
         description: apiGetState.private_key.description,
+        api_key_via_url: apiGetState.private_key.api_key_via_url,
       },
       validationErrors: {},
     });
@@ -65,6 +72,18 @@ const EditOnePrivateKey = () => {
       },
     }));
   };
+  // checkbox updates
+  const checkChangeHandler = (event) => {
+    setFormState((prevState) => {
+      return {
+        ...prevState,
+        private_key: {
+          ...prevState.private_key,
+          [event.target.id]: event.target.checked,
+        },
+      };
+    });
+  };
 
   // button handlers
   const resetClickHandler = (event) => {
@@ -87,15 +106,18 @@ const EditOnePrivateKey = () => {
   };
   const deleteConfirmHandler = () => {
     setDeleteModal(false);
-    sendData(`/v1/privatekeys/${formState.private_key.id}`, 'DELETE', null, true).then(
-      (success) => {
-        if (success) {
-          // back to the private keys page
-          //navigate('.');
-          navigate('/privatekeys');
-        }
+    sendData(
+      `/v1/privatekeys/${formState.private_key.id}`,
+      'DELETE',
+      null,
+      true
+    ).then((success) => {
+      if (success) {
+        // back to the private keys page
+        //navigate('.');
+        navigate('/privatekeys');
       }
-    );
+    });
   };
 
   // form submission handler
@@ -198,11 +220,27 @@ const EditOnePrivateKey = () => {
             API Key: {apiGetState.private_key.api_key}
           </FormInformation>
 
+          <InputCheckbox
+            id='api_key_via_url'
+            checked={formState.private_key.api_key_via_url ? true : false}
+            onChange={checkChangeHandler}
+          >
+            Allow API Key via URL{' '}
+            <span className='text-danger'>
+              (This should only be used for clients that absolutely need it.)
+            </span>
+          </InputCheckbox>
+
           <FormInformation>
-            <small>Created: {convertUnixTime(apiGetState.private_key.created_at)}</small>
+            <small>
+              Created: {convertUnixTime(apiGetState.private_key.created_at)}
+            </small>
           </FormInformation>
           <FormInformation>
-            <small>Last Updated: {convertUnixTime(apiGetState.private_key.updated_at)}</small>
+            <small>
+              Last Updated:{' '}
+              {convertUnixTime(apiGetState.private_key.updated_at)}
+            </small>
           </FormInformation>
 
           <Button
@@ -211,7 +249,9 @@ const EditOnePrivateKey = () => {
               sendApiState.isSending ||
               (apiGetState.private_key.name === formState.private_key.name &&
                 apiGetState.private_key.description ===
-                  formState.private_key.description)
+                  formState.private_key.description &&
+                apiGetState.private_key.api_key_via_url ===
+                  formState.private_key.api_key_via_url)
             }
           >
             Submit
