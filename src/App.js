@@ -21,7 +21,7 @@ import H1Header from './components/UI/Header/H1Header';
 import Settings from './components/Settings/Settings';
 
 // react app version
-export const frontendVersion = '0.3.1';
+export const frontendVersion = '0.3.2';
 // dev mode
 export const devMode =
   !process.env.NODE_ENV ||
