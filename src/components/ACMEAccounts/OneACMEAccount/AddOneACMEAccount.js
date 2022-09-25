@@ -17,7 +17,6 @@ import Form from '../../UI/Form/Form';
 import InputText from '../../UI/Form/InputText';
 import InputSelect from '../../UI/Form/InputSelect';
 import InputCheckbox from '../../UI/Form/InputCheckbox';
-import InputHidden from '../../UI/Form/InputHidden';
 import FormError from '../../UI/Form/FormError';
 
 const AddOneACMEAccount = () => {
@@ -33,7 +32,6 @@ const AddOneACMEAccount = () => {
 
   const blankFormState = {
     acme_account: {
-      id: newId,
       name: '',
       description: '',
       email: '',
@@ -178,8 +176,6 @@ const AddOneACMEAccount = () => {
         )}
 
         <Form onSubmit={submitFormHandler}>
-          <InputHidden id='id' name='id' value={formState.acme_account.id} />
-
           <InputText
             label='Account Name'
             id='name'

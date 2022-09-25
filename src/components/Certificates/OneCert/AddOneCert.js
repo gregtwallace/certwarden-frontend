@@ -15,7 +15,6 @@ import FormInformation from '../../UI/Form/FormInformation';
 import InputSelect from '../../UI/Form/InputSelect';
 import InputText from '../../UI/Form/InputText';
 import InputTextArray from '../../UI/Form/InputTextArray';
-import InputHidden from '../../UI/Form/InputHidden';
 import FormError from '../../UI/Form/FormError';
 
 const AddOneCert = () => {
@@ -31,7 +30,6 @@ const AddOneCert = () => {
 
   const blankFormState = {
     certificate: {
-      id: newId,
       name: '',
       description: '',
       private_key_id: -2,
@@ -209,8 +207,6 @@ const AddOneCert = () => {
           {sendApiState.errorMessage && (
             <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>
           )}
-
-          <InputHidden id='id' name='id' value={formState.certificate.id} />
 
           <InputText
             label='Name'

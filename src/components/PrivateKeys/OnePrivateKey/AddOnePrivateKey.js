@@ -15,7 +15,6 @@ import FormInformation from '../../UI/Form/FormInformation';
 import InputSelect from '../../UI/Form/InputSelect';
 import InputText from '../../UI/Form/InputText';
 import InputTextArea from '../../UI/Form/InputTextArea';
-import InputHidden from '../../UI/Form/InputHidden';
 import FormError from '../../UI/Form/FormError';
 
 const AddOnePrivateKey = () => {
@@ -31,7 +30,6 @@ const AddOnePrivateKey = () => {
 
   const blankFormState = {
     private_key: {
-      id: newId,
       name: '',
       description: '',
       algorithm_value: '',
@@ -110,8 +108,6 @@ const AddOnePrivateKey = () => {
           {sendApiState.errorMessage && (
             <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>
           )}
-
-          <InputHidden id='id' name='id' value={formState.private_key.id} />
 
           <InputText
             label='Name'
