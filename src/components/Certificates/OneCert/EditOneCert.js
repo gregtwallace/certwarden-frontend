@@ -255,7 +255,7 @@ const EditOneCert = () => {
             name='acme_account_id'
             defaultName={
               apiGetState.certificate.acme_account.name +
-              (apiGetState.certificate.acme_account.is_staging && ' (Staging)')
+              (apiGetState.certificate.acme_account.is_staging ? ' (Staging)' : '')
             }
             disabled
           />
