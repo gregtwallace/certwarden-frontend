@@ -155,7 +155,7 @@ const AddOneACMEAccount = () => {
     var availableKeys;
     var defaultKeysName;
     var defaultKeysValue = -2;
-    if (apiGetState.acme_account_options.private_keys) {
+    if (apiGetState?.acme_account_options?.private_keys) {
       defaultKeysName = '- Select a Key -';
       availableKeys = apiGetState.acme_account_options.private_keys.map(
         (m) => ({
