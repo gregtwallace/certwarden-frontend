@@ -22,7 +22,7 @@ import Settings from './components/Settings/Settings';
 import RolloverAccountKey from './components/ACMEAccounts/OneACMEAccount/Edit/RolloverAccountKey';
 
 // react app version
-export const frontendVersion = '0.3.2';
+export const frontendVersion = '0.4.0';
 // dev mode
 export const devMode =
   !process.env.NODE_ENV ||
