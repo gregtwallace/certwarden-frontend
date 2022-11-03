@@ -20,7 +20,7 @@ import Modal from '../../UI/Modal/Modal';
 import H2Header from '../../UI/Header/H2Header';
 
 // TODO
-// Add: deactivate button, rotate key button, refresh LE status button
+// Add: refresh LE status button
 
 const EditOneACMEAccount = () => {
   const { id } = useParams();
@@ -37,7 +37,6 @@ const EditOneACMEAccount = () => {
   // only includes values that will be used in payload
   const [formState, setFormState] = useState({
     acme_account: {
-      id: -2, // dummy value
       name: '',
       description: '',
     },
@@ -48,7 +47,7 @@ const EditOneACMEAccount = () => {
   const setFormToApi = useCallback(() => {
     setFormState({
       acme_account: {
-        id: apiGetState.acme_account.id,
+        id: id,
         name: apiGetState.acme_account.name,
         description: apiGetState.acme_account.description,
       },
@@ -97,15 +96,18 @@ const EditOneACMEAccount = () => {
   };
   const deleteConfirmHandler = () => {
     setDeleteModal(false);
-    sendData(`/v1/acmeaccounts/${formState.acme_account.id}`, 'DELETE', null, true).then(
-      (success) => {
-        if (success) {
-          // back to the accounts page
-          //navigate('.');
-          navigate('/acmeaccounts');
-        }
+    sendData(
+      `/v1/acmeaccounts/${id}`,
+      'DELETE',
+      null,
+      true
+    ).then((success) => {
+      if (success) {
+        // back to the accounts page
+        //navigate('.');
+        navigate('/acmeaccounts');
       }
-    );
+    });
   };
 
   // deactivate handlers
@@ -119,7 +121,7 @@ const EditOneACMEAccount = () => {
     setDeactivateModal(false);
 
     sendData(
-      `/v1/acmeaccounts/${formState.acme_account.id}/deactivate`,
+      `/v1/acmeaccounts/${id}/deactivate`,
       'POST',
       null,
       true
@@ -136,7 +138,7 @@ const EditOneACMEAccount = () => {
     event.preventDefault();
 
     sendData(
-      `/v1/acmeaccounts/${formState.acme_account.id}/new-account`,
+      `/v1/acmeaccounts/${id}/new-account`,
       'POST',
       null,
       true
@@ -151,7 +153,13 @@ const EditOneACMEAccount = () => {
   // change email handler
   const changeEmailClickHandler = (event) => {
     event.preventDefault();
-    navigate(`/acmeaccounts/${formState.acme_account.id}/email`);
+    navigate(`/acmeaccounts/${id}/email`);
+  };
+
+  // rollover key handler
+  const rolloverClickHandler = (event) => {
+    event.preventDefault();
+    navigate(`/acmeaccounts/${id}/key-change`);
   };
 
   // form submission handler
@@ -175,7 +183,7 @@ const EditOneACMEAccount = () => {
     ///
 
     sendData(
-      `/v1/acmeaccounts/${formState.acme_account.id}`,
+      `/v1/acmeaccounts/${id}`,
       'PUT',
       formState.acme_account,
       true
@@ -248,7 +256,7 @@ const EditOneACMEAccount = () => {
             <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>
           )}
 
-          <InputHidden id='id' name='id' value={formState.acme_account.id} />
+          <InputHidden id='id' name='id' value={id} />
 
           <InputText
             label='Account Name'
@@ -296,6 +304,16 @@ const EditOneACMEAccount = () => {
             }
             disabled
           />
+          {apiGetState.acme_account.status === 'valid' &&
+            apiGetState.acme_account.kid !== '' && (
+              <Button
+                type='primary'
+                onClick={rolloverClickHandler}
+                disabled={sendApiState.isSending}
+              >
+                Rollover Account Key
+              </Button>
+            )}
 
           <FormInformation>
             Status: {apiGetState.acme_account.status}
@@ -329,10 +347,15 @@ const EditOneACMEAccount = () => {
           </InputCheckbox>
 
           <FormInformation>
-            <small>Created: {convertUnixTime(apiGetState.acme_account.created_at)}</small>
+            <small>
+              Created: {convertUnixTime(apiGetState.acme_account.created_at)}
+            </small>
           </FormInformation>
           <FormInformation>
-            <small>Last Updated: {convertUnixTime(apiGetState.acme_account.updated_at)}</small>
+            <small>
+              Last Updated:{' '}
+              {convertUnixTime(apiGetState.acme_account.updated_at)}
+            </small>
           </FormInformation>
 
           <Button

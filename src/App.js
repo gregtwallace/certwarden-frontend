@@ -19,6 +19,7 @@ import EditOneCert from './components/Certificates/OneCert/EditOneCert';
 import AddOneCert from './components/Certificates/OneCert/AddOneCert';
 import H1Header from './components/UI/Header/H1Header';
 import Settings from './components/Settings/Settings';
+import RolloverAccountKey from './components/ACMEAccounts/OneACMEAccount/Edit/RolloverAccountKey';
 
 // react app version
 export const frontendVersion = '0.3.2';
@@ -28,7 +29,7 @@ export const devMode =
   process.env.NODE_ENV === 'development' ||
   window.env.DEV_MODE;
 
-    // value for new records on backend
+// value for new records on backend
 export const newId = -1;
 
 const App = () => {
@@ -118,6 +119,10 @@ const App = () => {
                 <Route
                   path='/acmeaccounts/:id/email'
                   element={<ChangeAccountEmail />}
+                />
+                <Route
+                  path='/acmeaccounts/:id/key-change'
+                  element={<RolloverAccountKey />}
                 />
                 <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
                 <Route path='/certificates' element={<AllCertificates />} />
