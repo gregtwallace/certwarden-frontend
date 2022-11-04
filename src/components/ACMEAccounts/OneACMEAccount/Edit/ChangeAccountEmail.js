@@ -10,7 +10,6 @@ import ApiLoading from '../../../UI/Api/ApiLoading';
 import InputText from '../../../UI/Form/InputText';
 import FormInformation from '../../../UI/Form/FormInformation';
 import FormError from '../../../UI/Form/FormError';
-import InputHidden from '../../../UI/Form/InputHidden';
 import Button from '../../../UI/Button/Button';
 import Form from '../../../UI/Form/Form';
 import H2Header from '../../../UI/Header/H2Header';
@@ -30,7 +29,6 @@ const ChangeAccountEmail = () => {
   // only includes values that will be used in payload
   const [formState, setFormState] = useState({
     acme_account: {
-      id: -2, // dummy value
       email: '',
     },
     validationErrors: {},
@@ -40,7 +38,6 @@ const ChangeAccountEmail = () => {
   const setFormToApi = useCallback(() => {
     setFormState({
       acme_account: {
-        id: apiGetState.acme_account.id,
         email: apiGetState.acme_account.email,
       },
       validationErrors: {},
@@ -53,12 +50,12 @@ const ChangeAccountEmail = () => {
       // if the account is not valid or is missing kid, this page won't work
       // so redirect to main account page
       if (apiGetState.acme_account.status !== 'valid' || apiGetState.acme_account.kid === '') {
-        navigate(`/acmeaccounts/${apiGetState.acme_account.id}`);
+        navigate(`/acmeaccounts/${id}`);
       }
 
       setFormToApi();
     }
-  }, [apiGetState, setFormToApi, navigate]);
+  }, [apiGetState, id, setFormToApi, navigate]);
 
   // data change handler
   const inputChangeHandler = (event) => {
@@ -80,7 +77,7 @@ const ChangeAccountEmail = () => {
   const cancelClickHandler = (event) => {
     event.preventDefault();
     //navigate('.');
-    navigate(`/acmeaccounts/${formState.acme_account.id}`);
+    navigate(`/acmeaccounts/${id}`);
   };
 
   // form submission handler
@@ -104,13 +101,13 @@ const ChangeAccountEmail = () => {
     ///
 
     sendData(
-      `/v1/acmeaccounts/${formState.acme_account.id}/email`,
+      `/v1/acmeaccounts/${id}/email`,
       'PUT',
       formState.acme_account,
       true
     ).then((success) => {
       if (success) {
-        navigate(`/acmeaccounts/${formState.acme_account.id}`);
+        navigate(`/acmeaccounts/${id}`);
       }
     });
   };
@@ -127,8 +124,6 @@ const ChangeAccountEmail = () => {
           {sendApiState.errorMessage && (
             <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>
           )}
-
-          <InputHidden id='id' name='id' value={formState.acme_account.id} />
 
           <FormInformation>
             Account Name: {apiGetState.acme_account.name}

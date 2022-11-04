@@ -46,10 +46,10 @@ const RolloverAccountKey = () => {
         apiGetState.acme_account.status !== 'valid' ||
         apiGetState.acme_account.kid === ''
       ) {
-        navigate(`/acmeaccounts/${apiGetState.acme_account.id}`);
+        navigate(`/acmeaccounts/${id}`);
       }
     }
-  }, [apiGetState, navigate]);
+  }, [apiGetState, id, navigate]);
 
   // int form field updates
   const intInputChangeHandler = (event) => {

@@ -15,7 +15,6 @@ import FormInformation from '../../UI/Form/FormInformation';
 import InputSelect from '../../UI/Form/InputSelect';
 import InputText from '../../UI/Form/InputText';
 import InputTextArray from '../../UI/Form/InputTextArray';
-import InputHidden from '../../UI/Form/InputHidden';
 import FormError from '../../UI/Form/FormError';
 import InputCheckbox from '../../UI/Form/InputCheckbox';
 
@@ -41,7 +40,6 @@ const EditOneCert = () => {
   // initialize dummy values
   const [formState, setFormState] = useState({
     certificate: {
-      id: -2,
       name: '',
       description: '',
       private_key_id: -2,
@@ -60,7 +58,6 @@ const EditOneCert = () => {
   const setFormToApi = useCallback(() => {
     setFormState({
       certificate: {
-        id: apiGetState.certificate.id,
         name: apiGetState.certificate.name,
         description: apiGetState.certificate.description,
         private_key_id: apiGetState.certificate.private_key.id,
@@ -230,8 +227,6 @@ const EditOneCert = () => {
           {sendApiState.errorMessage && (
             <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>
           )}
-
-          <InputHidden id='id' name='id' value={formState.certificate.id} />
 
           <InputText
             label='Name'

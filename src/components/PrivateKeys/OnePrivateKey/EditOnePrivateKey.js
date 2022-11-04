@@ -12,7 +12,6 @@ import Button from '../../UI/Button/Button';
 import Form from '../../UI/Form/Form';
 import FormError from '../../UI/Form/FormError';
 import FormInformation from '../../UI/Form/FormInformation';
-import InputHidden from '../../UI/Form/InputHidden';
 import InputText from '../../UI/Form/InputText';
 import H2Header from '../../UI/Header/H2Header';
 import Modal from '../../UI/Modal/Modal';
@@ -33,7 +32,6 @@ const EditOnePrivateKey = () => {
   // only includes values that will be used in payload
   const [formState, setFormState] = useState({
     private_key: {
-      id: -2, // dummy value
       name: '',
       description: '',
       api_key_via_url: null,
@@ -45,7 +43,6 @@ const EditOnePrivateKey = () => {
   const setFormToApi = useCallback(() => {
     setFormState({
       private_key: {
-        id: apiGetState.private_key.id,
         name: apiGetState.private_key.name,
         description: apiGetState.private_key.description,
         api_key_via_url: apiGetState.private_key.api_key_via_url,
@@ -107,7 +104,7 @@ const EditOnePrivateKey = () => {
   const deleteConfirmHandler = () => {
     setDeleteModal(false);
     sendData(
-      `/v1/privatekeys/${formState.private_key.id}`,
+      `/v1/privatekeys/${id}`,
       'DELETE',
       null,
       true
@@ -141,7 +138,7 @@ const EditOnePrivateKey = () => {
     ///
 
     sendData(
-      `/v1/privatekeys/${formState.private_key.id}`,
+      `/v1/privatekeys/${id}`,
       'PUT',
       formState.private_key,
       true
@@ -194,8 +191,6 @@ const EditOnePrivateKey = () => {
           {sendApiState.errorMessage && (
             <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>
           )}
-
-          <InputHidden id='id' name='id' value={formState.private_key.id} />
 
           <InputText
             label='Name'

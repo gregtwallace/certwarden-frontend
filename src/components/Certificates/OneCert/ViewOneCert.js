@@ -53,7 +53,7 @@ const ViewOneCert = () => {
   const deleteConfirmHandler = () => {
     setDeleteModal(false);
     sendData(
-      `/v1/certificates/${apiGetState.certificate.id}`,
+      `/v1/certificates/${id}`,
       'DELETE',
       null,
       true
