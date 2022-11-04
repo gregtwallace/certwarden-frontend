@@ -12,7 +12,7 @@ import styles from './Login.module.css';
 
 const LOGIN_URL = '/v1/auth/login';
 
-const Login = (props) => {
+const Login = () => {
   const [sendState, sendData] = useAxiosSend();
   const { setAuth } = useAuth();
 
