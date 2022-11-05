@@ -1,9 +1,8 @@
 import { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 
 import useAuth from './hooks/useAuth';
 import useAxiosSend from './hooks/useAxiosSend';
-import { basePathName } from './helpers/environment';
 
 import Dashboard from './components/Dashboard';
 import Login from './components/Authentication/Login';
@@ -131,8 +130,10 @@ const App = () => {
                   element={<AddOneCert />}
                 />
                 <Route path={'/settings'} element={<Settings />} />
-                `// TODO: Dashboard, Settings //`
+
                 <Route path='/' element={<Dashboard />} />
+
+                <Route path='*' element={<Navigate to='/' replace /> } />
               </Routes>
             </div>
           </div>
