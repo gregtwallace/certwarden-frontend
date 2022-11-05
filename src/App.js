@@ -63,7 +63,7 @@ const App = () => {
       <div className='container'>
         <H1Header className='ml-3 my-3' h1='LeGo CertHub'></H1Header>
 
-        <Router basename={basePathName}>
+        <Router basename={process.env.PUBLIC_URL}>
           <div className='row'>
             <div className='col-md-3'>
               <nav>
