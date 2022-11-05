@@ -28,6 +28,9 @@ export const devMode =
   !process.env.NODE_ENV ||
   process.env.NODE_ENV === 'development' ||
   window.env.DEV_MODE;
+// base path
+const basePathName =
+  process.env.NODE_ENV === 'production' ? window.env.BASE_PATH_NAME : '';
 
 // value for new records on backend
 export const newId = -1;
@@ -68,7 +71,7 @@ const App = () => {
       <div className='container'>
         <H1Header className='ml-3 my-3' h1='LeGo CertHub'></H1Header>
 
-        <Router>
+        <Router basename={basePathName}>
           <div className='row'>
             <div className='col-md-3'>
               <nav>
