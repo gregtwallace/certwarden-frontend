@@ -3,7 +3,7 @@ import { apiUrl } from '../helpers/environment';
 
 // base config
 export const axiosConfig = {
-  baseURL: apiUrl + '/api',
+  baseURL: apiUrl,
   headers: { 'Content-Type': 'application/json' },
 };
 
