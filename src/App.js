@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 import useAuth from './hooks/useAuth';
 import useAxiosSend from './hooks/useAxiosSend';
+import { basePathName } from './helpers/environment';
 
 import Dashboard from './components/Dashboard';
 import Login from './components/Authentication/Login';
@@ -23,15 +24,6 @@ import RolloverAccountKey from './components/ACMEAccounts/OneACMEAccount/Edit/Ro
 
 // react app version
 export const frontendVersion = '0.4.0';
-// dev mode
-export const devMode =
-  !process.env.NODE_ENV ||
-  process.env.NODE_ENV === 'development' ||
-  window.env.DEV_MODE;
-// base path
-const basePathName =
-  process.env.NODE_ENV === 'production' ? window.env.BASE_PATH_NAME : '';
-
 // value for new records on backend
 export const newId = -1;
 

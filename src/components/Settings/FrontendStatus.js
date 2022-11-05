@@ -1,5 +1,6 @@
-import { frontendVersion, devMode } from '../../App';
-import { API_URL } from '../../api/axios';
+import { frontendVersion } from '../../App';
+import { devMode } from '../../helpers/environment';
+import { apiUrl } from '../../helpers/environment';
 
 import H5Header from '../UI/Header/H5Header';
 
@@ -10,7 +11,7 @@ const FrontendStatus = () => {
 
       <p>Development Mode: {devMode ? 'true' : 'false'}</p>
       <p>Frontend Version: {`${frontendVersion}`}</p>
-      <p>API URL: {API_URL}</p>
+      <p>API URL: {apiUrl}</p>
     </div>
   );
 };

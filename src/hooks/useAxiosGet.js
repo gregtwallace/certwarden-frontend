@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 
-import { devMode } from '../App';
+import { devMode } from '../helpers/environment';
 import axios from '../api/axios';
 import useAxiosPrivate from './useAxiosPrivate';
 
