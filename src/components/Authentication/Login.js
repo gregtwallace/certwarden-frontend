@@ -36,9 +36,9 @@ const Login = () => {
     sendData(LOGIN_URL, 'POST', formState, true).then((success) => {
       if (success) {
         setAuth({
-          loggedIn: true,
+          loggedInExpiration: success.session.exp,
           accessToken: success.access_token,
-        });
+        }); 
       }
     });
   };

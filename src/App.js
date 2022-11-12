@@ -1,5 +1,11 @@
 import { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  Navigate,
+} from 'react-router-dom';
 
 import useAuth from './hooks/useAuth';
 import useAxiosSend from './hooks/useAxiosSend';
@@ -30,16 +36,18 @@ const App = () => {
   const { auth, setAuth } = useAuth();
   const [, sendData] = useAxiosSend();
 
-  // check for 'logged_in' cookie to set the initial login state
+  // check for 'logged_in_expiration' cookie to set the initial login state
   useEffect(() => {
-    const loggedIn = document.cookie.match(
-      /^(.*;)?\s*logged_in\s*=\s*[^;]+(.*)?$/
+    const loggedInExpiration = document.cookie.match(
+      new RegExp(`(^| )logged_in_expiration=([^;]+)`)
     );
-
-    setAuth((prevState) => ({
-      ...prevState,
-      loggedIn: loggedIn,
-    }));
+    if (loggedInExpiration) {
+      setAuth({
+        loggedInExpiration: loggedInExpiration[2],
+      });
+    } else {
+      setAuth({});
+    }
   }, [setAuth]);
 
   // logout handler
@@ -54,7 +62,7 @@ const App = () => {
   };
 
   // if not logged in
-  if (!auth.loggedIn) {
+  if (!auth.loggedInExpiration) {
     return <Login />;
   } else {
     // if logged in
@@ -133,7 +141,7 @@ const App = () => {
 
                 <Route path='/' element={<Dashboard />} />
 
-                <Route path='*' element={<Navigate to='/' replace /> } />
+                <Route path='*' element={<Navigate to='/' replace />} />
               </Routes>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { axiosConfig } from '../api/axios'
+import { axiosConfig } from '../api/axios';
 import useAuth from './useAuth';
 
 const REFRESH_NODE = 'v1/auth/refresh';
@@ -16,29 +16,28 @@ const useRefreshToken = () => {
         ...axiosConfig,
         method: 'POST',
         url: REFRESH_NODE,
-        withCredentials: true
+        withCredentials: true,
       });
 
       // error if no access_token or blank
-      if (response?.data?.response?.access_token == null || response?.data?.response?.access_token === "") {
+      if (
+        response?.data?.response?.access_token == null ||
+        response?.data?.response?.access_token === ''
+      ) {
         throw new Error(
           `Status: ${response.status}, Message: ${response?.error?.message}`
         );
       }
 
-      setAuth((prevState) => {
-        return {
-          ...prevState,
-          accessToken: response.data.response.access_token,
-        };
+      setAuth({
+        loggedInExpiration: response.data.response.session.exp,
+        accessToken: response.data.response.access_token,
       });
 
       return response.data.response.access_token;
-      
     } catch (error) {
       setAuth({});
       return error;
-
     }
   };
 
