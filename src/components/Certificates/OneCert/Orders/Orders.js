@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import useAxiosGet from '../../../../hooks/useAxiosGet';
-import { convertUnixTime } from '../../../../helpers/unix-time';
+import { convertUnixTime } from '../../../../helpers/time';
 
 import ApiLoading from '../../../UI/Api/ApiLoading';
 import ApiError from '../../../UI/Api/ApiError';

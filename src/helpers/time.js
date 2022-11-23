@@ -24,3 +24,11 @@ export const daysUntil = (unixTime) => {
 
   return Math.floor(((unixTime) - (Date.now() / 1000)) / (( 3600 * 24)))
 };
+
+// iso8601ToPretty provides a pretty output for the client from an iso8601
+// timestamp
+export const iso8601ToPretty = (iso8601Time) => {
+  const date = new Date(iso8601Time)
+
+  return date.toLocaleString('en-US')
+}

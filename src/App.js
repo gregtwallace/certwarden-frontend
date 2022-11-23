@@ -25,6 +25,7 @@ import EditOneCert from './components/Certificates/OneCert/EditOneCert';
 import AddOneCert from './components/Certificates/OneCert/AddOneCert';
 import H1Header from './components/UI/Header/H1Header';
 import Settings from './components/Settings/Settings';
+import LogViewer from './components/LogViewer/LogViewer';
 import RolloverAccountKey from './components/ACMEAccounts/OneACMEAccount/Edit/RolloverAccountKey';
 
 // react app version
@@ -88,6 +89,9 @@ const App = () => {
                     <Link to='/certificates'>Certificates</Link>
                   </li>
                   <li className='list-group-item'>
+                    <Link to='/logs'>Logs</Link>
+                  </li>
+                  <li className='list-group-item'>
                     <Link to='/settings'>Settings</Link>
                   </li>
                   <li className='list-group-item'>
@@ -137,6 +141,9 @@ const App = () => {
                   path={`/certificates/${newId}`}
                   element={<AddOneCert />}
                 />
+
+                <Route path={'/logs'} element={<LogViewer />} />
+
                 <Route path={'/settings'} element={<Settings />} />
 
                 <Route path='/' element={<Dashboard />} />

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import useAxiosGet from '../../hooks/useAxiosGet';
-import { convertUnixTime, daysUntil } from '../../helpers/unix-time';
+import { convertUnixTime, daysUntil } from '../../helpers/time';
 
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
