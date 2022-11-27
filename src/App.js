@@ -10,7 +10,7 @@ import {
 import useAuth from './hooks/useAuth';
 import useAxiosSend from './hooks/useAxiosSend';
 
-import Dashboard from './components/Dashboard';
+import Dashboard from './components/Dashboard/Dashboard';
 import Login from './components/Authentication/Login';
 import AllACMEAccounts from './components/ACMEAccounts/AllACMEAccounts';
 import AddOneACMEAccount from './components/ACMEAccounts/OneACMEAccount/AddOneACMEAccount';
