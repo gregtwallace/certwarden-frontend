@@ -29,7 +29,7 @@ import LogViewer from './components/LogViewer/LogViewer';
 import RolloverAccountKey from './components/ACMEAccounts/OneACMEAccount/Edit/RolloverAccountKey';
 
 // react app version
-export const frontendVersion = '0.4.1';
+export const frontendVersion = '0.5.0';
 // value for new records on backend
 export const newId = -1;
 

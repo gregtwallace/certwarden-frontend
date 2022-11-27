@@ -1,6 +1,6 @@
 {
   "name": "legocerthub-frontend",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "homepage": "/app",
   "private": true,
   "dependencies": {
