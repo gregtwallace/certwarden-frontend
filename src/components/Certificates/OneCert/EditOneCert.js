@@ -5,6 +5,7 @@ import useAxiosGet from '../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../hooks/useAxiosSend';
 import { isDomainValid, isNameValid } from '../../../helpers/form-validation';
 import { newId } from '../../../App';
+import { buildMethodsList } from './methods';
 
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
@@ -182,7 +183,7 @@ const EditOneCert = () => {
   } else if (!apiGetState.isLoaded || !optionsState.isLoaded) {
     return <ApiLoading />;
   } else {
-    // Logic for some of the components so JSX is cleaner
+    // JSX Logic - for some of the components so JSX is cleaner
     // build options for available keys
     var availableKeys;
     // populate current key
@@ -204,21 +205,28 @@ const EditOneCert = () => {
 
     // build challenge method options (must be returned by backend)
     var defaultMethodValue = apiGetState.certificate.challenge_method.value;
+
+    // add notation if Method is disabled
+    var defaultMethodDisableText = '';
+    if (!apiGetState.certificate.challenge_method.enabled) {
+      defaultMethodDisableText = '[Disabled] ';
+    }
+
     var defaultMethodName =
       apiGetState.certificate.challenge_method.name +
       ' (' +
       apiGetState.certificate.challenge_method.type +
-      ') - Current Method';
-    var availableMethods =
-      optionsState.certificate_options.challenge_methods.map((m) => ({
-        value: m.value,
-        name: m.name + ' (' + m.type + ')',
-      }));
-    // remove default from available options so it isn't listed twice
-    availableMethods = availableMethods.filter(
-      (method) => method.value !== defaultMethodValue
+      ') ' +
+      defaultMethodDisableText +
+      '- Current';
+
+    // build Challenge Method list
+    var availableMethods = buildMethodsList(
+      optionsState.certificate_options.challenge_methods,
+      apiGetState.certificate.challenge_method.value
     );
-    ///
+
+    // end JSX Logic
 
     return (
       <>
@@ -250,7 +258,9 @@ const EditOneCert = () => {
             name='acme_account_id'
             defaultName={
               apiGetState.certificate.acme_account.name +
-              (apiGetState.certificate.acme_account.is_staging ? ' (Staging)' : '')
+              (apiGetState.certificate.acme_account.is_staging
+                ? ' (Staging)'
+                : '')
             }
             disabled
           />

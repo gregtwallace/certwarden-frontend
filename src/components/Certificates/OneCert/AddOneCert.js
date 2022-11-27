@@ -5,6 +5,7 @@ import useAxiosGet from '../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../hooks/useAxiosSend';
 import { isDomainValid, isNameValid } from '../../../helpers/form-validation';
 import { newId } from '../../../App';
+import { buildMethodsList } from './methods';
 
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
@@ -155,7 +156,7 @@ const AddOneCert = () => {
   } else if (!apiGetState.isLoaded) {
     return <ApiLoading />;
   } else {
-    /// Logic for some of the components so JSX is cleaner
+    // JSX Logic - for some of the components so JSX is cleaner
     // build options for available accounts
     var defaultAccountsValue = -2;
     var defaultAccountsName;
@@ -192,13 +193,11 @@ const AddOneCert = () => {
     // build challenge method options (must be returned by backend)
     var defaultMethodValue = -2;
     var defaultMethodName = '- Select Challenge Method -';
-    var availableMethods =
-      apiGetState.certificate_options.challenge_methods.map((m) => ({
-        value: m.value,
-        name: m.name + ' (' + m.type + ')',
-      }));
+    var availableMethods = buildMethodsList(
+      apiGetState.certificate_options.challenge_methods
+    );
 
-    ///
+    // end JSX Logic
 
     return (
       <>
