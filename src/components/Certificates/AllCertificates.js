@@ -40,6 +40,7 @@ const AllCertificates = () => {
             <TableRow>
               <TableHeader scope='col'>Name</TableHeader>
               <TableHeader scope='col'>Subject</TableHeader>
+              <TableHeader scope='col'></TableHeader>
               <TableHeader scope='col'>Key</TableHeader>
               <TableHeader scope='col'>Account</TableHeader>
             </TableRow>
@@ -52,6 +53,11 @@ const AllCertificates = () => {
                     <Link to={'/certificates/' + m.id}>{m.name}</Link>
                   </TableHeader>
                   <TableData>{m.subject}</TableData>
+                  <TableData>
+                    {!m.challenge_method.enabled && (
+                      <span className='text-white bg-danger'>[Disabled Method]</span>
+                    )}
+                  </TableData>
                   <TableData>
                     <Link to={'/privatekeys/' + m.private_key.id}>
                       {m.private_key.name}

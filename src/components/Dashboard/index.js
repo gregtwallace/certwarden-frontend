@@ -68,12 +68,13 @@ const Dashboard = () => {
             {apiGetState.orders &&
               apiGetState.orders.map((m) => (
                 <TableRow key={m.id}>
-                  <TableHeader>
-                    {m.certificate.subject}{' '}
-                  </TableHeader>
+                  <TableHeader>{m.certificate.subject} </TableHeader>
                   <TableData>
-                  {m.certificate.acme_account.is_staging && (
+                    {m.certificate.acme_account.is_staging && (
                       <span className='text-info'>(Staging)</span>
+                    )}
+                    {!m.certificate.challenge_method.enabled && (
+                      <span className='text-white bg-danger'>[Disabled Method]</span>
                     )}
                   </TableData>
                   <TableData scope='row'>

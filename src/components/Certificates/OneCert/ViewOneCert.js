@@ -52,12 +52,7 @@ const ViewOneCert = () => {
   };
   const deleteConfirmHandler = () => {
     setDeleteModal(false);
-    sendData(
-      `/v1/certificates/${id}`,
-      'DELETE',
-      null,
-      true
-    ).then((success) => {
+    sendData(`/v1/certificates/${id}`, 'DELETE', null, true).then((success) => {
       if (success) {
         // back to the accounts page
         //navigate('.');
@@ -147,6 +142,9 @@ const ViewOneCert = () => {
           <FormInformation>
             <strong>Challenge Method:</strong>{' '}
             {apiGetState.certificate.challenge_method.name}
+            {!apiGetState.certificate.challenge_method.enabled && (
+              <span className='text-white bg-danger'>[Disabled Method]</span>
+            )}
           </FormInformation>
           <FormInformation>
             <strong>Subject:</strong> {apiGetState.certificate.subject}
