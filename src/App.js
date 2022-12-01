@@ -95,9 +95,9 @@ const App = () => {
                     <Link to='/settings'>Settings</Link>
                   </li>
                   <li className='list-group-item'>
-                    <a href={'#'} onClick={logoutHandler}>
+                    <Link to='/' onClick={logoutHandler}>
                       Logout
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </nav>
