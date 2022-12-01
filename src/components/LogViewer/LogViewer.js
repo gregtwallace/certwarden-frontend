@@ -4,13 +4,8 @@ import { iso8601ToPretty } from '../../helpers/time';
 
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
-import Table from '../UI/Table/Table';
-import TableBody from '../UI/Table/TableBody';
-import TableData from '../UI/Table/TableData';
-import TableHead from '../UI/Table/TableHead';
-import TableHeader from '../UI/Table/TableHeader';
-import TableRow from '../UI/Table/TableRow';
 import H2Header from '../UI/Header/H2Header';
+import InputTextArea from '../UI/Form/InputTextArea';
 
 const LogViewer = () => {
   const [apiGetState] = useAxiosGet('/v1/logs', 'logs', true);
@@ -23,28 +18,23 @@ const LogViewer = () => {
     return (
       <>
         <H2Header h2='Logs'></H2Header>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableHeader scope='col'>Level</TableHeader>
-              <TableHeader scope='col'>Time Stamp</TableHeader>
-              <TableHeader scope='col'>Caller</TableHeader>
-              <TableHeader scope='col'>Message</TableHeader>
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-            {apiGetState.logs &&
-              apiGetState.logs.map((m, i) => (
-                <TableRow key={i}>
-                  <TableData>{m.level}</TableData>
-                  <TableData>{iso8601ToPretty(m.ts)}</TableData>
-                  <TableData>{m.caller}</TableData>
-                  <TableData>{m.msg}</TableData>
-                </TableRow>
-              )).reverse()}
-          </TableBody>
-        </Table>
+        <InputTextArea
+          rows='40'
+          readOnly
+          value={apiGetState?.logs
+            .map(
+              (entry) =>
+                iso8601ToPretty(entry.ts) +
+                ', ' +
+                entry.level +
+                ', ' +
+                entry.caller +
+                ', ' +
+                entry.msg
+            )
+            .reverse()
+            .join('\n')}
+        />
       </>
     );
   }
