@@ -1,7 +1,6 @@
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from '@mui/material';
 
-import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -14,18 +13,14 @@ import { convertUnixTime, daysUntil } from '../../helpers/time';
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
 import Flag from '../UI/Flag/Flag';
+import PaperSingle from '../Paper/PaperSingle';
 import TitleBar from '../UI/Header/TitleBar';
 
 const Dashboard = () => {
   const [apiGetState] = useAxiosGet('/v1/orders/currentvalid', 'orders', true);
 
   return (
-    <Paper
-      sx={{
-        width: 1,
-        p: 2,
-      }}
-    >
+    <PaperSingle>
       <TitleBar title='Dashboard' />
 
       {!apiGetState.isLoaded && <ApiLoading />}
@@ -65,7 +60,7 @@ const Dashboard = () => {
                     </Link>
                   </TableCell>
                   <TableCell>
-                    {convertUnixTime(m.valid_to)}
+                    {convertUnixTime(m.valid_to)}{' '}
                     <Flag type='expire-days' days={daysUntil(m.valid_to)} />
                   </TableCell>
                 </TableRow>
@@ -73,7 +68,7 @@ const Dashboard = () => {
           </TableBody>
         </Table>
       )}
-    </Paper>
+    </PaperSingle>
   );
 };
 

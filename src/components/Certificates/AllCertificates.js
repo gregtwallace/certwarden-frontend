@@ -5,7 +5,6 @@ import useAxiosGet from '../../hooks/useAxiosGet';
 import { newId } from '../../App';
 
 import { Button } from '@mui/material';
-import { Paper } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -14,8 +13,9 @@ import TableRow from '@mui/material/TableRow';
 
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
-import TitleBar from '../UI/Header/TitleBar';
 import Flag from '../UI/Flag/Flag';
+import PaperSingle from '../Paper/PaperSingle';
+import TitleBar from '../UI/Header/TitleBar';
 
 const AllCertificates = () => {
   const navigate = useNavigate();
@@ -28,12 +28,7 @@ const AllCertificates = () => {
   };
 
   return (
-    <Paper
-      sx={{
-        width: 1,
-        p: 2,
-      }}
-    >
+    <PaperSingle>
       <TitleBar title='Certificates'>
         <Button variant='contained' type='submit' onClick={newClickHandler}>
           New Certificate
@@ -90,7 +85,7 @@ const AllCertificates = () => {
           </TableBody>
         </Table>
       )}
-    </Paper>
+    </PaperSingle>
   );
 };
 
