@@ -28,6 +28,9 @@ const Dashboard = () => {
     >
       <Title>Dashboard</Title>
 
+      {!apiGetState.isLoaded && <ApiLoading />}
+      {apiGetState.errorMessage && <ApiError>{apiGetState.errorMessage}</ApiError>}
+
       {apiGetState.isLoaded && !apiGetState.errorMessage && (
         <Table>
           <TableHead>
@@ -68,10 +71,6 @@ const Dashboard = () => {
           </TableBody>
         </Table>
       )}
-
-      {!apiGetState.isLoaded && <ApiLoading />}
-
-      {apiGetState.errorMessage && <ApiError />}
     </Paper>
   );
 };
