@@ -9,19 +9,7 @@ const Main = () => {
   const { auth } = useAuth();
 
   return (
-    <Box
-      component='main'
-      sx={{
-        backgroundColor: (theme) =>
-          theme.palette.mode === 'light'
-            ? theme.palette.grey[100]
-            : theme.palette.grey[900],
-        width: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-      }}
-    >
+    <Box component='main'>
       <Toolbar variant='dense' />
 
       {/* Not Logged In vs. Logged In */}

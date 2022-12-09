@@ -1,5 +1,4 @@
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
 const Footer = () => {
@@ -7,8 +6,8 @@ const Footer = () => {
     <Box
       component='footer'
       sx={{
-        flex: 'none',
         py: 1,
+        mt: 'auto',
         zIndex: (theme) => theme.zIndex.drawer + 1,
         backgroundColor: (theme) =>
           theme.palette.mode === 'light'
@@ -16,11 +15,9 @@ const Footer = () => {
             : theme.palette.grey[800],
       }}
     >
-      <Container maxWidth='sm'>
-        <Typography variant='body2' align='center'>
-          Copyright © 2022 Greg T. Wallace
-        </Typography>
-      </Container>
+      <Typography variant='body2' align='center'>
+        Copyright © 2022 Greg T. Wallace
+      </Typography>
     </Box>
   );
 };

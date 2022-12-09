@@ -35,11 +35,13 @@ const App = () => {
   return (
     <Box
       sx={{
-        margin: 0,
-        height: '100vh',
-        minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
+        minHeight: '100vh',
+        backgroundColor: (theme) =>
+          theme.palette.mode === 'light'
+            ? theme.palette.grey[100]
+            : theme.palette.grey[900],
       }}
     >
       <Router basename={process.env.PUBLIC_URL}>
