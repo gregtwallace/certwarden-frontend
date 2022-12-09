@@ -1,5 +1,7 @@
+import Alert from '@mui/material/Alert';
+
 const FormError = (props) => {
-  return <div className={'text-danger mb-2 ' + props.className}>{props.children}</div>
+  return <Alert severity="error">{props.children}</Alert>
 }
 
 export default FormError;

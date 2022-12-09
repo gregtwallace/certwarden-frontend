@@ -1,5 +1,20 @@
+import Box from '@mui/system/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+
 const ApiLoading = () => {
-  return <p>Fetching data from API, please wait...</p>;
+  return (
+    <Box
+      sx={{
+        margin: 4,
+        padding: 4,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+      <CircularProgress />
+    </Box>
+  );
 };
 
 export default ApiLoading;

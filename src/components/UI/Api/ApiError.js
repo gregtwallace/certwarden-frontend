@@ -1,11 +1,8 @@
+import Alert from '@mui/material/Alert';
+
 const ApiError = (props) => {
   return (
-    <>
-      <div className='text-danger mb-2'>
-        <p>An API error has occurred.</p>
-        <p>{props.children}</p>
-      </div>
-    </>
+    <Alert sx={{m: 2}} severity='error'>An API error has occurred.{props.children}</Alert>
   );
 };
 
