@@ -14,6 +14,7 @@ import Dashboard from '../Dashboard/Dashboard';
 import EditOneACMEAccount from '../ACMEAccounts/OneACMEAccount/EditOneACMEAccount';
 import EditOneCert from '../Certificates/OneCert/EditOneCert';
 import EditOnePrivateKey from '../PrivateKeys/OnePrivateKey/EditOnePrivateKey';
+import Logout from '../Authentication/Logout';
 import LogViewer from '../LogViewer/LogViewer';
 import RolloverAccountKey from '../ACMEAccounts/OneACMEAccount/Edit/RolloverAccountKey';
 import Settings from '../Settings/Settings';
@@ -63,6 +64,8 @@ const LoggedIn = () => {
             <Route path={'/logs'} element={<LogViewer />} />
 
             <Route path={'/settings'} element={<Settings />} />
+
+            <Route path={'/logout'} element={<Logout />} />
 
             <Route path='/' element={<Dashboard />} />
 

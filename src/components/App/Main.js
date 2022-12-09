@@ -3,7 +3,7 @@ import Toolbar from '@mui/material/Toolbar';
 
 import useAuth from '../../hooks/useAuth';
 import LoggedIn from './LoggedIn';
-import Login from '../Login/Login';
+import Login from '../Authentication/Login';
 
 const Main = () => {
   const { auth } = useAuth();
