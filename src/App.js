@@ -10,6 +10,10 @@ import {
 import useAuth from './hooks/useAuth';
 import useAxiosSend from './hooks/useAxiosSend';
 
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+
 import Dashboard from './components/Dashboard/Dashboard';
 import Login from './components/Authentication/Login';
 import AllACMEAccounts from './components/ACMEAccounts/AllACMEAccounts';
@@ -63,106 +67,120 @@ const App = () => {
   };
 
   // if not logged in
-  if (!auth.loggedInExpiration) {
-    return <Login />;
-  } else {
-    // if logged in
-    return (
-      <div className='container'>
-        <H1Header className='ml-3 my-3' h1='LeGo CertHub'></H1Header>
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+      }}
+    >
+      {!auth.loggedInExpiration ? (
+        <Login />
+      ) : (
+        <div className='container'>
+          <H1Header className='ml-3 my-3' h1='LeGo CertHub'></H1Header>
 
-        <Router basename={process.env.PUBLIC_URL}>
-          <div className='row'>
-            <div className='col-md-3'>
-              <nav>
-                <ul className='list-group'>
-                  <li className='list-group-item'>
-                    <Link to='/'>Dashboard</Link>
-                  </li>
-                  <li className='list-group-item'>
-                    <Link to='/privatekeys'>Private Keys</Link>
-                  </li>
-                  <li className='list-group-item'>
-                    <Link to='/acmeaccounts'>ACME Accounts</Link>
-                  </li>
-                  <li className='list-group-item'>
-                    <Link to='/certificates'>Certificates</Link>
-                  </li>
-                  <li className='list-group-item'>
-                    <Link to='/logs'>Logs</Link>
-                  </li>
-                  <li className='list-group-item'>
-                    <Link to='/settings'>Settings</Link>
-                  </li>
-                  <li className='list-group-item'>
-                    <Link to='/' onClick={logoutHandler}>
-                      Logout
-                    </Link>
-                  </li>
-                </ul>
-              </nav>
+          <Router basename={process.env.PUBLIC_URL}>
+            <div className='row'>
+              <div className='col-md-3'>
+                <nav>
+                  <ul className='list-group'>
+                    <li className='list-group-item'>
+                      <Link to='/'>Dashboard</Link>
+                    </li>
+                    <li className='list-group-item'>
+                      <Link to='/privatekeys'>Private Keys</Link>
+                    </li>
+                    <li className='list-group-item'>
+                      <Link to='/acmeaccounts'>ACME Accounts</Link>
+                    </li>
+                    <li className='list-group-item'>
+                      <Link to='/certificates'>Certificates</Link>
+                    </li>
+                    <li className='list-group-item'>
+                      <Link to='/logs'>Logs</Link>
+                    </li>
+                    <li className='list-group-item'>
+                      <Link to='/settings'>Settings</Link>
+                    </li>
+                    <li className='list-group-item'>
+                      <Link to='/' onClick={logoutHandler}>
+                        Logout
+                      </Link>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+
+              <div className='col-md-9'>
+                <Routes>
+                  <Route
+                    path={`/privatekeys/${newId}`}
+                    element={<AddOnePrivateKey />}
+                  />
+                  <Route
+                    path='/privatekeys/:id'
+                    element={<EditOnePrivateKey />}
+                  />
+                  <Route path='/privatekeys' element={<AllPrivateKeys />} />
+                  <Route
+                    path={`/acmeaccounts/${newId}`}
+                    element={<AddOneACMEAccount />}
+                  />
+                  <Route
+                    path='/acmeaccounts/:id'
+                    element={<EditOneACMEAccount />}
+                  />
+                  <Route
+                    path='/acmeaccounts/:id/email'
+                    element={<ChangeAccountEmail />}
+                  />
+                  <Route
+                    path='/acmeaccounts/:id/key-change'
+                    element={<RolloverAccountKey />}
+                  />
+                  <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
+                  <Route path='/certificates' element={<AllCertificates />} />
+                  <Route path='/certificates/:id' element={<ViewOneCert />} />
+                  <Route
+                    path='/certificates/:id/edit'
+                    element={<EditOneCert />}
+                  />
+                  <Route
+                    path={`/certificates/${newId}`}
+                    element={<AddOneCert />}
+                  />
+
+                  <Route path={'/logs'} element={<LogViewer />} />
+
+                  <Route path={'/settings'} element={<Settings />} />
+
+                  <Route path='/' element={<Dashboard />} />
+
+                  <Route path='*' element={<Navigate to='/' replace />} />
+                </Routes>
+              </div>
             </div>
+          </Router>
+        </div>
+      )}
 
-            <div className='col-md-9'>
-              <Routes>
-                <Route
-                  path={`/privatekeys/${newId}`}
-                  element={<AddOnePrivateKey />}
-                />
-                <Route
-                  path='/privatekeys/:id'
-                  element={<EditOnePrivateKey />}
-                />
-                <Route path='/privatekeys' element={<AllPrivateKeys />} />
-                <Route
-                  path={`/acmeaccounts/${newId}`}
-                  element={<AddOneACMEAccount />}
-                />
-                <Route
-                  path='/acmeaccounts/:id'
-                  element={<EditOneACMEAccount />}
-                />
-                <Route
-                  path='/acmeaccounts/:id/email'
-                  element={<ChangeAccountEmail />}
-                />
-                <Route
-                  path='/acmeaccounts/:id/key-change'
-                  element={<RolloverAccountKey />}
-                />
-                <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
-                <Route path='/certificates' element={<AllCertificates />} />
-                <Route path='/certificates/:id' element={<ViewOneCert />} />
-                <Route
-                  path='/certificates/:id/edit'
-                  element={<EditOneCert />}
-                />
-                <Route
-                  path={`/certificates/${newId}`}
-                  element={<AddOneCert />}
-                />
-
-                <Route path={'/logs'} element={<LogViewer />} />
-
-                <Route path={'/settings'} element={<Settings />} />
-
-                <Route path='/' element={<Dashboard />} />
-
-                <Route path='*' element={<Navigate to='/' replace />} />
-              </Routes>
-            </div>
-          </div>
-        </Router>
-
-        <footer className='my-4'>
-          <div className='text-center'>
-            <hr />
-            <p>Copyright © 2022 Greg T. Wallace</p>
-          </div>
-        </footer>
-      </div>
-    );
-  }
+      <Box
+        component='footer'
+        sx={{
+          py: 2,
+          mt: 'auto',
+        }}
+      >
+        <Container maxWidth='sm'>
+          <Typography variant='body2' align='center'>
+            Copyright © 2022 Greg T. Wallace
+          </Typography>
+        </Container>
+      </Box>
+    </Box>
+  );
 };
 
 export default App;
