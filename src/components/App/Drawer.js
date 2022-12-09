@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import { Divider } from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
@@ -56,6 +57,8 @@ const AppDrawer = () => {
           </ListItemIcon>
           <ListItemText primary='Certificates' />
         </ListItemButton>
+
+        <Divider sx={{ my: 2 }} />
 
         <ListItemButton component={Link} to='/logs'>
           <ListItemIcon>
