@@ -16,8 +16,7 @@ const Header = () => {
 
   return (
     <AppBar
-      position='fixed'
-      sx={{ flex: 'none', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      sx={{ position: 'relative', zIndex: (theme) => theme.zIndex.drawer + 1 }}
     >
       <Toolbar variant='dense'>
         <Typography

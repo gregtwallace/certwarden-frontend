@@ -1,5 +1,4 @@
 import { Box } from '@mui/system';
-import Toolbar from '@mui/material/Toolbar';
 
 import useAuth from '../../hooks/useAuth';
 import LoggedIn from './LoggedIn';
@@ -9,9 +8,10 @@ const Main = () => {
   const { auth } = useAuth();
 
   return (
-    <Box component='main'>
-      <Toolbar variant='dense' />
-
+    <Box
+      component='main'
+      sx={{ minHeight: 0, flexGrow: 1, overflow: 'auto' }}
+    >
       {/* Not Logged In vs. Logged In */}
       {!auth.loggedInExpiration ? <Login /> : <LoggedIn />}
     </Box>

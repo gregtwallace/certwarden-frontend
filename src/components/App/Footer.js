@@ -7,7 +7,6 @@ const Footer = () => {
       component='footer'
       sx={{
         py: 1,
-        mt: 'auto',
         zIndex: (theme) => theme.zIndex.drawer + 1,
         backgroundColor: (theme) =>
           theme.palette.mode === 'light'
