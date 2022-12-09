@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { Box, Container } from '@mui/system';
+import { Box } from '@mui/system';
 
 import { newId } from '../../App';
 import AddOneACMEAccount from '../ACMEAccounts/OneACMEAccount/AddOneACMEAccount';
@@ -22,58 +22,54 @@ import ViewOneCert from '../Certificates/OneCert/ViewOneCert';
 
 const LoggedIn = () => {
   return (
-    <Box sx={{ display: 'flex' }}>
+    <>
       <AppDrawer />
 
       <Box
         sx={{
-          width: 1,
+          m: 3,
+          flexGrow: 1,
+          overflowX: 'auto',
         }}
       >
-        <Container
-          sx={{
-            my: 3,
-          }}
-        >
-          <Routes>
-            <Route
-              path={`/privatekeys/${newId}`}
-              element={<AddOnePrivateKey />}
-            />
-            <Route path='/privatekeys/:id' element={<EditOnePrivateKey />} />
-            <Route path='/privatekeys' element={<AllPrivateKeys />} />
-            <Route
-              path={`/acmeaccounts/${newId}`}
-              element={<AddOneACMEAccount />}
-            />
-            <Route path='/acmeaccounts/:id' element={<EditOneACMEAccount />} />
-            <Route
-              path='/acmeaccounts/:id/email'
-              element={<ChangeAccountEmail />}
-            />
-            <Route
-              path='/acmeaccounts/:id/key-change'
-              element={<RolloverAccountKey />}
-            />
-            <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
-            <Route path='/certificates' element={<AllCertificates />} />
-            <Route path='/certificates/:id' element={<ViewOneCert />} />
-            <Route path='/certificates/:id/edit' element={<EditOneCert />} />
-            <Route path={`/certificates/${newId}`} element={<AddOneCert />} />
+        <Routes>
+          <Route
+            path={`/privatekeys/${newId}`}
+            element={<AddOnePrivateKey />}
+          />
+          <Route path='/privatekeys/:id' element={<EditOnePrivateKey />} />
+          <Route path='/privatekeys' element={<AllPrivateKeys />} />
+          <Route
+            path={`/acmeaccounts/${newId}`}
+            element={<AddOneACMEAccount />}
+          />
+          <Route path='/acmeaccounts/:id' element={<EditOneACMEAccount />} />
+          <Route
+            path='/acmeaccounts/:id/email'
+            element={<ChangeAccountEmail />}
+          />
+          <Route
+            path='/acmeaccounts/:id/key-change'
+            element={<RolloverAccountKey />}
+          />
+          <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
+          <Route path='/certificates' element={<AllCertificates />} />
+          <Route path='/certificates/:id' element={<ViewOneCert />} />
+          <Route path='/certificates/:id/edit' element={<EditOneCert />} />
+          <Route path={`/certificates/${newId}`} element={<AddOneCert />} />
 
-            <Route path={'/logs'} element={<LogViewer />} />
+          <Route path={'/logs'} element={<LogViewer />} />
 
-            <Route path={'/settings'} element={<Settings />} />
+          <Route path={'/settings'} element={<Settings />} />
 
-            <Route path={'/logout'} element={<Logout />} />
+          <Route path={'/logout'} element={<Logout />} />
 
-            <Route path='/' element={<Dashboard />} />
+          <Route path='/' element={<Dashboard />} />
 
-            <Route path='*' element={<Navigate to='/' replace />} />
-          </Routes>
-        </Container>
+          <Route path='*' element={<Navigate to='/' replace />} />
+        </Routes>
       </Box>
-    </Box>
+    </>
   );
 };
 

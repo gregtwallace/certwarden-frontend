@@ -10,7 +10,14 @@ const Main = () => {
   return (
     <Box
       component='main'
-      sx={{ minHeight: 0, flexGrow: 1, overflow: 'auto' }}
+      sx={{
+        minHeight: 0,
+        flexGrow: 1,
+        overflowY: 'auto',
+
+        display: 'flex',
+        flexDirection: 'row',
+      }}
     >
       {/* Not Logged In vs. Logged In */}
       {!auth.loggedInExpiration ? <Login /> : <LoggedIn />}
