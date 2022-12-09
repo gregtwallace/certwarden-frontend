@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 
@@ -8,6 +10,8 @@ const Header = () => {
   const { auth, setAuth } = useAuth();
   const [, sendData] = useAxiosSend();
 
+  const navigate = useNavigate();
+
   // logout handler
   // backend clears cookie on the call to /logout
   const logoutHandler = () => {
@@ -15,6 +19,7 @@ const Header = () => {
       if (success) {
         // update auth state
         setAuth({});
+        navigate('/');
       }
     });
   };

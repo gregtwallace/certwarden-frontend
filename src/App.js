@@ -1,4 +1,6 @@
 import { useEffect } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+
 import Box from '@mui/material/Box';
 
 import useAuth from './hooks/useAuth';
@@ -40,11 +42,11 @@ const App = () => {
         flexDirection: 'column',
       }}
     >
-
-      <Header />
-      <Main />
+      <Router basename={process.env.PUBLIC_URL}>
+        <Header />
+        <Main />
+      </Router>
       <Footer />
-
     </Box>
   );
 };
