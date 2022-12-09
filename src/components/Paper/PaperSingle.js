@@ -6,7 +6,6 @@ const PaperSingle = (props) => {
       sx={{
         width: 1,
         p: 1,
-        mb: 3,
       }}
     >
       {props.children}

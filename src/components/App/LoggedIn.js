@@ -30,7 +30,11 @@ const LoggedIn = () => {
           width: 1,
         }}
       >
-        <Container maxWidth={false} sx={{ mt: 3 }}>
+        <Container
+          sx={{
+            my: 3,
+          }}
+        >
           <Routes>
             <Route
               path={`/privatekeys/${newId}`}
