@@ -7,11 +7,12 @@ const Footer = () => {
     <Box
       component='footer'
       sx={{
-        py: 2,
-        mt: 'auto',
+        flex: 'none',
+        py: 1,
+        zIndex: (theme) => theme.zIndex.drawer + 1,
         backgroundColor: (theme) =>
           theme.palette.mode === 'light'
-            ? theme.palette.grey[200]
+            ? theme.palette.grey[300]
             : theme.palette.grey[800],
       }}
     >

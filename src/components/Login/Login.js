@@ -1,18 +1,17 @@
 import { useState } from 'react';
 
-import useAxiosSend from '../../hooks/useAxiosSend';
-import useAuth from '../../hooks/useAuth';
-
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-
-import Avatar from '@mui/material/Avatar';
 import Alert from '@mui/material/Alert';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Container from '@mui/material/Container';
+import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
+
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+
+import useAuth from '../../hooks/useAuth';
+import useAxiosSend from '../../hooks/useAxiosSend';
 
 const LOGIN_URL = '/v1/auth/login';
 
@@ -79,8 +78,8 @@ const Login = () => {
     <Container maxWidth='xs'>
       <Box
         sx={{
-          marginTop: 4,
-          padding: 4,
+          margin: 0,
+          padding: 6,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -89,10 +88,6 @@ const Login = () => {
         <Avatar sx={{ m: 1, bgcolor: 'error.main' }}>
           <LockOutlinedIcon />
         </Avatar>
-
-        <Typography component='h1' variant='h5'>
-          LeGo CertHub
-        </Typography>
 
         {sendState.errorMessage && (
           <Alert severity='error'>{sendState.errorMessage}</Alert>
@@ -106,7 +101,6 @@ const Login = () => {
             id='username'
             name='Username'
             label='Username'
-            autoFocus
             value={formState.login.username}
             onChange={inputChangeHandler}
             error={formState.validationErrors.username}
