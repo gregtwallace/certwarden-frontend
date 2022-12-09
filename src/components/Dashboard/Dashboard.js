@@ -14,7 +14,7 @@ import { convertUnixTime, daysUntil } from '../../helpers/time';
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
 import Flag from '../UI/Flag/Flag';
-import Title from '../UI/Header/Title';
+import TitleBar from '../UI/Header/TitleBar';
 
 const Dashboard = () => {
   const [apiGetState] = useAxiosGet('/v1/orders/currentvalid', 'orders', true);
@@ -26,10 +26,12 @@ const Dashboard = () => {
         p: 2,
       }}
     >
-      <Title>Dashboard</Title>
+      <TitleBar title='Dashboard' />
 
       {!apiGetState.isLoaded && <ApiLoading />}
-      {apiGetState.errorMessage && <ApiError>{apiGetState.errorMessage}</ApiError>}
+      {apiGetState.errorMessage && (
+        <ApiError>{apiGetState.errorMessage}</ApiError>
+      )}
 
       {apiGetState.isLoaded && !apiGetState.errorMessage && (
         <Table>

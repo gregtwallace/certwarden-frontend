@@ -6,7 +6,7 @@ import { Paper } from '@mui/material';
 import useAuth from '../../hooks/useAuth';
 import useAxiosSend from '../../hooks/useAxiosSend';
 
-import Title from '../UI/Header/Title';
+import TitleBar from '../UI/Header/TitleBar';
 import ApiError from '../UI/Api/ApiError';
 
 const Logout = () => {
@@ -37,7 +37,7 @@ const Logout = () => {
         p: 2,
       }}
     >
-      <Title>Logout</Title>
+      <TitleBar title='Logout' />
 
       {logoutFailed && <ApiError>Logout failed.</ApiError>}
     </Paper>
