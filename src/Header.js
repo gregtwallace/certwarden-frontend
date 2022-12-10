@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-import useAuth from '../../hooks/useAuth';
+import useAuth from './hooks/useAuth';
 
 const Header = () => {
   const { auth } = useAuth();

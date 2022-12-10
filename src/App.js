@@ -5,9 +5,9 @@ import Box from '@mui/material/Box';
 
 import useAuth from './hooks/useAuth';
 
-import Header from './components/App/Header';
-import Main from './components/App/Main';
-import Footer from './components/App/Footer';
+import Header from './Header';
+import Main from './components/Main/Main';
+import Footer from './Footer';
 
 // react app version
 export const frontendVersion = '0.5.0';
