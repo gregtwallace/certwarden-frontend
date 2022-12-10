@@ -8,7 +8,6 @@ import AddOnePrivateKey from '../PrivateKeys/OnePrivateKey/AddOnePrivateKey';
 import AllACMEAccounts from '../ACMEAccounts/AllACMEAccounts';
 import AllCertificates from '../Certificates/AllCertificates';
 import AllPrivateKeys from '../PrivateKeys/AllPrivateKeys';
-import AppDrawer from './Drawer';
 import ChangeAccountEmail from '../ACMEAccounts/OneACMEAccount/Edit/ChangeAccountEmail';
 import Dashboard from '../Dashboard/Dashboard';
 import EditOneACMEAccount from '../ACMEAccounts/OneACMEAccount/EditOneACMEAccount';
@@ -16,6 +15,7 @@ import EditOneCert from '../Certificates/OneCert/EditOneCert';
 import EditOnePrivateKey from '../PrivateKeys/OnePrivateKey/EditOnePrivateKey';
 import Logout from '../Authentication/Logout';
 import LogViewer from '../LogViewer/LogViewer';
+import Navbar from './Navbar';
 import RolloverAccountKey from '../ACMEAccounts/OneACMEAccount/Edit/RolloverAccountKey';
 import Settings from '../Settings/Settings';
 import ViewOneCert from '../Certificates/OneCert/ViewOneCert';
@@ -23,7 +23,7 @@ import ViewOneCert from '../Certificates/OneCert/ViewOneCert';
 const LoggedIn = () => {
   return (
     <>
-      <AppDrawer />
+      <Navbar />
 
       <Box
         sx={{

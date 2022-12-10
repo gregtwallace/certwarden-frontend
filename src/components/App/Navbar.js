@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import { Divider } from '@mui/material';
@@ -13,35 +15,69 @@ import KeyIcon from '@mui/icons-material/Key';
 import SettingsIcon from '@mui/icons-material/Settings';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 
-const AppDrawer = () => {
+const Navbar = () => {
+  const theme = useTheme();
+  const bigView = useMediaQuery(theme.breakpoints.up('sm'));
+
+  // logic for hiding list text and adding noWrap
+  const ListText = (props) => {
+    return (
+      <>
+        {bigView && (
+          <ListItemText
+            primary={props.primary}
+            noWrap
+            primaryTypographyProps={{
+              style: {
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              },
+            }}
+          />
+        )}
+      </>
+    );
+  };
+
+  let width = 'auto';
+  if (!bigView) {
+    width = '56px';
+  }
+
+  const sxList = {
+    width: width,
+    bgcolor: 'background.default',
+  };
+
   return (
-    <List component='nav' sx={{ bgcolor: 'background.default' }}>
+    <List component='nav' sx={sxList}>
       <ListItemButton component={Link} to='/'>
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
-        <ListItemText primary='Dashboard' />
+        <ListText primary='Dashboard' />
       </ListItemButton>
 
       <ListItemButton component={Link} to='/privatekeys'>
         <ListItemIcon>
           <KeyIcon />
         </ListItemIcon>
-        <ListItemText primary='Private Keys' />
+        <ListText primary='Private Keys' />
       </ListItemButton>
 
       <ListItemButton component={Link} to='/acmeaccounts'>
         <ListItemIcon>
           <BadgeIcon />
         </ListItemIcon>
-        <ListItemText primary='ACME Accounts' />
+        <ListText primary='ACME Accounts' />
       </ListItemButton>
 
       <ListItemButton component={Link} to='/certificates'>
         <ListItemIcon>
           <CardMembershipIcon />
         </ListItemIcon>
-        <ListItemText primary='Certificates' />
+        <ListText primary='Certificates' />
       </ListItemButton>
 
       <Divider sx={{ my: 2 }} />
@@ -50,17 +86,17 @@ const AppDrawer = () => {
         <ListItemIcon>
           <TextSnippetIcon />
         </ListItemIcon>
-        <ListItemText primary='Logs' />
+        <ListText primary='Logs' />
       </ListItemButton>
 
       <ListItemButton component={Link} to='/settings'>
         <ListItemIcon>
           <SettingsIcon />
         </ListItemIcon>
-        <ListItemText primary='Settings' />
+        <ListText primary='Settings' />
       </ListItemButton>
     </List>
   );
 };
 
-export default AppDrawer;
+export default Navbar;
