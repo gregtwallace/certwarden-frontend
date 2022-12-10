@@ -17,7 +17,7 @@ import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 
 const Navbar = () => {
   const theme = useTheme();
-  const bigView = useMediaQuery(theme.breakpoints.up('sm'));
+  const bigView = useMediaQuery(theme.breakpoints.up('md'));
 
   // logic for hiding list text and adding noWrap
   const ListText = (props) => {
