@@ -47,6 +47,8 @@ const Navbar = () => {
 
   const sxList = {
     width: width,
+    borderRight: 1,
+    borderColor: 'grey.500',
     bgcolor: 'background.default',
   };
 
