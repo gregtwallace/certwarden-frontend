@@ -14,7 +14,7 @@ import TableRow from '@mui/material/TableRow';
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
 import Flag from '../UI/Flag/Flag';
-import PaperSingle from '../Paper/PaperSingle';
+import PaperSingle from '../UI/Paper/PaperSingle';
 import TitleBar from '../UI/Header/TitleBar';
 
 const AllCertificates = () => {
