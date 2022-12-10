@@ -27,7 +27,7 @@ const LoggedIn = () => {
 
       <Box
         sx={{
-          m: 3,
+          p: 3,
           flexGrow: 1,
           overflowX: 'auto',
         }}
