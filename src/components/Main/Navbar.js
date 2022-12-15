@@ -26,7 +26,6 @@ const Navbar = () => {
         {bigView && (
           <ListItemText
             primary={props.primary}
-            noWrap
             primaryTypographyProps={{
               style: {
                 whiteSpace: 'nowrap',
