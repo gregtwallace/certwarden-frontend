@@ -39,7 +39,7 @@ const Dashboard = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {apiGetState.orders.length > 0 &&
+            {apiGetState.orders?.length > 0 &&
               apiGetState.orders.map((m) => (
                 <TableRow key={m.id}>
                   <TableCell>{m.certificate.subject}</TableCell>
