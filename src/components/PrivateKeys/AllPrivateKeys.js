@@ -1,65 +1,109 @@
-import { Link, useNavigate } from 'react-router-dom';
+import {
+  Link as RouterLink,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
+import { Link } from '@mui/material';
+
+import Button from '@mui/material/Button';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import { TableCell } from '@mui/material';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '../UI/Table/TableRow';
 
 import useAxiosGet from '../../hooks/useAxiosGet';
+import { getRowsPerPage, getPage, getSort } from '../UI/TableMui/query';
+import { newId } from '../../App';
 
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
-import Table from '../UI/Table/Table';
-import TableBody from '../UI/Table/TableBody';
-import TableData from '../UI/Table/TableData';
-import TableHead from '../UI/Table/TableHead';
-import TableHeader from '../UI/Table/TableHeader';
-import TableRow from '../UI/Table/TableRow';
-import Button from '../UI/Button/Button';
-import H2Header from '../UI/Header/H2Header';
+import PaperSingle from '../UI/Paper/PaperSingle';
+import TableHeaderRow from '../UI/TableMui/TableHeaderRow';
+import TitleBar from '../UI/Header/TitleBar';
+import TablePagination from '../UI/TableMui/TablePagination';
+
+// table headers and sortable param
+const tableHeaders = [
+  {
+    id: 'name',
+    label: 'Name',
+    sortable: true,
+  },
+  {
+    id: 'description',
+    label: 'Description',
+    sortable: true,
+  },
+  {
+    id: 'algorithm',
+    label: 'Algorithm',
+    sortable: true,
+  },
+];
 
 const AllPrivateKeys = () => {
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  const [apiGetState] = useAxiosGet('/v1/privatekeys', 'private_keys', true);
+  // get calculated query params
+  const rowsPerPage = getRowsPerPage(searchParams);
+  const page = getPage(searchParams);
+  const sort = getSort(searchParams, 'name', 'asc');
+
+  // calculate offset from current page and rows per page
+  const offset = page * rowsPerPage;
+
+  const [apiGetState] = useAxiosGet(
+    `/v1/privatekeys?limit=${rowsPerPage}&offset=${offset}&sort=${sort}`,
+    'all_private_keys',
+    true
+  );
+
+  // click new / navigation
+  const navigate = useNavigate();
 
   const newClickHandler = (event) => {
     event.preventDefault();
-    navigate('-1');
+    navigate(`/privatekeys/${newId}`);
   };
 
-  if (apiGetState.errorMessage) {
-    return <ApiError>{apiGetState.errorMessage}</ApiError>;
-  } else if (!apiGetState.isLoaded) {
-    return <ApiLoading />;
-  } else {
-    return (
-      <>
-        <H2Header h2='Private Keys'>
-          <Button type='submit' onClick={newClickHandler}>
-            New
-          </Button>
-        </H2Header>
-
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableHeader scope='col'>Name</TableHeader>
-              <TableHeader scope='col'>Description</TableHeader>
-              <TableHeader scope='col'>Algorithm</TableHeader>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {apiGetState.private_keys &&
-              apiGetState.private_keys.map((m) => (
-                <TableRow key={m.id}>
-                  <TableHeader scope='row'>
-                    <Link to={'/privatekeys/' + m.id}>{m.name}</Link>
-                  </TableHeader>
-                  <TableData>{m.description}</TableData>
-                  <TableData>{m.algorithm.name}</TableData>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </>
-    );
-  }
+  return (
+    <PaperSingle>
+      <TitleBar title='Private Keys'>
+        <Button variant='contained' type='submit' onClick={newClickHandler}>
+          New Key
+        </Button>
+      </TitleBar>
+      {!apiGetState.isLoaded && <ApiLoading />}
+      {apiGetState.errorMessage && (
+        <ApiError>{apiGetState.errorMessage}</ApiError>
+      )}
+      {apiGetState.isLoaded && !apiGetState.errorMessage && (
+        <>
+          <Table size='small'>
+            <TableHead>
+              <TableHeaderRow headers={tableHeaders} />
+            </TableHead>
+            <TableBody>
+              {apiGetState.all_private_keys.private_keys?.length > 0 &&
+                apiGetState.all_private_keys.private_keys.map((k) => (
+                  <TableRow key={k.id}>
+                    <TableCell>
+                      <Link component={RouterLink} to={'/privatekeys/' + k.id}>
+                        {k.name}
+                      </Link>
+                    </TableCell>
+                    <TableCell>{k.description}</TableCell>
+                    <TableCell>{k.algorithm.name}</TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+          <TablePagination count={apiGetState.all_private_keys.total_records} />
+        </>
+      )}
+    </PaperSingle>
+  );
 };
 
 export default AllPrivateKeys;
