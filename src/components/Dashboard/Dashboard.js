@@ -9,70 +9,59 @@ import TableRow from '@mui/material/TableRow';
 
 import useAxiosGet from '../../hooks/useAxiosGet';
 import { convertUnixTime, daysUntil } from '../../helpers/time';
+import { getRowsPerPage, getPage, getSort } from '../UI/TableMui/query';
 
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
 import Flag from '../UI/Flag/Flag';
 import PaperSingle from '../UI/Paper/PaperSingle';
-import TableHeader from '../UI/TableMui/TableHeader';
+import TableHeaderRow from '../UI/TableMui/TableHeaderRow';
+import TablePagination from '../UI/TableMui/TablePagination';
 import TitleBar from '../UI/Header/TitleBar';
 
+// table headers and sortable param
+const tableHeaders = [
+  {
+    id: 'subject',
+    label: 'Subject',
+    sortable: true,
+  },
+  {
+    id: 'flags',
+    label: 'Flags',
+    sortable: false,
+  },
+  {
+    id: 'name',
+    label: 'Name',
+    sortable: true,
+  },
+  {
+    id: 'valid_to',
+    label: 'Expiration (Remaining)',
+    sortable: true,
+  },
+];
+
 const Dashboard = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
-  // get params
-  const limit = searchParams.get('limit');
-  const offset = searchParams.get('offset');
-  const sort = searchParams.get('sort');
+  // get calculated query params
+  const rowsPerPage = getRowsPerPage(searchParams);
+  const page = getPage(searchParams);
+  const sort = getSort(searchParams, 'valid_to', 'asc');
 
-  // setup sorting vars
-  let sortComponents;
-  if (sort != null) {
-    sortComponents = sort.split('.');
-  }
-
-  let orderBy = '';
-  let order = '';
-  if (sortComponents?.length === 2) {
-    orderBy = sortComponents[0];
-    order = sortComponents[1];
-  } else {
-    orderBy = 'valid_to';
-    order = 'asc';
-  }
-
-  // if order is not asc or desc, set default
-  if (order !== 'asc' && order !== 'desc') {
-    order = 'asc';
-  }
+  // calculate offset from current page and rows per page
+  const offset = page * rowsPerPage;
 
   const [apiGetState] = useAxiosGet(
-    `/v1/orders/currentvalid?limit=${limit}&offset=${offset}&sort=${sort}`,
-    'orders',
+    `/v1/orders/currentvalid?limit=${rowsPerPage}&offset=${offset}&sort=${sort}`,
+    'valid_current_orders',
     true
   );
 
-  // sort handler
-  const setSortHandler = (headerId) => {
-    // check if the headerId is for current sort
-    // if so, reverse the order
-    let newOrder = '';
-    if (headerId === orderBy) {
-      if (order === 'asc') {
-        newOrder = 'desc';
-      } else {
-        newOrder = 'asc';
-      }
-    } else {
-      // if changing col, default to asc
-      newOrder = 'asc';
-    }
-
-    let newParams = searchParams;
-    newParams.set('sort', `${headerId}.${newOrder}`);
-
-    setSearchParams(newParams);
-  };
+  // TODO: useEffect - go to page 0 if page is greater than last page
+  // Requires updating backend to always return total even when out of bounds
 
   return (
     <PaperSingle>
@@ -87,34 +76,11 @@ const Dashboard = () => {
         <>
           <Table size='small'>
             <TableHead>
-              <TableRow>
-                <TableHeader
-                  id='subject'
-                  label='Subject'
-                  orderBy={orderBy}
-                  order={order}
-                  onClick={setSortHandler}
-                />
-                <TableCell>Flags</TableCell>
-                <TableHeader
-                  id='name'
-                  label='Name'
-                  orderBy={orderBy}
-                  order={order}
-                  onClick={setSortHandler}
-                />
-                <TableHeader
-                  id='valid_to'
-                  label='Expiration (Remaining)'
-                  orderBy={orderBy}
-                  order={order}
-                  onClick={setSortHandler}
-                />
-              </TableRow>
+              <TableHeaderRow headers={tableHeaders} />
             </TableHead>
             <TableBody>
-              {apiGetState.orders?.length > 0 &&
-                apiGetState.orders.map((m) => (
+              {apiGetState.valid_current_orders?.orders?.length > 0 &&
+                apiGetState.valid_current_orders.orders.map((m) => (
                   <TableRow key={m.id}>
                     <TableCell>{m.certificate.subject}</TableCell>
                     <TableCell>
@@ -141,6 +107,9 @@ const Dashboard = () => {
                 ))}
             </TableBody>
           </Table>
+          <TablePagination
+            count={apiGetState.valid_current_orders.total_orders}
+          />
         </>
       )}
     </PaperSingle>
