@@ -10,7 +10,7 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { TableCell } from '@mui/material';
 import TableHead from '@mui/material/TableHead';
-import TableRow from '../UI/Table/TableRow';
+import TableRow from '@mui/material/TableRow';
 
 import useAxiosGet from '../../hooks/useAxiosGet';
 import { getRowsPerPage, getPage, getSort } from '../UI/TableMui/query';
@@ -96,7 +96,7 @@ const AllCertificates = () => {
               <TableHeaderRow headers={tableHeaders} />
             </TableHead>
             <TableBody>
-              {apiGetState.all_certificates.certificates?.length > 0 &&
+              {apiGetState?.all_certificates?.certificates?.length > 0 &&
                 apiGetState.all_certificates.certificates.map((c) => (
                   <TableRow key={c.id}>
                     <TableCell>
@@ -128,7 +128,7 @@ const AllCertificates = () => {
                 ))}
             </TableBody>
           </Table>
-          <TablePagination count={apiGetState.all_certificates.total_records} />
+          <TablePagination count={apiGetState?.all_certificates?.total_records} />
         </>
       )}
     </PaperSingle>

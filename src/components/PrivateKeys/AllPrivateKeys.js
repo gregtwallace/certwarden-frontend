@@ -10,7 +10,7 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { TableCell } from '@mui/material';
 import TableHead from '@mui/material/TableHead';
-import TableRow from '../UI/Table/TableRow';
+import TableRow from '@mui/material/TableRow';
 
 import useAxiosGet from '../../hooks/useAxiosGet';
 import { getRowsPerPage, getPage, getSort } from '../UI/TableMui/query';
@@ -85,7 +85,7 @@ const AllPrivateKeys = () => {
               <TableHeaderRow headers={tableHeaders} />
             </TableHead>
             <TableBody>
-              {apiGetState.all_private_keys.private_keys?.length > 0 &&
+              {apiGetState?.all_private_keys?.private_keys?.length > 0 &&
                 apiGetState.all_private_keys.private_keys.map((k) => (
                   <TableRow key={k.id}>
                     <TableCell>
@@ -99,7 +99,7 @@ const AllPrivateKeys = () => {
                 ))}
             </TableBody>
           </Table>
-          <TablePagination count={apiGetState.all_private_keys.total_records} />
+          <TablePagination count={apiGetState?.all_private_keys?.total_records} />
         </>
       )}
     </PaperSingle>

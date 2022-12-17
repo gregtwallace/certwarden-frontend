@@ -79,7 +79,7 @@ const Dashboard = () => {
               <TableHeaderRow headers={tableHeaders} />
             </TableHead>
             <TableBody>
-              {apiGetState.valid_current_orders?.orders?.length > 0 &&
+              {apiGetState?.valid_current_orders?.orders?.length > 0 &&
                 apiGetState.valid_current_orders.orders.map((m) => (
                   <TableRow key={m.id}>
                     <TableCell>{m.certificate.subject}</TableCell>
@@ -108,7 +108,7 @@ const Dashboard = () => {
             </TableBody>
           </Table>
           <TablePagination
-            count={apiGetState.valid_current_orders.total_orders}
+            count={apiGetState?.valid_current_orders?.total_orders}
           />
         </>
       )}
