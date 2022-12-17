@@ -1,67 +1,140 @@
-import { Link, useNavigate } from 'react-router-dom';
+import {
+  Link as RouterLink,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
+import { Link } from '@mui/material';
+
+import Button from '@mui/material/Button';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import { TableCell } from '@mui/material';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '../UI/Table/TableRow';
 
 import useAxiosGet from '../../hooks/useAxiosGet';
+import { getRowsPerPage, getPage, getSort } from '../UI/TableMui/query';
+import { newId } from '../../App';
 
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
-import Table from '../UI/Table/Table';
-import TableBody from '../UI/Table/TableBody';
-import TableData from '../UI/Table/TableData';
-import TableHead from '../UI/Table/TableHead';
-import TableHeader from '../UI/Table/TableHeader';
-import TableRow from '../UI/Table/TableRow';
-import Button from '../UI/Button/Button';
-import H2Header from '../UI/Header/H2Header';
+import PaperSingle from '../UI/Paper/PaperSingle';
+import TableHeaderRow from '../UI/TableMui/TableHeaderRow';
+import TitleBar from '../UI/Header/TitleBar';
+import TablePagination from '../UI/TableMui/TablePagination';
+
+// table headers and sortable param
+const tableHeaders = [
+  {
+    id: 'name',
+    label: 'Name',
+    sortable: true,
+  },
+  {
+    id: 'description',
+    label: 'Description',
+    sortable: true,
+  },
+  {
+    id: 'keyname',
+    label: 'Key',
+    sortable: true,
+  },
+  {
+    id: 'status',
+    label: 'Status',
+    sortable: true,
+  },
+  {
+    id: 'email',
+    label: 'E-Mail',
+    sortable: true,
+  },
+  {
+    id: 'is_staging',
+    label: 'Environment',
+    sortable: true,
+  },
+];
 
 const AllACMEAccounts = () => {
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  const [ apiGetState ] = useAxiosGet('/v1/acmeaccounts', 'acme_accounts', true);
+  // get calculated query params
+  const rowsPerPage = getRowsPerPage(searchParams);
+  const page = getPage(searchParams);
+  const sort = getSort(searchParams, 'name', 'asc');
+
+  // calculate offset from current page and rows per page
+  const offset = page * rowsPerPage;
+
+  const [apiGetState] = useAxiosGet(
+    `/v1/acmeaccounts?limit=${rowsPerPage}&offset=${offset}&sort=${sort}`,
+    'all_acme_accounts',
+    true
+  );
+
+  // click new / navigation
+  const navigate = useNavigate();
 
   const newClickHandler = (event) => {
     event.preventDefault();
-    navigate('-1');
+    navigate(`/acmeaccounts/${newId}`);
   };
 
-  if (apiGetState.errorMessage) {
-    return <ApiError>{apiGetState.errorMessage}</ApiError>;
-  } else if (!apiGetState.isLoaded) {
-    return <ApiLoading />;
-  } else {
   return (
-    <>
-        <H2Header h2='ACME Accounts'>
-          <Button type='submit' onClick={newClickHandler}>
-            New
-          </Button>
-        </H2Header>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableHeader scope='col'>Name</TableHeader>
-            <TableHeader scope='col'>Description</TableHeader>
-            <TableHeader scope='col'>Key</TableHeader>
-            <TableHeader scope='col'>Status</TableHeader>
-            <TableHeader scope='col'>Email</TableHeader>
-            <TableHeader scope='col'>Type</TableHeader>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {apiGetState.acme_accounts && apiGetState.acme_accounts.map((m) => (
-            <TableRow key={m.id}>
-              <TableHeader scope='row'><Link to={"/acmeaccounts/" + m.id}>{m.name}</Link></TableHeader>
-              <TableData>{m.description}</TableData>
-              <TableData><Link to={"/privatekeys/" + m.private_key.id}>{m.private_key.name}</Link></TableData>
-              <TableData>{m.status}</TableData>
-              <TableData>{m.email}</TableData>
-              <TableData>{m.is_staging ? "Staging" : "Production"}</TableData>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </>
+    <PaperSingle>
+      <TitleBar title='ACME Accounts'>
+        <Button variant='contained' type='submit' onClick={newClickHandler}>
+          New Account
+        </Button>
+      </TitleBar>
+      {!apiGetState.isLoaded && <ApiLoading />}
+      {apiGetState.errorMessage && (
+        <ApiError>{apiGetState.errorMessage}</ApiError>
+      )}
+      {apiGetState.isLoaded && !apiGetState.errorMessage && (
+        <>
+          <Table size='small'>
+            <TableHead>
+              <TableHeaderRow headers={tableHeaders} />
+            </TableHead>
+            <TableBody>
+              {apiGetState.all_acme_accounts.acme_accounts?.length > 0 &&
+                apiGetState.all_acme_accounts.acme_accounts.map((a) => (
+                  <TableRow key={a.id}>
+                    <TableCell>
+                      <Link component={RouterLink} to={'/acmeaccounts/' + a.id}>
+                        {a.name}
+                      </Link>
+                    </TableCell>
+                    <TableCell>{a.description}</TableCell>
+                    <TableCell>
+                      <Link
+                        component={RouterLink}
+                        to={'/privatekeys/' + a.private_key.id}
+                      >
+                        {a.private_key.name}
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      {a.status.charAt(0).toUpperCase() + a.status.slice(1)}
+                    </TableCell>
+                    <TableCell>{a.email}</TableCell>
+                    <TableCell>
+                      {a.is_staging ? 'Staging' : 'Production'}
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+          <TablePagination
+            count={apiGetState.all_acme_accounts.total_records}
+          />
+        </>
+      )}
+    </PaperSingle>
   );
-          }
 };
 
 export default AllACMEAccounts;
