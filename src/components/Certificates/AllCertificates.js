@@ -1,26 +1,77 @@
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import {
+  Link as RouterLink,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
 import { Link } from '@mui/material';
 
-import useAxiosGet from '../../hooks/useAxiosGet';
-import { newId } from '../../App';
-
-import { Button } from '@mui/material';
+import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
+import { TableCell } from '@mui/material';
 import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
+import TableRow from '../UI/Table/TableRow';
+
+import useAxiosGet from '../../hooks/useAxiosGet';
+import { getRowsPerPage, getPage, getSort } from '../UI/TableMui/query';
+import { newId } from '../../App';
 
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
 import Flag from '../UI/Flag/Flag';
 import PaperSingle from '../UI/Paper/PaperSingle';
+import TableHeaderRow from '../UI/TableMui/TableHeaderRow';
 import TitleBar from '../UI/Header/TitleBar';
+import TablePagination from '../UI/TableMui/TablePagination';
+
+// table headers and sortable param
+const tableHeaders = [
+  {
+    id: 'name',
+    label: 'Name',
+    sortable: true,
+  },
+  {
+    id: 'subject',
+    label: 'Subject',
+    sortable: true,
+  },
+  {
+    id: 'flags',
+    label: 'Flags',
+    sortable: false,
+  },
+  {
+    id: 'keyname',
+    label: 'Key',
+    sortable: true,
+  },
+  {
+    id: 'accountname',
+    label: 'Account',
+    sortable: true,
+  },
+];
 
 const AllCertificates = () => {
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  const [apiGetState] = useAxiosGet('/v1/certificates', 'certificates', true);
+  // get calculated query params
+  const rowsPerPage = getRowsPerPage(searchParams);
+  const page = getPage(searchParams);
+  const sort = getSort(searchParams, 'name', 'asc');
+
+  // calculate offset from current page and rows per page
+  const offset = page * rowsPerPage;
+
+  const [apiGetState] = useAxiosGet(
+    `/v1/certificates?limit=${rowsPerPage}&offset=${offset}&sort=${sort}`,
+    'all_certificates',
+    true
+  );
+
+  // click new / navigation
+  const navigate = useNavigate();
 
   const newClickHandler = (event) => {
     event.preventDefault();
@@ -34,59 +85,56 @@ const AllCertificates = () => {
           New Certificate
         </Button>
       </TitleBar>
-
       {!apiGetState.isLoaded && <ApiLoading />}
       {apiGetState.errorMessage && (
         <ApiError>{apiGetState.errorMessage}</ApiError>
       )}
-
       {apiGetState.isLoaded && !apiGetState.errorMessage && (
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Subject</TableCell>
-              <TableCell>Flags</TableCell>
-              <TableCell>Key</TableCell>
-              <TableCell>Account</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {apiGetState.certificates.length > 0 &&
-              apiGetState.certificates.map((m) => (
-                <TableRow key={m.id}>
-                  <TableCell>
-                    <Link component={RouterLink} to={'/certificates/' + m.id}>
-                      {m.name}
-                    </Link>
-                  </TableCell>
-                  <TableCell>{m.subject}</TableCell>
-                  <TableCell>
-                    {!m.challenge_method.enabled && <Flag type='method' />}
-                  </TableCell>
-                  <TableCell>
-                    <Link
-                      component={RouterLink}
-                      to={'/privatekeys/' + m.private_key.id}
-                    >
-                      {m.private_key.name}
-                    </Link>
-                  </TableCell>
-                  <TableCell>
-                    <Link
-                      component={RouterLink}
-                      to={'/acmeaccounts/' + m.acme_account.id}
-                    >
-                      {m.acme_account.name}
-                    </Link>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
+        <>
+          <Table size='small'>
+            <TableHead>
+              <TableHeaderRow headers={tableHeaders} />
+            </TableHead>
+            <TableBody>
+              {apiGetState.all_certificates.certificates?.length > 0 &&
+                apiGetState.all_certificates.certificates.map((c) => (
+                  <TableRow key={c.id}>
+                    <TableCell>
+                      <Link component={RouterLink} to={'/certificates/' + c.id}>
+                        {c.name}
+                      </Link>
+                    </TableCell>
+                    <TableCell>{c.subject}</TableCell>
+                    <TableCell>
+                      {!c.challenge_method.enabled && <Flag type='method' />}
+                    </TableCell>
+                    <TableCell>
+                      <Link
+                        component={RouterLink}
+                        to={'/privatekeys/' + c.private_key.id}
+                      >
+                        {c.private_key.name}
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      <Link
+                        component={RouterLink}
+                        to={'/acmeaccounts/' + c.acme_account.id}
+                      >
+                        {c.acme_account.name}
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+          <TablePagination count={apiGetState.all_certificates.total_records} />
+        </>
       )}
     </PaperSingle>
   );
+
+  //                   {!m.challenge_method.enabled && <Flag type='method' />}
 };
 
 export default AllCertificates;
