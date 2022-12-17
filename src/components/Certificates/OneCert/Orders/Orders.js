@@ -1,48 +1,99 @@
-import { Link } from 'react-router-dom';
+import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import { Link } from '@mui/material';
+
+import Button from '@mui/material/Button';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 
 import useAxiosGet from '../../../../hooks/useAxiosGet';
+import { getRowsPerPage, getPage, getSort } from '../../../UI/TableMui/query';
 import { convertUnixTime } from '../../../../helpers/time';
 
 import ApiLoading from '../../../UI/Api/ApiLoading';
 import ApiError from '../../../UI/Api/ApiError';
-import Table from '../../../UI/Table/Table';
-import TableBody from '../../../UI/Table/TableBody';
-import TableData from '../../../UI/Table/TableData';
-import TableHead from '../../../UI/Table/TableHead';
-import TableHeader from '../../../UI/Table/TableHeader';
-import TableRow from '../../../UI/Table/TableRow';
-import H2Header from '../../../UI/Header/H2Header';
-import Button from '../../../UI/Button/Button';
+import PaperSingle from '../../../UI/Paper/PaperSingle';
+import TableHeaderRow from '../../../UI/TableMui/TableHeaderRow';
+import TitleBar from '../../../UI/Header/TitleBar';
+import TablePagination from '../../../UI/TableMui/TablePagination';
+
+// table headers and sortable param
+const tableHeaders = [
+  {
+    id: 'created_at',
+    label: 'Created At',
+    sortable: true,
+  },
+  {
+    id: 'valid_to',
+    label: 'Valid To',
+    sortable: true,
+  },
+  {
+    id: 'status',
+    label: 'Status',
+    sortable: true,
+  },
+  {
+    id: 'keyname',
+    label: 'Key',
+    sortable: true,
+  },
+  {
+    id: 'actions',
+    label: 'Actions',
+    sortable: false,
+  },
+];
 
 const Orders = (props) => {
+  const [searchParams] = useSearchParams();
+
+  // get calculated query params
+  const rowsPerPage = getRowsPerPage(searchParams);
+  const page = getPage(searchParams);
+  const sort = getSort(searchParams, 'created_at', 'desc');
+
+  // calculate offset from current page and rows per page
+  const offset = page * rowsPerPage;
+
   const [apiGetState] = useAxiosGet(
-    `/v1/certificates/${props.certId}/orders`,
-    'orders',
+    `/v1/certificates/${props.certId}/orders?limit=${rowsPerPage}&offset=${offset}&sort=${sort}`,
+    'all_orders',
     true
   );
 
+  // action handlers
   // Rather than making another sendApi, use the parent component's.
   // This allows disabling the parent's buttons also
   const [sendApiState, sendData] = [props.sendApiState, props.sendData];
 
   // handler to place a new order
   const newOrderHandler = (event) => {
-    sendData(`/v1/certificates/${props.certId}/orders`, 'POST', null, true).then(
-      (success) => {
-        props.updateGet();
-      }
-    );
+    sendData(
+      `/v1/certificates/${props.certId}/orders`,
+      'POST',
+      null,
+      true
+    ).then((success) => {
+      props.updateGet();
+    });
   };
 
   // handler to retry an existing order that isn't valid or invalid
   const retryOrderHandler = (event, orderId) => {
     event.preventDefault();
 
-    sendData(`/v1/certificates/${props.certId}/orders/${orderId}`, 'POST', null, true).then(
-      (success) => {
-        props.updateGet();
-      }
-    );
+    sendData(
+      `/v1/certificates/${props.certId}/orders/${orderId}`,
+      'POST',
+      null,
+      true
+    ).then((success) => {
+      props.updateGet();
+    });
   };
 
   // handler to revoke a valid order's certificate
@@ -59,80 +110,88 @@ const Orders = (props) => {
       props.updateGet();
     });
   };
+  // action handlers -- end
 
-  if (apiGetState.errorMessage) {
-    return <ApiError>{apiGetState.errorMessage}</ApiError>;
-  } else if (!apiGetState.isLoaded) {
-    return <ApiLoading />;
-  } else {
-    return (
-      <>
-        <H2Header h2='Orders'>
-          <Button
-            type='primary'
-            disabled={sendApiState.isSending}
-            onClick={newOrderHandler}
-          >
-            Place New Order
-          </Button>
-        </H2Header>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableHeader scope='col'>Created At</TableHeader>
-              <TableHeader scope='col'>Valid To</TableHeader>
-              <TableHeader scope='col'>Status</TableHeader>
-              <TableHeader scope='col'>Private Key</TableHeader>
-              <TableHeader scope='col'>Actions</TableHeader>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {apiGetState.orders &&
-              apiGetState.orders.map((m) => (
-                <TableRow key={m.id}>
-                  <TableHeader scope='row'>
-                    {convertUnixTime(m.created_at)}
-                  </TableHeader>
-                  <TableData>{convertUnixTime(m.valid_to)}</TableData>
-                  <TableData>
-                    {m.known_revoked ? 'revoked' : m.status}
-                  </TableData>
-                  <TableData>
-                    {m.finalized_key && (
-                      <Link to={`/privatekeys/${m.finalized_key.id}`}>
-                        {m.finalized_key.name}
-                      </Link>
-                    )}
-                  </TableData>
-                  <TableData>
-                    {m.status !== 'valid' && m.status !== 'invalid' && (
-                      <Button
-                        type='secondary'
-                        disabled={sendApiState.isSending}
-                        onClick={(event) => retryOrderHandler(event, m.id)}
-                      >
-                        Retry
-                      </Button>
-                    )}
-                    {m.status === 'valid' &&
-                      !m.known_revoked &&
-                      Date.now() / 1000 < m.valid_to && (
-                        <Button
-                          type='revoke'
-                          disabled={sendApiState.isSending}
-                          onClick={(event) => revokeCertHandler(event, m.id)}
+  return (
+    <PaperSingle>
+      <TitleBar title='ACME Orders' headerComponent='h3'>
+        <Button
+          variant='contained'
+          type='submit'
+          size='small'
+          onClick={newOrderHandler}
+        >
+          Place New Order
+        </Button>
+      </TitleBar>
+      {!apiGetState.isLoaded && <ApiLoading />}
+      {apiGetState.errorMessage && (
+        <ApiError>{apiGetState.errorMessage}</ApiError>
+      )}
+      {apiGetState.isLoaded && !apiGetState.errorMessage && (
+        <>
+          <Table size='small'>
+            <TableHead>
+              <TableHeaderRow headers={tableHeaders} />
+            </TableHead>
+            <TableBody>
+              {apiGetState?.all_orders?.orders?.length > 0 &&
+                apiGetState.all_orders.orders.map((o) => (
+                  <TableRow key={o.id}>
+                    <TableCell>{convertUnixTime(o.created_at)}</TableCell>
+                    <TableCell>{convertUnixTime(o.valid_to)}</TableCell>
+                    <TableCell>
+                      {o.known_revoked
+                        ? 'Revoked'
+                        : o.status.charAt(0).toUpperCase() + o.status.slice(1)}
+                    </TableCell>
+                    <TableCell>
+                      {o.finalized_key && (
+                        <Link
+                          component={RouterLink}
+                          to={`/privatekeys/${o.finalized_key.id}`}
                         >
-                          Revoke
+                          {o.finalized_key.name}
+                        </Link>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {o.status !== 'valid' && o.status !== 'invalid' && (
+                        <Button
+                          variant='contained'
+                          size='small'
+                          color='info'
+                          type='submit'
+                          disabled={sendApiState.isSending}
+                          onClick={(event) => retryOrderHandler(event, o.id)}
+                        >
+                          Retry
                         </Button>
                       )}
-                  </TableData>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </>
-    );
-  }
+                      {o.status === 'valid' &&
+                        !o.known_revoked &&
+                        Date.now() / 1000 < o.valid_to && (
+                          <Button
+                            variant='contained'
+                            size='small'
+                            color='error'
+                            type='submit'
+                            disabled={sendApiState.isSending}
+                            onClick={(event) => revokeCertHandler(event, o.id)}
+                          >
+                            Revoke
+                          </Button>
+                        )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+          <TablePagination count={apiGetState?.all_orders?.total_records} />
+        </>
+      )}
+    </PaperSingle>
+  );
 };
 
 export default Orders;
