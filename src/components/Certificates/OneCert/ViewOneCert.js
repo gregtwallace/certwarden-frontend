@@ -16,9 +16,6 @@ import H2Header from '../../UI/Header/H2Header';
 
 import Orders from './Orders/Orders';
 
-// TODO: Revoke functionality
-// TODO: CSR fields
-
 const ViewOneCert = () => {
   const { id } = useParams();
 
