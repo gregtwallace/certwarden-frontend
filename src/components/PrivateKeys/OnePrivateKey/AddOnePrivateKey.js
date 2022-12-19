@@ -8,18 +8,30 @@ import { newId } from '../../../App';
 
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
-import H2Header from '../../UI/Header/H2Header';
-import Button from '../../UI/Button/Button';
-import Form from '../../UI/Form/Form';
-import FormInformation from '../../UI/Form/FormInformation';
-import InputSelect from '../../UI/Form/InputSelect';
-import InputText from '../../UI/Form/InputText';
-import InputTextArea from '../../UI/Form/InputTextArea';
-import FormError from '../../UI/Form/FormError';
+import InputSelect from '../../UI/FormMui/InputSelect';
+import Form from '../../UI/FormMui/Form';
+import FormButton from '../../UI/FormMui/FormButton';
+import FormContainer from '../../UI/FormMui/FormContainer';
+import FormError from '../../UI/FormMui/FormError';
+import InputTextArea from '../../UI/FormMui/InputTextArea';
+import InputTextField from '../../UI/FormMui/InputTextField';
+import TitleBar from '../../UI/Header/TitleBar';
+import FormFooter from '../../UI/FormMui/FormFooter';
+
+const keySources = [
+  {
+    value: 0,
+    name: 'Generate',
+  },
+  {
+    value: 1,
+    name: 'Paste PEM',
+  },
+];
 
 const AddOnePrivateKey = () => {
   // fetch valid options (for private keys this is the algorithms list)
-  const [ apiGetState ] = useAxiosGet(
+  const [apiGetState] = useAxiosGet(
     `/v1/privatekeys/${newId}`,
     'private_key_options',
     true
@@ -29,6 +41,7 @@ const AddOnePrivateKey = () => {
   const navigate = useNavigate();
 
   const blankFormState = {
+    key_source: '',
     private_key: {
       name: '',
       description: '',
@@ -45,7 +58,20 @@ const AddOnePrivateKey = () => {
       ...prevState,
       private_key: {
         ...prevState.private_key,
-        [event.target.id]: event.target.value,
+        [event.target.name]: event.target.value,
+      },
+    }));
+  };
+
+  // on key change, clear out alg value and pem also
+  const keySourceChangeHandler = (event) => {
+    setFormState((prevState) => ({
+      ...prevState,
+      key_source: event.target.value,
+      private_key: {
+        ...prevState.private_key,
+        algorithm_value: '',
+        pem: '',
       },
     }));
   };
@@ -71,11 +97,18 @@ const AddOnePrivateKey = () => {
     if (!isNameValid(formState.private_key.name)) {
       validationErrors.name = true;
     }
-    
+
     // ensure algo or pem
-    if (formState.private_key.algorithm_value === '' && formState.private_key.pem === '') {
+    if (formState.key_source === '') {
+      validationErrors.key_source = true;
+    }
+
+    // if algo, confirm selected
+    if (
+      formState.key_source === 0 &&
+      formState.private_key.algorithm_value === ''
+    ) {
       validationErrors.algorithm_value = true;
-      validationErrors.pem = true;
     }
 
     setFormState((prevState) => ({
@@ -87,13 +120,15 @@ const AddOnePrivateKey = () => {
     }
     //
 
-    sendData(`/v1/privatekeys`, 'POST', formState.private_key, true).then((success) => {
-      if (success) {
-        // back to the private keys page
-        //navigate('.');
-        navigate('/privatekeys');
+    sendData(`/v1/privatekeys`, 'POST', formState.private_key, true).then(
+      (success) => {
+        if (success) {
+          // back to the private keys page
+          //navigate('.');
+          navigate('/privatekeys');
+        }
       }
-    });
+    );
   };
 
   if (apiGetState.errorMessage) {
@@ -102,76 +137,78 @@ const AddOnePrivateKey = () => {
     return <ApiLoading />;
   } else {
     return (
-      <>
-        <H2Header h2='Private Keys - Add' />
+      <FormContainer>
+        <TitleBar title='Create Private Key' />
+
         <Form onSubmit={submitFormHandler}>
           {sendApiState.errorMessage && (
             <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>
           )}
 
-          <InputText
+          <InputTextField
             label='Name'
             id='name'
-            name='name'
             value={formState.private_key.name}
             onChange={inputChangeHandler}
-            invalid={formState.validationErrors.name && true}
+            error={formState.validationErrors.name && true}
           />
-          <InputText
+
+          <InputTextField
             label='Description'
             id='description'
-            name='description'
             value={formState.private_key.description}
             onChange={inputChangeHandler}
           />
-          <FormInformation>
-            <strong>Select One of:</strong>
-          </FormInformation>
+
           <InputSelect
-            label='1) Generate Using Algorithm'
-            id='algorithm_value'
-            name='algorithm_value'
-            options={apiGetState.private_key_options.key_algorithms}
-            value={formState.private_key.algorithm_value}
-            onChange={inputChangeHandler}
-            defaultValue=''
-            defaultName='- Select an Algorithm / Do Not Generate -'
-            disabled={formState.private_key.pem && true}
-            invalid={formState.validationErrors.algorithm_value && true}
-          />
-          <FormInformation>
-            <strong>- OR -</strong>
-          </FormInformation>
-          <InputTextArea
-            label='2) Paste PEM Content'
-            id='pem'
-            name='pem'
-            rows='8'
-            value={formState.private_key.pem}
-            onChange={inputChangeHandler}
-            disabled={formState.private_key.algorithm_value && true}
-            invalid={formState.validationErrors.pem && true}
+            label='Key Source'
+            id='key_source'
+            options={keySources}
+            value={formState.key_source}
+            onChange={keySourceChangeHandler}
+            error={formState.validationErrors.key_source && true}
           />
 
-          <Button type='submit' disabled={sendApiState.isSending}>
-            Submit
-          </Button>
-          <Button
-            type='reset'
-            onClick={resetClickHandler}
-            disabled={sendApiState.isSending}
-          >
-            Reset
-          </Button>
-          <Button
-            type='cancel'
-            onClick={cancelClickHandler}
-            disabled={sendApiState.isSending}
-          >
-            Cancel
-          </Button>
+          {formState.key_source === 0 && (
+            <InputSelect
+              label='Key Generation Algorithm'
+              id='algorithm_value'
+              options={apiGetState.private_key_options.key_algorithms}
+              value={formState.private_key.algorithm_value}
+              onChange={inputChangeHandler}
+              error={formState.validationErrors.algorithm_value && true}
+            />
+          )}
+
+          {formState.key_source === 1 && (
+            <InputTextArea
+              label='PEM Content'
+              id='pem'
+              value={formState.private_key.pem}
+              onChange={inputChangeHandler}
+              invalid={formState.validationErrors.pem && true}
+            />
+          )}
+
+          <FormFooter>
+            <FormButton
+              type='cancel'
+              onClick={cancelClickHandler}
+              disabled={sendApiState.isSending}
+            >
+              Cancel
+            </FormButton>
+            <FormButton
+              type='reset'
+              onClick={resetClickHandler}
+              disabled={sendApiState.isSending}
+            >
+              Reset
+            </FormButton>
+            <FormButton type='submit'>Create</FormButton>
+          </FormFooter>
         </Form>
-      </>
+      </FormContainer>
     );
   }
 };
