@@ -107,6 +107,7 @@ const AllCertificates = () => {
                     <TableCell>{c.subject}</TableCell>
                     <TableCell>
                       {!c.challenge_method.enabled && <Flag type='method' />}
+                      {c.api_key_via_url && <Flag type='legacy_api' />}
                     </TableCell>
                     <TableCell>
                       <Link
@@ -128,7 +129,9 @@ const AllCertificates = () => {
                 ))}
             </TableBody>
           </Table>
-          <TablePagination count={apiGetState?.all_certificates?.total_records} />
+          <TablePagination
+            count={apiGetState?.all_certificates?.total_records}
+          />
         </>
       )}
     </PaperSingle>

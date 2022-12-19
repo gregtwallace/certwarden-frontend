@@ -18,6 +18,7 @@ import { newId } from '../../App';
 
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
+import Flag from '../UI/Flag/Flag';
 import PaperSingle from '../UI/Paper/PaperSingle';
 import TableHeaderRow from '../UI/TableMui/TableHeaderRow';
 import TitleBar from '../UI/Header/TitleBar';
@@ -34,6 +35,11 @@ const tableHeaders = [
     id: 'description',
     label: 'Description',
     sortable: true,
+  },
+  {
+    id: 'flags',
+    label: 'Flags',
+    sortable: false,
   },
   {
     id: 'algorithm',
@@ -94,6 +100,9 @@ const AllPrivateKeys = () => {
                       </Link>
                     </TableCell>
                     <TableCell>{k.description}</TableCell>
+                    <TableCell>
+                      {k.api_key_via_url && <Flag type='legacy_api' />}
+                    </TableCell>
                     <TableCell>{k.algorithm.name}</TableCell>
                   </TableRow>
                 ))}

@@ -87,6 +87,9 @@ const Dashboard = () => {
                       {m.certificate.acme_account.is_staging && (
                         <Flag type='staging' />
                       )}
+                      {m.certificate.api_key_via_url && (
+                        <Flag type='legacy_api' />
+                      )}
                       {!m.certificate.challenge_method.enabled && (
                         <Flag type='method' />
                       )}

@@ -18,6 +18,12 @@ const Flag = (props) => {
       text = 'Invalid Method';
       break;
     
+    case 'legacy_api':
+      color = 'white';
+      bgcolor = 'warning.dark';
+      text = 'Legacy API';
+      break;
+
     case 'expire-days':
       switch (true) {
         case props.days <= 30:
