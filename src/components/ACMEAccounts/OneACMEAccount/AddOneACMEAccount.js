@@ -126,7 +126,6 @@ const AddOneACMEAccount = () => {
       validationErrors: validationErrors,
     }));
     if (Object.keys(validationErrors).length > 0) {
-
       return false;
     }
     // form validation -- end
@@ -233,9 +232,12 @@ const AddOneACMEAccount = () => {
             </Link>
           </InputCheckbox>
 
-          {apiSendState.errorMessage && formState.validationErrors.length > 0 && (
-            <FormError>Error Posting -- {apiSendState.errorMessage}</FormError>
-          )}
+          {apiSendState.errorMessage &&
+            formState.validationErrors.length > 0 && (
+              <FormError>
+                Error Posting -- {apiSendState.errorMessage}
+              </FormError>
+            )}
 
           <FormFooter>
             <Button
@@ -253,7 +255,7 @@ const AddOneACMEAccount = () => {
               Reset
             </Button>
             <Button type='submit' disabled={apiSendState.isSending}>
-              Create
+              Submit
             </Button>
           </FormFooter>
         </Form>
