@@ -142,10 +142,6 @@ const AddOnePrivateKey = () => {
 
       {apiGetState.isLoaded && !apiGetState.errorMessage && (
         <Form onSubmit={submitFormHandler}>
-          {sendApiState.errorMessage && (
-            <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>
-          )}
-
           <InputTextField
             label='Name'
             id='name'
@@ -191,6 +187,10 @@ const AddOnePrivateKey = () => {
             />
           )}
 
+          {sendApiState.errorMessage && (
+            <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>
+          )}
+
           <FormFooter>
             <FormButton
               type='cancel'
@@ -206,7 +206,9 @@ const AddOnePrivateKey = () => {
             >
               Reset
             </FormButton>
-            <FormButton type='submit'>Create</FormButton>
+            <FormButton type='submit' disabled={sendApiState.isSending}>
+              Create
+            </FormButton>
           </FormFooter>
         </Form>
       )}
