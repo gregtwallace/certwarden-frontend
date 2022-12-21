@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useAxiosGet from '../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../hooks/useAxiosSend';
 import { isNameValid } from '../../../helpers/form-validation';
+import { isSubset } from '../../../helpers/object-subset';
 
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
@@ -32,7 +33,7 @@ const EditOnePrivateKey = () => {
   // set dummy state prior to apiGet loading
   // only includes values that will be used in payload
   const dummyForm = {
-    private_key: {
+    form: {
       name: '',
       description: '',
       api_key_via_url: null,
@@ -45,7 +46,7 @@ const EditOnePrivateKey = () => {
   // Function to set the form equal to the current API state
   const setFormToApi = useCallback(() => {
     setFormState({
-      private_key: {
+      form: {
         name: apiGetState.private_key.name,
         description: apiGetState.private_key.description,
         api_key_via_url: apiGetState.private_key.api_key_via_url,
@@ -66,8 +67,8 @@ const EditOnePrivateKey = () => {
   const inputChangeHandler = (event) => {
     setFormState((prevState) => ({
       ...prevState,
-      private_key: {
-        ...prevState.private_key,
+      form: {
+        ...prevState.form,
         [event.target.name]: event.target.value,
       },
     }));
@@ -77,8 +78,8 @@ const EditOnePrivateKey = () => {
     setFormState((prevState) => {
       return {
         ...prevState,
-        private_key: {
-          ...prevState.private_key,
+        form: {
+          ...prevState.form,
           [event.target.name]: event.target.checked,
         },
       };
@@ -120,7 +121,7 @@ const EditOnePrivateKey = () => {
     // client side validation
     let validationErrors = {};
     // check name
-    if (!isNameValid(formState.private_key.name)) {
+    if (!isNameValid(formState.form.name)) {
       validationErrors.name = true;
     }
 
@@ -133,7 +134,7 @@ const EditOnePrivateKey = () => {
     }
     // client side validation -- end
 
-    sendData(`/v1/privatekeys/${id}`, 'PUT', formState.private_key, true).then(
+    sendData(`/v1/privatekeys/${id}`, 'PUT', formState.form, true).then(
       (success) => {
         if (success) {
           // back to the private keys page
@@ -148,11 +149,7 @@ const EditOnePrivateKey = () => {
     apiGetState.isLoaded &&
     !apiGetState.errorMessage &&
     JSON.stringify(dummyForm.form) !== JSON.stringify(formState.form);
-  const formUnchanged =
-    apiGetState.private_key.name === formState.private_key.name &&
-    apiGetState.private_key.description === formState.private_key.description &&
-    apiGetState.private_key.api_key_via_url ===
-      formState.private_key.api_key_via_url;
+  const formUnchanged = isSubset(apiGetState.private_key, formState.form);
 
   return (
     <FormContainer>
@@ -176,7 +173,7 @@ const EditOnePrivateKey = () => {
       {renderApiItems && (
         <>
           <DialogAlert
-            title={`Are you sure you want to delete ${formState.private_key.name}?`}
+            title={`Are you sure you want to delete ${formState.form.name}?`}
             open={deleteOpen}
             onCancel={deleteCancelHandler}
             onConfirm={deleteConfirmHandler}
@@ -188,7 +185,7 @@ const EditOnePrivateKey = () => {
             <InputTextField
               label='Name'
               id='name'
-              value={formState.private_key.name}
+              value={formState.form.name}
               onChange={inputChangeHandler}
               error={formState.validationErrors.name && true}
             />
@@ -196,7 +193,7 @@ const EditOnePrivateKey = () => {
             <InputTextField
               label='Description'
               id='description'
-              value={formState.private_key.description}
+              value={formState.form.description}
               onChange={inputChangeHandler}
             />
 
@@ -219,7 +216,7 @@ const EditOnePrivateKey = () => {
 
             <InputCheckbox
               id='api_key_via_url'
-              checked={formState.private_key.api_key_via_url}
+              checked={formState.form.api_key_via_url}
               onChange={checkChangeHandler}
             >
               Allow API Key via URL (for Legacy Clients)

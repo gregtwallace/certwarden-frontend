@@ -100,11 +100,7 @@ const RolloverAccountKey = () => {
 
   // consts related to rendering
   const renderApiItems =
-    apiGetAccountState.isLoaded &&
-    !apiGetAccountState.errorMessage &&
-    JSON.stringify(dummyForm.form) !== JSON.stringify(formState.form);
-  const formUnchanged =
-    apiGetAccountState.acme_account.email === formState.form.email;
+    apiGetAccountState.isLoaded && !apiGetAccountState.errorMessage;
 
   // vars related to api
   // build available keys list
@@ -192,7 +188,7 @@ const RolloverAccountKey = () => {
             </Button>
             <Button
               type='submit'
-              disabled={apiSendState.isSending || formUnchanged}
+              disabled={apiSendState.isSending}
             >
               Submit
             </Button>

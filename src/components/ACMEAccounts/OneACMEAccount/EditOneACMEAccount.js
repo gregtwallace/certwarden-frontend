@@ -5,6 +5,7 @@ import useAxiosGet from '../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../hooks/useAxiosSend';
 import { isNameValid } from '../../../helpers/form-validation';
 import { devMode } from '../../../helpers/environment';
+import { isSubset } from '../../../helpers/object-subset';
 
 import { Typography } from '@mui/material';
 
@@ -188,9 +189,7 @@ const EditOneACMEAccount = () => {
     apiGetState.isLoaded &&
     !apiGetState.errorMessage &&
     JSON.stringify(dummyForm.form) !== JSON.stringify(formState.form);
-  const formUnchanged =
-    apiGetState.acme_account.name === formState.form.name &&
-    apiGetState.acme_account.description === formState.form.description;
+  const formUnchanged = isSubset(apiGetState.acme_account, formState.form);
   const canDoAccountActions =
     apiGetState.acme_account.status === 'valid' &&
     apiGetState.acme_account.kid !== '';

@@ -40,9 +40,9 @@ const AddOnePrivateKey = () => {
   const [apiSendState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
-  const blankFormState = {
+  const emptyForm = {
     key_source: '',
-    private_key: {
+    form: {
       name: '',
       description: '',
       algorithm_value: '',
@@ -50,14 +50,14 @@ const AddOnePrivateKey = () => {
     },
     validationErrors: {},
   };
-  const [formState, setFormState] = useState(blankFormState);
+  const [formState, setFormState] = useState(emptyForm);
 
   // data change handler
   const inputChangeHandler = (event) => {
     setFormState((prevState) => ({
       ...prevState,
-      private_key: {
-        ...prevState.private_key,
+      form: {
+        ...prevState.form,
         [event.target.name]: event.target.value,
       },
     }));
@@ -68,8 +68,8 @@ const AddOnePrivateKey = () => {
     setFormState((prevState) => ({
       ...prevState,
       key_source: event.target.value,
-      private_key: {
-        ...prevState.private_key,
+      form: {
+        ...prevState.form,
         algorithm_value: '',
         pem: '',
       },
@@ -79,7 +79,7 @@ const AddOnePrivateKey = () => {
   // button handlers
   const resetClickHandler = (event) => {
     event.preventDefault();
-    setFormState(blankFormState);
+    setFormState(emptyForm);
   };
   const cancelClickHandler = (event) => {
     event.preventDefault();
@@ -94,7 +94,7 @@ const AddOnePrivateKey = () => {
     /// form validation
     let validationErrors = [];
     // name
-    if (!isNameValid(formState.private_key.name)) {
+    if (!isNameValid(formState.form.name)) {
       validationErrors.name = true;
     }
 
@@ -106,7 +106,7 @@ const AddOnePrivateKey = () => {
     // if algo, confirm selected
     if (
       formState.key_source === 0 &&
-      formState.private_key.algorithm_value === ''
+      formState.form.algorithm_value === ''
     ) {
       validationErrors.algorithm_value = true;
     }
@@ -120,7 +120,7 @@ const AddOnePrivateKey = () => {
     }
     //
 
-    sendData(`/v1/privatekeys`, 'POST', formState.private_key, true).then(
+    sendData(`/v1/privatekeys`, 'POST', formState.form, true).then(
       (response) => {
         if (response) {
           // back to the private keys page
@@ -129,6 +129,9 @@ const AddOnePrivateKey = () => {
       }
     );
   };
+
+  // consts related to rendering
+  const renderApiItems = apiGetState.isLoaded && !apiGetState.errorMessage;
 
   return (
     <FormContainer>
@@ -139,12 +142,12 @@ const AddOnePrivateKey = () => {
         <ApiError>{apiGetState.errorMessage}</ApiError>
       )}
 
-      {apiGetState.isLoaded && !apiGetState.errorMessage && (
+      {renderApiItems && (
         <Form onSubmit={submitFormHandler}>
           <InputTextField
             label='Name'
             id='name'
-            value={formState.private_key.name}
+            value={formState.form.name}
             onChange={inputChangeHandler}
             error={formState.validationErrors.name && true}
           />
@@ -152,7 +155,7 @@ const AddOnePrivateKey = () => {
           <InputTextField
             label='Description'
             id='description'
-            value={formState.private_key.description}
+            value={formState.form.description}
             onChange={inputChangeHandler}
           />
 
@@ -170,7 +173,7 @@ const AddOnePrivateKey = () => {
               label='Key Generation Algorithm'
               id='algorithm_value'
               options={apiGetState.private_key_options.key_algorithms}
-              value={formState.private_key.algorithm_value}
+              value={formState.form.algorithm_value}
               onChange={inputChangeHandler}
               error={formState.validationErrors.algorithm_value && true}
             />
@@ -180,15 +183,18 @@ const AddOnePrivateKey = () => {
             <InputTextArea
               label='PEM Content'
               id='pem'
-              value={formState.private_key.pem}
+              value={formState.form.pem}
               onChange={inputChangeHandler}
               invalid={formState.validationErrors.pem && true}
             />
           )}
 
-          {apiSendState.errorMessage && formState.validationErrors.length > 0 && (
-            <FormError>Error Posting -- {apiSendState.errorMessage}</FormError>
-          )}
+          {apiSendState.errorMessage &&
+            formState.validationErrors.length > 0 && (
+              <FormError>
+                Error Posting -- {apiSendState.errorMessage}
+              </FormError>
+            )}
 
           <FormFooter>
             <Button
