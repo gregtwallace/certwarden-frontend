@@ -9,15 +9,19 @@ import {
 } from '../../../helpers/form-validation';
 import { newId } from '../../../App';
 
+import { Link } from '@mui/material';
+
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
-import H2Header from '../../UI/Header/H2Header';
 import Button from '../../UI/Button/Button';
-import Form from '../../UI/Form/Form';
-import InputText from '../../UI/Form/InputText';
-import InputSelect from '../../UI/Form/InputSelect';
-import InputCheckbox from '../../UI/Form/InputCheckbox';
-import FormError from '../../UI/Form/FormError';
+import InputCheckbox from '../../UI/FormMui/InputCheckbox';
+import InputSelect from '../../UI/FormMui/InputSelect';
+import Form from '../../UI/FormMui/Form';
+import FormContainer from '../../UI/FormMui/FormContainer';
+import FormError from '../../UI/FormMui/FormError';
+import FormFooter from '../../UI/FormMui/FormFooter';
+import InputTextField from '../../UI/FormMui/InputTextField';
+import TitleBar from '../../UI/Header/TitleBar';
 
 const AddOneACMEAccount = () => {
   // fetch valid options (for private keys this is the algorithms list)
@@ -35,7 +39,7 @@ const AddOneACMEAccount = () => {
       name: '',
       description: '',
       email: '',
-      private_key_id: -2,
+      private_key_id: '',
       is_staging: false,
       accepted_tos: false,
     },
@@ -51,7 +55,7 @@ const AddOneACMEAccount = () => {
         ...prevState,
         acme_account: {
           ...prevState.acme_account,
-          [event.target.id]: event.target.value,
+          [event.target.name]: event.target.value,
         },
       };
     });
@@ -64,7 +68,7 @@ const AddOneACMEAccount = () => {
         ...prevState,
         acme_account: {
           ...prevState.acme_account,
-          [event.target.id]: parseInt(event.target.value),
+          [event.target.name]: parseInt(event.target.value),
         },
       };
     });
@@ -77,7 +81,7 @@ const AddOneACMEAccount = () => {
         ...prevState,
         acme_account: {
           ...prevState.acme_account,
-          [event.target.id]: event.target.checked,
+          [event.target.name]: event.target.checked,
         },
       };
     });
@@ -98,7 +102,7 @@ const AddOneACMEAccount = () => {
   const submitFormHandler = (event) => {
     event.preventDefault();
 
-    /// form validation
+    // form validation
     let validationErrors = [];
     // name
     if (!isNameValid(formState.acme_account.name)) {
@@ -109,7 +113,7 @@ const AddOneACMEAccount = () => {
       validationErrors.email = true;
     }
     // check private key is selected
-    if (formState.acme_account.private_key_id === -2) {
+    if (formState.acme_account.private_key_id === '') {
       validationErrors.private_key_id = true;
     }
     // ToS must be accepted
@@ -122,9 +126,10 @@ const AddOneACMEAccount = () => {
       validationErrors: validationErrors,
     }));
     if (Object.keys(validationErrors).length > 0) {
+
       return false;
     }
-    ///
+    // form validation -- end
 
     sendData(`/v1/acmeaccounts`, 'POST', formState.acme_account, true).then(
       (response) => {
@@ -136,14 +141,15 @@ const AddOneACMEAccount = () => {
     );
   };
 
-  if (apiGetState.errorMessage) {
-    return <ApiError>{apiGetState.errorMessage}</ApiError>;
-  } else if (!apiGetState.isLoaded) {
-    return <ApiLoading />;
-  } else {
-    /// Logic for some of the components so JSX is cleaner
+  // consts related to rendering
+  const renderApiItems = apiGetState.isLoaded && !apiGetState.errorMessage;
+
+  // vars related to api
+  var tos_url;
+  var availableKeys;
+
+  if (renderApiItems) {
     // tos URL (prod vs. staging)
-    var tos_url;
     if (!formState.acme_account.is_staging) {
       tos_url = apiGetState.acme_account_options.tos_url;
     } else {
@@ -152,69 +158,64 @@ const AddOneACMEAccount = () => {
 
     // build options for available keys
     // if there are available keys, populate them
-    var availableKeys;
-    var defaultKeysName;
-    var defaultKeysValue = -2;
     if (apiGetState?.acme_account_options?.private_keys) {
-      defaultKeysName = '- Select a Key -';
       availableKeys = apiGetState.acme_account_options.private_keys.map(
         (m) => ({
           value: parseInt(m.id),
           name: m.name + ' (' + m.algorithm.name + ')',
         })
       );
-    } else {
-      defaultKeysName = '- No Keys Available -'
     }
-    ///
+  }
+  // vars related to api -- end
 
-    return (
-      <>
-        <H2Header h2='ACME Accounts - Add' />
-        {apiSendState.errorMessage && (
-          <FormError>Error Posting -- {apiSendState.errorMessage}</FormError>
-        )}
+  return (
+    <FormContainer>
+      <TitleBar title='New ACME Account' />
 
+      {!apiGetState.isLoaded && <ApiLoading />}
+      {apiGetState.errorMessage && (
+        <ApiError>{apiGetState.errorMessage}</ApiError>
+      )}
+
+      {renderApiItems && (
         <Form onSubmit={submitFormHandler}>
-          <InputText
-            label='Account Name'
+          <InputTextField
+            label='Name'
             id='name'
-            name='name'
             value={formState.acme_account.name}
             onChange={stringInputChangeHandler}
-            invalid={formState.validationErrors.name && true}
+            error={formState.validationErrors.name && true}
           />
-          <InputText
+
+          <InputTextField
             label='Description'
             id='description'
-            name='description'
             value={formState.acme_account.description}
             onChange={stringInputChangeHandler}
           />
-          <InputText
-            label="E-Mail Address (will be overwritten if account already exists with Let's Encrypt)"
+
+          <InputTextField
+            label='Contact E-Mail Address'
             id='email'
             name='email'
             value={formState.acme_account.email}
             onChange={stringInputChangeHandler}
-            invalid={formState.validationErrors.email && true}
+            error={formState.validationErrors.email && true}
           />
+
           <InputSelect
             label='Private Key'
             id='private_key_id'
-            name='private_key_id'
             options={availableKeys}
             value={formState.acme_account.private_key_id}
             onChange={intInputChangeHandler}
-            defaultValue={defaultKeysValue}
-            defaultName={defaultKeysName}
-            disableEmptyValue
-            invalid={formState.validationErrors.private_key_id}
+            error={formState.validationErrors.private_key_id && true}
           />
 
           <InputCheckbox
             id='is_staging'
-            checked={formState.acme_account.is_staging ? true : false}
+            checked={formState.acme_account.is_staging}
             onChange={checkChangeHandler}
           >
             Staging Environment Account
@@ -222,42 +223,43 @@ const AddOneACMEAccount = () => {
 
           <InputCheckbox
             id='accepted_tos'
-            checked={formState.acme_account.accepted_tos ? true : false}
+            checked={formState.acme_account.accepted_tos}
             onChange={checkChangeHandler}
-            invalid={formState.validationErrors.accepted_tos}
+            error={formState.validationErrors.accepted_tos && true}
           >
             Accept{' '}
-            <a href={tos_url} target='_blank' rel='noreferrer'>
+            <Link href={tos_url} target='_blank' rel='noreferrer'>
               Let's Encrypt Terms of Service
-            </a>
+            </Link>
           </InputCheckbox>
 
-          <Button
-            type='submit'
-            disabled={
-              apiSendState.isSending
-            }
-          >
-            Submit
-          </Button>
-          <Button
-            type='reset'
-            onClick={resetClickHandler}
-            disabled={apiSendState.isSending}
-          >
-            Reset
-          </Button>
-          <Button
-            type='cancel'
-            onClick={cancelClickHandler}
-            disabled={apiSendState.isSending}
-          >
-            Cancel
-          </Button>
+          {apiSendState.errorMessage && formState.validationErrors.length > 0 && (
+            <FormError>Error Posting -- {apiSendState.errorMessage}</FormError>
+          )}
+
+          <FormFooter>
+            <Button
+              type='cancel'
+              onClick={cancelClickHandler}
+              disabled={apiSendState.isSending}
+            >
+              Cancel
+            </Button>
+            <Button
+              type='reset'
+              onClick={resetClickHandler}
+              disabled={apiSendState.isSending}
+            >
+              Reset
+            </Button>
+            <Button type='submit' disabled={apiSendState.isSending}>
+              Create
+            </Button>
+          </FormFooter>
         </Form>
-      </>
-    );
-  }
+      )}
+    </FormContainer>
+  );
 };
 
 export default AddOneACMEAccount;

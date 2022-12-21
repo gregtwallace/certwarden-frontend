@@ -15,6 +15,9 @@ const InputSelect = (props) => {
     case 'key_source':
       errorMessage = 'Key source must be selected.';
       break;
+    case 'private_key_id':
+      errorMessage = 'A private key must be selected.';
+      break;
 
     default:
       errorMessage = 'This field has an error.';
