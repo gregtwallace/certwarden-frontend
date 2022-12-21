@@ -4,19 +4,23 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useAxiosGet from '../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../hooks/useAxiosSend';
 import { isNameValid } from '../../../helpers/form-validation';
-import { convertUnixTime } from '../../../helpers/time';
+import { devMode } from '../../../helpers/environment';
+
+import { Typography } from '@mui/material';
 
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
-import InputText from '../../UI/Form/InputText';
-import InputSelect from '../../UI/Form/InputSelect';
-import InputCheckbox from '../../UI/Form/InputCheckbox';
-import FormInformation from '../../UI/Form/FormInformation';
-import FormError from '../../UI/Form/FormError';
 import Button from '../../UI/Button/Button';
-import Form from '../../UI/Form/Form';
-import Modal from '../../UI/Modal/Modal';
-import H2Header from '../../UI/Header/H2Header';
+import DialogAlert from '../../UI/Dialog/DialogAlert';
+import Form from '../../UI/FormMui/Form';
+import FormContainer from '../../UI/FormMui/FormContainer';
+import FormError from '../../UI/FormMui/FormError';
+import FormFooter from '../../UI/FormMui/FormFooter';
+import FormRowRight from '../../UI/FormMui/FormRowRight';
+import InputCheckbox from '../../UI/FormMui/InputCheckbox';
+import InputSelect from '../../UI/FormMui/InputSelect';
+import InputTextField from '../../UI/FormMui/InputTextField';
+import TitleBar from '../../UI/Header/TitleBar';
 
 // TODO
 // Add: refresh LE status button
@@ -29,13 +33,13 @@ const EditOneACMEAccount = () => {
     true
   );
 
-  const [sendApiState, sendData] = useAxiosSend();
+  const [apiSendState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
   // set dummy state prior to apiGet loading
   // only includes values that will be used in payload
   const [formState, setFormState] = useState({
-    acme_account: {
+    form: {
       name: '',
       description: '',
     },
@@ -45,7 +49,7 @@ const EditOneACMEAccount = () => {
   // Function to set the form equal to the current API state
   const setFormToApi = useCallback(() => {
     setFormState({
-      acme_account: {
+      form: {
         name: apiGetState.acme_account.name,
         description: apiGetState.acme_account.description,
       },
@@ -53,8 +57,8 @@ const EditOneACMEAccount = () => {
     });
   }, [apiGetState]);
 
-  const [deactivateModal, setDeactivateModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deactivateOpen, setDeactivateOpen] = useState(false);
 
   useEffect(() => {
     if (apiGetState.isLoaded && !apiGetState.errorMessage) {
@@ -66,9 +70,9 @@ const EditOneACMEAccount = () => {
   const inputChangeHandler = (event) => {
     setFormState((prevState) => ({
       ...prevState,
-      acme_account: {
-        ...prevState.acme_account,
-        [event.target.id]: event.target.value,
+      form: {
+        ...prevState.form,
+        [event.target.name]: event.target.value,
       },
     }));
   };
@@ -81,71 +85,59 @@ const EditOneACMEAccount = () => {
   };
   const cancelClickHandler = (event) => {
     event.preventDefault();
-    //navigate('.');
-    navigate('/acmeaccounts');
+
+    navigate(-1);
   };
 
   // delete handlers
   const deleteClickHandler = () => {
-    setDeleteModal(true);
+    setDeleteOpen(true);
   };
   const deleteCancelHandler = () => {
-    setDeleteModal(false);
+    setDeleteOpen(false);
   };
   const deleteConfirmHandler = () => {
-    setDeleteModal(false);
-    sendData(
-      `/v1/acmeaccounts/${id}`,
-      'DELETE',
-      null,
-      true
-    ).then((success) => {
+    setDeleteOpen(false);
+    sendData(`/v1/acmeaccounts/${id}`, 'DELETE', null, true).then((success) => {
       if (success) {
         // back to the accounts page
-        //navigate('.');
-        navigate('/acmeaccounts');
+        navigate(-1);
       }
     });
   };
 
   // deactivate handlers
   const deactivateClickHandler = () => {
-    setDeactivateModal(true);
+    setDeactivateOpen(true);
   };
   const deactivateCancelHandler = () => {
-    setDeactivateModal(false);
+    setDeactivateOpen(false);
   };
   const deactivateConfirmHandler = () => {
-    setDeactivateModal(false);
+    setDeactivateOpen(false);
 
-    sendData(
-      `/v1/acmeaccounts/${id}/deactivate`,
-      'POST',
-      null,
-      true
-    ).then((success) => {
-      if (success) {
-        // update account from backend
-        updateGet();
+    sendData(`/v1/acmeaccounts/${id}/deactivate`, 'POST', null, true).then(
+      (success) => {
+        if (success) {
+          // update account from backend
+          updateGet();
+        }
       }
-    });
+    );
   };
 
   // register ACME account handler
   const registerClickHandler = (event) => {
     event.preventDefault();
 
-    sendData(
-      `/v1/acmeaccounts/${id}/new-account`,
-      'POST',
-      null,
-      true
-    ).then((success) => {
-      if (success) {
-        // update account from backend
-        updateGet();
+    sendData(`/v1/acmeaccounts/${id}/new-account`, 'POST', null, true).then(
+      (success) => {
+        if (success) {
+          // update account from backend
+          updateGet();
+        }
       }
-    });
+    );
   };
 
   // change email handler
@@ -164,10 +156,10 @@ const EditOneACMEAccount = () => {
   const submitFormHandler = (event) => {
     event.preventDefault();
 
-    /// client side validation
+    // client side validation
     let validationErrors = {};
     // check name
-    if (!isNameValid(formState.acme_account.name)) {
+    if (!isNameValid(formState.form.name)) {
       validationErrors.name = true;
     }
 
@@ -178,211 +170,222 @@ const EditOneACMEAccount = () => {
     if (Object.keys(validationErrors).length > 0) {
       return false;
     }
-    ///
+    // client side validation -- end
 
-    sendData(
-      `/v1/acmeaccounts/${id}`,
-      'PUT',
-      formState.acme_account,
-      true
-    ).then((success) => {
-      if (success) {
-        // back to the previous page
-        //navigate('.');
-        navigate('/acmeaccounts');
+    sendData(`/v1/acmeaccounts/${id}`, 'PUT', formState.form, true).then(
+      (success) => {
+        if (success) {
+          navigate(-1);
+        }
       }
-    });
+    );
   };
 
-  if (apiGetState.errorMessage) {
-    return <ApiError>{apiGetState.errorMessage}</ApiError>;
-  } else if (!apiGetState.isLoaded) {
-    return <ApiLoading />;
-  } else {
-    return (
-      <>
-        {deactivateModal && (
-          <Modal
-            title={`Deactivate Account - ${formState.acme_account.name}`}
-            hasCancel
-            onClickCancel={deactivateCancelHandler}
-            hasConfirm
-            onClickConfirm={deactivateConfirmHandler}
-          >
-            Are you sure you want to deactivate the acme account '
-            {formState.acme_account.name}' ?<br />
-            <strong className='text-danger'>
-              This process cannot be reversed! Ensure you understand all
-              consequences of this action before confirming!
-            </strong>
-          </Modal>
-        )}
-        {deleteModal && (
-          <Modal
-            title={`Delete Account - ${formState.acme_account.name}`}
-            hasCancel
-            onClickCancel={deleteCancelHandler}
-            hasConfirm
-            onClickConfirm={deleteConfirmHandler}
-          >
-            Are you sure you want to delete the acme account '
-            {formState.acme_account.name}' ?<br />
-            The account can be recovered as long as the associated key is not
-            deleted.
-          </Modal>
-        )}
-        <H2Header h2='ACME Account - Edit'>
-          {apiGetState.acme_account.status === 'valid' && (
+  // consts related to rendering
+  const renderApiItems = apiGetState.isLoaded && !apiGetState.errorMessage;
+  const formUnchanged =
+    apiGetState.acme_account.name === formState.form.name &&
+    apiGetState.acme_account.description === formState.form.description;
+  const canDoAccountActions =
+    apiGetState.acme_account.status === 'valid' &&
+    apiGetState.acme_account.kid !== '';
+  const canRegister =
+    apiGetState.acme_account.status === 'unknown' ||
+    apiGetState.acme_account.status === '' ||
+    apiGetState.acme_account.kid === '';
+
+  return (
+    <FormContainer>
+      <TitleBar title='Edit ACME Account'>
+        {renderApiItems && (
+          <>
             <Button
               type='deactivate'
               onClick={deactivateClickHandler}
-              disabled={sendApiState.isSending}
+              disabled={apiSendState.isSending || !canDoAccountActions}
             >
               Deactivate
             </Button>
-          )}
-          <Button
-            type='delete'
-            onClick={deleteClickHandler}
-            disabled={sendApiState.isSending}
-          >
-            Delete
-          </Button>
-        </H2Header>
-        <Form onSubmit={submitFormHandler}>
-          {sendApiState.errorMessage && (
-            <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>
-          )}
 
-          <InputText
-            label='Account Name'
-            id='name'
-            name='name'
-            value={formState.acme_account.name}
-            onChange={inputChangeHandler}
-            invalid={formState.validationErrors.name && true}
-          />
-          <InputText
-            label='Description'
-            id='description'
-            name='description'
-            value={formState.acme_account.description}
-            onChange={inputChangeHandler}
-          />
-          {/* TODO: Allow multiple email addresses */}
-          <InputText
-            label='E-Mail Address'
-            id='email'
-            name='email'
-            value={apiGetState.acme_account.email}
-            onChange={inputChangeHandler}
-            disabled
-          />
-          {apiGetState.acme_account.status === 'valid' &&
-            apiGetState.acme_account.kid !== '' && (
+            <Button
+              type='delete'
+              onClick={deleteClickHandler}
+              disabled={apiSendState.isSending}
+            >
+              Delete
+            </Button>
+          </>
+        )}
+      </TitleBar>
+
+      {!apiGetState.isLoaded && <ApiLoading />}
+      {apiGetState.errorMessage && (
+        <ApiError>{apiGetState.errorMessage}</ApiError>
+      )}
+
+      {renderApiItems && (
+        <>
+          <DialogAlert
+            title={`Are you sure you want to delete ${formState.form.name}?`}
+            open={deleteOpen}
+            onCancel={deleteCancelHandler}
+            onConfirm={deleteConfirmHandler}
+          >
+            The account can be recovered as long as the associated key is not
+            lost.
+          </DialogAlert>
+
+          <DialogAlert
+            title={`Are you sure you want to deactivate ${formState.form.name}?`}
+            open={deactivateOpen}
+            onCancel={deactivateCancelHandler}
+            onConfirm={deactivateConfirmHandler}
+          >
+            This process cannot be reversed! Ensure you understand all
+            consequences of this action before confirming!
+          </DialogAlert>
+
+          <Form onSubmit={submitFormHandler}>
+            <InputTextField
+              label='Name'
+              id='name'
+              value={formState.form.name}
+              onChange={inputChangeHandler}
+              error={formState.validationErrors.name && true}
+            />
+
+            <InputTextField
+              label='Description'
+              id='description'
+              value={formState.form.description}
+              onChange={inputChangeHandler}
+            />
+
+            <InputTextField
+              label='Contact E-Mail Address'
+              id='email'
+              name='email'
+              value={
+                apiGetState.acme_account.email
+                  ? apiGetState.acme_account.email
+                  : 'None'
+              }
+              disabled
+            />
+
+            <FormRowRight>
               <Button
-                type='primary'
+                type='info'
                 onClick={changeEmailClickHandler}
-                disabled={sendApiState.isSending}
+                disabled={apiSendState.isSending || !canDoAccountActions}
               >
                 Change Email
               </Button>
-            )}
+            </FormRowRight>
 
-          <InputSelect
-            label='Private Key'
-            id='privateKey'
-            defaultName={
-              apiGetState.acme_account.private_key.name +
-              ' (' +
-              apiGetState.acme_account.private_key.algorithm.name +
-              ')'
-            }
-            disabled
-          />
-          {apiGetState.acme_account.status === 'valid' &&
-            apiGetState.acme_account.kid !== '' && (
+            <InputSelect
+              label='Private Key'
+              id='private_key_id'
+              options={[
+                {
+                  value: 0,
+                  name:
+                    apiGetState.acme_account.private_key.name +
+                    ' (' +
+                    apiGetState.acme_account.private_key.algorithm.name +
+                    ')',
+                },
+              ]}
+              value={0}
+              disabled
+            />
+
+            <FormRowRight>
               <Button
-                type='primary'
+                type='info'
                 onClick={rolloverClickHandler}
-                disabled={sendApiState.isSending}
+                disabled={apiSendState.isSending || !canDoAccountActions}
               >
-                Rollover Account Key
+                Rollover Key
               </Button>
+            </FormRowRight>
+
+            {devMode && (
+              <Typography variant='p' sx={{ my: 1 }} display='block'>
+                Kid: {apiGetState.acme_account.kid}
+              </Typography>
             )}
 
-          <FormInformation>
-            Status: {apiGetState.acme_account.status}
-            {(apiGetState.acme_account.status === 'unknown' ||
-              apiGetState.acme_account.status === '' ||
-              apiGetState.acme_account.kid === '') && (
+            <Typography variant='p' sx={{ my: 1 }} display='block'>
+              Account Status:{' '}
+              {apiGetState.acme_account.status.charAt(0).toUpperCase() +
+                apiGetState.acme_account.status.slice(1)}
+            </Typography>
+
+            <FormRowRight>
               <Button
                 className='ml-2'
                 type='primary'
                 onClick={registerClickHandler}
-                disabled={sendApiState.isSending}
+                disabled={apiSendState.isSending || !canRegister}
               >
                 Register
               </Button>
-            )}
-          </FormInformation>
+            </FormRowRight>
 
-          {apiGetState.acme_account.kid && (
-            <FormInformation>
-              Kid: {apiGetState.acme_account.kid}
-            </FormInformation>
-          )}
+            <InputCheckbox
+              id='is_staging'
+              checked={apiGetState.acme_account.is_staging}
+              disabled
+            >
+              Staging Environment Account
+            </InputCheckbox>
 
-          <FormInformation>
-            Account Type:{' '}
-            {apiGetState.acme_account.is_staging ? 'Staging' : 'Production'}
-          </FormInformation>
+            <InputCheckbox
+              id='accepted_tos'
+              checked={apiGetState.acme_account.accepted_tos}
+              disabled
+            >
+              Accept Let's Encrypt Terms of Service
+            </InputCheckbox>
 
-          <InputCheckbox id='accepted_tos' checked disabled>
-            Accept Let's Encrypt Terms of Service
-          </InputCheckbox>
+            {apiSendState.errorMessage &&
+              formState.validationErrors.length > 0 && (
+                <FormError>
+                  Error Posting -- {apiSendState.errorMessage}
+                </FormError>
+              )}
 
-          <FormInformation>
-            <small>
-              Created: {convertUnixTime(apiGetState.acme_account.created_at)}
-            </small>
-          </FormInformation>
-          <FormInformation>
-            <small>
-              Last Updated:{' '}
-              {convertUnixTime(apiGetState.acme_account.updated_at)}
-            </small>
-          </FormInformation>
-
-          <Button
-            type='submit'
-            disabled={
-              sendApiState.isSending ||
-              (apiGetState.acme_account.name === formState.acme_account.name &&
-                apiGetState.acme_account.description ===
-                  formState.acme_account.description)
-            }
-          >
-            Submit
-          </Button>
-          <Button
-            type='reset'
-            onClick={resetClickHandler}
-            disabled={sendApiState.isSending}
-          >
-            Reset
-          </Button>
-          <Button
-            type='cancel'
-            onClick={cancelClickHandler}
-            disabled={sendApiState.isSending}
-          >
-            Cancel
-          </Button>
-        </Form>
-      </>
-    );
-  }
+            <FormFooter
+              createdAt={apiGetState.acme_account.created_at}
+              updatedAt={apiGetState.acme_account.updated_at}
+            >
+              <Button
+                type='cancel'
+                onClick={cancelClickHandler}
+                disabled={apiSendState.isSending}
+              >
+                Cancel
+              </Button>
+              <Button
+                type='reset'
+                onClick={resetClickHandler}
+                disabled={apiSendState.isSending || formUnchanged}
+              >
+                Reset
+              </Button>
+              <Button
+                type='submit'
+                disabled={apiSendState.isSending || formUnchanged}
+              >
+                Submit
+              </Button>
+            </FormFooter>
+          </Form>
+        </>
+      )}
+    </FormContainer>
+  );
 };
 
 export default EditOneACMEAccount;

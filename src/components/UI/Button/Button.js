@@ -7,12 +7,17 @@ const Button = (props) => {
     case 'submit':
       color = 'primary';
       break;
+    case 'deactivate':
+      color = 'warning';
+      break;
     case 'delete':
       color = 'error';
       break;
+    case 'info':
     case 'reset':
       color = 'info';
       break;
+    case 'secondary':
     case 'cancel':
       color = 'secondary';
       break;
