@@ -92,7 +92,7 @@ const EditOnePrivateKey = () => {
   const cancelClickHandler = (event) => {
     event.preventDefault();
 
-    navigate('/privatekeys');
+    navigate(-1);
   };
 
   // delete handlers
@@ -106,8 +106,7 @@ const EditOnePrivateKey = () => {
     setDeleteOpen(false);
     sendData(`/v1/privatekeys/${id}`, 'DELETE', null, true).then((success) => {
       if (success) {
-        // back to the private keys page
-        navigate('/privatekeys');
+        navigate(-1);
       }
     });
   };
@@ -221,11 +220,12 @@ const EditOnePrivateKey = () => {
               Allow API Key via URL (for Legacy Clients)
             </InputCheckbox>
 
-            {apiSendState.errorMessage && formState.validationErrors.length > 0 && (
-              <FormError>
-                Error Posting -- {apiSendState.errorMessage}
-              </FormError>
-            )}
+            {apiSendState.errorMessage &&
+              formState.validationErrors.length > 0 && (
+                <FormError>
+                  Error Posting -- {apiSendState.errorMessage}
+                </FormError>
+              )}
 
             <FormFooter
               createdAt={apiGetState.private_key.created_at}

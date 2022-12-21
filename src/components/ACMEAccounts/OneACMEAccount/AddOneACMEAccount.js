@@ -94,8 +94,8 @@ const AddOneACMEAccount = () => {
   };
   const cancelClickHandler = (event) => {
     event.preventDefault();
-    // navigate('.');
-    navigate('/acmeaccounts');
+
+    navigate(-1);
   };
 
   // submit handler

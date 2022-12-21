@@ -83,8 +83,8 @@ const AddOnePrivateKey = () => {
   };
   const cancelClickHandler = (event) => {
     event.preventDefault();
-    //navigate('.');
-    navigate('/privatekeys');
+
+    navigate(-1);
   };
 
   // form submission handler
@@ -121,11 +121,10 @@ const AddOnePrivateKey = () => {
     //
 
     sendData(`/v1/privatekeys`, 'POST', formState.private_key, true).then(
-      (success) => {
-        if (success) {
+      (response) => {
+        if (response) {
           // back to the private keys page
-          //navigate('.');
-          navigate('/privatekeys');
+          navigate(`/privatekeys/${response.record_id}`);
         }
       }
     );
