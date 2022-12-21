@@ -28,14 +28,14 @@ const ChangeAccountEmail = () => {
 
   // set dummy state prior to apiGet loading
   // only includes values that will be used in payload
-  const emptyForm = {
+  const dummyForm = {
     form: {
       email: '',
     },
     validationErrors: {},
   };
 
-  const [formState, setFormState] = useState(emptyForm);
+  const [formState, setFormState] = useState(dummyForm);
 
   // Function to set the form equal to the current API state
   const setFormToApi = useCallback(() => {
@@ -118,10 +118,11 @@ const ChangeAccountEmail = () => {
   };
 
   // consts related to rendering
-  const renderApiItems = apiGetState.isLoaded && !apiGetState.errorMessage;
-  const formUnchanged =
-    JSON.stringify(emptyForm.form) === JSON.stringify(formState.form) ||
-    apiGetState.acme_account.email === formState.form.email;
+  const renderApiItems =
+    apiGetState.isLoaded &&
+    !apiGetState.errorMessage &&
+    JSON.stringify(dummyForm.form) !== JSON.stringify(formState.form);
+  const formUnchanged = apiGetState.acme_account.email === formState.form.email;
 
   return (
     <FormContainer>

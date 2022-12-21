@@ -38,7 +38,7 @@ const EditOneACMEAccount = () => {
 
   // set dummy state prior to apiGet loading
   // only includes values that will be used in payload
-  const emptyForm = {
+  const dummyForm = {
     form: {
       name: '',
       description: '',
@@ -46,7 +46,7 @@ const EditOneACMEAccount = () => {
     validationErrors: {},
   };
 
-  const [formState, setFormState] = useState(emptyForm);
+  const [formState, setFormState] = useState(dummyForm);
 
   // Function to set the form equal to the current API state
   const setFormToApi = useCallback(() => {
@@ -184,11 +184,13 @@ const EditOneACMEAccount = () => {
   };
 
   // consts related to rendering
-  const renderApiItems = apiGetState.isLoaded && !apiGetState.errorMessage;
+  const renderApiItems =
+    apiGetState.isLoaded &&
+    !apiGetState.errorMessage &&
+    JSON.stringify(dummyForm.form) !== JSON.stringify(formState.form);
   const formUnchanged =
-    JSON.stringify(emptyForm.form) === JSON.stringify(formState.form) ||
-    (apiGetState.acme_account.name === formState.form.name &&
-      apiGetState.acme_account.description === formState.form.description);
+    apiGetState.acme_account.name === formState.form.name &&
+    apiGetState.acme_account.description === formState.form.description;
   const canDoAccountActions =
     apiGetState.acme_account.status === 'valid' &&
     apiGetState.acme_account.kid !== '';

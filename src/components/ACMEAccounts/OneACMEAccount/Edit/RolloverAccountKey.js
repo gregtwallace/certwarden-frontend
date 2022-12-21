@@ -35,14 +35,14 @@ const RolloverAccountKey = () => {
   const navigate = useNavigate();
 
   // set dummy state
-  const emptyForm = {
+  const dummyForm = {
     form: {
       private_key_id: '',
     },
     validationErrors: {},
   };
 
-  const [formState, setFormState] = useState(emptyForm);
+  const [formState, setFormState] = useState(dummyForm);
 
   useEffect(() => {
     // execute actions after loaded
@@ -100,9 +100,10 @@ const RolloverAccountKey = () => {
 
   // consts related to rendering
   const renderApiItems =
-    apiGetAccountState.isLoaded && !apiGetAccountState.errorMessage;
+    apiGetAccountState.isLoaded &&
+    !apiGetAccountState.errorMessage &&
+    JSON.stringify(dummyForm.form) !== JSON.stringify(formState.form);
   const formUnchanged =
-    JSON.stringify(emptyForm.form) === JSON.stringify(formState.form) ||
     apiGetAccountState.acme_account.email === formState.form.email;
 
   // vars related to api

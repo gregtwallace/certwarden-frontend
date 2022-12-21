@@ -31,7 +31,7 @@ const EditOnePrivateKey = () => {
 
   // set dummy state prior to apiGet loading
   // only includes values that will be used in payload
-  const emptyForm = {
+  const dummyForm = {
     private_key: {
       name: '',
       description: '',
@@ -40,7 +40,7 @@ const EditOnePrivateKey = () => {
     validationErrors: {},
   };
 
-  const [formState, setFormState] = useState(emptyForm);
+  const [formState, setFormState] = useState(dummyForm);
 
   // Function to set the form equal to the current API state
   const setFormToApi = useCallback(() => {
@@ -144,14 +144,15 @@ const EditOnePrivateKey = () => {
   };
 
   // consts related to rendering
-  const renderApiItems = apiGetState.isLoaded && !apiGetState.errorMessage;
+  const renderApiItems =
+    apiGetState.isLoaded &&
+    !apiGetState.errorMessage &&
+    JSON.stringify(dummyForm.form) !== JSON.stringify(formState.form);
   const formUnchanged =
-  JSON.stringify(emptyForm.form) === JSON.stringify(formState.form) ||
-    (apiGetState.private_key.name === formState.private_key.name &&
-      apiGetState.private_key.description ===
-        formState.private_key.description &&
-      apiGetState.private_key.api_key_via_url ===
-        formState.private_key.api_key_via_url);
+    apiGetState.private_key.name === formState.private_key.name &&
+    apiGetState.private_key.description === formState.private_key.description &&
+    apiGetState.private_key.api_key_via_url ===
+      formState.private_key.api_key_via_url;
 
   return (
     <FormContainer>
