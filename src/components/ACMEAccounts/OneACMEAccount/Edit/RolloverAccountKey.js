@@ -7,58 +7,67 @@ import { newId } from '../../../../App';
 
 import ApiError from '../../../UI/Api/ApiError';
 import ApiLoading from '../../../UI/Api/ApiLoading';
-import FormInformation from '../../../UI/Form/FormInformation';
-import FormError from '../../../UI/Form/FormError';
-import InputSelect from '../../../UI/Form/InputSelect';
 import Button from '../../../UI/Button/Button';
-import Form from '../../../UI/Form/Form';
-import H2Header from '../../../UI/Header/H2Header';
+import Form from '../../../UI/FormMui/Form';
+import FormContainer from '../../../UI/FormMui/FormContainer';
+import FormError from '../../../UI/FormMui/FormError';
+import FormFooter from '../../../UI/FormMui/FormFooter';
+import InputSelect from '../../../UI/FormMui/InputSelect';
+import InputTextField from '../../../UI/FormMui/InputTextField';
+import TitleBar from '../../../UI/Header/TitleBar';
 
 const RolloverAccountKey = () => {
   const { id } = useParams();
-  const [apiGetState] = useAxiosGet(
+
+  const [apiGetAccountState] = useAxiosGet(
     `/v1/acmeaccounts/${id}`,
     'acme_account',
     true
   );
 
-  const [newKeyOptions] = useAxiosGet(
+  const [apiGetKeyOptionsState] = useAxiosGet(
     `/v1/acmeaccounts/${newId}`,
     'acme_account_options',
     true
   );
-  const [sendApiState, sendData] = useAxiosSend();
+
+  const [apiSendState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
-  // blank form state
-  const [formState, setFormState] = useState({
-    acme_account: {
-      private_key_id: -2,
+  // set dummy state
+  const emptyForm = {
+    form: {
+      private_key_id: '',
     },
     validationErrors: {},
-  });
+  };
+
+  const [formState, setFormState] = useState(emptyForm);
 
   useEffect(() => {
-    if (apiGetState.isLoaded && !apiGetState.errorMessage) {
-      // if the account is not valid or is missing kid, this page won't work
-      // so redirect to main account page
-      if (
-        apiGetState.acme_account.status !== 'valid' ||
-        apiGetState.acme_account.kid === ''
+    // execute actions after loaded
+    if (apiGetAccountState.isLoaded) {
+      // if api error, redirect to root /acmeaccounts
+      if (apiGetAccountState.errorMessage) {
+        navigate('/acmeaccounts');
+      } else if (
+        // if no api error, but account isn't in a state to roll, go back to edit account
+        apiGetAccountState.acme_account.status !== 'valid' ||
+        apiGetAccountState.acme_account.kid === ''
       ) {
         navigate(`/acmeaccounts/${id}`);
       }
     }
-  }, [apiGetState, id, navigate]);
+  }, [apiGetAccountState, id, navigate]);
 
   // int form field updates
   const intInputChangeHandler = (event) => {
     setFormState((prevState) => {
       return {
         ...prevState,
-        acme_account: {
-          ...prevState.acme_account,
-          [event.target.id]: parseInt(event.target.value),
+        form: {
+          ...prevState.form,
+          [event.target.name]: parseInt(event.target.value),
         },
       };
     });
@@ -67,8 +76,7 @@ const RolloverAccountKey = () => {
   // button handlers
   const cancelClickHandler = (event) => {
     event.preventDefault();
-    //navigate('.');
-    navigate(`/acmeaccounts/${id}`);
+    navigate(-1);
   };
 
   // form submission handler
@@ -76,25 +84,12 @@ const RolloverAccountKey = () => {
     event.preventDefault();
 
     // client side validation
-    let validationErrors = [];
-    // check private key is selected
-    if (formState.acme_account.private_key_id === -2) {
-      validationErrors.private_key_id = true;
-    }
-
-    setFormState((prevState) => ({
-      ...prevState,
-      validationErrors: validationErrors,
-    }));
-    if (Object.keys(validationErrors).length > 0) {
-      return false;
-    }
-    // end validation
+    // not needed w/ only select box
 
     sendData(
       `/v1/acmeaccounts/${id}/key-change`,
       'PUT',
-      formState.acme_account,
+      formState.form,
       true
     ).then((success) => {
       if (success) {
@@ -103,82 +98,108 @@ const RolloverAccountKey = () => {
     });
   };
 
-  if (apiGetState.errorMessage) {
-    return <ApiError>{apiGetState.errorMessage}</ApiError>;
-  } else if (!apiGetState.isLoaded) {
-    return <ApiLoading />;
-  } else {
-    // wait for new key options (avail keys) too
-    if (newKeyOptions.errorMessage) {
-      return <ApiError>{newKeyOptions.errorMessage}</ApiError>;
-    } else if (!newKeyOptions.isLoaded) {
-      return <ApiLoading />;
-    } else {
-      // Logic for some of the components so JSX is cleaner
-      // build options for available keys
-      // if there are available keys, populate them
-      var availableKeys;
-      var defaultKeysName;
-      var defaultKeysValue = -2;
-      if (newKeyOptions?.acme_account_options?.private_keys) {
-        defaultKeysName = '- Select a Key -';
-        availableKeys = newKeyOptions.acme_account_options.private_keys.map(
-          (m) => ({
-            value: parseInt(m.id),
-            name: m.name + ' (' + m.algorithm.name + ')',
-          })
-        );
-      } else {
-        defaultKeysName = '- No Keys Available -';
-      }
-      // end jsx logic
+  // consts related to rendering
+  const renderApiItems =
+    apiGetAccountState.isLoaded && !apiGetAccountState.errorMessage;
+  const formUnchanged =
+    JSON.stringify(emptyForm.form) === JSON.stringify(formState.form) ||
+    apiGetAccountState.acme_account.email === formState.form.email;
 
-      return (
-        <>
-          <H2Header h2='ACME Account - Rollover Key'></H2Header>
-          <Form onSubmit={submitFormHandler}>
-            {sendApiState.errorMessage && (
+  // vars related to api
+  // build available keys list
+  var availableKeys = [{ value: '', name: 'Loading...' }];
+  if (apiGetKeyOptionsState.isLoaded) {
+    // build options for available keys
+    // if there are available keys, populate them
+    if (apiGetKeyOptionsState?.acme_account_options?.private_keys) {
+      availableKeys =
+        apiGetKeyOptionsState.acme_account_options.private_keys.map((m) => ({
+          value: parseInt(m.id),
+          name: m.name + ' (' + m.algorithm.name + ')',
+        }));
+    }
+  }
+
+  return (
+    <FormContainer>
+      <TitleBar title='Rollover ACME Account Key' />
+
+      {!apiGetAccountState.isLoaded && <ApiLoading />}
+      {apiGetAccountState.errorMessage && (
+        <ApiError>{apiGetAccountState.errorMessage}</ApiError>
+      )}
+
+      {renderApiItems && (
+        <Form onSubmit={submitFormHandler}>
+          <InputTextField
+            label='Name'
+            id='name'
+            value={apiGetAccountState.acme_account.name}
+            disabled
+          />
+
+          <InputTextField
+            label='Description'
+            id='description'
+            value={
+              apiGetAccountState.acme_account.description
+                ? apiGetAccountState.acme_account.description
+                : 'None'
+            }
+            disabled
+          />
+
+          <InputSelect
+            label='Current Private Key'
+            id='private_key_id'
+            options={[
+              {
+                value: 0,
+                name:
+                  apiGetAccountState.acme_account.private_key.name +
+                  ' (' +
+                  apiGetAccountState.acme_account.private_key.algorithm.name +
+                  ')',
+              },
+            ]}
+            value={0}
+            disabled
+          />
+
+          <InputSelect
+            label='New Private Key'
+            id='private_key_id'
+            options={availableKeys}
+            value={formState.form.private_key_id}
+            onChange={intInputChangeHandler}
+          />
+
+          {apiSendState.errorMessage &&
+            formState.validationErrors.length > 0 && (
               <FormError>
-                Error Posting -- {sendApiState.errorMessage}
+                Error Posting -- {apiSendState.errorMessage}
               </FormError>
             )}
 
-            <FormInformation>
-              Account Name: {apiGetState.acme_account.name}
-            </FormInformation>
-
-            <FormInformation>
-              Account Description: {apiGetState.acme_account.description}
-            </FormInformation>
-
-            <InputSelect
-              label='New Private Key'
-              id='private_key_id'
-              name='private_key_id'
-              options={availableKeys}
-              value={formState.acme_account.private_key_id}
-              onChange={intInputChangeHandler}
-              defaultValue={defaultKeysValue}
-              defaultName={defaultKeysName}
-              disableEmptyValue
-              invalid={formState.validationErrors.private_key_id}
-            />
-
-            <Button type='submit' disabled={sendApiState.isSending}>
-              Submit
-            </Button>
+          <FormFooter>
             <Button
               type='cancel'
               onClick={cancelClickHandler}
-              disabled={sendApiState.isSending}
+              disabled={apiSendState.isSending}
             >
               Cancel
             </Button>
-          </Form>
-        </>
-      );
-    }
-  }
+            <Button
+              type='submit'
+              disabled={apiSendState.isSending || formUnchanged}
+            >
+              Submit
+            </Button>
+          </FormFooter>
+        </Form>
+      )}
+    </FormContainer>
+  );
 };
 
 export default RolloverAccountKey;
