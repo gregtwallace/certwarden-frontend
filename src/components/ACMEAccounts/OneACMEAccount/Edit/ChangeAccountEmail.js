@@ -120,7 +120,7 @@ const ChangeAccountEmail = () => {
   // consts related to rendering
   const renderApiItems = apiGetState.isLoaded && !apiGetState.errorMessage;
   const formUnchanged =
-    JSON.stringify(emptyForm) === JSON.stringify(formState) ||
+    JSON.stringify(emptyForm.form) === JSON.stringify(formState.form) ||
     apiGetState.acme_account.email === formState.form.email;
 
   return (

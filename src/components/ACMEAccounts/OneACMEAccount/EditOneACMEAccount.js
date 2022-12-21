@@ -186,7 +186,7 @@ const EditOneACMEAccount = () => {
   // consts related to rendering
   const renderApiItems = apiGetState.isLoaded && !apiGetState.errorMessage;
   const formUnchanged =
-    JSON.stringify(emptyForm) === JSON.stringify(formState) ||
+    JSON.stringify(emptyForm.form) === JSON.stringify(formState.form) ||
     (apiGetState.acme_account.name === formState.form.name &&
       apiGetState.acme_account.description === formState.form.description);
   const canDoAccountActions =
