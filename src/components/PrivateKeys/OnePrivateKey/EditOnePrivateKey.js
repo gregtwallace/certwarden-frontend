@@ -221,7 +221,7 @@ const EditOnePrivateKey = () => {
               Allow API Key via URL (for Legacy Clients)
             </InputCheckbox>
 
-            {apiSendState.errorMessage && (
+            {apiSendState.errorMessage && formState.validationErrors.length > 0 && (
               <FormError>
                 Error Posting -- {apiSendState.errorMessage}
               </FormError>

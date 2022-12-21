@@ -187,7 +187,7 @@ const AddOnePrivateKey = () => {
             />
           )}
 
-          {apiSendState.errorMessage && (
+          {apiSendState.errorMessage && formState.validationErrors.length > 0 && (
             <FormError>Error Posting -- {apiSendState.errorMessage}</FormError>
           )}
 
