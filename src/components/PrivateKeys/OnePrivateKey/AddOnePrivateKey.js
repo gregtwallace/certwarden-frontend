@@ -37,7 +37,7 @@ const AddOnePrivateKey = () => {
     true
   );
 
-  const [sendApiState, sendData] = useAxiosSend();
+  const [apiSendState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
   const blankFormState = {
@@ -133,7 +133,7 @@ const AddOnePrivateKey = () => {
 
   return (
     <FormContainer>
-      <TitleBar title='Create Private Key' />
+      <TitleBar title='New Private Key' />
 
       {!apiGetState.isLoaded && <ApiLoading />}
       {apiGetState.errorMessage && (
@@ -187,27 +187,27 @@ const AddOnePrivateKey = () => {
             />
           )}
 
-          {sendApiState.errorMessage && (
-            <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>
+          {apiSendState.errorMessage && (
+            <FormError>Error Posting -- {apiSendState.errorMessage}</FormError>
           )}
 
           <FormFooter>
             <Button
               type='cancel'
               onClick={cancelClickHandler}
-              disabled={sendApiState.isSending}
+              disabled={apiSendState.isSending}
             >
               Cancel
             </Button>
             <Button
               type='reset'
               onClick={resetClickHandler}
-              disabled={sendApiState.isSending}
+              disabled={apiSendState.isSending}
             >
               Reset
             </Button>
-            <Button type='submit' disabled={sendApiState.isSending}>
-              Create
+            <Button type='submit' disabled={apiSendState.isSending}>
+              Submit
             </Button>
           </FormFooter>
         </Form>

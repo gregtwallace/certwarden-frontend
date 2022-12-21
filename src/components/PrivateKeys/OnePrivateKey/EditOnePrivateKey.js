@@ -26,7 +26,7 @@ const EditOnePrivateKey = () => {
     true
   );
 
-  const [sendApiState, sendData] = useAxiosSend();
+  const [apiSendState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
   // set dummy state prior to apiGet loading
@@ -66,7 +66,7 @@ const EditOnePrivateKey = () => {
       ...prevState,
       private_key: {
         ...prevState.private_key,
-        [event.target.id]: event.target.value,
+        [event.target.name]: event.target.value,
       },
     }));
   };
@@ -77,7 +77,7 @@ const EditOnePrivateKey = () => {
         ...prevState,
         private_key: {
           ...prevState.private_key,
-          [event.target.id]: event.target.checked,
+          [event.target.name]: event.target.checked,
         },
       };
     });
@@ -157,7 +157,7 @@ const EditOnePrivateKey = () => {
           <Button
             type='delete'
             onClick={deleteClickHandler}
-            disabled={sendApiState.isSending}
+            disabled={apiSendState.isSending}
           >
             Delete
           </Button>
@@ -221,9 +221,9 @@ const EditOnePrivateKey = () => {
               Allow API Key via URL (for Legacy Clients)
             </InputCheckbox>
 
-            {sendApiState.errorMessage && (
+            {apiSendState.errorMessage && (
               <FormError>
-                Error Posting -- {sendApiState.errorMessage}
+                Error Posting -- {apiSendState.errorMessage}
               </FormError>
             )}
 
@@ -234,20 +234,20 @@ const EditOnePrivateKey = () => {
               <Button
                 type='cancel'
                 onClick={cancelClickHandler}
-                disabled={sendApiState.isSending}
+                disabled={apiSendState.isSending}
               >
                 Cancel
               </Button>
               <Button
                 type='reset'
                 onClick={resetClickHandler}
-                disabled={sendApiState.isSending || formUnchanged}
+                disabled={apiSendState.isSending || formUnchanged}
               >
                 Reset
               </Button>
               <Button
                 type='submit'
-                disabled={sendApiState.isSending || formUnchanged}
+                disabled={apiSendState.isSending || formUnchanged}
               >
                 Submit
               </Button>
