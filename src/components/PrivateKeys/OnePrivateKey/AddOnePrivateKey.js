@@ -8,9 +8,9 @@ import { newId } from '../../../App';
 
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
+import Button from '../../UI/Button/Button';
 import InputSelect from '../../UI/FormMui/InputSelect';
 import Form from '../../UI/FormMui/Form';
-import FormButton from '../../UI/FormMui/FormButton';
 import FormContainer from '../../UI/FormMui/FormContainer';
 import FormError from '../../UI/FormMui/FormError';
 import FormFooter from '../../UI/FormMui/FormFooter';
@@ -192,23 +192,23 @@ const AddOnePrivateKey = () => {
           )}
 
           <FormFooter>
-            <FormButton
+            <Button
               type='cancel'
               onClick={cancelClickHandler}
               disabled={sendApiState.isSending}
             >
               Cancel
-            </FormButton>
-            <FormButton
+            </Button>
+            <Button
               type='reset'
               onClick={resetClickHandler}
               disabled={sendApiState.isSending}
             >
               Reset
-            </FormButton>
-            <FormButton type='submit' disabled={sendApiState.isSending}>
+            </Button>
+            <Button type='submit' disabled={sendApiState.isSending}>
               Create
-            </FormButton>
+            </Button>
           </FormFooter>
         </Form>
       )}

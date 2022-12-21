@@ -1,44 +1,40 @@
+import { Button as ButtonMui } from '@mui/material';
+
 const Button = (props) => {
-  var buttonClasses = 'btn mr-2';
+  var color = '';
 
   switch (props.type) {
-    case 'primary':
     case 'submit':
-      buttonClasses += ' btn-primary';
+      color = 'primary';
       break;
-    case 'secondary':
-    case 'cancel':
-    case 'back':
-      buttonClasses += ' btn-secondary';
-      break;
-    case 'success':
-      buttonClasses += ' btn-success';
+    case 'delete':
+      color = 'error';
       break;
     case 'reset':
-    case 'deactivate':
-    case 'revoke':
-    case 'edit':
-      buttonClasses += ' btn-warning';
+      color = 'info';
       break;
-    case 'danger':
-    case 'delete':
-      buttonClasses += ' btn-danger';
+    case 'cancel':
+      color = 'secondary';
       break;
+
     default:
+      color = 'primary';
       break;
   }
 
-  buttonClasses = buttonClasses + ' ' + props.className;
-
   return (
-    <button
+    <ButtonMui
       type={props.type}
-      className={buttonClasses}
+      variant='contained'
       onClick={props.onClick}
       disabled={props.disabled}
+      sx={{
+        ml: 2,
+      }}
+      color={color}
     >
       {props.children}
-    </button>
+    </ButtonMui>
   );
 };
 

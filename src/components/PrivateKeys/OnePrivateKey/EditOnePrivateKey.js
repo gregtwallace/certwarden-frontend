@@ -7,9 +7,9 @@ import { isNameValid } from '../../../helpers/form-validation';
 
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
+import Button from '../../UI/Button/Button';
 import DialogAlert from '../../UI/Dialog/DialogAlert';
 import Form from '../../UI/FormMui/Form';
-import FormButton from '../../UI/FormMui/FormButton';
 import FormContainer from '../../UI/FormMui/FormContainer';
 import FormError from '../../UI/FormMui/FormError';
 import FormFooter from '../../UI/FormMui/FormFooter';
@@ -154,13 +154,13 @@ const EditOnePrivateKey = () => {
     <FormContainer>
       <TitleBar title='Edit Private Key'>
         {renderApiItems && (
-          <FormButton
+          <Button
             type='delete'
             onClick={deleteClickHandler}
             disabled={sendApiState.isSending}
           >
             Delete
-          </FormButton>
+          </Button>
         )}
       </TitleBar>
 
@@ -231,26 +231,26 @@ const EditOnePrivateKey = () => {
               createdAt={apiGetState.private_key.created_at}
               updatedAt={apiGetState.private_key.updated_at}
             >
-              <FormButton
+              <Button
                 type='cancel'
                 onClick={cancelClickHandler}
                 disabled={sendApiState.isSending}
               >
                 Cancel
-              </FormButton>
-              <FormButton
+              </Button>
+              <Button
                 type='reset'
                 onClick={resetClickHandler}
                 disabled={sendApiState.isSending || formUnchanged}
               >
                 Reset
-              </FormButton>
-              <FormButton
+              </Button>
+              <Button
                 type='submit'
                 disabled={sendApiState.isSending || formUnchanged}
               >
                 Submit
-              </FormButton>
+              </Button>
             </FormFooter>
           </Form>
         </>
