@@ -131,15 +131,16 @@ const AddOnePrivateKey = () => {
     );
   };
 
-  if (apiGetState.errorMessage) {
-    return <ApiError>{apiGetState.errorMessage}</ApiError>;
-  } else if (!apiGetState.isLoaded) {
-    return <ApiLoading />;
-  } else {
-    return (
-      <FormContainer>
-        <TitleBar title='Create Private Key' />
+  return (
+    <FormContainer>
+      <TitleBar title='Create Private Key' />
 
+      {!apiGetState.isLoaded && <ApiLoading />}
+      {apiGetState.errorMessage && (
+        <ApiError>{apiGetState.errorMessage}</ApiError>
+      )}
+
+      {apiGetState.isLoaded && !apiGetState.errorMessage && (
         <Form onSubmit={submitFormHandler}>
           {sendApiState.errorMessage && (
             <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>
@@ -208,9 +209,9 @@ const AddOnePrivateKey = () => {
             <FormButton type='submit'>Create</FormButton>
           </FormFooter>
         </Form>
-      </FormContainer>
-    );
-  }
+      )}
+    </FormContainer>
+  );
 };
 
 export default AddOnePrivateKey;
