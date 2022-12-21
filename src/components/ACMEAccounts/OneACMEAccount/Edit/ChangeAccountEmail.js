@@ -7,37 +7,40 @@ import { isEmailValid } from '../../../../helpers/form-validation';
 
 import ApiError from '../../../UI/Api/ApiError';
 import ApiLoading from '../../../UI/Api/ApiLoading';
-import InputText from '../../../UI/Form/InputText';
-import FormInformation from '../../../UI/Form/FormInformation';
-import FormError from '../../../UI/Form/FormError';
 import Button from '../../../UI/Button/Button';
-import Form from '../../../UI/Form/Form';
-import H2Header from '../../../UI/Header/H2Header';
+import Form from '../../../UI/FormMui/Form';
+import FormContainer from '../../../UI/FormMui/FormContainer';
+import FormError from '../../../UI/FormMui/FormError';
+import FormFooter from '../../../UI/FormMui/FormFooter';
+import InputTextField from '../../../UI/FormMui/InputTextField';
+import TitleBar from '../../../UI/Header/TitleBar';
 
 const ChangeAccountEmail = () => {
   const { id } = useParams();
-  const [ apiGetState ] = useAxiosGet(
+  const [apiGetState] = useAxiosGet(
     `/v1/acmeaccounts/${id}`,
     'acme_account',
     true
   );
 
-  const [sendApiState, sendData] = useAxiosSend();
+  const [apiSendState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
   // set dummy state prior to apiGet loading
   // only includes values that will be used in payload
-  const [formState, setFormState] = useState({
-    acme_account: {
+  const emptyForm = {
+    form: {
       email: '',
     },
     validationErrors: {},
-  });
+  };
+
+  const [formState, setFormState] = useState(emptyForm);
 
   // Function to set the form equal to the current API state
   const setFormToApi = useCallback(() => {
     setFormState({
-      acme_account: {
+      form: {
         email: apiGetState.acme_account.email,
       },
       validationErrors: {},
@@ -45,11 +48,16 @@ const ChangeAccountEmail = () => {
   }, [apiGetState]);
 
   useEffect(() => {
-    if (apiGetState.isLoaded && !apiGetState.errorMessage) {
-      
-      // if the account is not valid or is missing kid, this page won't work
-      // so redirect to main account page
-      if (apiGetState.acme_account.status !== 'valid' || apiGetState.acme_account.kid === '') {
+    // execute actions after loaded
+    if (apiGetState.isLoaded) {
+      // if api error, redirect to root /acmeaccounts
+      if (apiGetState.errorMessage) {
+        navigate('/acmeaccounts');
+      } else if (
+        // if no api error, but account isn't in a state to edit email, go back to edit account
+        apiGetState.acme_account.status !== 'valid' ||
+        apiGetState.acme_account.kid === ''
+      ) {
         navigate(`/acmeaccounts/${id}`);
       }
 
@@ -61,9 +69,9 @@ const ChangeAccountEmail = () => {
   const inputChangeHandler = (event) => {
     setFormState((prevState) => ({
       ...prevState,
-      acme_account: {
-        ...prevState.acme_account,
-        [event.target.id]: event.target.value,
+      form: {
+        ...prevState.form,
+        [event.target.name]: event.target.value,
       },
     }));
   };
@@ -84,10 +92,10 @@ const ChangeAccountEmail = () => {
   const submitFormHandler = (event) => {
     event.preventDefault();
 
-    /// client side validation
+    // client side validation
     let validationErrors = {};
     // check email (can't edit ACME to blank)
-    if (!isEmailValid(formState.acme_account.email)) {
+    if (!isEmailValid(formState.form.email)) {
       validationErrors.email = true;
     }
 
@@ -98,72 +106,94 @@ const ChangeAccountEmail = () => {
     if (Object.keys(validationErrors).length > 0) {
       return false;
     }
-    ///
+    // client side validation -- end
 
-    sendData(
-      `/v1/acmeaccounts/${id}/email`,
-      'PUT',
-      formState.acme_account,
-      true
-    ).then((success) => {
-      if (success) {
-        navigate(`/acmeaccounts/${id}`);
+    sendData(`/v1/acmeaccounts/${id}/email`, 'PUT', formState.form, true).then(
+      (success) => {
+        if (success) {
+          navigate(`/acmeaccounts/${id}`);
+        }
       }
-    });
+    );
   };
 
-  if (apiGetState.errorMessage) {
-    return <ApiError>{apiGetState.errorMessage}</ApiError>;
-  } else if (!apiGetState.isLoaded) {
-    return <ApiLoading />;
-  } else {
-    return (
-      <>
-        <H2Header h2='ACME Account - Change Email'></H2Header>
+  // consts related to rendering
+  const renderApiItems = apiGetState.isLoaded && !apiGetState.errorMessage;
+  const formUnchanged =
+    JSON.stringify(emptyForm) === JSON.stringify(formState) ||
+    apiGetState.acme_account.email === formState.form.email;
+
+  return (
+    <FormContainer>
+      <TitleBar title='Change ACME Account Email' />
+
+      {!apiGetState.isLoaded && <ApiLoading />}
+      {apiGetState.errorMessage && (
+        <ApiError>{apiGetState.errorMessage}</ApiError>
+      )}
+
+      {renderApiItems && (
         <Form onSubmit={submitFormHandler}>
-          {sendApiState.errorMessage && (
-            <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>
-          )}
-
-          <FormInformation>
-            Account Name: {apiGetState.acme_account.name}
-          </FormInformation>
-
-          <FormInformation>
-            Account Description: {apiGetState.acme_account.description}
-          </FormInformation>
-
-          {/* TODO: Allow multiple email addresses */}
-          <InputText
-            label='E-Mail Address'
-            id='email'
-            name='email'
-            value={formState.acme_account.email}
-            onChange={inputChangeHandler}
-            invalid={formState.validationErrors.email && true}
+          <InputTextField
+            label='Name'
+            id='name'
+            value={apiGetState.acme_account.name}
+            disabled
           />
 
-          <Button type='submit' disabled={sendApiState.isSending}>
-            Submit
-          </Button>
-          <Button
-            type='reset'
-            onClick={resetClickHandler}
-            disabled={sendApiState.isSending}
-          >
-            Reset
-          </Button>
-          <Button
-            type='cancel'
-            onClick={cancelClickHandler}
-            disabled={sendApiState.isSending}
-          >
-            Cancel
-          </Button>
+          <InputTextField
+            label='Description'
+            id='description'
+            value={
+              apiGetState.acme_account.description
+                ? apiGetState.acme_account.description
+                : 'None'
+            }
+            disabled
+          />
+
+          <InputTextField
+            label='Contact E-Mail Address'
+            id='email'
+            name='email'
+            value={formState.form.email}
+            onChange={inputChangeHandler}
+            error={formState.validationErrors.email && true}
+          />
+
+          {apiSendState.errorMessage &&
+            formState.validationErrors.length > 0 && (
+              <FormError>
+                Error Posting -- {apiSendState.errorMessage}
+              </FormError>
+            )}
+
+          <FormFooter>
+            <Button
+              type='cancel'
+              onClick={cancelClickHandler}
+              disabled={apiSendState.isSending}
+            >
+              Cancel
+            </Button>
+            <Button
+              type='reset'
+              onClick={resetClickHandler}
+              disabled={apiSendState.isSending || formUnchanged}
+            >
+              Reset
+            </Button>
+            <Button
+              type='submit'
+              disabled={apiSendState.isSending || formUnchanged}
+            >
+              Submit
+            </Button>
+          </FormFooter>
         </Form>
-      </>
-    );
-  }
+      )}
+    </FormContainer>
+  );
 };
 
 export default ChangeAccountEmail;
