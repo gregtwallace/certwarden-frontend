@@ -33,6 +33,8 @@ const InputSelect = (props) => {
         label={props.label}
         value={props.value}
         onChange={props.onChange}
+        readOnly={props.readOnly}
+        disabled={props.disabled}
       >
         {props?.options &&
           props.options.map((o) => (

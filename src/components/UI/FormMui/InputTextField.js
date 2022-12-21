@@ -41,8 +41,8 @@ const InputTextField = (props) => {
       variant='outlined'
       value={props.value}
       onChange={props.onChange}
-      readOnly={props.readOnly && true}
-      disabled={props.disabled && true}
+      readOnly={props.readOnly}
+      disabled={props.disabled}
       error={props.error}
       helperText={props.error && errorMessage}
       sx={{ my: 1 }}

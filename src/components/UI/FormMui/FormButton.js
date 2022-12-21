@@ -7,11 +7,14 @@ const FormButton = (props) => {
     case 'submit':
       color = 'primary';
       break;
+    case 'delete':
+      color = 'error';
+      break;
     case 'reset':
       color = 'info';
       break;
     case 'cancel':
-      color = 'error';
+      color = 'secondary';
       break;
 
     default:

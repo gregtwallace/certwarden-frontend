@@ -4,18 +4,19 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useAxiosGet from '../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../hooks/useAxiosSend';
 import { isNameValid } from '../../../helpers/form-validation';
-import { convertUnixTime } from '../../../helpers/time';
 
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
-import Button from '../../UI/Button/Button';
-import Form from '../../UI/Form/Form';
-import FormError from '../../UI/Form/FormError';
-import FormInformation from '../../UI/Form/FormInformation';
-import InputText from '../../UI/Form/InputText';
-import H2Header from '../../UI/Header/H2Header';
-import Modal from '../../UI/Modal/Modal';
-import InputCheckbox from '../../UI/Form/InputCheckbox';
+import DialogAlert from '../../UI/Dialog/DialogAlert';
+import Form from '../../UI/FormMui/Form';
+import FormButton from '../../UI/FormMui/FormButton';
+import FormContainer from '../../UI/FormMui/FormContainer';
+import FormError from '../../UI/FormMui/FormError';
+import FormFooter from '../../UI/FormMui/FormFooter';
+import InputCheckbox from '../../UI/FormMui/InputCheckbox';
+import InputSelect from '../../UI/FormMui/InputSelect';
+import InputTextField from '../../UI/FormMui/InputTextField';
+import TitleBar from '../../UI/Header/TitleBar';
 
 const EditOnePrivateKey = () => {
   const { id } = useParams();
@@ -51,7 +52,7 @@ const EditOnePrivateKey = () => {
     });
   }, [apiGetState]);
 
-  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   useEffect(() => {
     if (apiGetState.isLoaded && !apiGetState.errorMessage) {
@@ -90,28 +91,22 @@ const EditOnePrivateKey = () => {
   };
   const cancelClickHandler = (event) => {
     event.preventDefault();
-    //navigate('.');
+
     navigate('/privatekeys');
   };
 
   // delete handlers
   const deleteClickHandler = () => {
-    setDeleteModal(true);
+    setDeleteOpen(true);
   };
   const deleteCancelHandler = () => {
-    setDeleteModal(false);
+    setDeleteOpen(false);
   };
   const deleteConfirmHandler = () => {
-    setDeleteModal(false);
-    sendData(
-      `/v1/privatekeys/${id}`,
-      'DELETE',
-      null,
-      true
-    ).then((success) => {
+    setDeleteOpen(false);
+    sendData(`/v1/privatekeys/${id}`, 'DELETE', null, true).then((success) => {
       if (success) {
         // back to the private keys page
-        //navigate('.');
         navigate('/privatekeys');
       }
     });
@@ -121,7 +116,7 @@ const EditOnePrivateKey = () => {
   const submitFormHandler = (event) => {
     event.preventDefault();
 
-    /// client side validation
+    // client side validation
     let validationErrors = {};
     // check name
     if (!isNameValid(formState.private_key.name)) {
@@ -135,140 +130,133 @@ const EditOnePrivateKey = () => {
     if (Object.keys(validationErrors).length > 0) {
       return false;
     }
-    ///
+    // client side validation -- end
 
-    sendData(
-      `/v1/privatekeys/${id}`,
-      'PUT',
-      formState.private_key,
-      true
-    ).then((success) => {
-      if (success) {
-        // back to the private keys page
-        //navigate('.');
-        navigate('/privatekeys');
+    sendData(`/v1/privatekeys/${id}`, 'PUT', formState.private_key, true).then(
+      (success) => {
+        if (success) {
+          // back to the private keys page
+          navigate('/privatekeys');
+        }
       }
-    });
+    );
   };
 
-  if (apiGetState.errorMessage) {
-    return <ApiError>{apiGetState.errorMessage}</ApiError>;
-  } else if (!apiGetState.isLoaded) {
-    return <ApiLoading />;
-  } else {
-    return (
-      <>
-        {deleteModal && (
-          <Modal
-            title={`Delete Key - ${formState.private_key.name}`}
-            hasCancel
-            onClickCancel={deleteCancelHandler}
-            hasConfirm
-            onClickConfirm={deleteConfirmHandler}
-          >
-            Are you sure you want to delete the key named '
-            {formState.private_key.name}' ?<br />
-            This action cannot be undone and{' '}
-            <strong className='text-danger'>
-              the key will not be recoverable!
-            </strong>{' '}
-            If you do not have a backup of the key,{' '}
-            <strong className='text-danger'>
-              any associated accounts will also not be recoverable!
-            </strong>
-          </Modal>
-        )}
-        <H2Header h2='Private Key - Edit'>
-          <Button
+  // consts related to rendering
+  const renderApiItems = apiGetState.isLoaded && !apiGetState.errorMessage;
+  const formUnchanged =
+    apiGetState.private_key.name === formState.private_key.name &&
+    apiGetState.private_key.description === formState.private_key.description &&
+    apiGetState.private_key.api_key_via_url ===
+      formState.private_key.api_key_via_url;
+
+  return (
+    <FormContainer>
+      <TitleBar title='Edit Private Key'>
+        {renderApiItems && (
+          <FormButton
             type='delete'
             onClick={deleteClickHandler}
             disabled={sendApiState.isSending}
           >
             Delete
-          </Button>
-        </H2Header>
-        <Form onSubmit={submitFormHandler}>
-          {sendApiState.errorMessage && (
-            <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>
-          )}
+          </FormButton>
+        )}
+      </TitleBar>
 
-          <InputText
-            label='Name'
-            id='name'
-            name='name'
-            value={formState.private_key.name}
-            onChange={inputChangeHandler}
-            invalid={formState.validationErrors.name && true}
-          />
-          <InputText
-            label='Description'
-            id='description'
-            name='description'
-            value={formState.private_key.description}
-            onChange={inputChangeHandler}
-          />
+      {!apiGetState.isLoaded && <ApiLoading />}
+      {apiGetState.errorMessage && (
+        <ApiError>{apiGetState.errorMessage}</ApiError>
+      )}
 
-          <FormInformation>
-            Algorithm: {apiGetState.private_key.algorithm.name}
-          </FormInformation>
-          <FormInformation>
-            API Key: {apiGetState.private_key.api_key}
-          </FormInformation>
-
-          <InputCheckbox
-            id='api_key_via_url'
-            checked={formState.private_key.api_key_via_url ? true : false}
-            onChange={checkChangeHandler}
+      {renderApiItems && (
+        <>
+          <DialogAlert
+            title={`Are you sure you want to delete ${formState.private_key.name}?`}
+            open={deleteOpen}
+            onCancel={deleteCancelHandler}
+            onConfirm={deleteConfirmHandler}
           >
-            Allow API Key via URL{' '}
-            <span className='text-danger'>
-              (This should only be used for clients that absolutely need it.)
-            </span>
-          </InputCheckbox>
+            This action cannot be undone and the key will NOT be recoverable!{' '}
+          </DialogAlert>
 
-          <FormInformation>
-            <small>
-              Created: {convertUnixTime(apiGetState.private_key.created_at)}
-            </small>
-          </FormInformation>
-          <FormInformation>
-            <small>
-              Last Updated:{' '}
-              {convertUnixTime(apiGetState.private_key.updated_at)}
-            </small>
-          </FormInformation>
+          <Form onSubmit={submitFormHandler}>
+            <InputTextField
+              label='Name'
+              id='name'
+              value={formState.private_key.name}
+              onChange={inputChangeHandler}
+              error={formState.validationErrors.name && true}
+            />
 
-          <Button
-            type='submit'
-            disabled={
-              sendApiState.isSending ||
-              (apiGetState.private_key.name === formState.private_key.name &&
-                apiGetState.private_key.description ===
-                  formState.private_key.description &&
-                apiGetState.private_key.api_key_via_url ===
-                  formState.private_key.api_key_via_url)
-            }
-          >
-            Submit
-          </Button>
-          <Button
-            type='reset'
-            onClick={resetClickHandler}
-            disabled={sendApiState.isSending}
-          >
-            Reset
-          </Button>
-          <Button
-            type='cancel'
-            onClick={cancelClickHandler}
-            disabled={sendApiState.isSending}
-          >
-            Cancel
-          </Button>
-        </Form>
-      </>
-    );
-  }
+            <InputTextField
+              label='Description'
+              id='description'
+              value={formState.private_key.description}
+              onChange={inputChangeHandler}
+            />
+
+            <InputSelect
+              label='Key Algorithm'
+              id='algorithm_value'
+              value={0}
+              options={[
+                { value: 0, name: apiGetState.private_key.algorithm.name },
+              ]}
+              disabled
+            />
+
+            <InputTextField
+              label='API Key'
+              id='api_key'
+              value={apiGetState.private_key.api_key}
+              readOnly
+            />
+
+            <InputCheckbox
+              id='api_key_via_url'
+              checked={formState.private_key.api_key_via_url}
+              onChange={checkChangeHandler}
+            >
+              Allow API Key via URL (for Legacy Clients)
+            </InputCheckbox>
+
+            {sendApiState.errorMessage && (
+              <FormError>
+                Error Posting -- {sendApiState.errorMessage}
+              </FormError>
+            )}
+
+            <FormFooter
+              createdAt={apiGetState.private_key.created_at}
+              updatedAt={apiGetState.private_key.updated_at}
+            >
+              <FormButton
+                type='cancel'
+                onClick={cancelClickHandler}
+                disabled={sendApiState.isSending}
+              >
+                Cancel
+              </FormButton>
+              <FormButton
+                type='reset'
+                onClick={resetClickHandler}
+                disabled={sendApiState.isSending || formUnchanged}
+              >
+                Reset
+              </FormButton>
+              <FormButton
+                type='submit'
+                disabled={sendApiState.isSending || formUnchanged}
+              >
+                Submit
+              </FormButton>
+            </FormFooter>
+          </Form>
+        </>
+      )}
+    </FormContainer>
+  );
 };
 
 export default EditOnePrivateKey;

@@ -9,7 +9,7 @@ const TitleBar = (props) => {
   }
 
   return (
-    <Toolbar variant='dense' sx={{ m: 0, p: 0 }}>
+    <Toolbar variant='dense' disableGutters sx={{ m: 0, px: 2 }}>
       <Typography
         component={headerComponent}
         variant='h6'
