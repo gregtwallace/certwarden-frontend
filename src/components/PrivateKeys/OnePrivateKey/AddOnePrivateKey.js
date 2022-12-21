@@ -13,10 +13,10 @@ import Form from '../../UI/FormMui/Form';
 import FormButton from '../../UI/FormMui/FormButton';
 import FormContainer from '../../UI/FormMui/FormContainer';
 import FormError from '../../UI/FormMui/FormError';
+import FormFooter from '../../UI/FormMui/FormFooter';
 import InputTextArea from '../../UI/FormMui/InputTextArea';
 import InputTextField from '../../UI/FormMui/InputTextField';
 import TitleBar from '../../UI/Header/TitleBar';
-import FormFooter from '../../UI/FormMui/FormFooter';
 
 const keySources = [
   {
