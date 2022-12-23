@@ -4,7 +4,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useAxiosGet from '../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../hooks/useAxiosSend';
 import { isNameValid } from '../../../helpers/form-validation';
-import { isSubset } from '../../../helpers/object-subset';
 
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
@@ -36,7 +35,7 @@ const EditOnePrivateKey = () => {
     form: {
       name: '',
       description: '',
-      api_key_via_url: null,
+      api_key_via_url: false,
     },
     validationErrors: {},
   };
@@ -149,7 +148,11 @@ const EditOnePrivateKey = () => {
     apiGetState.isLoaded &&
     !apiGetState.errorMessage &&
     JSON.stringify(dummyForm.form) !== JSON.stringify(formState.form);
-  const formUnchanged = isSubset(apiGetState.private_key, formState.form);
+
+  const formUnchanged =
+    apiGetState.private_key.name === formState.form.name &&
+    apiGetState.private_key.description === formState.form.description &&
+    apiGetState.private_key.api_key_via_url === formState.form.api_key_via_url;
 
   return (
     <FormContainer>

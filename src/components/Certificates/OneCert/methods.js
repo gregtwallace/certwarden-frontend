@@ -1,28 +1,38 @@
+const methodOption = (method, current) => {
+  return {
+    value: method.value,
+    name:
+      method.name + ' (' + method.type + ')' + (current ? ' - Current' : ''),
+  };
+};
+
 // buildMethodsList is a helper function to take an array of methods
-// an optional default MethodValue and return an array of options
+// an optional current Method and returns an array of options
 // for a form.
-export const buildMethodsList = (methods, defaultValue = '') => {
-  // remove default if specified so it isn't listed twice
-  if (defaultValue !== '') {
-    methods = methods.filter((method) => method.value !== defaultValue);
+export const buildMethodsList = (methods, currentMethod = null) => {
+  // variable to hold ordered methods
+  var methodsList = [];
+
+  // 1st current method (if specified)
+  if (currentMethod != null) {
+    // remove default from the array of all options
+    methods = methods.filter((method) => method.value !== currentMethod.value);
+
+    // start returned list with the default value
+    methodsList = methodsList.concat(methodOption(currentMethod, true));
   }
 
-  // only methods that are enabled
+  // 2nd methods that are enabled
   var enabledMethods = methods.filter((m) => m.enabled);
+  enabledMethods = enabledMethods.map((m) => methodOption(m));
 
-  enabledMethods = enabledMethods.map((m) => ({
-    value: m.value,
-    name: m.name + ' (' + m.type + ')',
-  }));
+  methodsList = methodsList.concat(enabledMethods);
 
-  // only methods that are disabled
+  // 3rd methods that are disabled
   var disabledMethods = methods.filter((m) => !m.enabled);
+  disabledMethods = disabledMethods.map((m) => methodOption(m));
 
-  disabledMethods = disabledMethods.map((m) => ({
-    value: m.value,
-    name: m.name + ' (' + m.type + ') [Disabled]',
-  }));
+  methodsList = methodsList.concat(disabledMethods);
 
-  // return combo of enabled followed by diabled
-  return enabledMethods.concat(disabledMethods);
+  return methodsList;
 };

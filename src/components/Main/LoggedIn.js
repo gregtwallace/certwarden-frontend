@@ -18,7 +18,6 @@ import LogViewer from '../LogViewer/LogViewer';
 import Navbar from './Navbar';
 import RolloverAccountKey from '../ACMEAccounts/OneACMEAccount/Edit/RolloverAccountKey';
 import Settings from '../Settings/Settings';
-import ViewOneCert from '../Certificates/OneCert/ViewOneCert';
 
 const LoggedIn = () => {
   return (
@@ -54,8 +53,7 @@ const LoggedIn = () => {
           />
           <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
           <Route path='/certificates' element={<AllCertificates />} />
-          <Route path='/certificates/:id' element={<ViewOneCert />} />
-          <Route path='/certificates/:id/edit' element={<EditOneCert />} />
+          <Route path='/certificates/:id' element={<EditOneCert />} />
           <Route path={`/certificates/${newId}`} element={<AddOneCert />} />
 
           <Route path={'/logs'} element={<LogViewer />} />

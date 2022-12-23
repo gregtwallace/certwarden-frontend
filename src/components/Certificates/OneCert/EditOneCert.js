@@ -7,19 +7,29 @@ import { isDomainValid, isNameValid } from '../../../helpers/form-validation';
 import { newId } from '../../../App';
 import { buildMethodsList } from './methods';
 
+import { Typography } from '@mui/material';
+
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
-import H2Header from '../../UI/Header/H2Header';
 import Button from '../../UI/Button/Button';
-import Form from '../../UI/Form/Form';
-import FormInformation from '../../UI/Form/FormInformation';
-import InputSelect from '../../UI/Form/InputSelect';
-import InputText from '../../UI/Form/InputText';
-import InputTextArray from '../../UI/Form/InputTextArray';
-import FormError from '../../UI/Form/FormError';
-import InputCheckbox from '../../UI/Form/InputCheckbox';
+import DialogAlert from '../../UI/Dialog/DialogAlert';
+import Form from '../../UI/FormMui/Form';
+import FormContainer from '../../UI/FormMui/FormContainer';
+import FormError from '../../UI/FormMui/FormError';
+import FormFooter from '../../UI/FormMui/FormFooter';
+import InputCheckbox from '../../UI/FormMui/InputCheckbox';
+import InputSelect from '../../UI/FormMui/InputSelect';
+import InputTextArray from '../../UI/FormMui/InputTextArray';
+import InputTextField from '../../UI/FormMui/InputTextField';
+import Orders from './Orders/Orders';
+import TitleBar from '../../UI/Header/TitleBar';
 
 const EditOneCert = () => {
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const [apiSendState, sendData] = useAxiosSend();
+  const navigate = useNavigate();
+
   // fetch current state
   const { id } = useParams();
   const [apiGetState] = useAxiosGet(
@@ -29,36 +39,35 @@ const EditOneCert = () => {
   );
 
   // get config options
-  const [optionsState] = useAxiosGet(
+  const [apiGetCertOptionsState] = useAxiosGet(
     `/v1/certificates/${newId}`,
     'certificate_options',
     true
   );
 
-  const [sendApiState, sendData] = useAxiosSend();
-  const navigate = useNavigate();
-
   // initialize dummy values
-  const [formState, setFormState] = useState({
-    certificate: {
+  const dummyForm = {
+    form: {
       name: '',
       description: '',
-      private_key_id: -2,
+      private_key_id: '',
       challenge_method_value: '',
       subject_alts: [],
-      api_key_via_url: null,
-      organization: '',
-      organizational_unit: '',
+      api_key_via_url: false,
       country: '',
       city: '',
+      organization: '',
+      organizational_unit: '',
     },
     validationErrors: {},
-  });
+  };
+
+  const [formState, setFormState] = useState(dummyForm);
 
   // Function to set the form equal to the current API state
   const setFormToApi = useCallback(() => {
     setFormState({
-      certificate: {
+      form: {
         name: apiGetState.certificate.name,
         description: apiGetState.certificate.description,
         private_key_id: apiGetState.certificate.private_key.id,
@@ -86,9 +95,9 @@ const EditOneCert = () => {
     setFormState((prevState) => {
       return {
         ...prevState,
-        certificate: {
-          ...prevState.certificate,
-          [event.target.id]: event.target.value,
+        form: {
+          ...prevState.form,
+          [event.target.name]: event.target.value,
         },
       };
     });
@@ -98,9 +107,9 @@ const EditOneCert = () => {
     setFormState((prevState) => {
       return {
         ...prevState,
-        certificate: {
-          ...prevState.certificate,
-          [event.target.id]: event.target.checked,
+        form: {
+          ...prevState.form,
+          [event.target.name]: event.target.checked,
         },
       };
     });
@@ -111,11 +120,27 @@ const EditOneCert = () => {
     setFormState((prevState) => {
       return {
         ...prevState,
-        certificate: {
-          ...prevState.certificate,
-          [event.target.id]: parseInt(event.target.value),
+        form: {
+          ...prevState.form,
+          [event.target.name]: parseInt(event.target.value),
         },
       };
+    });
+  };
+
+  // delete handlers
+  const deleteClickHandler = () => {
+    setDeleteOpen(true);
+  };
+  const deleteCancelHandler = () => {
+    setDeleteOpen(false);
+  };
+  const deleteConfirmHandler = () => {
+    setDeleteOpen(false);
+    sendData(`/v1/certificates/${id}`, 'DELETE', null, true).then((success) => {
+      if (success) {
+        navigate(-1);
+      }
     });
   };
 
@@ -127,25 +152,24 @@ const EditOneCert = () => {
   };
   const cancelClickHandler = (event) => {
     event.preventDefault();
-    //navigate('.');
-    navigate(`/certificates/${id}`);
+    navigate(-1);
   };
 
   // form submission handler
   const submitFormHandler = (event) => {
     event.preventDefault();
 
-    /// form validation
+    // form validation
     let validationErrors = [];
     // name
-    if (!isNameValid(formState.certificate.name)) {
+    if (!isNameValid(formState.form.name)) {
       validationErrors.name = true;
     }
 
     // subject alts (use an array to record which specific
     // alts are not valid)
     var subject_alts = [];
-    formState.certificate.subject_alts.forEach((alt, i) => {
+    formState.form.subject_alts.forEach((alt, i) => {
       if (!isDomainValid(alt)) {
         subject_alts.push(i);
       }
@@ -164,216 +188,249 @@ const EditOneCert = () => {
     if (Object.keys(validationErrors).length > 0) {
       return false;
     }
-    //
+    // form validation -- end
 
-    sendData(`/v1/certificates/${id}`, 'PUT', formState.certificate, true).then(
+    sendData(`/v1/certificates/${id}`, 'PUT', formState.form, true).then(
       (success) => {
         if (success) {
-          // back to certificate view
-          navigate(`/certificates/${id}`);
+          navigate('/certificates');
         }
       }
     );
   };
 
-  if (apiGetState.errorMessage) {
-    return <ApiError>{apiGetState.errorMessage}</ApiError>;
-  } else if (optionsState.errorMessage) {
-    <ApiError>{optionsState.errorMessage}</ApiError>;
-  } else if (!apiGetState.isLoaded || !optionsState.isLoaded) {
-    return <ApiLoading />;
-  } else {
-    // JSX Logic - for some of the components so JSX is cleaner
+  // consts related to rendering
+  const renderApiItems =
+    apiGetState.isLoaded &&
+    !apiGetState.errorMessage &&
+    apiGetCertOptionsState.isLoaded &&
+    !apiGetCertOptionsState.errorMessage &&
+    JSON.stringify(dummyForm.form) !== JSON.stringify(formState.form);
+
+  const formUnchanged =
+    apiGetState.certificate.name === formState.form.name &&
+    apiGetState.certificate.description === formState.form.description &&
+    apiGetState.certificate.private_key.id === formState.form.private_key_id &&
+    apiGetState.certificate.challenge_method.value ===
+      formState.form.challenge_method_value &&
+    apiGetState.certificate.subject_alts === formState.form.subject_alts &&
+    apiGetState.certificate.api_key_via_url ===
+      formState.form.api_key_via_url &&
+    apiGetState.certificate.country === formState.form.country &&
+    apiGetState.certificate.city === formState.form.city &&
+    apiGetState.certificate.organization === formState.form.organization &&
+    apiGetState.certificate.organizational_unit ===
+      formState.form.organizational_unit;
+
+  // vars related to api
+  var availableKeys;
+  var availableMethods;
+
+  if (renderApiItems) {
     // build options for available keys
-    var availableKeys;
-    // populate current key
+    // default (current) option
     availableKeys = [
       {
-        value: apiGetState.certificate.private_key.id,
-        name: apiGetState.certificate.private_key.name + ' - Current Key',
+        value: parseInt(apiGetState.certificate.private_key.id),
+        name: apiGetState.certificate.private_key.name + ' - Current',
       },
     ];
-    // if there are additional available keys, add those
-    if (optionsState.certificate_options.private_keys) {
+    if (apiGetCertOptionsState?.certificate_options?.private_keys) {
       availableKeys = availableKeys.concat(
-        optionsState.certificate_options.private_keys.map((m) => ({
-          value: parseInt(m.id),
-          name: m.name + ' (' + m.algorithm.name + ')',
+        apiGetCertOptionsState.certificate_options.private_keys.map((k) => ({
+          value: parseInt(k.id),
+          name: k.name,
         }))
       );
     }
-
-    // build challenge method options (must be returned by backend)
-    var defaultMethodValue = apiGetState.certificate.challenge_method.value;
-
-    // add notation if Method is disabled
-    var defaultMethodDisableText = '';
-    if (!apiGetState.certificate.challenge_method.enabled) {
-      defaultMethodDisableText = '[Disabled] ';
+    // build options for challenge method
+    if (apiGetCertOptionsState?.certificate_options?.challenge_methods) {
+      availableMethods = buildMethodsList(
+        apiGetCertOptionsState.certificate_options.challenge_methods,
+        apiGetState.certificate.challenge_method
+      );
     }
-
-    var defaultMethodName =
-      apiGetState.certificate.challenge_method.name +
-      ' (' +
-      apiGetState.certificate.challenge_method.type +
-      ') ' +
-      defaultMethodDisableText +
-      '- Current';
-
-    // build Challenge Method list
-    var availableMethods = buildMethodsList(
-      optionsState.certificate_options.challenge_methods,
-      apiGetState.certificate.challenge_method.value
-    );
-
-    // end JSX Logic
-
-    return (
-      <>
-        <H2Header h2='Certificates - Edit' />
-        <Form onSubmit={submitFormHandler}>
-          {sendApiState.errorMessage && (
-            <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>
-          )}
-
-          <InputText
-            label='Name'
-            id='name'
-            name='name'
-            value={formState.certificate.name}
-            onChange={stringInputChangeHandler}
-            invalid={formState.validationErrors.name && true}
-          />
-          <InputText
-            label='Description'
-            id='description'
-            name='description'
-            value={formState.certificate.description}
-            onChange={stringInputChangeHandler}
-          />
-
-          <InputSelect
-            label='ACME Account'
-            id='acme_account_id'
-            name='acme_account_id'
-            defaultName={
-              apiGetState.certificate.acme_account.name +
-              (apiGetState.certificate.acme_account.is_staging
-                ? ' (Staging)'
-                : '')
-            }
-            disabled
-          />
-
-          <InputSelect
-            label='Private Key'
-            id='private_key_id'
-            name='private_key_id'
-            options={availableKeys}
-            value={formState.certificate.private_key_id}
-            onChange={intInputChangeHandler}
-            disableEmptyValue
-            invalid={formState.validationErrors.private_key_id}
-          />
-
-          <InputSelect
-            label='Challenge Method'
-            id='challenge_method_value'
-            name='challenge_method_value'
-            options={availableMethods}
-            value={formState.certificate.challenge_method_value}
-            onChange={stringInputChangeHandler}
-            defaultValue={defaultMethodValue}
-            defaultName={defaultMethodName}
-            disableEmptyValue
-            invalid={formState.validationErrors.challenge_method_value}
-          />
-
-          <InputText
-            label='Subject (and Common Name)'
-            id='subject'
-            name='subject'
-            value={apiGetState.certificate.subject}
-            disabled
-          />
-
-          <InputTextArray
-            label='Subject Alt. Names'
-            id='subject_alts'
-            name='subject_alts'
-            value={formState.certificate.subject_alts}
-            onChange={stringInputChangeHandler}
-            invalid={formState.validationErrors.subject_alts}
-          />
-
-          <InputCheckbox
-            id='api_key_via_url'
-            checked={formState.certificate.api_key_via_url ? true : false}
-            onChange={checkChangeHandler}
-          >
-            Allow API Key via URL{' '}
-            <span className='text-danger'>
-              (This should only be used for clients that absolutely need it.)
-            </span>
-          </InputCheckbox>
-
-          <FormInformation>
-            <strong>CSR</strong>
-          </FormInformation>
-          <InputText
-            label='Organization'
-            id='organization'
-            name='organization'
-            value={formState.certificate.organization}
-            onChange={stringInputChangeHandler}
-            invalid={formState.validationErrors.organization && true}
-          />
-          <InputText
-            label='Organizational Unit'
-            id='organizational_unit'
-            name='organizational_unit'
-            value={formState.certificate.organizational_unit}
-            onChange={stringInputChangeHandler}
-            invalid={formState.validationErrors.organizational_unit && true}
-          />
-          <InputText
-            label='Country (2 Letter Code)'
-            id='country'
-            name='country'
-            value={formState.certificate.country}
-            onChange={stringInputChangeHandler}
-            invalid={formState.validationErrors.country && true}
-          />
-          <InputText
-            label='City'
-            id='city'
-            name='city'
-            value={formState.certificate.city}
-            onChange={stringInputChangeHandler}
-            invalid={formState.validationErrors.city && true}
-          />
-
-          <Button type='submit' disabled={sendApiState.isSending}>
-            Submit
-          </Button>
-          <Button
-            type='reset'
-            onClick={resetClickHandler}
-            disabled={sendApiState.isSending}
-          >
-            Reset
-          </Button>
-          <Button
-            type='cancel'
-            onClick={cancelClickHandler}
-            disabled={sendApiState.isSending}
-          >
-            Cancel
-          </Button>
-        </Form>
-      </>
-    );
   }
+  // vars related to api -- end
+
+  return (
+    <>
+      <FormContainer>
+        <TitleBar title='Edit Certificate'>
+          {renderApiItems && (
+            <Button
+              type='delete'
+              onClick={deleteClickHandler}
+              disabled={apiSendState.isSending}
+            >
+              Delete
+            </Button>
+          )}
+        </TitleBar>
+
+        {!apiGetState.isLoaded && <ApiLoading />}
+        {apiGetState.errorMessage && (
+          <ApiError>{apiGetState.errorMessage}</ApiError>
+        )}
+
+        {renderApiItems && (
+          <>
+            <DialogAlert
+              title={`Are you sure you want to delete ${formState.form.name}?`}
+              open={deleteOpen}
+              onCancel={deleteCancelHandler}
+              onConfirm={deleteConfirmHandler}
+            >
+              The account can be recovered as long as the associated key is not
+              lost.
+            </DialogAlert>
+
+            <Form onSubmit={submitFormHandler}>
+              <InputTextField
+                label='Name'
+                id='name'
+                value={formState.form.name}
+                onChange={stringInputChangeHandler}
+                error={formState.validationErrors.name && true}
+              />
+
+              <InputTextField
+                label='Description'
+                id='description'
+                value={formState.form.description}
+                onChange={stringInputChangeHandler}
+              />
+
+              <InputSelect
+                label='ACME Account'
+                id='acme_account_id'
+                value={0}
+                options={[
+                  {
+                    value: 0,
+                    name:
+                      apiGetState.certificate.acme_account.name +
+                      (apiGetState.certificate.acme_account.is_staging
+                        ? ' (Staging)'
+                        : ''),
+                  },
+                ]}
+                disabled
+              />
+
+              <InputSelect
+                label='Private Key'
+                id='private_key_id'
+                options={availableKeys}
+                value={formState.form.private_key_id}
+                onChange={intInputChangeHandler}
+                error={formState.validationErrors.private_key_id}
+              />
+
+              <InputSelect
+                label='Challenge Method'
+                id='challenge_method_value'
+                options={availableMethods}
+                value={formState.form.challenge_method_value}
+                onChange={stringInputChangeHandler}
+                error={formState.validationErrors.challenge_method_value}
+              />
+
+              <InputTextField
+                label='Subject (and Common Name)'
+                id='subject'
+                value={apiGetState.certificate.subject}
+                disabled
+              />
+
+              <InputTextArray
+                label='Subject Alternate Names'
+                id='subject_alts'
+                name='subject_alts'
+                value={formState.form.subject_alts}
+                onChange={stringInputChangeHandler}
+                error={formState.validationErrors.subject_alts}
+              />
+
+              <Typography component='h3' variant='subtitle2' sx={{ m: 2 }}>
+                CSR Fields
+              </Typography>
+
+              <InputTextField
+                label='Country (2 Letter Code)'
+                id='country'
+                value={formState.form.country}
+                onChange={stringInputChangeHandler}
+              />
+
+              <InputTextField
+                label='City'
+                id='city'
+                value={formState.form.city}
+                onChange={stringInputChangeHandler}
+              />
+
+              <InputTextField
+                label='Organization'
+                id='organization'
+                value={formState.form.organization}
+                onChange={stringInputChangeHandler}
+              />
+
+              <InputTextField
+                label='Organizational Unit'
+                id='organizational_unit'
+                value={formState.form.organizational_unit}
+                onChange={stringInputChangeHandler}
+              />
+
+              <InputCheckbox
+                id='api_key_via_url'
+                checked={formState.form.api_key_via_url}
+                onChange={checkChangeHandler}
+              >
+                Allow API Key via URL (for Legacy Clients)
+              </InputCheckbox>
+
+              {apiSendState.errorMessage &&
+                formState.validationErrors.length > 0 && (
+                  <FormError>
+                    Error Posting -- {apiSendState.errorMessage}
+                  </FormError>
+                )}
+
+              <FormFooter
+                createdAt={apiGetState.certificate.created_at}
+                updatedAt={apiGetState.certificate.updated_at}
+              >
+                <Button
+                  type='cancel'
+                  onClick={cancelClickHandler}
+                  disabled={apiSendState.isSending}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type='reset'
+                  onClick={resetClickHandler}
+                  disabled={apiSendState.isSending || formUnchanged}
+                >
+                  Reset
+                </Button>
+                <Button
+                  type='submit'
+                  disabled={apiSendState.isSending || formUnchanged}
+                >
+                  Submit
+                </Button>
+              </FormFooter>
+            </Form>
+          </>
+        )}
+      </FormContainer>
+      <Orders certId={id} sendApiState={apiSendState} sendData={sendData} />
+    </>
+  );
 };
 
 export default EditOneCert;

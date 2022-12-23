@@ -59,7 +59,7 @@ const Orders = (props) => {
   // calculate offset from current page and rows per page
   const offset = page * rowsPerPage;
 
-  const [apiGetState] = useAxiosGet(
+  const [apiGetState, updateGet] = useAxiosGet(
     `/v1/certificates/${props.certId}/orders?limit=${rowsPerPage}&offset=${offset}&sort=${sort}`,
     'all_orders',
     true
@@ -78,7 +78,7 @@ const Orders = (props) => {
       null,
       true
     ).then((success) => {
-      props.updateGet();
+      updateGet();
     });
   };
 
@@ -92,7 +92,7 @@ const Orders = (props) => {
       null,
       true
     ).then((success) => {
-      props.updateGet();
+      updateGet();
     });
   };
 
@@ -107,22 +107,27 @@ const Orders = (props) => {
       null,
       true
     ).then((success) => {
-      props.updateGet();
+      updateGet();
     });
   };
   // action handlers -- end
 
+  // consts related to rendering
+  const renderApiItems = apiGetState.isLoaded && !apiGetState.errorMessage;
+
   return (
     <TableContainer>
       <TitleBar title='ACME Orders' headerComponent='h3'>
-        <Button
-          variant='contained'
-          type='submit'
-          size='small'
-          onClick={newOrderHandler}
-        >
-          Place New Order
-        </Button>
+        {renderApiItems && (
+          <Button
+            variant='contained'
+            type='submit'
+            size='small'
+            onClick={newOrderHandler}
+          >
+            Place New Order
+          </Button>
+        )}
       </TitleBar>
       {!apiGetState.isLoaded && <ApiLoading />}
       {apiGetState.errorMessage && (
