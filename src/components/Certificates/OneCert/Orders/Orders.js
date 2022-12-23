@@ -14,7 +14,7 @@ import { convertUnixTime } from '../../../../helpers/time';
 
 import ApiLoading from '../../../UI/Api/ApiLoading';
 import ApiError from '../../../UI/Api/ApiError';
-import PaperSingle from '../../../UI/Paper/PaperSingle';
+import TableContainer from '../../../UI/TableMui/TableContainer';
 import TableHeaderRow from '../../../UI/TableMui/TableHeaderRow';
 import TitleBar from '../../../UI/Header/TitleBar';
 import TablePagination from '../../../UI/TableMui/TablePagination';
@@ -113,7 +113,7 @@ const Orders = (props) => {
   // action handlers -- end
 
   return (
-    <PaperSingle>
+    <TableContainer>
       <TitleBar title='ACME Orders' headerComponent='h3'>
         <Button
           variant='contained'
@@ -190,7 +190,7 @@ const Orders = (props) => {
           <TablePagination count={apiGetState?.all_orders?.total_records} />
         </>
       )}
-    </PaperSingle>
+    </TableContainer>
   );
 };
 

@@ -14,7 +14,7 @@ import { getRowsPerPage, getPage, getSort } from '../UI/TableMui/query';
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
 import Flag from '../UI/Flag/Flag';
-import PaperSingle from '../UI/Paper/PaperSingle';
+import TableContainer from '../UI/TableMui/TableContainer';
 import TableHeaderRow from '../UI/TableMui/TableHeaderRow';
 import TablePagination from '../UI/TableMui/TablePagination';
 import TitleBar from '../UI/Header/TitleBar';
@@ -64,7 +64,7 @@ const Dashboard = () => {
   // Requires updating backend to always return total even when out of bounds
 
   return (
-    <PaperSingle>
+    <TableContainer>
       <TitleBar title='Dashboard' />
 
       {!apiGetState.isLoaded && <ApiLoading />}
@@ -115,7 +115,7 @@ const Dashboard = () => {
           />
         </>
       )}
-    </PaperSingle>
+    </TableContainer>
   );
 };
 

@@ -18,7 +18,7 @@ import { newId } from '../../App';
 
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
-import PaperSingle from '../UI/Paper/PaperSingle';
+import TableContainer from '../UI/TableMui/TableContainer';
 import TableHeaderRow from '../UI/TableMui/TableHeaderRow';
 import TitleBar from '../UI/Header/TitleBar';
 import TablePagination from '../UI/TableMui/TablePagination';
@@ -83,7 +83,7 @@ const AllACMEAccounts = () => {
   };
 
   return (
-    <PaperSingle>
+    <TableContainer>
       <TitleBar title='ACME Accounts'>
         <Button variant='contained' type='submit' onClick={newClickHandler}>
           New Account
@@ -133,7 +133,7 @@ const AllACMEAccounts = () => {
           />
         </>
       )}
-    </PaperSingle>
+    </TableContainer>
   );
 };
 

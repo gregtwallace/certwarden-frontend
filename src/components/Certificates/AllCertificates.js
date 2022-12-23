@@ -19,7 +19,7 @@ import { newId } from '../../App';
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
 import Flag from '../UI/Flag/Flag';
-import PaperSingle from '../UI/Paper/PaperSingle';
+import TableContainer from '../UI/TableMui/TableContainer';
 import TableHeaderRow from '../UI/TableMui/TableHeaderRow';
 import TitleBar from '../UI/Header/TitleBar';
 import TablePagination from '../UI/TableMui/TablePagination';
@@ -79,7 +79,7 @@ const AllCertificates = () => {
   };
 
   return (
-    <PaperSingle>
+    <TableContainer>
       <TitleBar title='Certificates'>
         <Button variant='contained' type='submit' onClick={newClickHandler}>
           New Certificate
@@ -134,7 +134,7 @@ const AllCertificates = () => {
           />
         </>
       )}
-    </PaperSingle>
+    </TableContainer>
   );
 
   //                   {!m.challenge_method.enabled && <Flag type='method' />}

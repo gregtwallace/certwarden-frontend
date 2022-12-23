@@ -1,6 +1,6 @@
 import { Paper } from '@mui/material';
 
-const PaperSingle = (props) => {
+const TableContainer = (props) => {
   return (
     <Paper
       sx={{
@@ -14,4 +14,4 @@ const PaperSingle = (props) => {
   );
 };
 
-export default PaperSingle;
+export default TableContainer;
