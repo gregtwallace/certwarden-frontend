@@ -12,6 +12,12 @@ const InputSelect = (props) => {
     case 'algorithm_value':
       errorMessage = 'Algorithm must be selected to generate a key.';
       break;
+    case 'acme_account_id':
+      errorMessage = 'An account must be selected.';
+      break;
+    case 'challenge_method_value':
+      errorMessage = 'A challenge method must be selected.';
+      break;
     case 'key_source':
       errorMessage = 'Key source must be selected.';
       break;

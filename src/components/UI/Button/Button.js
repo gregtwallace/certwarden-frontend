@@ -4,6 +4,9 @@ const Button = (props) => {
   var color = '';
 
   switch (props.type) {
+    case 'add':
+      color = 'success';
+      break;
     case 'submit':
       color = 'primary';
       break;
@@ -37,6 +40,7 @@ const Button = (props) => {
         ml: 2,
       }}
       color={color}
+      size={props.size}
     >
       {props.children}
     </ButtonMui>
