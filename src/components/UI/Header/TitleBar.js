@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 
 const TitleBar = (props) => {
   // if headerComponent not specified, set to h2
-  let headerComponent = 'h2'
+  let headerComponent = 'h2';
   if (props.headerComponent) {
     headerComponent = props.headerComponent;
   }
