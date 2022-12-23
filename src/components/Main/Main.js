@@ -1,11 +1,11 @@
 import { Box } from '@mui/system';
 
-import useAuth from '../../hooks/useAuth';
+import useAuthExpires from '../../hooks/useAuthExpires';
 import LoggedIn from './LoggedIn';
 import Login from '../Authentication/Login';
 
 const Main = () => {
-  const { auth } = useAuth();
+  const { authExpires } = useAuthExpires();
 
   return (
     <Box
@@ -20,7 +20,7 @@ const Main = () => {
       }}
     >
       {/* Not Logged In vs. Logged In */}
-      {!auth.loggedInExpiration ? <Login /> : <LoggedIn />}
+      {!authExpires ? <Login /> : <LoggedIn />}
     </Box>
   );
 };

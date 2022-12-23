@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-import useAuth from './hooks/useAuth';
+import useAuthExpires from './hooks/useAuthExpires';
 
 const Header = () => {
-  const { auth } = useAuth();
+  const { authExpires } = useAuthExpires();
   const navigate = useNavigate();
 
   // logout handler just redirects to logout route
@@ -27,7 +27,7 @@ const Header = () => {
         >
           LeGo CertHub
         </Typography>
-        {auth.loggedInExpiration && (
+        {authExpires && (
           <IconButton color='inherit' onClick={logoutHandler}>
             <LogoutIcon />
           </IconButton>

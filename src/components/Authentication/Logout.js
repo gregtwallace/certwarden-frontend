@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 
 import { Paper } from '@mui/material';
 
-import useAuth from '../../hooks/useAuth';
+import useAuthExpires from '../../hooks/useAuthExpires';
 import useAxiosSend from '../../hooks/useAxiosSend';
 
 import TitleBar from '../UI/Header/TitleBar';
 import ApiError from '../UI/Api/ApiError';
 
 const Logout = () => {
-  const { setAuth } = useAuth();
+  const { setAuthExpires } = useAuthExpires();
   const [, sendData] = useAxiosSend();
 
   const [logoutFailed, setLogoutFailed] = useState(false);
@@ -21,8 +21,9 @@ const Logout = () => {
     sendData(`/v1/auth/logout`, 'POST', null, true).then((success) => {
       console.log(success);
       if (success) {
-        // update auth state
-        setAuth({});
+        // update auth
+        sessionStorage.removeItem('access_token');
+        setAuthExpires();
         navigate('/');
       } else {
         setLogoutFailed(true);
@@ -39,7 +40,7 @@ const Logout = () => {
     >
       <TitleBar title='Logout' />
 
-      {logoutFailed && <ApiError>Logout failed.</ApiError>}
+      {logoutFailed && <ApiError>Logout API call failed.</ApiError>}
     </Paper>
   );
 };

@@ -1,12 +1,12 @@
 import axios from 'axios';
 
 import { axiosConfig } from '../api/axios';
-import useAuth from './useAuth';
+import useAuthExpires from './useAuthExpires';
 
 const REFRESH_NODE = 'v1/auth/refresh';
 
 const useRefreshToken = () => {
-  const { setAuth } = useAuth();
+  const { setAuthExpires } = useAuthExpires();
 
   const refresh = async () => {
     try {
@@ -29,14 +29,17 @@ const useRefreshToken = () => {
         );
       }
 
-      setAuth({
-        loggedInExpiration: response.data.response.session.exp,
-        accessToken: response.data.response.access_token,
-      });
+      setAuthExpires(response.data.response.session.exp);
+      sessionStorage.setItem(
+        'access_token',
+        response.data.response.access_token
+      );
 
       return response.data.response.access_token;
     } catch (error) {
-      setAuth({});
+      setAuthExpires();
+      sessionStorage.removeItem('access_token');
+
       return error;
     }
   };

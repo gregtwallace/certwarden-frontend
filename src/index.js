@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 import App from './App';
-import { AuthProvider } from './context/AuthProvider';
+import { AuthExpiresProvider } from './context/AuthExpiresProvider';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -24,13 +24,11 @@ const theme = createTheme({
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-
       <CssBaseline />
 
-      <AuthProvider>
+      <AuthExpiresProvider>
         <App />
-      </AuthProvider>
-      
+      </AuthExpiresProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

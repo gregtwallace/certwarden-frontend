@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 
-import useAuth from './hooks/useAuth';
+import useAuthExpires from './hooks/useAuthExpires';
 
 import Header from './Header';
 import Main from './components/Main/Main';
@@ -16,7 +16,7 @@ export const frontendVersion = '0.5.0';
 export const newId = -1;
 
 const App = () => {
-  const { setAuth } = useAuth();
+  const { setAuthExpires } = useAuthExpires();
 
   // check for 'logged_in_expiration' cookie to set the initial login state
   useEffect(() => {
@@ -24,13 +24,11 @@ const App = () => {
       new RegExp(`(^| )logged_in_expiration=([^;]+)`)
     );
     if (loggedInExpiration) {
-      setAuth({
-        loggedInExpiration: loggedInExpiration[2],
-      });
+      setAuthExpires(loggedInExpiration[2]);
     } else {
-      setAuth({});
+      setAuthExpires();
     }
-  }, [setAuth]);
+  }, [setAuthExpires]);
 
   return (
     <Box

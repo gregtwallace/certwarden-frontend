@@ -10,14 +10,14 @@ import TextField from '@mui/material/TextField';
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
-import useAuth from '../../hooks/useAuth';
+import useAuthExpires from '../../hooks/useAuthExpires';
 import useAxiosSend from '../../hooks/useAxiosSend';
 
 const LOGIN_URL = '/v1/auth/login';
 
 const Login = () => {
   const [sendState, sendData] = useAxiosSend();
-  const { setAuth } = useAuth();
+  const { setAuthExpires } = useAuthExpires();
 
   const [formState, setFormState] = useState({
     login: {
@@ -66,10 +66,8 @@ const Login = () => {
 
     sendData(LOGIN_URL, 'POST', formState.login, true).then((success) => {
       if (success) {
-        setAuth({
-          loggedInExpiration: success.session.exp,
-          accessToken: success.access_token,
-        });
+        sessionStorage.setItem('access_token', success.access_token);
+        setAuthExpires(success.session.exp);
       }
     });
   };
