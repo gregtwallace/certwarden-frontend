@@ -1,42 +1,95 @@
 import useAxiosGet from '../../hooks/useAxiosGet';
 
+import { Link, Typography } from '@mui/material';
+
 import ApiError from '../UI/Api/ApiError';
 import ApiLoading from '../UI/Api/ApiLoading';
-import H5Header from '../UI/Header/H5Header';
+import GridItemContainer from '../UI/Grid/GridItemContainer';
+import GridTitle from '../UI/Grid/GridTitle';
 
 const BackendStatus = () => {
   const [apiGetState] = useAxiosGet('/status', 'server', true);
 
-  if (apiGetState.errorMessage) {
-    return <ApiError>{apiGetState.errorMessage}</ApiError>;
-  } else if (!apiGetState.isLoaded) {
-    return <ApiLoading />;
-  } else {
-    return (
-      <div className='container mb-5'>
-        <H5Header h5='Backend Status' />
+  // consts related to rendering
+  const renderApiItems = apiGetState.isLoaded && !apiGetState.errorMessage;
 
-        <p>Status: {apiGetState.server.status}</p>
-        <p>
-          Development Mode:{' '}
-          {apiGetState.server.development_mode ? 'true' : 'false'}
-        </p>
-        <p>Backend Version: {apiGetState.server.version}</p>
-        <p>Backend API URL: {apiGetState.server.api_url}</p>
+  return (
+    <GridItemContainer>
+      <GridTitle title='Backend Status' />
 
-        {apiGetState.server.frontend_url && (
-          <p>Frontend URL: {apiGetState.server.frontend_url}</p>
-        )}
+      {!apiGetState.isLoaded && <ApiLoading />}
+      {apiGetState.errorMessage && (
+        <ApiError>{apiGetState.errorMessage}</ApiError>
+      )}
 
-        <p>
-          ACME Production Directory: {apiGetState.server.acme_directories.prod}
-        </p>
-        <p>
-          ACME Staging Directory: {apiGetState.server.acme_directories.staging}
-        </p>
-      </div>
-    );
-  }
+      {renderApiItems && (
+        <>
+          <Typography variant='p' sx={{ my: 1 }} display='block'>
+            Status:{' '}
+            {apiGetState.server.status.charAt(0).toUpperCase() +
+              apiGetState.server.status.slice(1)}
+          </Typography>
+
+          <Typography variant='p' sx={{ my: 1 }} display='block'>
+            Version: {apiGetState.server.version}
+          </Typography>
+
+          <Typography variant='p' sx={{ my: 1 }} display='block'>
+            API URL:{' '}
+            <Link
+              href={apiGetState.server.api_url}
+              target='_blank'
+              rel='noreferrer'
+            >
+              {apiGetState.server.api_url}
+            </Link>
+          </Typography>
+
+          <Typography variant='p' sx={{ my: 1 }} display='block'>
+            Development Mode:{' '}
+            {apiGetState.server.development_mode ? 'Yes' : 'No'}
+          </Typography>
+
+          <Typography variant='p' sx={{ my: 1 }} display='block'>
+            Hosted Frontend:{' '}
+            {apiGetState.server.frontend_url ? (
+              <Link
+                href={apiGetState.server.frontend_url}
+                target='_blank'
+                rel='noreferrer'
+              >
+                {apiGetState.server.frontend_url}
+              </Link>
+            ) : (
+              'Disabled'
+            )}
+          </Typography>
+
+          <Typography variant='p' sx={{ my: 1 }} display='block'>
+            ACME Production Directory:{' '}
+            <Link
+              href={apiGetState.server.acme_directories.prod}
+              target='_blank'
+              rel='noreferrer'
+            >
+              {apiGetState.server.acme_directories.prod}
+            </Link>
+          </Typography>
+
+          <Typography variant='p' sx={{ my: 1 }} display='block'>
+            ACME Staging Directory:{' '}
+            <Link
+              href={apiGetState.server.acme_directories.staging}
+              target='_blank'
+              rel='noreferrer'
+            >
+              {apiGetState.server.acme_directories.staging}
+            </Link>
+          </Typography>
+        </>
+      )}
+    </GridItemContainer>
+  );
 };
 
 export default BackendStatus;

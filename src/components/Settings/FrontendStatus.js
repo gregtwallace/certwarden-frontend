@@ -2,17 +2,35 @@ import { frontendVersion } from '../../App';
 import { devMode } from '../../helpers/environment';
 import { apiUrl } from '../../helpers/environment';
 
-import H5Header from '../UI/Header/H5Header';
+import { Link, Typography } from '@mui/material';
+
+import GridItemContainer from '../UI/Grid/GridItemContainer';
+import GridTitle from '../UI/Grid/GridTitle';
 
 const FrontendStatus = () => {
   return (
-    <div className='container mb-5'>
-      <H5Header h5='Frontend Status' />
+    <GridItemContainer>
+      <GridTitle title='Frontend Status' />
 
-      <p>Development Mode: {devMode ? 'true' : 'false'}</p>
-      <p>Frontend Version: {`${frontendVersion}`}</p>
-      <p>API URL: {apiUrl}</p>
-    </div>
+      <Typography variant='p' sx={{ my: 1 }} display='block'>
+        Status: Available
+      </Typography>
+
+      <Typography variant='p' sx={{ my: 1 }} display='block'>
+        Version: {frontendVersion}
+      </Typography>
+
+      <Typography variant='p' sx={{ my: 1 }} display='block'>
+        API URL:{' '}
+        <Link href={apiUrl} target='_blank' rel='noreferrer'>
+          {apiUrl}
+        </Link>
+      </Typography>
+
+      <Typography variant='p' sx={{ my: 1 }} display='block'>
+        Development Mode: {devMode ? 'Yes' : 'No'}
+      </Typography>
+    </GridItemContainer>
   );
 };
 

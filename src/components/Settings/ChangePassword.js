@@ -2,17 +2,19 @@ import { useState } from 'react';
 
 import useAxiosSend from '../../hooks/useAxiosSend';
 
-import Form from '../UI/Form/Form';
-import InputText from '../UI/Form/InputText';
+import Form from '../UI/FormMui/Form';
+import GridItemContainer from '../UI/Grid/GridItemContainer';
+import FormError from '../UI/FormMui/FormError';
+import FormFooter from '../UI/FormMui/FormFooter';
 import Button from '../UI/Button/Button';
-import FormResponse from '../UI/Form/FormResponse';
-import H5Header from '../UI/Header/H5Header';
+import GridTitle from '../UI/Grid/GridTitle';
+import InputTextField from '../UI/FormMui/InputTextField';
 
 const ChangePassword = () => {
-  const [sendApiState, sendData] = useAxiosSend();
+  const [apiSendState, sendData] = useAxiosSend();
 
   const blankFormState = {
-    payload: {
+    form: {
       // no username (extracted from jwt claims on backend)
       current_password: '',
       new_password: '',
@@ -27,9 +29,9 @@ const ChangePassword = () => {
   const inputChangeHandler = (event) => {
     setFormState((prevState) => ({
       ...prevState,
-      payload: {
-        ...prevState.payload,
-        [event.target.id]: event.target.value,
+      form: {
+        ...prevState.form,
+        [event.target.name]: event.target.value,
       },
     }));
   };
@@ -44,20 +46,18 @@ const ChangePassword = () => {
   const submitFormHandler = (event) => {
     event.preventDefault();
 
-    /// form validation
+    // form validation
     let validationErrors = [];
     // TODO: Additional password complexity requirements?
     // new password
-    if (formState.payload.new_password.length < 10) {
+    if (formState.form.new_password.length < 10) {
       validationErrors.new_password = true;
     }
 
     // confirm password
-    if (formState.payload.new_password !== formState.payload.confirm_new_password) {
+    if (formState.form.new_password !== formState.form.confirm_new_password) {
       validationErrors.confirm_new_password = true;
     }
-
-    // TODO: Confirm passwords match
 
     setFormState((prevState) => ({
       ...prevState,
@@ -66,9 +66,9 @@ const ChangePassword = () => {
     if (Object.keys(validationErrors).length > 0) {
       return false;
     }
-    //
+    // form validation -- end
 
-    sendData(`/v1/auth/changepassword`, 'PUT', formState.payload, true).then(
+    sendData(`/v1/auth/changepassword`, 'PUT', formState.form, true).then(
       (success) => {
         if (success) {
           // clear form
@@ -82,55 +82,53 @@ const ChangePassword = () => {
   };
 
   return (
-    <div className="container mb-5">
-      <H5Header h5="Change Password" />
+    <GridItemContainer>
+      <GridTitle title='Change Password' />
       <Form onSubmit={submitFormHandler}>
-        {/* {sendApiState.errorMessage && (
-          <FormError>Error Posting -- {sendApiState.errorMessage}</FormError>
-        )} */}
-        <InputText
+        <InputTextField
           label='Current Password'
           id='current_password'
-          name='name'
           type='password'
-          value={formState.payload.current_password}
+          value={formState.form.current_password}
           onChange={inputChangeHandler}
         />
-        <InputText
+
+        <InputTextField
           label='New Password'
           id='new_password'
-          name='new_password'
           type='password'
-          value={formState.payload.new_password}
+          value={formState.form.new_password}
           onChange={inputChangeHandler}
-          invalid={formState.validationErrors.new_password && true}
+          error={formState.validationErrors.new_password && true}
         />
-        <InputText
+
+        <InputTextField
           label='Confirm New Password'
           id='confirm_new_password'
-          name='confirm_new_password'
           type='password'
-          value={formState.payload.confirm_new_password}
+          value={formState.form.confirm_new_password}
           onChange={inputChangeHandler}
-          invalid={formState.validationErrors.confirm_new_password && true}
+          error={formState.validationErrors.confirm_new_password && true}
         />
 
-        {!sendApiState.errorMessage && formState.apiMessage && (
-          <FormResponse>Password successfully changed.</FormResponse>
+        {apiSendState.errorMessage && formState.validationErrors.length > 0 && (
+          <FormError>Error Posting -- {apiSendState.errorMessage}</FormError>
         )}
 
-        <Button type='submit' disabled={sendApiState.isSending}>
-          Submit
-        </Button>
-        <Button
-          type='reset'
-          onClick={resetClickHandler}
-          disabled={sendApiState.isSending}
-        >
-          Reset
-        </Button>
+        <FormFooter>
+          <Button
+            type='reset'
+            onClick={resetClickHandler}
+            disabled={apiSendState.isSending}
+          >
+            Reset
+          </Button>
+          <Button type='submit' disabled={apiSendState.isSending}>
+            Submit
+          </Button>
+        </FormFooter>
       </Form>
-    </div>
+    </GridItemContainer>
   );
 };
 

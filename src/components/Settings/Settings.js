@@ -1,17 +1,29 @@
-import H2Header from '../UI/Header/H2Header';
+import GridContainer from '../UI/Grid/GridContainer';
+import GridItemThird from '../UI/Grid/GridItemThird';
+
 import ChangePassword from './ChangePassword';
 import BackendStatus from './BackendStatus';
 import FrontendStatus from './FrontendStatus';
+import TitleBar from '../UI/Header/TitleBar';
 
 const Settings = () => {
   return (
     <>
-      <H2Header h2='LeGo Settings' />
-      
-      <ChangePassword />
+      <TitleBar title='Settings' />
 
-      <FrontendStatus />
-      <BackendStatus />
+      <GridContainer>
+        <GridItemThird>
+          <FrontendStatus />
+        </GridItemThird>
+
+        <GridItemThird>
+          <BackendStatus />
+        </GridItemThird>
+
+        <GridItemThird>
+          <ChangePassword />
+        </GridItemThird>
+      </GridContainer>
     </>
   );
 };
