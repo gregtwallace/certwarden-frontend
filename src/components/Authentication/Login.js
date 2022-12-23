@@ -5,6 +5,7 @@ import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
+import { Paper } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 
@@ -74,10 +75,12 @@ const Login = () => {
 
   return (
     <Container maxWidth='xs'>
-      <Box
+      <Paper
         sx={{
-          margin: 0,
-          padding: 6,
+          my: 6,
+          px: 6,
+          pt: 2,
+          pb: 3,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -135,7 +138,7 @@ const Login = () => {
             </Button>
           </Stack>
         </Box>
-      </Box>
+      </Paper>
     </Container>
   );
 };
