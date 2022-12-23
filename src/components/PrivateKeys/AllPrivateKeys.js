@@ -108,7 +108,11 @@ const AllPrivateKeys = () => {
                 ))}
             </TableBody>
           </Table>
-          <TablePagination count={apiGetState?.all_private_keys?.total_records} />
+          <TablePagination
+            page={page}
+            rowsPerPage={rowsPerPage}
+            count={apiGetState?.all_private_keys?.total_records}
+          />
         </>
       )}
     </TableContainer>

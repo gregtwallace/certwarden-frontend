@@ -130,6 +130,8 @@ const AllCertificates = () => {
             </TableBody>
           </Table>
           <TablePagination
+            page={page}
+            rowsPerPage={rowsPerPage}
             count={apiGetState?.all_certificates?.total_records}
           />
         </>

@@ -52,7 +52,7 @@ const Orders = (props) => {
   const [searchParams] = useSearchParams();
 
   // get calculated query params
-  const rowsPerPage = getRowsPerPage(searchParams);
+  const rowsPerPage = getRowsPerPage(searchParams, 5);
   const page = getPage(searchParams);
   const sort = getSort(searchParams, 'created_at', 'desc');
 
@@ -192,7 +192,11 @@ const Orders = (props) => {
                 ))}
             </TableBody>
           </Table>
-          <TablePagination count={apiGetState?.all_orders?.total_records} />
+          <TablePagination
+            page={page}
+            rowsPerPage={rowsPerPage}
+            count={apiGetState?.all_orders?.total_records}
+          />
         </>
       )}
     </TableContainer>

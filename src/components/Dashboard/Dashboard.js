@@ -111,6 +111,8 @@ const Dashboard = () => {
             </TableBody>
           </Table>
           <TablePagination
+            page={page}
+            rowsPerPage={rowsPerPage}
             count={apiGetState?.valid_current_orders?.total_orders}
           />
         </>

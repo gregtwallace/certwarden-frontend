@@ -1,9 +1,12 @@
-export const perPageOptions = [5, 10, 15, 25, 50];
-const defaultRowsPerPage = 25;
+export const perPageOptions = [5, 10, 20, 50];
+const defaultRowsPerPage = 20;
 
 // getRowsPerPage returns the rows per page that is specified
 // or the default if specified is not valid
-export const getRowsPerPage = (searchParams) => {
+export const getRowsPerPage = (
+  searchParams,
+  defaultRows = defaultRowsPerPage
+) => {
   let rowsPerPage = parseInt(searchParams.get('perpage'));
 
   // set default perpage if not specified or invalid
@@ -12,7 +15,7 @@ export const getRowsPerPage = (searchParams) => {
     isNaN(rowsPerPage) ||
     !perPageOptions.includes(rowsPerPage)
   ) {
-    rowsPerPage = defaultRowsPerPage;
+    rowsPerPage = defaultRows;
   }
 
   return rowsPerPage;

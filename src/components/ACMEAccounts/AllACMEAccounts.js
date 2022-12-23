@@ -129,6 +129,8 @@ const AllACMEAccounts = () => {
             </TableBody>
           </Table>
           <TablePagination
+            page={page}
+            rowsPerPage={rowsPerPage}
             count={apiGetState?.all_acme_accounts?.total_records}
           />
         </>

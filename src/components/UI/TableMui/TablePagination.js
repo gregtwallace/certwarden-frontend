@@ -1,14 +1,14 @@
 import { useSearchParams } from 'react-router-dom';
 
-import { getRowsPerPage, getPage, perPageOptions } from './query';
+import { perPageOptions } from './query';
 
 import MuiTablePagination from '@mui/material/TablePagination';
 
 const TablePagination = (props) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const rowsPerPage = getRowsPerPage(searchParams);
-  const page = getPage(searchParams);
+  const page = props.page;
+  const rowsPerPage = props.rowsPerPage;
 
   // page change handler
   const pageChangeHandler = (_, newPage) => {
