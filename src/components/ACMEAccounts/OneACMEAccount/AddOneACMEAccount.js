@@ -35,7 +35,7 @@ const AddOneACMEAccount = () => {
   const navigate = useNavigate();
 
   const blankFormState = {
-    acme_account: {
+    form: {
       name: '',
       description: '',
       email: '',
@@ -53,8 +53,8 @@ const AddOneACMEAccount = () => {
     setFormState((prevState) => {
       return {
         ...prevState,
-        acme_account: {
-          ...prevState.acme_account,
+        form: {
+          ...prevState.form,
           [event.target.name]: event.target.value,
         },
       };
@@ -66,8 +66,8 @@ const AddOneACMEAccount = () => {
     setFormState((prevState) => {
       return {
         ...prevState,
-        acme_account: {
-          ...prevState.acme_account,
+        form: {
+          ...prevState.form,
           [event.target.name]: parseInt(event.target.value),
         },
       };
@@ -79,8 +79,8 @@ const AddOneACMEAccount = () => {
     setFormState((prevState) => {
       return {
         ...prevState,
-        acme_account: {
-          ...prevState.acme_account,
+        form: {
+          ...prevState.form,
           [event.target.name]: event.target.checked,
         },
       };
@@ -105,19 +105,19 @@ const AddOneACMEAccount = () => {
     // form validation
     let validationErrors = [];
     // name
-    if (!isNameValid(formState.acme_account.name)) {
+    if (!isNameValid(formState.form.name)) {
       validationErrors.name = true;
     }
     // check email format (if present)
-    if (!isEmailValidOrBlank(formState.acme_account.email)) {
+    if (!isEmailValidOrBlank(formState.form.email)) {
       validationErrors.email = true;
     }
     // check private key is selected
-    if (formState.acme_account.private_key_id === '') {
+    if (formState.form.private_key_id === '') {
       validationErrors.private_key_id = true;
     }
     // ToS must be accepted
-    if (formState.acme_account.accepted_tos !== true) {
+    if (formState.form.accepted_tos !== true) {
       validationErrors.accepted_tos = true;
     }
 
@@ -130,7 +130,7 @@ const AddOneACMEAccount = () => {
     }
     // form validation -- end
 
-    sendData(`/v1/acmeaccounts`, 'POST', formState.acme_account, true).then(
+    sendData(`/v1/acmeaccounts`, 'POST', formState.form, true).then(
       (response) => {
         if (response) {
           // go to the new account
@@ -149,7 +149,7 @@ const AddOneACMEAccount = () => {
 
   if (renderApiItems) {
     // tos URL (prod vs. staging)
-    if (!formState.acme_account.is_staging) {
+    if (!formState.form.is_staging) {
       tos_url = apiGetState.acme_account_options.tos_url;
     } else {
       tos_url = apiGetState.acme_account_options.staging_tos_url;
@@ -182,7 +182,7 @@ const AddOneACMEAccount = () => {
           <InputTextField
             label='Name'
             id='name'
-            value={formState.acme_account.name}
+            value={formState.form.name}
             onChange={stringInputChangeHandler}
             error={formState.validationErrors.name && true}
           />
@@ -190,7 +190,7 @@ const AddOneACMEAccount = () => {
           <InputTextField
             label='Description'
             id='description'
-            value={formState.acme_account.description}
+            value={formState.form.description}
             onChange={stringInputChangeHandler}
           />
 
@@ -198,7 +198,7 @@ const AddOneACMEAccount = () => {
             label='Contact E-Mail Address'
             id='email'
             name='email'
-            value={formState.acme_account.email}
+            value={formState.form.email}
             onChange={stringInputChangeHandler}
             error={formState.validationErrors.email && true}
           />
@@ -207,14 +207,14 @@ const AddOneACMEAccount = () => {
             label='Private Key'
             id='private_key_id'
             options={availableKeys}
-            value={formState.acme_account.private_key_id}
+            value={formState.form.private_key_id}
             onChange={intInputChangeHandler}
             error={formState.validationErrors.private_key_id && true}
           />
 
           <InputCheckbox
             id='is_staging'
-            checked={formState.acme_account.is_staging}
+            checked={formState.form.is_staging}
             onChange={checkChangeHandler}
           >
             Staging Environment Account
@@ -222,7 +222,7 @@ const AddOneACMEAccount = () => {
 
           <InputCheckbox
             id='accepted_tos'
-            checked={formState.acme_account.accepted_tos}
+            checked={formState.form.accepted_tos}
             onChange={checkChangeHandler}
             error={formState.validationErrors.accepted_tos && true}
           >
