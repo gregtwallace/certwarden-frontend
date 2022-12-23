@@ -4,7 +4,7 @@ import GridItemThird from '../UI/Grid/GridItemThird';
 import ChangePassword from './ChangePassword';
 import BackendStatus from './BackendStatus';
 import FrontendStatus from './FrontendStatus';
-import TitleBar from '../UI/Header/TitleBar';
+import TitleBar from '../UI/TitleBar/TitleBar';
 
 const Settings = () => {
   return (

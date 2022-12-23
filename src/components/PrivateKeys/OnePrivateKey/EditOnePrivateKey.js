@@ -16,7 +16,7 @@ import FormFooter from '../../UI/FormMui/FormFooter';
 import InputCheckbox from '../../UI/FormMui/InputCheckbox';
 import InputSelect from '../../UI/FormMui/InputSelect';
 import InputTextField from '../../UI/FormMui/InputTextField';
-import TitleBar from '../../UI/Header/TitleBar';
+import TitleBar from '../../UI/TitleBar/TitleBar';
 
 const EditOnePrivateKey = () => {
   const { id } = useParams();

@@ -14,7 +14,7 @@ import FormError from '../../../UI/FormMui/FormError';
 import FormFooter from '../../../UI/FormMui/FormFooter';
 import InputSelect from '../../../UI/FormMui/InputSelect';
 import InputTextField from '../../../UI/FormMui/InputTextField';
-import TitleBar from '../../../UI/Header/TitleBar';
+import TitleBar from '../../../UI/TitleBar/TitleBar';
 
 const RolloverAccountKey = () => {
   const { id } = useParams();
@@ -186,10 +186,7 @@ const RolloverAccountKey = () => {
             >
               Cancel
             </Button>
-            <Button
-              type='submit'
-              disabled={apiSendState.isSending}
-            >
+            <Button type='submit' disabled={apiSendState.isSending}>
               Submit
             </Button>
           </FormFooter>

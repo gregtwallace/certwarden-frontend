@@ -21,7 +21,7 @@ import FormContainer from '../../UI/FormMui/FormContainer';
 import FormError from '../../UI/FormMui/FormError';
 import FormFooter from '../../UI/FormMui/FormFooter';
 import InputTextField from '../../UI/FormMui/InputTextField';
-import TitleBar from '../../UI/Header/TitleBar';
+import TitleBar from '../../UI/TitleBar/TitleBar';
 
 const AddOneACMEAccount = () => {
   // fetch valid options (for private keys this is the algorithms list)

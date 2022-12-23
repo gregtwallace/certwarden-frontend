@@ -22,7 +22,7 @@ import InputSelect from '../../UI/FormMui/InputSelect';
 import InputTextArray from '../../UI/FormMui/InputTextArray';
 import InputTextField from '../../UI/FormMui/InputTextField';
 import Orders from './Orders/Orders';
-import TitleBar from '../../UI/Header/TitleBar';
+import TitleBar from '../../UI/TitleBar/TitleBar';
 
 const EditOneCert = () => {
   const [deleteOpen, setDeleteOpen] = useState(false);

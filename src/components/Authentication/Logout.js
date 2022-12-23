@@ -6,7 +6,7 @@ import { Paper } from '@mui/material';
 import useAuthExpires from '../../hooks/useAuthExpires';
 import useAxiosSend from '../../hooks/useAxiosSend';
 
-import TitleBar from '../UI/Header/TitleBar';
+import TitleBar from '../UI/TitleBar/TitleBar';
 import ApiError from '../UI/Api/ApiError';
 
 const Logout = () => {

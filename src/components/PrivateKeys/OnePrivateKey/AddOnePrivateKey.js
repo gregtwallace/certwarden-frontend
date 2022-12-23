@@ -16,7 +16,7 @@ import FormError from '../../UI/FormMui/FormError';
 import FormFooter from '../../UI/FormMui/FormFooter';
 import InputTextArea from '../../UI/FormMui/InputTextArea';
 import InputTextField from '../../UI/FormMui/InputTextField';
-import TitleBar from '../../UI/Header/TitleBar';
+import TitleBar from '../../UI/TitleBar/TitleBar';
 
 const keySources = [
   {
@@ -104,10 +104,7 @@ const AddOnePrivateKey = () => {
     }
 
     // if algo, confirm selected
-    if (
-      formState.key_source === 0 &&
-      formState.form.algorithm_value === ''
-    ) {
+    if (formState.key_source === 0 && formState.form.algorithm_value === '') {
       validationErrors.algorithm_value = true;
     }
 

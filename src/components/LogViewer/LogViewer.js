@@ -5,7 +5,7 @@ import { Paper, TextField } from '@mui/material';
 
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
-import TitleBar from '../UI/Header/TitleBar';
+import TitleBar from '../UI/TitleBar/TitleBar';
 
 const LogViewer = () => {
   const [apiGetState] = useAxiosGet('/v1/logs', 'logs', true);

@@ -20,7 +20,7 @@ import FormRowRight from '../../UI/FormMui/FormRowRight';
 import InputCheckbox from '../../UI/FormMui/InputCheckbox';
 import InputSelect from '../../UI/FormMui/InputSelect';
 import InputTextField from '../../UI/FormMui/InputTextField';
-import TitleBar from '../../UI/Header/TitleBar';
+import TitleBar from '../../UI/TitleBar/TitleBar';
 
 // TODO
 // Add: refresh LE status button

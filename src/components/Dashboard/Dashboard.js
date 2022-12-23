@@ -17,7 +17,7 @@ import Flag from '../UI/Flag/Flag';
 import TableContainer from '../UI/TableMui/TableContainer';
 import TableHeaderRow from '../UI/TableMui/TableHeaderRow';
 import TablePagination from '../UI/TableMui/TablePagination';
-import TitleBar from '../UI/Header/TitleBar';
+import TitleBar from '../UI/TitleBar/TitleBar';
 
 // table headers and sortable param
 const tableHeaders = [

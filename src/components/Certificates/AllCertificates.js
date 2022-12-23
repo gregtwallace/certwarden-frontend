@@ -21,7 +21,7 @@ import ApiError from '../UI/Api/ApiError';
 import Flag from '../UI/Flag/Flag';
 import TableContainer from '../UI/TableMui/TableContainer';
 import TableHeaderRow from '../UI/TableMui/TableHeaderRow';
-import TitleBar from '../UI/Header/TitleBar';
+import TitleBar from '../UI/TitleBar/TitleBar';
 import TablePagination from '../UI/TableMui/TablePagination';
 
 // table headers and sortable param

@@ -19,7 +19,7 @@ import FormError from '../../UI/FormMui/FormError';
 import FormFooter from '../../UI/FormMui/FormFooter';
 import InputTextArray from '../../UI/FormMui/InputTextArray';
 import InputTextField from '../../UI/FormMui/InputTextField';
-import TitleBar from '../../UI/Header/TitleBar';
+import TitleBar from '../../UI/TitleBar/TitleBar';
 
 const AddOneCert = () => {
   // fetch valid options (for private keys this is the algorithms list)
