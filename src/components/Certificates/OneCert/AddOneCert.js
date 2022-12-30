@@ -93,7 +93,7 @@ const AddOneCert = () => {
     event.preventDefault();
 
     // form validation
-    let validationErrors = [];
+    let validationErrors = {};
     // name
     if (!isNameValid(formState.form.name)) {
       validationErrors.name = true;
@@ -290,7 +290,7 @@ const AddOneCert = () => {
           />
 
           {apiSendState.errorMessage &&
-            formState.validationErrors.length > 0 && (
+            Object.keys(formState.validationErrors).length <= 0 && (
               <FormError>
                 Error Posting -- {apiSendState.errorMessage}
               </FormError>

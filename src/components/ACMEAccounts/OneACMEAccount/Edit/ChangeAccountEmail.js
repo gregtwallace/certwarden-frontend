@@ -163,7 +163,7 @@ const ChangeAccountEmail = () => {
           />
 
           {apiSendState.errorMessage &&
-            formState.validationErrors.length > 0 && (
+            Object.keys(formState.validationErrors).length <= 0 && (
               <FormError>
                 Error Posting -- {apiSendState.errorMessage}
               </FormError>

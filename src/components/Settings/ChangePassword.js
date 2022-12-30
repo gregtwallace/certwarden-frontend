@@ -47,7 +47,7 @@ const ChangePassword = () => {
     event.preventDefault();
 
     // form validation
-    let validationErrors = [];
+    let validationErrors = {};
     // TODO: Additional password complexity requirements?
     // new password
     if (formState.form.new_password.length < 10) {

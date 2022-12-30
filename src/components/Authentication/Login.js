@@ -44,7 +44,7 @@ const Login = () => {
     event.preventDefault();
 
     // form validation
-    let validationErrors = [];
+    let validationErrors = {};
 
     // username (not blank)
     if (formState.login.username.length <= 0) {
