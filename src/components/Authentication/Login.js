@@ -67,7 +67,10 @@ const Login = () => {
 
     sendData(LOGIN_URL, 'POST', formState.login, true).then((response) => {
       if (response.status === 200) {
-        sessionStorage.setItem('access_token', response.data.response.access_token);
+        sessionStorage.setItem(
+          'access_token',
+          response.data.response.access_token
+        );
         setAuthExpires(response.data.response.session.exp);
       }
     });
@@ -90,9 +93,10 @@ const Login = () => {
           <LockOutlinedIcon />
         </Avatar>
 
-        {sendState.errorMessage && (
-          <Alert severity='error'>{sendState.errorMessage}</Alert>
-        )}
+        {sendState.errorMessage &&
+          Object.keys(formState.validationErrors).length <= 0 && (
+            <Alert severity='error'>{sendState.errorMessage}</Alert>
+          )}
 
         <Box component='form' onSubmit={submitLogin}>
           <TextField
