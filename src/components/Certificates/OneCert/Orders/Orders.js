@@ -148,6 +148,8 @@ const Orders = (props) => {
                     <TableCell>
                       {o.known_revoked
                         ? 'Revoked'
+                        : o.status === 'valid' && Date.now() / 1000 > o.valid_to
+                        ? 'Expired'
                         : o.status.charAt(0).toUpperCase() + o.status.slice(1)}
                     </TableCell>
                     <TableCell>
