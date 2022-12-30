@@ -12,7 +12,7 @@ const InputTextField = (props) => {
       break;
     case 'subject':
     case props?.id?.match(/^subject_alts/)?.input:
-      errorMessage = 'Subject name must be a valid (sub)domain name.';
+      errorMessage = 'Subject name must be a valid (sub)domain name and may start with a wildcard (*.).';
       break;
     case 'new_password':
       errorMessage = 'New password must be at least 10 characters long.';
