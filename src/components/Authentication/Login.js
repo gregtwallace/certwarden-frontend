@@ -65,10 +65,10 @@ const Login = () => {
     }
     // form validation - end
 
-    sendData(LOGIN_URL, 'POST', formState.login, true).then((success) => {
-      if (success) {
-        sessionStorage.setItem('access_token', success.access_token);
-        setAuthExpires(success.session.exp);
+    sendData(LOGIN_URL, 'POST', formState.login, true).then((response) => {
+      if (response.status === 200) {
+        sessionStorage.setItem('access_token', response.data.response.access_token);
+        setAuthExpires(response.data.response.session.exp);
       }
     });
   };

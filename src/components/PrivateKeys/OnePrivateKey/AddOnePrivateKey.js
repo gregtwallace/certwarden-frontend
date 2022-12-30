@@ -119,9 +119,9 @@ const AddOnePrivateKey = () => {
 
     sendData(`/v1/privatekeys`, 'POST', formState.form, true).then(
       (response) => {
-        if (response) {
+        if (response.status >= 200 && response.status <= 299) {
           // back to the private keys page
-          navigate(`/privatekeys/${response.record_id}`);
+          navigate(`/privatekeys/${response.data?.response?.record_id}`);
         }
       }
     );

@@ -137,11 +137,13 @@ const EditOneCert = () => {
   };
   const deleteConfirmHandler = () => {
     setDeleteOpen(false);
-    sendData(`/v1/certificates/${id}`, 'DELETE', null, true).then((success) => {
-      if (success) {
-        navigate(-1);
+    sendData(`/v1/certificates/${id}`, 'DELETE', null, true).then(
+      (response) => {
+        if (response.status >= 200 && response.status <= 299) {
+          navigate(-1);
+        }
       }
-    });
+    );
   };
 
   // button handlers
@@ -191,8 +193,8 @@ const EditOneCert = () => {
     // form validation -- end
 
     sendData(`/v1/certificates/${id}`, 'PUT', formState.form, true).then(
-      (success) => {
-        if (success) {
+      (response) => {
+        if (response.status >= 200 && response.status <= 299) {
           navigate('/certificates');
         }
       }

@@ -91,8 +91,8 @@ const RolloverAccountKey = () => {
       'PUT',
       formState.form,
       true
-    ).then((success) => {
-      if (success) {
+    ).then((response) => {
+      if (response.status >= 200 && response.status <= 299) {
         navigate(`/acmeaccounts/${id}`);
       }
     });

@@ -18,7 +18,8 @@ const useAxiosSend = () => {
     apiNode,
     method,
     payloadObj,
-    withCredentials = false
+    withCredentials = false,
+    responseType = 'json'
   ) => {
     // select instance based on if route is secured
     var axiosInstance;
@@ -44,11 +45,12 @@ const useAxiosSend = () => {
         method: method,
         url: apiNode,
         data: JSON.stringify(payloadObj),
+        responseType: responseType
       });
 
       // debugging
       if (devMode) {
-        console.log(response?.data);
+        console.log(response);
       }
 
       // done sending, success
@@ -56,7 +58,7 @@ const useAxiosSend = () => {
         isSending: false,
         errorMessage: null,
       });
-      return response?.data?.response;
+      return response;
     } catch (error) {
       // debugging
       if (devMode) {

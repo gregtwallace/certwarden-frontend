@@ -106,8 +106,8 @@ const EditOnePrivateKey = () => {
   };
   const deleteConfirmHandler = () => {
     setDeleteOpen(false);
-    sendData(`/v1/privatekeys/${id}`, 'DELETE', null, true).then((success) => {
-      if (success) {
+    sendData(`/v1/privatekeys/${id}`, 'DELETE', null, true).then((response) => {
+      if (response.status >= 200 && response.status <= 299) {
         navigate(-1);
       }
     });
@@ -134,8 +134,8 @@ const EditOnePrivateKey = () => {
     // client side validation -- end
 
     sendData(`/v1/privatekeys/${id}`, 'PUT', formState.form, true).then(
-      (success) => {
-        if (success) {
+      (response) => {
+        if (response.status >= 200 && response.status <= 299) {
           // back to the private keys page
           navigate('/privatekeys');
         }

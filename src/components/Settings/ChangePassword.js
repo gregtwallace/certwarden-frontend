@@ -69,12 +69,12 @@ const ChangePassword = () => {
     // form validation -- end
 
     sendData(`/v1/auth/changepassword`, 'PUT', formState.form, true).then(
-      (success) => {
-        if (success) {
+      (response) => {
+        if (response.status >= 200 && response.status <= 299) {
           // clear form
           setFormState({
             ...blankFormState,
-            apiMessage: success?.message,
+            apiMessage: response.data?.response?.message,
           });
         }
       }

@@ -100,12 +100,14 @@ const EditOneACMEAccount = () => {
   };
   const deleteConfirmHandler = () => {
     setDeleteOpen(false);
-    sendData(`/v1/acmeaccounts/${id}`, 'DELETE', null, true).then((success) => {
-      if (success) {
-        // back to the accounts page
-        navigate(-1);
+    sendData(`/v1/acmeaccounts/${id}`, 'DELETE', null, true).then(
+      (response) => {
+        if (response.status >= 200 && response.status <= 299) {
+          // back to the accounts page
+          navigate(-1);
+        }
       }
-    });
+    );
   };
 
   // deactivate handlers
@@ -119,8 +121,8 @@ const EditOneACMEAccount = () => {
     setDeactivateOpen(false);
 
     sendData(`/v1/acmeaccounts/${id}/deactivate`, 'POST', null, true).then(
-      (success) => {
-        if (success) {
+      (response) => {
+        if (response.status >= 200 && response.status <= 299) {
           // update account from backend
           updateGet();
         }
@@ -133,8 +135,8 @@ const EditOneACMEAccount = () => {
     event.preventDefault();
 
     sendData(`/v1/acmeaccounts/${id}/new-account`, 'POST', null, true).then(
-      (success) => {
-        if (success) {
+      (response) => {
+        if (response.status >= 200 && response.status <= 299) {
           // update account from backend
           updateGet();
         }
@@ -175,8 +177,8 @@ const EditOneACMEAccount = () => {
     // client side validation -- end
 
     sendData(`/v1/acmeaccounts/${id}`, 'PUT', formState.form, true).then(
-      (success) => {
-        if (success) {
+      (response) => {
+        if (response.status >= 200 && response.status <= 299) {
           navigate(-1);
         }
       }

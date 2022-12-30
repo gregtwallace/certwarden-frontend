@@ -145,8 +145,8 @@ const AddOneCert = () => {
 
     sendData(`/v1/certificates`, 'POST', formState.form, true).then(
       (response) => {
-        if (response) {
-          navigate(`/certificates/${response.record_id}`);
+        if (response.status >= 200 && response.status <= 299) {
+          navigate(`/certificates/${response.data?.response?.record_id}`);
         }
       }
     );

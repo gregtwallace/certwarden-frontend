@@ -18,9 +18,8 @@ const Logout = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    sendData(`/v1/auth/logout`, 'POST', null, true).then((success) => {
-      console.log(success);
-      if (success) {
+    sendData(`/v1/auth/logout`, 'POST', null, true).then((response) => {
+      if (response.status >= 200 && response.status <= 299) {
         // update auth
         sessionStorage.removeItem('access_token');
         setAuthExpires();

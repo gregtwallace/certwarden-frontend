@@ -1,14 +1,24 @@
 import useAxiosGet from '../../hooks/useAxiosGet';
+import useAxiosSend from '../../hooks/useAxiosSend';
 import { iso8601ToPretty } from '../../helpers/time';
+import { downloadBlob } from '../../helpers/download';
 
 import { Paper, TextField } from '@mui/material';
 
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';
+import Button from '../UI/Button/Button';
 import TitleBar from '../UI/TitleBar/TitleBar';
 
 const LogViewer = () => {
-  const [apiGetState] = useAxiosGet('/v1/logs', 'logs', true);
+  const [apiGetState] = useAxiosGet('/v1/log', 'log_entries', true);
+  const [, sendData] = useAxiosSend();
+
+  const downloadAllClickHandler = () => {
+    sendData(`/v1/logs`, 'GET', null, true, 'blob').then((response) => {
+      downloadBlob(response);
+    });
+  };
 
   if (apiGetState.errorMessage) {
     return <ApiError>{apiGetState.errorMessage}</ApiError>;
@@ -26,14 +36,18 @@ const LogViewer = () => {
           p: 1,
         }}
       >
-        <TitleBar title='Logs' disableGutters sx={{ m: 0, px: 2 }} />
+        <TitleBar title='Most Recent Log' disableGutters sx={{ m: 0, px: 2 }}>
+          <Button variant='contained' onClick={downloadAllClickHandler}>
+            Download All Logs
+          </Button>
+        </TitleBar>
 
         <TextField
           id='logs'
           name='logs'
           fullWidth
           variant='standard'
-          value={apiGetState?.logs
+          value={apiGetState?.log_entries
             .map(
               (entry) =>
                 iso8601ToPretty(entry.ts) +

@@ -109,8 +109,8 @@ const ChangeAccountEmail = () => {
     // client side validation -- end
 
     sendData(`/v1/acmeaccounts/${id}/email`, 'PUT', formState.form, true).then(
-      (success) => {
-        if (success) {
+      (response) => {
+        if (response.status >= 200 && response.status <= 299) {
           navigate(`/acmeaccounts/${id}`);
         }
       }

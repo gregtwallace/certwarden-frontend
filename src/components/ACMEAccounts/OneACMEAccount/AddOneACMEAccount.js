@@ -132,9 +132,9 @@ const AddOneACMEAccount = () => {
 
     sendData(`/v1/acmeaccounts`, 'POST', formState.form, true).then(
       (response) => {
-        if (response) {
+        if (response.status >= 200 && response.status <= 299) {
           // go to the new account
-          navigate(`/acmeaccounts/${response.record_id}`);
+          navigate(`/acmeaccounts/${response.data?.response?.record_id}`);
         }
       }
     );
