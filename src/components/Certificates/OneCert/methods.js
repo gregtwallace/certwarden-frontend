@@ -2,7 +2,7 @@ const methodOption = (method, current) => {
   return {
     value: method.value,
     name:
-      method.name + ' (' + method.type + ')' + (current ? ' - Current' : ''),
+      method.name + ' (' + method.type + ')' + (!method.enabled ? ' [Disabled]' : '') + (current ? ' - Current' : ''),
   };
 };
 
