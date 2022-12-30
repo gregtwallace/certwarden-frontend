@@ -163,6 +163,7 @@ const EditOneCert = () => {
 
     // form validation
     let validationErrors = {};
+    let containsWildcard = false;
     // name
     if (!isNameValid(formState.form.name)) {
       validationErrors.name = true;
@@ -175,10 +176,28 @@ const EditOneCert = () => {
       if (!isDomainValid(alt)) {
         subject_alts.push(i);
       }
+      // flag wildcard
+      if (alt.startsWith('*.')) {
+        containsWildcard = true;
+      }
     });
     // if any alts invalid, create the error array
     if (subject_alts.length !== 0) {
       validationErrors.subject_alts = subject_alts;
+    }
+    // if any wildcards exist, verify the selected method is dns-01
+    if (containsWildcard) {
+      // find full method details
+      let method =
+        apiGetCertOptionsState?.certificate_options?.challenge_methods.find(
+          (method) => {
+            return method.value === formState.form.challenge_method_value;
+          }
+        );
+      // check the method's type
+      if (method?.type !== 'dns-01') {
+        validationErrors.challenge_method_value = true;
+      }
     }
 
     //TODO: CSR validation?
