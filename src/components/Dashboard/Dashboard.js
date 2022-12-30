@@ -22,6 +22,11 @@ import TitleBar from '../UI/TitleBar/TitleBar';
 // table headers and sortable param
 const tableHeaders = [
   {
+    id: 'name',
+    label: 'Name',
+    sortable: true,
+  },
+  {
     id: 'subject',
     label: 'Subject',
     sortable: true,
@@ -30,11 +35,6 @@ const tableHeaders = [
     id: 'flags',
     label: 'Flags',
     sortable: false,
-  },
-  {
-    id: 'name',
-    label: 'Name',
-    sortable: true,
   },
   {
     id: 'valid_to',
@@ -82,6 +82,14 @@ const Dashboard = () => {
               {apiGetState?.valid_current_orders?.orders?.length > 0 &&
                 apiGetState.valid_current_orders.orders.map((m) => (
                   <TableRow key={m.id}>
+                    <TableCell>
+                      <Link
+                        component={RouterLink}
+                        to={'/certificates/' + m.certificate.id}
+                      >
+                        {m.certificate.name}
+                      </Link>
+                    </TableCell>
                     <TableCell>{m.certificate.subject}</TableCell>
                     <TableCell>
                       {m.certificate.acme_account.is_staging && (
@@ -93,14 +101,6 @@ const Dashboard = () => {
                       {!m.certificate.challenge_method.enabled && (
                         <Flag type='method' />
                       )}
-                    </TableCell>
-                    <TableCell>
-                      <Link
-                        component={RouterLink}
-                        to={'/certificates/' + m.certificate.id}
-                      >
-                        {m.certificate.name}
-                      </Link>
                     </TableCell>
                     <TableCell>
                       {convertUnixTime(m.valid_to)}{' '}
