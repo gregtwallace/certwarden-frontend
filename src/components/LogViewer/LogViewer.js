@@ -16,7 +16,9 @@ const LogViewer = () => {
 
   const downloadAllClickHandler = () => {
     sendData(`/v1/logs`, 'GET', null, true, 'blob').then((response) => {
-      downloadBlob(response);
+      if (response.status >= 200 && response.status <= 299) {
+        downloadBlob(response);
+      }
     });
   };
 
