@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import Box from '@mui/material/Box';
-
 import useAuthExpires from './hooks/useAuthExpires';
+import ThemeProvider from './context/ThemeProvider';
 
+import CssBaseline from '@mui/material/CssBaseline';
+import Box from '@mui/material/Box';
 import Header from './Header';
 import Main from './components/Main/Main';
 import Footer from './Footer';
@@ -31,23 +32,26 @@ const App = () => {
   }, [setAuthExpires]);
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-        backgroundColor: (theme) =>
-          theme.palette.mode === 'light'
-            ? theme.palette.grey[100]
-            : theme.palette.grey[900],
-      }}
-    >
-      <Router basename={process.env.PUBLIC_URL}>
-        <Header />
-        <Main />
-      </Router>
-      <Footer />
-    </Box>
+    <ThemeProvider>
+      <CssBaseline />
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100vh',
+          backgroundColor: (theme) =>
+            theme.palette.mode === 'light'
+              ? theme.palette.grey[100]
+              : theme.palette.grey[900],
+        }}
+      >
+        <Router basename={process.env.PUBLIC_URL}>
+          <Header />
+          <Main />
+        </Router>
+        <Footer />
+      </Box>
+    </ThemeProvider>
   );
 };
 
