@@ -12,8 +12,10 @@ export const downloadBlob = (response) => {
   let filenameMatches = filenameRegex.exec(
     response.headers['content-disposition']
   );
-  let filename = filenameMatches[1];
-  link.setAttribute('download', filename);
+  if (filenameMatches?.length >= 2) {
+    let filename = filenameMatches[1];
+    link.setAttribute('download', filename);
+  }
 
   document.body.appendChild(link);
   link.click();
