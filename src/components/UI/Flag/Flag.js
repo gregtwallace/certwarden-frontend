@@ -17,11 +17,17 @@ const Flag = (props) => {
       bgcolor = 'error.dark';
       text = 'Invalid Method';
       break;
-    
+
     case 'legacy_api':
       color = 'white';
       bgcolor = 'warning.dark';
       text = 'Legacy API';
+      break;
+
+    case 'api_key_disabled':
+      color = 'white';
+      bgcolor = 'secondary.dark';
+      text = 'API Disabled';
       break;
 
     case 'expire-days':

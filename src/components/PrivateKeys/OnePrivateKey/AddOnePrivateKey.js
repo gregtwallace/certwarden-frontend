@@ -14,6 +14,7 @@ import Form from '../../UI/FormMui/Form';
 import FormContainer from '../../UI/FormMui/FormContainer';
 import FormError from '../../UI/FormMui/FormError';
 import FormFooter from '../../UI/FormMui/FormFooter';
+import InputCheckbox from '../../UI/FormMui/InputCheckbox';
 import InputTextArea from '../../UI/FormMui/InputTextArea';
 import InputTextField from '../../UI/FormMui/InputTextField';
 import TitleBar from '../../UI/TitleBar/TitleBar';
@@ -47,6 +48,7 @@ const AddOnePrivateKey = () => {
       description: '',
       algorithm_value: '',
       pem: '',
+      api_key_disabled: false,
     },
     validationErrors: {},
   };
@@ -61,6 +63,18 @@ const AddOnePrivateKey = () => {
         [event.target.name]: event.target.value,
       },
     }));
+  };
+  // checkbox updates
+  const checkChangeHandler = (event) => {
+    setFormState((prevState) => {
+      return {
+        ...prevState,
+        form: {
+          ...prevState.form,
+          [event.target.name]: event.target.checked,
+        },
+      };
+    });
   };
 
   // on key change, clear out alg value and pem also
@@ -185,6 +199,14 @@ const AddOnePrivateKey = () => {
               invalid={formState.validationErrors.pem && true}
             />
           )}
+
+          <InputCheckbox
+            id='api_key_disabled'
+            checked={formState.form.api_key_disabled}
+            onChange={checkChangeHandler}
+          >
+            Disable API Key
+          </InputCheckbox>
 
           {apiSendState.errorMessage &&
             Object.keys(formState.validationErrors).length <= 0 && (

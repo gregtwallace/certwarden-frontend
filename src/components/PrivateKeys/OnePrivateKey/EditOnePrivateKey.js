@@ -37,6 +37,7 @@ const EditOnePrivateKey = () => {
     form: {
       name: '',
       description: '',
+      api_key_disabled: false,
       api_key_via_url: false,
     },
     validationErrors: {},
@@ -50,6 +51,7 @@ const EditOnePrivateKey = () => {
       form: {
         name: apiGetState.private_key.name,
         description: apiGetState.private_key.description,
+        api_key_disabled: apiGetState.private_key.api_key_disabled,
         api_key_via_url: apiGetState.private_key.api_key_via_url,
       },
       validationErrors: {},
@@ -170,6 +172,7 @@ const EditOnePrivateKey = () => {
   const formUnchanged =
     apiGetState.private_key.name === formState.form.name &&
     apiGetState.private_key.description === formState.form.description &&
+    apiGetState.private_key.api_key_disabled === formState.form.api_key_disabled &&
     apiGetState.private_key.api_key_via_url === formState.form.api_key_via_url;
 
   return (
@@ -239,11 +242,22 @@ const EditOnePrivateKey = () => {
             <FormRowRight>
               <Button
                 onClick={downloadClickHandler}
-                disabled={apiSendState.isSending || apiGetState.private_key.api_key === '[redacted]'}
+                disabled={
+                  apiSendState.isSending ||
+                  apiGetState.private_key.api_key === '[redacted]'
+                }
               >
                 Download
               </Button>
             </FormRowRight>
+
+            <InputCheckbox
+              id='api_key_disabled'
+              checked={formState.form.api_key_disabled}
+              onChange={checkChangeHandler}
+            >
+              Disable API Key
+            </InputCheckbox>
 
             <InputCheckbox
               id='api_key_via_url'

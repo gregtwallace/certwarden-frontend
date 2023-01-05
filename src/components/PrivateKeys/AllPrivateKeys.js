@@ -102,6 +102,7 @@ const AllPrivateKeys = () => {
                     <TableCell>{k.description}</TableCell>
                     <TableCell>
                       {k.api_key_via_url && <Flag type='legacy_api' />}
+                      {k.api_key_disabled && <Flag type='api_key_disabled' />}
                     </TableCell>
                     <TableCell>{k.algorithm.name}</TableCell>
                   </TableRow>
