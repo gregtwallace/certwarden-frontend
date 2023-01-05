@@ -22,7 +22,7 @@ import TitleBar from '../../UI/TitleBar/TitleBar';
 
 const EditOnePrivateKey = () => {
   const { id } = useParams();
-  const [apiGetState] = useAxiosGet(
+  const [apiGetState, updateGet] = useAxiosGet(
     `/v1/privatekeys/${id}`,
     'private_key',
     true
@@ -106,6 +106,28 @@ const EditOnePrivateKey = () => {
     }
   };
 
+  const newApiKeyClickHandler = () => {
+    sendData(`/v1/privatekeys/${id}/apikey`, 'POST', null, true).then(
+      (response) => {
+        if (response.status >= 200 && response.status <= 299) {
+          // reload key state
+          updateGet();
+        }
+      }
+    );
+  };
+
+  const retireApiKeyClickHandler = () => {
+    sendData(`/v1/privatekeys/${id}/apikey`, 'DELETE', null, true).then(
+      (response) => {
+        if (response.status >= 200 && response.status <= 299) {
+          // reload key state
+          updateGet();
+        }
+      }
+    );
+  };
+
   const resetClickHandler = (event) => {
     event.preventDefault();
 
@@ -172,20 +194,32 @@ const EditOnePrivateKey = () => {
   const formUnchanged =
     apiGetState.private_key.name === formState.form.name &&
     apiGetState.private_key.description === formState.form.description &&
-    apiGetState.private_key.api_key_disabled === formState.form.api_key_disabled &&
+    apiGetState.private_key.api_key_disabled ===
+      formState.form.api_key_disabled &&
     apiGetState.private_key.api_key_via_url === formState.form.api_key_via_url;
 
   return (
     <FormContainer>
       <TitleBar title='Edit Private Key'>
         {renderApiItems && (
-          <Button
-            type='delete'
-            onClick={deleteClickHandler}
-            disabled={apiSendState.isSending}
-          >
-            Delete
-          </Button>
+          <>
+            <Button
+              onClick={downloadClickHandler}
+              disabled={
+                apiSendState.isSending ||
+                apiGetState.private_key.api_key === '[redacted]'
+              }
+            >
+              Download Key
+            </Button>
+            <Button
+              type='delete'
+              onClick={deleteClickHandler}
+              disabled={apiSendState.isSending}
+            >
+              Delete
+            </Button>
+          </>
         )}
       </TitleBar>
 
@@ -232,24 +266,52 @@ const EditOnePrivateKey = () => {
             />
 
             <InputTextField
-              label='API Key'
+              label={
+                (apiGetState.private_key.api_key_new ? 'Old ' : '') + 'API Key'
+              }
               id='api_key'
               value={apiGetState.private_key.api_key}
               readOnly
               disabled={apiGetState.private_key.api_key === '[redacted]'}
             />
 
-            <FormRowRight>
-              <Button
-                onClick={downloadClickHandler}
-                disabled={
-                  apiSendState.isSending ||
-                  apiGetState.private_key.api_key === '[redacted]'
-                }
-              >
-                Download
-              </Button>
-            </FormRowRight>
+            {apiGetState.private_key.api_key_new && (
+              <>
+                <FormRowRight>
+                  <Button
+                    onClick={retireApiKeyClickHandler}
+                    disabled={
+                      apiSendState.isSending ||
+                      apiGetState.private_key.api_key === '[redacted]'
+                    }
+                  >
+                    Retire Old API Key
+                  </Button>
+                </FormRowRight>
+
+                <InputTextField
+                  label='New API Key'
+                  id='api_key_new'
+                  value={apiGetState.private_key.api_key_new}
+                  readOnly
+                  disabled={apiGetState.private_key.api_key === '[redacted]'}
+                />
+              </>
+            )}
+
+            {!apiGetState.private_key.api_key_new && (
+              <FormRowRight>
+                <Button
+                  onClick={newApiKeyClickHandler}
+                  disabled={
+                    apiSendState.isSending ||
+                    apiGetState.private_key.api_key === '[redacted]'
+                  }
+                >
+                  New API Key
+                </Button>
+              </FormRowRight>
+            )}
 
             <InputCheckbox
               id='api_key_disabled'
