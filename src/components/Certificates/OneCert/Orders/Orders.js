@@ -65,6 +65,11 @@ const Orders = (props) => {
     true
   );
 
+  // set parent's hasOrders
+  if (props.setHasOrders && apiGetState?.all_orders?.orders?.length > 0) {
+    props.setHasOrders(true);
+  }
+
   // action handlers
   // Rather than making another sendApi, use the parent component's.
   // This allows disabling the parent's buttons also

@@ -6,6 +6,7 @@ import useAxiosSend from '../../../hooks/useAxiosSend';
 import { isDomainValid, isNameValid } from '../../../helpers/form-validation';
 import { newId } from '../../../App';
 import { buildMethodsList } from './methods';
+import { downloadBlob } from '../../../helpers/download';
 
 import { Typography } from '@mui/material';
 
@@ -17,6 +18,7 @@ import Form from '../../UI/FormMui/Form';
 import FormContainer from '../../UI/FormMui/FormContainer';
 import FormError from '../../UI/FormMui/FormError';
 import FormFooter from '../../UI/FormMui/FormFooter';
+import FormRowRight from '../../UI/FormMui/FormRowRight';
 import InputCheckbox from '../../UI/FormMui/InputCheckbox';
 import InputSelect from '../../UI/FormMui/InputSelect';
 import InputTextArray from '../../UI/FormMui/InputTextArray';
@@ -25,6 +27,8 @@ import Orders from './Orders/Orders';
 import TitleBar from '../../UI/TitleBar/TitleBar';
 
 const EditOneCert = () => {
+  const [hasOrders, setHasOrders] = useState(false);
+
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   const [apiSendState, sendData] = useAxiosSend();
@@ -147,6 +151,22 @@ const EditOneCert = () => {
   };
 
   // button handlers
+  const downloadClickHandler = () => {
+    if (apiGetState?.certificate?.name) {
+      sendData(
+        `/v1/certificates/${id}/download`,
+        'GET',
+        null,
+        true,
+        'blob'
+      ).then((response) => {
+        if (response.status >= 200 && response.status <= 299) {
+          downloadBlob(response);
+        }
+      });
+    }
+  };
+
   const resetClickHandler = (event) => {
     event.preventDefault();
 
@@ -413,6 +433,19 @@ const EditOneCert = () => {
                 disabled={apiGetState.certificate.api_key === '[redacted]'}
               />
 
+              <FormRowRight>
+                <Button
+                  onClick={downloadClickHandler}
+                  disabled={
+                    apiSendState.isSending ||
+                    apiGetState.certificate.api_key === '[redacted]' ||
+                    !hasOrders
+                  }
+                >
+                  Download
+                </Button>
+              </FormRowRight>
+
               <InputCheckbox
                 id='api_key_via_url'
                 checked={formState.form.api_key_via_url}
@@ -457,7 +490,7 @@ const EditOneCert = () => {
           </>
         )}
       </FormContainer>
-      <Orders certId={id} sendApiState={apiSendState} sendData={sendData} />
+      <Orders setHasOrders={setHasOrders} certId={id} sendApiState={apiSendState} sendData={sendData} />
     </>
   );
 };
