@@ -436,11 +436,7 @@ const EditOneCert = () => {
               <FormRowRight>
                 <Button
                   onClick={downloadClickHandler}
-                  disabled={
-                    apiSendState.isSending ||
-                    apiGetState.certificate.api_key === '[redacted]' ||
-                    !hasOrders
-                  }
+                  disabled={apiSendState.isSending || !hasOrders}
                 >
                   Download
                 </Button>
@@ -490,7 +486,12 @@ const EditOneCert = () => {
           </>
         )}
       </FormContainer>
-      <Orders setHasOrders={setHasOrders} certId={id} sendApiState={apiSendState} sendData={sendData} />
+      <Orders
+        setHasOrders={setHasOrders}
+        certId={id}
+        sendApiState={apiSendState}
+        sendData={sendData}
+      />
     </>
   );
 };

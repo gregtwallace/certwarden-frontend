@@ -11,6 +11,7 @@ import TableRow from '@mui/material/TableRow';
 import useAxiosGet from '../../../../hooks/useAxiosGet';
 import { getRowsPerPage, getPage, getSort } from '../../../UI/TableMui/query';
 import { convertUnixTime } from '../../../../helpers/time';
+import { downloadBlob } from '../../../../helpers/download';
 
 import ApiLoading from '../../../UI/Api/ApiLoading';
 import ApiError from '../../../UI/Api/ApiError';
@@ -73,7 +74,24 @@ const Orders = (props) => {
   // action handlers
   // Rather than making another sendApi, use the parent component's.
   // This allows disabling the parent's buttons also
-  const [sendApiState, sendData] = [props.sendApiState, props.sendData];
+  const [apiSendState, sendData] = [props.sendApiState, props.sendData];
+
+  // download order pem
+  const downloadClickHandler = (orderId) => {
+    if (apiGetState?.all_orders) {
+      sendData(
+        `/v1/certificates/${props.certId}/orders/${orderId}/download`,
+        'GET',
+        null,
+        true,
+        'blob'
+      ).then((response) => {
+        if (response.status >= 200 && response.status <= 299) {
+          downloadBlob(response);
+        }
+      });
+    }
+  };
 
   // handler to place a new order
   const newOrderHandler = (event) => {
@@ -174,7 +192,7 @@ const Orders = (props) => {
                           size='small'
                           color='info'
                           type='submit'
-                          disabled={sendApiState.isSending}
+                          disabled={apiSendState.isSending}
                           onClick={(event) => retryOrderHandler(event, o.id)}
                         >
                           Retry
@@ -183,16 +201,30 @@ const Orders = (props) => {
                       {o.status === 'valid' &&
                         !o.known_revoked &&
                         Date.now() / 1000 < o.valid_to && (
-                          <Button
-                            variant='contained'
-                            size='small'
-                            color='error'
-                            type='submit'
-                            disabled={sendApiState.isSending}
-                            onClick={(event) => revokeCertHandler(event, o.id)}
-                          >
-                            Revoke
-                          </Button>
+                          <>
+                            <Button
+                              variant='contained'
+                              size='small'
+                              color='primary'
+                              sx={{ mr: 1 }}
+                              onClick={() => downloadClickHandler(o.id)}
+                              disabled={apiSendState.isSending}
+                            >
+                              Download
+                            </Button>
+                            <Button
+                              variant='contained'
+                              size='small'
+                              color='error'
+                              type='submit'
+                              disabled={apiSendState.isSending}
+                              onClick={(event) =>
+                                revokeCertHandler(event, o.id)
+                              }
+                            >
+                              Revoke
+                            </Button>
+                          </>
                         )}
                     </TableCell>
                   </TableRow>
