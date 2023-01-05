@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useAxiosGet from '../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../hooks/useAxiosSend';
 import { isNameValid } from '../../../helpers/form-validation';
+import { downloadBlob } from '../../../helpers/download';
 
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
@@ -13,6 +14,7 @@ import Form from '../../UI/FormMui/Form';
 import FormContainer from '../../UI/FormMui/FormContainer';
 import FormError from '../../UI/FormMui/FormError';
 import FormFooter from '../../UI/FormMui/FormFooter';
+import FormRowRight from '../../UI/FormMui/FormRowRight';
 import InputCheckbox from '../../UI/FormMui/InputCheckbox';
 import InputSelect from '../../UI/FormMui/InputSelect';
 import InputTextField from '../../UI/FormMui/InputTextField';
@@ -86,6 +88,22 @@ const EditOnePrivateKey = () => {
   };
 
   // button handlers
+  const downloadClickHandler = () => {
+    if (apiGetState?.private_key?.name) {
+      sendData(
+        `/v1/privatekeys/${id}/download`,
+        'GET',
+        null,
+        true,
+        'blob'
+      ).then((response) => {
+        if (response.status >= 200 && response.status <= 299) {
+          downloadBlob(response);
+        }
+      });
+    }
+  };
+
   const resetClickHandler = (event) => {
     event.preventDefault();
 
@@ -215,7 +233,17 @@ const EditOnePrivateKey = () => {
               id='api_key'
               value={apiGetState.private_key.api_key}
               readOnly
+              disabled={apiGetState.private_key.api_key === '[redacted]'}
             />
+
+            <FormRowRight>
+              <Button
+                onClick={downloadClickHandler}
+                disabled={apiSendState.isSending || apiGetState.private_key.api_key === '[redacted]'}
+              >
+                Download
+              </Button>
+            </FormRowRight>
 
             <InputCheckbox
               id='api_key_via_url'
