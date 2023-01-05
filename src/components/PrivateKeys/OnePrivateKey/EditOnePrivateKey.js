@@ -228,7 +228,7 @@ const EditOnePrivateKey = () => {
             {apiSendState.errorMessage &&
               Object.keys(formState.validationErrors).length <= 0 && (
                 <FormError>
-                  Error Posting -- {apiSendState.errorMessage}
+                  Error Sending -- {apiSendState.errorMessage}
                 </FormError>
               )}
 

@@ -35,9 +35,9 @@ const useAxiosGet = (apiNode, expectedJsonName, withCredentials = false) => {
         url: apiNode,
       });
 
-      // debugging
+      // dev log response
       if (devMode) {
-        console.log(response?.data);
+        console.log(response);
       }
 
       setState({
@@ -45,15 +45,34 @@ const useAxiosGet = (apiNode, expectedJsonName, withCredentials = false) => {
         isLoaded: true,
         errorMessage: null,
       });
-    } catch (error) {
-      // if received a response error, set that in error state
-      // otherwise use Axios' error
-      // check for response errors
-      let errorMessage;
-      if (error?.response?.data?.error != null) {
-        errorMessage = `Status: ${error?.response?.status}, Message: ${error?.response?.data?.error?.message}`;
-      } else {
-        errorMessage = error.toString();
+    } catch (errorOutter) {
+      // dev log error
+      if (devMode) {
+        console.log(errorOutter);
+      }
+
+      // set error to the error code
+      let errorMessage = `Status: ${errorOutter.response.status}`;
+
+      // try to append an error message, if present
+      try {
+        // if response data doesn't have an error text object (e.g. a blob), try to make it text
+        if (!errorOutter.response.data.error) {
+          let errorDataText = await errorOutter.response.data.text();
+          let jsonError = JSON.parse(errorDataText);
+
+          // update the data with the new json data
+          errorOutter.response.data = jsonError;
+        }
+
+        errorMessage =
+          errorMessage +
+          `, Message: ${errorOutter.response.data.error.message}`;
+      } catch (errorInner) {
+        // log inner error if in devmode
+        if (devMode) {
+          console.log(errorInner);
+        }
       }
 
       setState({

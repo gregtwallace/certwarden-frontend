@@ -112,7 +112,7 @@ const ChangePassword = () => {
         />
 
         {apiSendState.errorMessage && formState.validationErrors.length > 0 && (
-          <FormError>Error Posting -- {apiSendState.errorMessage}</FormError>
+          <FormError>Error Sending -- {apiSendState.errorMessage}</FormError>
         )}
 
         <FormFooter>
