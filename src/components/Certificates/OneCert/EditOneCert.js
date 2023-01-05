@@ -405,6 +405,14 @@ const EditOneCert = () => {
                 onChange={stringInputChangeHandler}
               />
 
+              <InputTextField
+                label='API Key'
+                id='api_key'
+                value={apiGetState.certificate.api_key}
+                readOnly
+                disabled={apiGetState.certificate.api_key === '[redacted]'}
+              />
+
               <InputCheckbox
                 id='api_key_via_url'
                 checked={formState.form.api_key_via_url}
