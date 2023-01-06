@@ -36,7 +36,7 @@ const EditOneCert = () => {
 
   // fetch current state
   const { id } = useParams();
-  const [apiGetState] = useAxiosGet(
+  const [apiGetState, updateCertGet] = useAxiosGet(
     `/v1/certificates/${id}`,
     'certificate',
     true
@@ -165,6 +165,28 @@ const EditOneCert = () => {
         }
       });
     }
+  };
+
+  const newApiKeyClickHandler = () => {
+    sendData(`/v1/certificates/${id}/apikey`, 'POST', null, true).then(
+      (response) => {
+        if (response.status >= 200 && response.status <= 299) {
+          // reload state
+          updateCertGet();
+        }
+      }
+    );
+  };
+
+  const retireApiKeyClickHandler = () => {
+    sendData(`/v1/certificates/${id}/apikey`, 'DELETE', null, true).then(
+      (response) => {
+        if (response.status >= 200 && response.status <= 299) {
+          // reload state
+          updateCertGet();
+        }
+      }
+    );
   };
 
   const resetClickHandler = (event) => {
@@ -299,13 +321,21 @@ const EditOneCert = () => {
       <FormContainer>
         <TitleBar title='Edit Certificate'>
           {renderApiItems && (
-            <Button
-              type='delete'
-              onClick={deleteClickHandler}
-              disabled={apiSendState.isSending}
-            >
-              Delete
-            </Button>
+            <>
+              <Button
+                onClick={downloadClickHandler}
+                disabled={apiSendState.isSending || !hasOrders}
+              >
+                Download
+              </Button>
+              <Button
+                type='delete'
+                onClick={deleteClickHandler}
+                disabled={apiSendState.isSending}
+              >
+                Delete
+              </Button>
+            </>
           )}
         </TitleBar>
 
@@ -426,21 +456,53 @@ const EditOneCert = () => {
               />
 
               <InputTextField
-                label='API Key'
+                label={
+                  (apiGetState.certificate.api_key_new ? 'Old ' : '') +
+                  'API Key'
+                }
                 id='api_key'
                 value={apiGetState.certificate.api_key}
                 readOnly
                 disabled={apiGetState.certificate.api_key === '[redacted]'}
               />
 
-              <FormRowRight>
-                <Button
-                  onClick={downloadClickHandler}
-                  disabled={apiSendState.isSending || !hasOrders}
-                >
-                  Download
-                </Button>
-              </FormRowRight>
+              {apiGetState.certificate.api_key_new && (
+                <>
+                  <FormRowRight>
+                    <Button
+                      onClick={retireApiKeyClickHandler}
+                      disabled={
+                        apiSendState.isSending ||
+                        apiGetState.certificate.api_key === '[redacted]'
+                      }
+                    >
+                      Retire Old API Key
+                    </Button>
+                  </FormRowRight>
+
+                  <InputTextField
+                    label='New API Key'
+                    id='api_key_new'
+                    value={apiGetState.certificate.api_key_new}
+                    readOnly
+                    disabled={apiGetState.certificate.api_key === '[redacted]'}
+                  />
+                </>
+              )}
+
+              {!apiGetState.certificate.api_key_new && (
+                <FormRowRight>
+                  <Button
+                    onClick={newApiKeyClickHandler}
+                    disabled={
+                      apiSendState.isSending ||
+                      apiGetState.certificate.api_key === '[redacted]'
+                    }
+                  >
+                    New API Key
+                  </Button>
+                </FormRowRight>
+              )}
 
               <InputCheckbox
                 id='api_key_via_url'
