@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 import { Link } from '@mui/material';
 
@@ -67,9 +68,12 @@ const Orders = (props) => {
   );
 
   // set parent's hasOrders
-  if (props.setHasOrders && apiGetState?.all_orders?.orders?.length > 0) {
-    props.setHasOrders(true);
-  }
+  const { setHasOrders } = props;
+  useEffect(() => {
+    if (setHasOrders && apiGetState?.all_orders?.orders?.length > 0) {
+      setHasOrders(true);
+    }
+  }, [setHasOrders, apiGetState?.all_orders?.orders?.length]);
 
   // action handlers
   // Rather than making another sendApi, use the parent component's.
