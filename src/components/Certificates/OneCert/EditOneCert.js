@@ -27,7 +27,7 @@ import Orders from './Orders/Orders';
 import TitleBar from '../../UI/TitleBar/TitleBar';
 
 const EditOneCert = () => {
-  const [hasOrders, setHasOrders] = useState(false);
+  const [hasValidOrders, setHasValidOrders] = useState(false);
 
   const [deleteOpen, setDeleteOpen] = useState(false);
 
@@ -324,7 +324,7 @@ const EditOneCert = () => {
             <>
               <Button
                 onClick={downloadClickHandler}
-                disabled={apiSendState.isSending || !hasOrders}
+                disabled={apiSendState.isSending || !hasValidOrders}
               >
                 Download
               </Button>
@@ -549,7 +549,7 @@ const EditOneCert = () => {
         )}
       </FormContainer>
       <Orders
-        setHasOrders={setHasOrders}
+        setHasValidOrders={setHasValidOrders}
         certId={id}
         sendApiState={apiSendState}
         sendData={sendData}

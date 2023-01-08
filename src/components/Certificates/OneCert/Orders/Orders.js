@@ -53,6 +53,9 @@ const tableHeaders = [
 const Orders = (props) => {
   const [searchParams] = useSearchParams();
 
+  // func for if a unix timestamp is expired
+  const isExpired = (unixTime) => Date.now() / 1000 > unixTime;
+
   // get calculated query params
   const rowsPerPage = getRowsPerPage(searchParams, 5);
   const page = getPage(searchParams);
@@ -67,13 +70,29 @@ const Orders = (props) => {
     true
   );
 
-  // set parent's hasOrders
-  const { setHasOrders } = props;
+  // set parent's hasValidOrders
+  const { setHasValidOrders } = props;
   useEffect(() => {
-    if (setHasOrders && apiGetState?.all_orders?.orders?.length > 0) {
-      setHasOrders(true);
+    // func for if an order is usable (i.e. 'valid' + not revoked + not expired)
+    const isUsable = (order) =>
+      order.status === 'valid' &&
+      !order.known_revoked &&
+      !isExpired(order.valid_to);
+
+    // check if any orders, and if any are usable
+    if (
+      setHasValidOrders &&
+      apiGetState?.all_orders?.orders?.length > 0 &&
+      apiGetState.all_orders.orders.some(isUsable)
+    ) {
+      // if so, check if any are usable
+
+      setHasValidOrders(true);
+    } else {
+      // no usable orders
+      setHasValidOrders(false);
     }
-  }, [setHasOrders, apiGetState?.all_orders?.orders?.length]);
+  }, [setHasValidOrders, apiGetState?.all_orders?.orders]);
 
   // action handlers
   // Rather than making another sendApi, use the parent component's.
@@ -175,7 +194,7 @@ const Orders = (props) => {
                     <TableCell>
                       {o.known_revoked
                         ? 'Revoked'
-                        : o.status === 'valid' && Date.now() / 1000 > o.valid_to
+                        : o.status === 'valid' && isExpired(o.valid_to)
                         ? 'Expired'
                         : o.status.charAt(0).toUpperCase() + o.status.slice(1)}
                     </TableCell>
