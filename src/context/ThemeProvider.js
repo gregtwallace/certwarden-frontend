@@ -14,12 +14,12 @@ const ThemeProvider = (props) => {
   // handle dark mode toggle
   const toggleDarkMode = () => {
     setDarkMode((prevState) => {
-      sessionStorage.setItem('dark_mode', !prevState);
+      localStorage.setItem('dark_mode', !prevState);
       return !prevState;
     });
   };
 
-  const storageDarkMode = sessionStorage.getItem('dark_mode');
+  const storageDarkMode = localStorage.getItem('dark_mode');
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   // only run this on very first render, then let state control
@@ -35,7 +35,7 @@ const ThemeProvider = (props) => {
       }
     }
     // set storage theme
-    sessionStorage.setItem('dark_mode', themeDarkMode);
+    localStorage.setItem('dark_mode', themeDarkMode);
 
     setDarkMode(themeDarkMode);
   }, []);
