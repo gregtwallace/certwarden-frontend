@@ -8,7 +8,13 @@ import { newId } from '../../../App';
 import { buildMethodsList } from './methods';
 import { downloadBlob } from '../../../helpers/download';
 
-import { Typography } from '@mui/material';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Typography,
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
@@ -423,37 +429,49 @@ const EditOneCert = () => {
                 error={formState.validationErrors.subject_alts}
               />
 
-              <Typography component='h3' variant='subtitle2' sx={{ m: 2 }}>
-                CSR Fields
-              </Typography>
+              <Accordion sx={{ mb: 2 }}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls='csr-fields-content'
+                  id='csr-fields-header'
+                >
+                  <Typography>CSR Fields</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography sx={{ mb: 2 }}>
+                    These fields are optional and appear to be ignored by Let's
+                    Encrypt.
+                  </Typography>
 
-              <InputTextField
-                label='Country (2 Letter Code)'
-                id='country'
-                value={formState.form.country}
-                onChange={stringInputChangeHandler}
-              />
+                  <InputTextField
+                    label='Country (2 Letter Code)'
+                    id='country'
+                    value={formState.form.country}
+                    onChange={stringInputChangeHandler}
+                  />
 
-              <InputTextField
-                label='City'
-                id='city'
-                value={formState.form.city}
-                onChange={stringInputChangeHandler}
-              />
+                  <InputTextField
+                    label='City'
+                    id='city'
+                    value={formState.form.city}
+                    onChange={stringInputChangeHandler}
+                  />
 
-              <InputTextField
-                label='Organization'
-                id='organization'
-                value={formState.form.organization}
-                onChange={stringInputChangeHandler}
-              />
+                  <InputTextField
+                    label='Organization'
+                    id='organization'
+                    value={formState.form.organization}
+                    onChange={stringInputChangeHandler}
+                  />
 
-              <InputTextField
-                label='Organizational Unit'
-                id='organizational_unit'
-                value={formState.form.organizational_unit}
-                onChange={stringInputChangeHandler}
-              />
+                  <InputTextField
+                    label='Organizational Unit'
+                    id='organizational_unit'
+                    value={formState.form.organizational_unit}
+                    onChange={stringInputChangeHandler}
+                  />
+                </AccordionDetails>
+              </Accordion>
 
               <InputTextField
                 label={
