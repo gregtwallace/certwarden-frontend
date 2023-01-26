@@ -106,8 +106,9 @@ const AllCertificates = () => {
                     </TableCell>
                     <TableCell>{c.subject}</TableCell>
                     <TableCell>
-                      {!c.challenge_method.enabled && <Flag type='method' />}
+                      {c.acme_account.is_staging && <Flag type='staging' />}
                       {c.api_key_via_url && <Flag type='legacy_api' />}
+                      {!c.challenge_method.enabled && <Flag type='method' />}
                     </TableCell>
                     <TableCell>
                       <Link
