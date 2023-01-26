@@ -358,8 +358,10 @@ const EditOneCert = () => {
               onCancel={deleteCancelHandler}
               onConfirm={deleteConfirmHandler}
             >
-              The account can be recovered as long as the associated key is not
-              lost.
+              All orders associated with this certificate will also be deleted
+              and irrecoverable.
+              <br />
+              Any associated account and private keys will be unchanged.
             </DialogAlert>
 
             <Form onSubmit={submitFormHandler}>
