@@ -11,7 +11,7 @@ import Main from './components/Main/Main';
 import Footer from './Footer';
 
 // react app version
-export const frontendVersion = "0.6.8";
+export const frontendVersion = "0.6.9";
 
 // value for new records on backend
 export const newId = -1;
