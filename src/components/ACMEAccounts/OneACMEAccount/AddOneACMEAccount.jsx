@@ -228,7 +228,7 @@ const AddOneACMEAccount = () => {
           >
             Accept{' '}
             <Link href={tos_url} target='_blank' rel='noreferrer'>
-              Let's Encrypt Terms of Service
+              Let&apos;s Encrypt Terms of Service
             </Link>
           </InputCheckbox>
 

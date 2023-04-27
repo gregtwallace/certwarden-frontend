@@ -295,7 +295,7 @@ const AddOneCert = () => {
             </AccordionSummary>
             <AccordionDetails>
               <Typography sx={{ mb: 2 }}>
-                These fields are optional and appear to be ignored by Let's
+                These fields are optional and appear to be ignored by Let&apos;s
                 Encrypt.
               </Typography>
 
