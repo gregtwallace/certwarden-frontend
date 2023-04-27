@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import useAxiosGet from '../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../hooks/useAxiosSend';
 import { isDomainValid, isNameValid } from '../../../helpers/form-validation';
-import { newId } from '../../../App';
+import { newId } from '../../../helpers/constants';
 import { buildMethodsList } from './methods';
 
 import {

@@ -1,4 +1,4 @@
-import { frontendVersion } from '../../App';
+import { frontendVersion } from '../../helpers/constants';
 import { devMode } from '../../helpers/environment';
 import { apiUrl } from '../../helpers/environment';
 

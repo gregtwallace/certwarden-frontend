@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Box } from '@mui/system';
 
-import { newId } from '../../App';
+import { newId } from '../../helpers/constants';
 import AddOneACMEAccount from '../ACMEAccounts/OneACMEAccount/AddOneACMEAccount';
 import AddOneCert from '../Certificates/OneCert/AddOneCert';
 import AddOnePrivateKey from '../PrivateKeys/OnePrivateKey/AddOnePrivateKey';

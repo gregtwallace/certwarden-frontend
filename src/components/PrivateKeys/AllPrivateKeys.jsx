@@ -14,7 +14,7 @@ import TableRow from '@mui/material/TableRow';
 
 import useAxiosGet from '../../hooks/useAxiosGet';
 import { getRowsPerPage, getPage, getSort } from '../UI/TableMui/query';
-import { newId } from '../../App';
+import { newId } from '../../helpers/constants';
 
 import ApiLoading from '../UI/Api/ApiLoading';
 import ApiError from '../UI/Api/ApiError';

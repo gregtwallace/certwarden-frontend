@@ -10,12 +10,6 @@ import Header from './Header';
 import Main from './components/Main/Main';
 import Footer from './Footer';
 
-// react app version
-export const frontendVersion = "0.7.a";
-
-// value for new records on backend
-export const newId = -1;
-
 const App = () => {
   const { setAuthExpires } = useAuthExpires();
 

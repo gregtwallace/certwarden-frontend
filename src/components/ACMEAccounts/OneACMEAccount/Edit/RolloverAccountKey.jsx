@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
-import { newId } from '../../../../App';
+import { newId } from '../../../../helpers/constants';
 
 import ApiError from '../../../UI/Api/ApiError';
 import ApiLoading from '../../../UI/Api/ApiLoading';
