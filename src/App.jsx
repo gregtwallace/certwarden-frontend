@@ -11,7 +11,7 @@ import Main from './components/Main/Main';
 import Footer from './Footer';
 
 // react app version
-export const frontendVersion = "0.6.11";
+export const frontendVersion = "0.7.a";
 
 // value for new records on backend
 export const newId = -1;
@@ -45,7 +45,7 @@ const App = () => {
               : theme.palette.grey[900],
         }}
       >
-        <Router basename={process.env.PUBLIC_URL}>
+        <Router basename={import.meta.env.PUBLIC_URL}>
           <Header />
           <Main />
         </Router>
