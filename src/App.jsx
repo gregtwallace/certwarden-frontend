@@ -39,7 +39,7 @@ const App = () => {
               : theme.palette.grey[900],
         }}
       >
-        <Router basename={import.meta.env.PUBLIC_URL}>
+        <Router basename={import.meta.env.BASE_URL}>
           <Header />
           <Main />
         </Router>
