@@ -6,9 +6,9 @@ const ApiError = (props) => {
     <Alert sx={{ m: 2 }} severity='error'>
       An API error has occurred.
       <br />
-      Response Status Code: {props.code}
+      Status Code: {props.code}
       <br />
-      Response: {props.message}
+      Message: {props.message}
     </Alert>
   );
 };
