@@ -26,16 +26,7 @@ const ChangeAccountEmail = () => {
   const [apiSendState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
-  // set dummy state prior to apiGet loading
-  // only includes values that will be used in payload
-  const dummyForm = {
-    form: {
-      email: '',
-    },
-    validationErrors: {},
-  };
-
-  const [formState, setFormState] = useState(dummyForm);
+  const [formState, setFormState] = useState({});
 
   // Function to set the form equal to the current API state
   const setFormToApi = useCallback(() => {
@@ -118,11 +109,19 @@ const ChangeAccountEmail = () => {
   };
 
   // consts related to rendering
+  // don't render if not loaded, error, or formState not yet set
+  // formState set is needed to prevent animations of form fields
+  // populating (when previously using a blank form object) or invalid
+  // references to formState.form now that blank form object is gone
   const renderApiItems =
     apiGetState.isLoaded &&
     !apiGetState.errorMessage &&
-    JSON.stringify(dummyForm.form) !== JSON.stringify(formState.form);
-  const formUnchanged = apiGetState.acme_account.email === formState.form.email;
+    JSON.stringify({}) !== JSON.stringify(formState);
+
+  var formUnchanged = false;
+  if (renderApiItems) {
+    formUnchanged = apiGetState.acme_account.email === formState.form.email;
+  }
 
   return (
     <FormContainer>

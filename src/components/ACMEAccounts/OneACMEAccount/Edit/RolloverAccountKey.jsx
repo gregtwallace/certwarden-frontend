@@ -34,15 +34,15 @@ const RolloverAccountKey = () => {
   const [apiSendState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
-  // set dummy state
-  const dummyForm = {
+  // set blank form state
+  const blankForm = {
     form: {
       private_key_id: '',
     },
     validationErrors: {},
   };
 
-  const [formState, setFormState] = useState(dummyForm);
+  const [formState, setFormState] = useState(blankForm);
 
   useEffect(() => {
     // execute actions after loaded
@@ -99,6 +99,8 @@ const RolloverAccountKey = () => {
   };
 
   // consts related to rendering
+  // no check on blank form as blank is the starting state
+  // which isn't changed by the apiGet
   const renderApiItems =
     apiGetAccountState.isLoaded && !apiGetAccountState.errorMessage;
 

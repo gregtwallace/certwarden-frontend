@@ -20,13 +20,15 @@ const Login = () => {
   const [sendState, sendData] = useAxiosSend();
   const { setAuthExpires } = useAuthExpires();
 
-  const [formState, setFormState] = useState({
+  // set blank form state
+  const blankForm = {
     login: {
       username: '',
       password: '',
     },
     validationErrors: {},
-  });
+  };
+  const [formState, setFormState] = useState(blankForm);
 
   // form data change handler
   const inputChangeHandler = (event) => {

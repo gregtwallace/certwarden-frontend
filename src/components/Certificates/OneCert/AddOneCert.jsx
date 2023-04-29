@@ -38,7 +38,7 @@ const AddOneCert = () => {
   const [apiSendState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
-  const blankFormState = {
+  const blankForm = {
     form: {
       name: '',
       description: '',
@@ -54,7 +54,7 @@ const AddOneCert = () => {
     },
     validationErrors: {},
   };
-  const [formState, setFormState] = useState(blankFormState);
+  const [formState, setFormState] = useState(blankForm);
 
   // data change handlers
   // string form field updates
@@ -86,7 +86,7 @@ const AddOneCert = () => {
   // button handlers
   const resetClickHandler = (event) => {
     event.preventDefault();
-    setFormState(blankFormState);
+    setFormState(blankForm);
   };
   const cancelClickHandler = (event) => {
     event.preventDefault();
@@ -181,6 +181,8 @@ const AddOneCert = () => {
   };
 
   // consts related to rendering
+  // no check on blank form as blank is the starting state
+  // which isn't changed by the apiGet
   const renderApiItems = apiGetState.isLoaded && !apiGetState.errorMessage;
 
   // vars related to api
@@ -190,7 +192,7 @@ const AddOneCert = () => {
 
   if (renderApiItems) {
     // build options for available accounts
-    if (apiGetState?.certificate_options?.acme_accounts) {
+    if (apiGetState.certificate_options.acme_accounts) {
       availableAccounts = apiGetState.certificate_options.acme_accounts.map(
         (a) => ({
           value: parseInt(a.id),
@@ -199,14 +201,14 @@ const AddOneCert = () => {
       );
     }
     // build options for available keys
-    if (apiGetState?.certificate_options?.private_keys) {
+    if (apiGetState.certificate_options.private_keys) {
       availableKeys = apiGetState.certificate_options.private_keys.map((k) => ({
         value: parseInt(k.id),
         name: k.name + ' (' + k.algorithm.name + ')',
       }));
     }
     // build options for challenge method
-    if (apiGetState?.certificate_options?.challenge_methods) {
+    if (apiGetState.certificate_options.challenge_methods) {
       availableMethods = buildMethodsList(
         apiGetState.certificate_options.challenge_methods
       );

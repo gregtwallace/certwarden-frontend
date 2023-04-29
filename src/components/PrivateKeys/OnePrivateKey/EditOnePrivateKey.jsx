@@ -31,19 +31,7 @@ const EditOnePrivateKey = () => {
   const [apiSendState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
-  // set dummy state prior to apiGet loading
-  // only includes values that will be used in payload
-  const dummyForm = {
-    form: {
-      name: '',
-      description: '',
-      api_key_disabled: false,
-      api_key_via_url: false,
-    },
-    validationErrors: {},
-  };
-
-  const [formState, setFormState] = useState(dummyForm);
+  const [formState, setFormState] = useState({});
 
   // Function to set the form equal to the current API state
   const setFormToApi = useCallback(() => {
@@ -186,17 +174,25 @@ const EditOnePrivateKey = () => {
   };
 
   // consts related to rendering
+  // don't render if not loaded, error, or formState not yet set
+  // formState set is needed to prevent animations of form fields
+  // populating (when previously using a blank form object) or invalid
+  // references to formState.form now that blank form object is gone
   const renderApiItems =
     apiGetState.isLoaded &&
     !apiGetState.errorMessage &&
-    JSON.stringify(dummyForm.form) !== JSON.stringify(formState.form);
+    JSON.stringify({}) !== JSON.stringify(formState);
 
-  const formUnchanged =
-    apiGetState.private_key.name === formState.form.name &&
-    apiGetState.private_key.description === formState.form.description &&
-    apiGetState.private_key.api_key_disabled ===
-      formState.form.api_key_disabled &&
-    apiGetState.private_key.api_key_via_url === formState.form.api_key_via_url;
+  var formUnchanged = true;
+  if (renderApiItems) {
+    formUnchanged =
+      apiGetState.private_key.name === formState.form.name &&
+      apiGetState.private_key.description === formState.form.description &&
+      apiGetState.private_key.api_key_disabled ===
+        formState.form.api_key_disabled &&
+      apiGetState.private_key.api_key_via_url ===
+        formState.form.api_key_via_url;
+  }
 
   return (
     <FormContainer>

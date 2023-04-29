@@ -36,17 +36,7 @@ const EditOneACMEAccount = () => {
   const [apiSendState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
-  // set dummy state prior to apiGet loading
-  // only includes values that will be used in payload
-  const dummyForm = {
-    form: {
-      name: '',
-      description: '',
-    },
-    validationErrors: {},
-  };
-
-  const [formState, setFormState] = useState(dummyForm);
+  const [formState, setFormState] = useState({});
 
   // Function to set the form equal to the current API state
   const setFormToApi = useCallback(() => {
@@ -186,23 +176,32 @@ const EditOneACMEAccount = () => {
   };
 
   // consts related to rendering
+  // don't render if not loaded, error, or formState not yet set
+  // formState set is needed to prevent animations of form fields
+  // populating (when previously using a blank form object) or invalid
+  // references to formState.form now that blank form object is gone
   const renderApiItems =
     apiGetState.isLoaded &&
     !apiGetState.errorMessage &&
-    JSON.stringify(dummyForm.form) !== JSON.stringify(formState.form);
+    JSON.stringify({}) !== JSON.stringify(formState);
 
-  const formUnchanged =
-    apiGetState.acme_account.name === formState.form.name &&
-    apiGetState.acme_account.description === formState.form.description;
+  var formUnchanged = true;
+  var canDoAccountActions = false;
+  var canRegister = false;
+  if (renderApiItems) {
+    formUnchanged =
+      apiGetState.acme_account.name === formState.form.name &&
+      apiGetState.acme_account.description === formState.form.description;
 
-  const canDoAccountActions =
-    apiGetState.acme_account.status === 'valid' &&
-    apiGetState.acme_account.kid !== '';
+    canDoAccountActions =
+      apiGetState.acme_account.status === 'valid' &&
+      apiGetState.acme_account.kid !== '';
 
-  const canRegister =
-    apiGetState.acme_account.status === 'unknown' ||
-    apiGetState.acme_account.status === '' ||
-    apiGetState.acme_account.kid === '';
+    canRegister =
+      apiGetState.acme_account.status === 'unknown' ||
+      apiGetState.acme_account.status === '' ||
+      apiGetState.acme_account.kid === '';
+  }
 
   return (
     <FormContainer>
@@ -356,7 +355,7 @@ const EditOneACMEAccount = () => {
               checked={apiGetState.acme_account.accepted_tos}
               disabled
             >
-              Accept Let's Encrypt Terms of Service
+              Accept Let&apos;s Encrypt Terms of Service
             </InputCheckbox>
 
             {apiSendState.errorMessage &&

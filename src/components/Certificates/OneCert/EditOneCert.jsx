@@ -55,24 +55,7 @@ const EditOneCert = () => {
     true
   );
 
-  // initialize dummy values
-  const dummyForm = {
-    form: {
-      name: '',
-      description: '',
-      private_key_id: '',
-      challenge_method_value: '',
-      subject_alts: [],
-      api_key_via_url: false,
-      country: '',
-      city: '',
-      organization: '',
-      organizational_unit: '',
-    },
-    validationErrors: {},
-  };
-
-  const [formState, setFormState] = useState(dummyForm);
+  const [formState, setFormState] = useState({});
 
   // Function to set the form equal to the current API state
   const setFormToApi = useCallback(() => {
@@ -269,31 +252,21 @@ const EditOneCert = () => {
   };
 
   // consts related to rendering
+  // don't render if not loaded, error, or formState not yet set
+  // formState set is needed to prevent animations of form fields
+  // populating (when previously using a blank form object) or invalid
+  // references to formState.form now that blank form object is gone
   const renderApiItems =
     apiGetState.isLoaded &&
     !apiGetState.errorMessage &&
     apiGetCertOptionsState.isLoaded &&
     !apiGetCertOptionsState.errorMessage &&
-    JSON.stringify(dummyForm.form) !== JSON.stringify(formState.form);
-
-  const formUnchanged =
-    apiGetState.certificate.name === formState.form.name &&
-    apiGetState.certificate.description === formState.form.description &&
-    apiGetState.certificate.private_key.id === formState.form.private_key_id &&
-    apiGetState.certificate.challenge_method.value ===
-      formState.form.challenge_method_value &&
-    apiGetState.certificate.subject_alts === formState.form.subject_alts &&
-    apiGetState.certificate.api_key_via_url ===
-      formState.form.api_key_via_url &&
-    apiGetState.certificate.country === formState.form.country &&
-    apiGetState.certificate.city === formState.form.city &&
-    apiGetState.certificate.organization === formState.form.organization &&
-    apiGetState.certificate.organizational_unit ===
-      formState.form.organizational_unit;
+    JSON.stringify({}) !== JSON.stringify(formState);
 
   // vars related to api
   var availableKeys;
   var availableMethods;
+  var formUnchanged = true;
 
   if (renderApiItems) {
     // build options for available keys
@@ -319,6 +292,23 @@ const EditOneCert = () => {
         apiGetState.certificate.challenge_method
       );
     }
+
+    // does form match get api call
+    formUnchanged =
+      apiGetState.certificate.name === formState.form.name &&
+      apiGetState.certificate.description === formState.form.description &&
+      apiGetState.certificate.private_key.id ===
+        formState.form.private_key_id &&
+      apiGetState.certificate.challenge_method.value ===
+        formState.form.challenge_method_value &&
+      apiGetState.certificate.subject_alts === formState.form.subject_alts &&
+      apiGetState.certificate.api_key_via_url ===
+        formState.form.api_key_via_url &&
+      apiGetState.certificate.country === formState.form.country &&
+      apiGetState.certificate.city === formState.form.city &&
+      apiGetState.certificate.organization === formState.form.organization &&
+      apiGetState.certificate.organizational_unit ===
+        formState.form.organizational_unit;
   }
   // vars related to api -- end
 

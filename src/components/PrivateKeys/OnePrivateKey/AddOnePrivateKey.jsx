@@ -41,7 +41,7 @@ const AddOnePrivateKey = () => {
   const [apiSendState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
-  const emptyForm = {
+  const blankForm = {
     key_source: '',
     form: {
       name: '',
@@ -52,7 +52,7 @@ const AddOnePrivateKey = () => {
     },
     validationErrors: {},
   };
-  const [formState, setFormState] = useState(emptyForm);
+  const [formState, setFormState] = useState(blankForm);
 
   // data change handler
   const inputChangeHandler = (event) => {
@@ -93,7 +93,7 @@ const AddOnePrivateKey = () => {
   // button handlers
   const resetClickHandler = (event) => {
     event.preventDefault();
-    setFormState(emptyForm);
+    setFormState(blankForm);
   };
   const cancelClickHandler = (event) => {
     event.preventDefault();
@@ -142,6 +142,8 @@ const AddOnePrivateKey = () => {
   };
 
   // consts related to rendering
+  // no check on blank form as blank is the starting state
+  // which isn't changed by the apiGet
   const renderApiItems = apiGetState.isLoaded && !apiGetState.errorMessage;
 
   return (

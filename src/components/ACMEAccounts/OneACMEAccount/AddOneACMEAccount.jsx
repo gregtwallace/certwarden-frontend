@@ -34,7 +34,8 @@ const AddOneACMEAccount = () => {
   const [apiSendState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
-  const blankFormState = {
+  // set blank form state
+  const blankForm = {
     form: {
       name: '',
       description: '',
@@ -45,7 +46,7 @@ const AddOneACMEAccount = () => {
     },
     validationErrors: {},
   };
-  const [formState, setFormState] = useState(blankFormState);
+  const [formState, setFormState] = useState(blankForm);
 
   // data change handlers
   // string form field updates
@@ -90,7 +91,7 @@ const AddOneACMEAccount = () => {
   // button handlers
   const resetClickHandler = (event) => {
     event.preventDefault();
-    setFormState(blankFormState);
+    setFormState(blankForm);
   };
   const cancelClickHandler = (event) => {
     event.preventDefault();
@@ -141,6 +142,8 @@ const AddOneACMEAccount = () => {
   };
 
   // consts related to rendering
+  // no check on blank form as blank is the starting state
+  // which isn't changed by the apiGet
   const renderApiItems = apiGetState.isLoaded && !apiGetState.errorMessage;
 
   // vars related to api
