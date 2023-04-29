@@ -115,6 +115,9 @@ const RolloverAccountKey = () => {
           value: parseInt(m.id),
           name: m.name + ' (' + m.algorithm.name + ')',
         }));
+    } else {
+      // when loaded but none are available
+      availableKeys = []
     }
   }
 
