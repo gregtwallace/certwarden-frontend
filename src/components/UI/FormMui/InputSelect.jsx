@@ -47,12 +47,16 @@ const InputSelect = (props) => {
         readOnly={props.readOnly}
         disabled={props.disabled}
       >
-        {props.options &&
+        {/* Check options exists and has at least one entry */}
+        {props.options && props.options.length > 0 ? (
           props.options.map((o) => (
             <MenuItem key={o.value} value={o.value}>
               {o.name}
             </MenuItem>
-          ))}
+          ))
+        ) : (
+          <MenuItem disabled>None Available</MenuItem>
+        )}
       </Select>
       {props.error && <FormHelperText error>{errorMessage}</FormHelperText>}
     </FormControl>
@@ -70,8 +74,9 @@ InputSelect.propTypes = {
   error: PropTypes.bool,
   options: PropTypes.arrayOf(
     PropTypes.shape({
-      name: PropTypes.string,
-      value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      name: PropTypes.string.isRequired,
+      value: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+        .isRequired,
     })
   ),
 };
