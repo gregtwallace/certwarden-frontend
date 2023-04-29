@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
-import { Link } from '@mui/material';
+import PropTypes from 'prop-types';
 
+import { Link } from '@mui/material';
 import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -117,13 +118,13 @@ const Orders = (props) => {
   };
 
   // handler to place a new order
-  const newOrderHandler = (event) => {
+  const newOrderHandler = () => {
     sendData(
       `/v1/certificates/${props.certId}/orders`,
       'POST',
       null,
       true
-    ).then((success) => {
+    ).then(() => {
       updateGet();
     });
   };
@@ -137,7 +138,7 @@ const Orders = (props) => {
       'POST',
       null,
       true
-    ).then((success) => {
+    ).then(() => {
       updateGet();
     });
   };
@@ -152,7 +153,7 @@ const Orders = (props) => {
       'POST',
       null,
       true
-    ).then((success) => {
+    ).then(() => {
       updateGet();
     });
   };
@@ -263,6 +264,17 @@ const Orders = (props) => {
       )}
     </TableContainer>
   );
+};
+
+// define props for linter
+Orders.propTypes = {
+  certId: PropTypes.string.isRequired,
+  setHasValidOrders: PropTypes.func.isRequired,
+  sendApiState: PropTypes.shape({
+    isSending: PropTypes.bool,
+    errorMessage: PropTypes.string,
+  }).isRequired,
+  sendData: PropTypes.func.isRequired,
 };
 
 export default Orders;
