@@ -133,7 +133,7 @@ const EditOneCert = () => {
     sendData(`/v1/certificates/${id}`, 'DELETE', null, true).then(
       (response) => {
         if (response.status >= 200 && response.status <= 299) {
-          navigate(-1);
+          navigate('/certificates');
         }
       }
     );
@@ -185,7 +185,7 @@ const EditOneCert = () => {
   };
   const cancelClickHandler = (event) => {
     event.preventDefault();
-    navigate(-1);
+    navigate('/certificates');
   };
 
   // form submission handler

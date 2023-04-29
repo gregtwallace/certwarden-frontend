@@ -98,7 +98,7 @@ const AddOnePrivateKey = () => {
   const cancelClickHandler = (event) => {
     event.preventDefault();
 
-    navigate(-1);
+    navigate('/privatekeys');
   };
 
   // form submission handler

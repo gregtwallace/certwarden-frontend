@@ -91,7 +91,7 @@ const AddOneCert = () => {
   const cancelClickHandler = (event) => {
     event.preventDefault();
 
-    navigate(-1);
+    navigate('/certificates');
   };
 
   // form submission handler

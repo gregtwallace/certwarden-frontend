@@ -124,7 +124,7 @@ const EditOnePrivateKey = () => {
   const cancelClickHandler = (event) => {
     event.preventDefault();
 
-    navigate(-1);
+    navigate('/privatekeys');
   };
 
   // delete handlers
@@ -138,7 +138,7 @@ const EditOnePrivateKey = () => {
     setDeleteOpen(false);
     sendData(`/v1/privatekeys/${id}`, 'DELETE', null, true).then((response) => {
       if (response.status >= 200 && response.status <= 299) {
-        navigate(-1);
+        navigate('/privatekeys');
       }
     });
   };

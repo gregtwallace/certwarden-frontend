@@ -77,8 +77,7 @@ const EditOneACMEAccount = () => {
   };
   const cancelClickHandler = (event) => {
     event.preventDefault();
-
-    navigate(-1);
+    navigate('/acmeaccounts');
   };
 
   // delete handlers
@@ -94,7 +93,7 @@ const EditOneACMEAccount = () => {
       (response) => {
         if (response.status >= 200 && response.status <= 299) {
           // back to the accounts page
-          navigate(-1);
+          navigate('/acmeaccounts');
         }
       }
     );
@@ -169,7 +168,7 @@ const EditOneACMEAccount = () => {
     sendData(`/v1/acmeaccounts/${id}`, 'PUT', formState.form, true).then(
       (response) => {
         if (response.status >= 200 && response.status <= 299) {
-          navigate(-1);
+          navigate('/acmeaccounts');
         }
       }
     );

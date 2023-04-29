@@ -76,7 +76,7 @@ const RolloverAccountKey = () => {
   // button handlers
   const cancelClickHandler = (event) => {
     event.preventDefault();
-    navigate(-1);
+    navigate(`/acmeaccounts/${id}`);
   };
 
   // form submission handler

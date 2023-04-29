@@ -75,7 +75,6 @@ const ChangeAccountEmail = () => {
   };
   const cancelClickHandler = (event) => {
     event.preventDefault();
-    //navigate('.');
     navigate(`/acmeaccounts/${id}`);
   };
 
