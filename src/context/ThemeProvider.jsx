@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { createContext, useEffect, useMemo, useState } from 'react';
 import {
   createTheme,
@@ -56,6 +57,10 @@ const ThemeProvider = (props) => {
       <ThemeProviderMui theme={theme}>{props.children}</ThemeProviderMui>
     </ThemeModeContext.Provider>
   );
+};
+
+ThemeProvider.propTypes = {
+  children: PropTypes.node,
 };
 
 // exports
