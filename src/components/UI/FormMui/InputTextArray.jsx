@@ -64,6 +64,7 @@ const InputTextArray = (props) => {
         props.value.map((element, i) => (
           <InputTextField
             id={props.id + '_' + i}
+            label={props.subLabel + ' ' + parseInt(i + 1)}
             name={props.name ? props.name + '_' + i : props.id + '_' + i}
             key={i}
             value={element}
@@ -90,6 +91,7 @@ InputTextArray.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string,
   label: PropTypes.string.isRequired,
+  subLabel: PropTypes.string.isRequired,
   value: PropTypes.arrayOf(
     PropTypes.oneOfType([PropTypes.number, PropTypes.string])
   ).isRequired,
