@@ -22,7 +22,6 @@ import Button from '../../UI/Button/Button';
 import DialogAlert from '../../UI/Dialog/DialogAlert';
 import Form from '../../UI/FormMui/Form';
 import FormContainer from '../../UI/FormMui/FormContainer';
-import FormError from '../../UI/FormMui/FormError';
 import FormFooter from '../../UI/FormMui/FormFooter';
 import FormRowRight from '../../UI/FormMui/FormRowRight';
 import InputCheckbox from '../../UI/FormMui/InputCheckbox';
@@ -337,7 +336,10 @@ const EditOneCert = () => {
 
         {!apiGetState.isLoaded && <ApiLoading />}
         {apiGetState.errorMessage && (
-          <ApiError>{apiGetState.errorMessage}</ApiError>
+          <ApiError
+            code={apiGetState.errorCode}
+            message={apiGetState.errorMessage}
+          />
         )}
 
         {renderApiItems && (
@@ -524,9 +526,10 @@ const EditOneCert = () => {
 
               {apiSendState.errorMessage &&
                 Object.keys(formState.validationErrors).length <= 0 && (
-                  <FormError>
-                    Error Sending -- {apiSendState.errorMessage}
-                  </FormError>
+                  <ApiError
+                    code={apiSendState.errorCode}
+                    message={apiSendState.errorMessage}
+                  />
                 )}
 
               <FormFooter

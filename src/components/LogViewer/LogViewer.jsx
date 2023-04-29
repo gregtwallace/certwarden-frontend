@@ -23,7 +23,12 @@ const LogViewer = () => {
   };
 
   if (apiGetState.errorMessage) {
-    return <ApiError>{apiGetState.errorMessage}</ApiError>;
+    return (
+      <ApiError
+        code={apiGetState.errorCode}
+        message={apiGetState.errorMessage}
+      />
+    );
   } else if (!apiGetState.isLoaded) {
     return <ApiLoading />;
   } else {

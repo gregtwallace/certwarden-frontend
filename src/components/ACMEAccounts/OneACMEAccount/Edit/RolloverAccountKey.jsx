@@ -10,7 +10,6 @@ import ApiLoading from '../../../UI/Api/ApiLoading';
 import Button from '../../../UI/Button/Button';
 import Form from '../../../UI/FormMui/Form';
 import FormContainer from '../../../UI/FormMui/FormContainer';
-import FormError from '../../../UI/FormMui/FormError';
 import FormFooter from '../../../UI/FormMui/FormFooter';
 import InputSelect from '../../../UI/FormMui/InputSelect';
 import InputTextField from '../../../UI/FormMui/InputTextField';
@@ -125,7 +124,10 @@ const RolloverAccountKey = () => {
 
       {!apiGetAccountState.isLoaded && <ApiLoading />}
       {apiGetAccountState.errorMessage && (
-        <ApiError>{apiGetAccountState.errorMessage}</ApiError>
+        <ApiError
+          code={apiGetAccountState.errorCode}
+          message={apiGetAccountState.errorMessage}
+        />
       )}
 
       {renderApiItems && (
@@ -175,9 +177,10 @@ const RolloverAccountKey = () => {
 
           {apiSendState.errorMessage &&
             Object.keys(formState.validationErrors).length <= 0 && (
-              <FormError>
-                Error Sending -- {apiSendState.errorMessage}
-              </FormError>
+              <ApiError
+                code={apiSendState.errorCode}
+                message={apiSendState.errorMessage}
+              />
             )}
 
           <FormFooter>

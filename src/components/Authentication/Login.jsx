@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -8,6 +7,7 @@ import Container from '@mui/material/Container';
 import { Paper } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+import ApiError from '../UI/Api/ApiError';
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
@@ -98,8 +98,12 @@ const Login = () => {
         </Avatar>
 
         {sendState.errorMessage &&
+          // hide error if form becomes invalid
           Object.keys(formState.validationErrors).length <= 0 && (
-            <Alert severity='error'>{sendState.errorMessage}</Alert>
+            <ApiError
+              code={sendState.errorCode}
+              message={sendState.errorMessage}
+            />
           )}
 
         <Box component='form' onSubmit={submitLogin}>

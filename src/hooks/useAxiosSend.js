@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { devMode } from '../helpers/environment';
+import { parseAxiosError } from '../helpers/axios-error';
 import axios from '../api/axios';
 import useAxiosPrivate from './useAxiosPrivate';
 
 const useAxiosSend = () => {
   const [state, setState] = useState({
     isSending: false,
+    errorCode: null,
     errorMessage: null,
   });
 
@@ -14,89 +16,73 @@ const useAxiosSend = () => {
 
   // Send data to the node using the specified method and a payload from the specified event
   // return true if success and no error, return false if something goes wrong
-  const sendData = async (
-    apiNode,
-    method,
-    payloadObj,
-    withCredentials = false,
-    responseType = 'json'
-  ) => {
-    // select instance based on if route is secured
-    var axiosInstance;
-    if (withCredentials) {
-      axiosInstance = axiosPrivate;
-    } else {
-      axiosInstance = axios;
-    }
-
-    // set state to sending
-    setState({
-      isSending: true,
-      errorMessage: null,
-    });
-
-    // debugging
-    if (devMode) {
-      console.log(payloadObj);
-    }
-
-    try {
-      let response = await axiosInstance({
-        method: method,
-        url: apiNode,
-        data: JSON.stringify(payloadObj),
-        responseType: responseType,
-      });
-
-      // dev log response
-      if (devMode) {
-        console.log(response);
+  const sendData = useCallback(
+    async (
+      apiNode,
+      method,
+      payloadObj,
+      withCredentials = false,
+      responseType = 'json'
+    ) => {
+      // select instance based on if route is secured
+      var axiosInstance;
+      if (withCredentials) {
+        axiosInstance = axiosPrivate;
+      } else {
+        axiosInstance = axios;
       }
 
-      // done sending, success
+      // set state to sending
       setState({
-        isSending: false,
+        isSending: true,
+        errorCode: null,
         errorMessage: null,
       });
-      return response;
-    } catch (errorOutter) {
-      // dev log error
+
+      // debugging
       if (devMode) {
-        console.log(errorOutter);
+        if (payloadObj === null) {
+          console.log('send payload is null');
+        } else {
+          console.log(payloadObj);
+        }
       }
 
-      // set error to the error code
-      let errorMessage = `Status: ${errorOutter.response.status}`;
-
-      // try to append an error message, if present
       try {
-        // if response data doesn't have an error text object (e.g. a blob), try to make it text
-        if (!errorOutter.response.data.error) {
-          let errorDataText = await errorOutter.response.data.text();
-          let jsonError = JSON.parse(errorDataText);
+        let response = await axiosInstance({
+          method: method,
+          url: apiNode,
+          data: JSON.stringify(payloadObj),
+          responseType: responseType,
+        });
 
-          // update the data with the new json data
-          errorOutter.response.data = jsonError;
-        }
-
-        errorMessage =
-          errorMessage +
-          `, Message: ${errorOutter.response.data.error.message}`;
-      } catch (errorInner) {
-        // log inner error if in devmode
+        // dev log response
         if (devMode) {
-          console.log(errorInner);
+          console.log(response);
         }
-      }
 
-      // done sending, error
-      setState({
-        isSending: false,
-        errorMessage: errorMessage,
-      });
-      return false;
-    }
-  };
+        // done sending, success
+        setState({
+          isSending: false,
+          errorCode: null,
+          errorMessage: null,
+        });
+        return response;
+      } catch (err) {
+        // use common axios error parser
+        const [errCode, errMessage] = await parseAxiosError(err, devMode);
+
+        // done, set error
+        setState({
+          isSending: false,
+          errorCode: errCode,
+          errorMessage: errMessage,
+        });
+        return false;
+      }
+    },
+    [axiosPrivate, setState]
+  );
 
   return [state, sendData];
 };

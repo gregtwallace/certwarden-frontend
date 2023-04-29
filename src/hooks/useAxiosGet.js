@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 
 import { devMode } from '../helpers/environment';
+import { parseAxiosError } from '../helpers/axios-error';
 import axios from '../api/axios';
 import useAxiosPrivate from './useAxiosPrivate';
 
@@ -19,6 +20,7 @@ const useAxiosGet = (apiNode, expectedJsonName, withCredentials = false) => {
   const [state, setState] = useState({
     [expectedJsonName]: {},
     isLoaded: false,
+    errorCode: null,
     errorMessage: null,
   });
 
@@ -26,6 +28,7 @@ const useAxiosGet = (apiNode, expectedJsonName, withCredentials = false) => {
     setState({
       [expectedJsonName]: {},
       isLoaded: false,
+      errorCode: null,
       errorMessage: null,
     });
 
@@ -43,42 +46,18 @@ const useAxiosGet = (apiNode, expectedJsonName, withCredentials = false) => {
       setState({
         [expectedJsonName]: response?.data[expectedJsonName],
         isLoaded: true,
+        errorCode: null,
         errorMessage: null,
       });
-    } catch (errorOutter) {
-      // dev log error
-      if (devMode) {
-        console.log(errorOutter);
-      }
-
-      // set error to the error code
-      let errorMessage = `Status: ${errorOutter.response.status}`;
-
-      // try to append an error message, if present
-      try {
-        // if response data doesn't have an error text object (e.g. a blob), try to make it text
-        if (!errorOutter.response.data.error) {
-          let errorDataText = await errorOutter.response.data.text();
-          let jsonError = JSON.parse(errorDataText);
-
-          // update the data with the new json data
-          errorOutter.response.data = jsonError;
-        }
-
-        errorMessage =
-          errorMessage +
-          `, Message: ${errorOutter.response.data.error.message}`;
-      } catch (errorInner) {
-        // log inner error if in devmode
-        if (devMode) {
-          console.log(errorInner);
-        }
-      }
+    } catch (err) {
+      // use common axios error parser
+      const [errCode, errMessage] = await parseAxiosError(err, devMode);
 
       setState({
         [expectedJsonName]: {},
         isLoaded: true,
-        errorMessage: errorMessage,
+        errorCode: errCode,
+        errorMessage: errMessage,
       });
     }
   }, [axiosInstance, apiNode, expectedJsonName]);

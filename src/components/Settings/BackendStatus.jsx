@@ -19,7 +19,10 @@ const BackendStatus = () => {
 
       {!apiGetState.isLoaded && <ApiLoading />}
       {apiGetState.errorMessage && (
-        <ApiError>{apiGetState.errorMessage}</ApiError>
+        <ApiError
+          code={apiGetState.errorCode}
+          message={apiGetState.errorMessage}
+        />
       )}
 
       {renderApiItems && (

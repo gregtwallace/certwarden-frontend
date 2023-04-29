@@ -87,7 +87,10 @@ const AllCertificates = () => {
       </TitleBar>
       {!apiGetState.isLoaded && <ApiLoading />}
       {apiGetState.errorMessage && (
-        <ApiError>{apiGetState.errorMessage}</ApiError>
+        <ApiError
+          code={apiGetState.errorCode}
+          message={apiGetState.errorMessage}
+        />
       )}
       {apiGetState.isLoaded && !apiGetState.errorMessage && (
         <>

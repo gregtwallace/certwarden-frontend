@@ -4,13 +4,18 @@ import Alert from '@mui/material/Alert';
 const ApiError = (props) => {
   return (
     <Alert sx={{ m: 2 }} severity='error'>
-      An API error has occurred. {props.children}
+      An API error has occurred.
+      <br />
+      Response Status Code: {props.code}
+      <br />
+      Response: {props.message}
     </Alert>
   );
 };
 
 ApiError.propTypes = {
-  children: PropTypes.node
-}
+  code: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  message: PropTypes.string.isRequired,
+};
 
 export default ApiError;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Paper } from '@mui/material';
@@ -8,27 +8,24 @@ import useAxiosSend from '../../hooks/useAxiosSend';
 
 import TitleBar from '../UI/TitleBar/TitleBar';
 import ApiError from '../UI/Api/ApiError';
+import ApiLoading from '../UI/Api/ApiLoading';
 
 const Logout = () => {
   const { setAuthExpires } = useAuthExpires();
-  const [, sendData] = useAxiosSend();
-
-  const [logoutFailed, setLogoutFailed] = useState(false);
+  const [sendState, sendData] = useAxiosSend();
 
   const navigate = useNavigate();
 
   useEffect(() => {
     sendData(`/v1/auth/logout`, 'POST', null, true).then((response) => {
       if (response.status >= 200 && response.status <= 299) {
-        // update auth
+        // if success, clear login and go to root
         sessionStorage.removeItem('access_token');
         setAuthExpires();
         navigate('/');
-      } else {
-        setLogoutFailed(true);
       }
     });
-  }, []);
+  }, [navigate, sendData, setAuthExpires]);
 
   return (
     <Paper
@@ -37,9 +34,13 @@ const Logout = () => {
         p: 2,
       }}
     >
-      <TitleBar title='Logout' />
+      <TitleBar title='Logging Out...' />
 
-      {logoutFailed && <ApiError>Logout API call failed.</ApiError>}
+      {sendState.isSending && <ApiLoading />}
+
+      {sendState.errorMessage && (
+        <ApiError code={sendState.errorCode} message={sendState.errorMessage} />
+      )}
     </Paper>
   );
 };

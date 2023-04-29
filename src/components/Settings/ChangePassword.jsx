@@ -2,9 +2,9 @@ import { useState } from 'react';
 
 import useAxiosSend from '../../hooks/useAxiosSend';
 
+import ApiError from '../UI/Api/ApiError';
 import Form from '../UI/FormMui/Form';
 import GridItemContainer from '../UI/Grid/GridItemContainer';
-import FormError from '../UI/FormMui/FormError';
 import FormFooter from '../UI/FormMui/FormFooter';
 import Button from '../UI/Button/Button';
 import GridTitle from '../UI/Grid/GridTitle';
@@ -112,7 +112,10 @@ const ChangePassword = () => {
         />
 
         {apiSendState.errorMessage && formState.validationErrors.length > 0 && (
-          <FormError>Error Sending -- {apiSendState.errorMessage}</FormError>
+          <ApiError
+            code={apiSendState.errorCode}
+            message={apiSendState.errorMessage}
+          />
         )}
 
         <FormFooter>
