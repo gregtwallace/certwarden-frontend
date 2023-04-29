@@ -1,5 +1,7 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 import { useMediaQuery, useTheme } from '@mui/material';
 import { ThemeModeContext } from '../../context/ThemeProvider';
 
@@ -18,30 +20,31 @@ import KeyIcon from '@mui/icons-material/Key';
 import SettingsIcon from '@mui/icons-material/Settings';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 
+// ListText is the list item text (when expanded)
+const ListText = (props) => {
+  return (
+    <ListItemText
+      primary={props.primary}
+      primaryTypographyProps={{
+        style: {
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+        },
+      }}
+    />
+  );
+};
+
+ListText.propTypes = {
+  primary: PropTypes.string,
+};
+
+// Navbar is the full Navbar
 const Navbar = () => {
   const theme = useTheme();
   const toggleDarkMode = useContext(ThemeModeContext);
   const bigView = useMediaQuery(theme.breakpoints.up('md'));
-
-  // logic for hiding list text and adding noWrap
-  const ListText = (props) => {
-    return (
-      <>
-        {bigView && (
-          <ListItemText
-            primary={props.primary}
-            primaryTypographyProps={{
-              style: {
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              },
-            }}
-          />
-        )}
-      </>
-    );
-  };
 
   let width = 'auto';
   if (!bigView) {
