@@ -74,6 +74,8 @@ const Login = () => {
           response.data.response.access_token
         );
         setAuthExpires(response.data.response.session.exp);
+      } else {
+        setFormState(blankForm);
       }
     });
   };
