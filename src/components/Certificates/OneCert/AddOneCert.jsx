@@ -282,6 +282,7 @@ const AddOneCert = () => {
 
           <InputTextArray
             label='Subject Alternate Names'
+            subLabel='Alternate Name'
             id='subject_alts'
             name='subject_alts'
             value={formState.form.subject_alts}
