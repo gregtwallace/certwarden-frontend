@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { TextField } from '@mui/material';
 
 const InputTextArea = (props) => {
@@ -57,6 +58,19 @@ const InputTextArea = (props) => {
       }}
     />
   );
+};
+
+InputTextArea.propTypes = {
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  type: PropTypes.string,
+  required: PropTypes.bool,
+  label: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  onChange: PropTypes.func,
+  readOnly: PropTypes.bool,
+  disabled: PropTypes.bool,
+  error: PropTypes.bool,
 };
 
 export default InputTextArea;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { TextField } from '@mui/material';
 
 const InputTextField = (props) => {
@@ -12,7 +13,8 @@ const InputTextField = (props) => {
       break;
     case 'subject':
     case props?.id?.match(/^subject_alts/)?.input:
-      errorMessage = 'Subject name must be a valid (sub)domain name and may start with a wildcard (*.).';
+      errorMessage =
+        'Subject name must be a valid (sub)domain name and may start with a wildcard (*.).';
       break;
     case 'new_password':
       errorMessage = 'New password must be at least 10 characters long.';
@@ -48,6 +50,19 @@ const InputTextField = (props) => {
       sx={{ my: 1 }}
     />
   );
+};
+
+InputTextField.propTypes = {
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  type: PropTypes.string,
+  label: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  onChange: PropTypes.func,
+  required: PropTypes.bool,
+  readOnly: PropTypes.bool,
+  disabled: PropTypes.bool,
+  error: PropTypes.bool,
 };
 
 export default InputTextField;

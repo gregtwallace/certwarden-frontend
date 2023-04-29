@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import {
   FormControl,
   FormHelperText,
@@ -16,7 +17,8 @@ const InputSelect = (props) => {
       errorMessage = 'An account must be selected.';
       break;
     case 'challenge_method_value':
-      errorMessage = 'A challenge method must be selected. The method must be dns-01 for wildcards.';
+      errorMessage =
+        'A challenge method must be selected. The method must be dns-01 for wildcards.';
       break;
     case 'key_source':
       errorMessage = 'Key source must be selected.';
@@ -45,7 +47,7 @@ const InputSelect = (props) => {
         readOnly={props.readOnly}
         disabled={props.disabled}
       >
-        {props?.options &&
+        {props.options &&
           props.options.map((o) => (
             <MenuItem key={o.value} value={o.value}>
               {o.name}
@@ -55,6 +57,23 @@ const InputSelect = (props) => {
       {props.error && <FormHelperText error>{errorMessage}</FormHelperText>}
     </FormControl>
   );
+};
+
+InputSelect.propTypes = {
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  label: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  onChange: PropTypes.func,
+  readOnly: PropTypes.bool,
+  disabled: PropTypes.bool,
+  error: PropTypes.bool,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    })
+  ),
 };
 
 export default InputSelect;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Toolbar } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
@@ -22,6 +23,12 @@ const TitleBar = (props) => {
       {props.children}
     </Toolbar>
   );
+};
+
+TitleBar.propTypes = {
+  title: PropTypes.string.isRequired,
+  headerComponent: PropTypes.string,
+  children: PropTypes.node,
 };
 
 export default TitleBar;

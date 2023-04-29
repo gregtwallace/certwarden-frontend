@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 
 const GridContainer = (props) => {
@@ -11,5 +12,9 @@ const GridContainer = (props) => {
     </Grid>
   );
 };
+
+GridContainer.propTypes = {
+  children: PropTypes.node,
+}
 
 export default GridContainer;

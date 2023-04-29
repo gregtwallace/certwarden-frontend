@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Box } from '@mui/material';
 
 const Form = (props) => {
@@ -12,5 +13,10 @@ const Form = (props) => {
     </Box>
   );
 };
+
+Form.propTypes = {
+  onSubmit: PropTypes.func,
+  children: PropTypes.node,
+}
 
 export default Form;

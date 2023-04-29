@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Typography } from '@mui/material';
 
 const Flag = (props) => {
@@ -72,5 +73,10 @@ const Flag = (props) => {
     </Typography>
   );
 };
+
+Flag.propTypes = {
+  type: PropTypes.string,
+  days: PropTypes.number,
+}
 
 export default Flag;

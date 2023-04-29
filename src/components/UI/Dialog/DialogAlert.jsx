@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Button } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -26,6 +27,14 @@ const DialogAlert = (props) => {
       </DialogActions>
     </Dialog>
   );
+};
+
+DialogAlert.propTypes = {
+  open: PropTypes.bool,
+  onCancel: PropTypes.func,
+  onConfirm: PropTypes.func,
+  title: PropTypes.string,
+  children: PropTypes.node,
 };
 
 export default DialogAlert;

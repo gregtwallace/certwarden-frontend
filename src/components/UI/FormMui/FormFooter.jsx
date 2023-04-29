@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { convertUnixTime } from '../../../helpers/time';
 
 import { Box, Toolbar } from '@mui/material';
@@ -23,5 +24,11 @@ const FormFooter = (props) => {
     </Toolbar>
   );
 };
+
+FormFooter.propTypes = {
+  createdAt: PropTypes.number,
+  updatedAt: PropTypes.number,
+  children: PropTypes.node,
+}
 
 export default FormFooter;

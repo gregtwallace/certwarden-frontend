@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Typography } from '@mui/material';
 
 const FormInfo = (props) => {
@@ -7,5 +8,9 @@ const FormInfo = (props) => {
     </Typography>
   );
 };
+
+FormInfo.propTypes = {
+  children: PropTypes.node,
+}
 
 export default FormInfo;

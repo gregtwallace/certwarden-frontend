@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useSearchParams } from 'react-router-dom';
 
 import { perPageOptions } from './query';
@@ -45,6 +46,12 @@ const TablePagination = (props) => {
       onRowsPerPageChange={rowPerPageChangeHandler}
     ></MuiTablePagination>
   );
+};
+
+TablePagination.propTypes = {
+  page: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+  count: PropTypes.number.isRequired,
 };
 
 export default TablePagination;

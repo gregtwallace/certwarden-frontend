@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Container, Paper } from '@mui/material';
 
 const FormContainer = (props) => {
@@ -7,5 +8,9 @@ const FormContainer = (props) => {
     </Container>
   );
 };
+
+FormContainer.propTypes = {
+  children: PropTypes.node,
+}
 
 export default FormContainer;

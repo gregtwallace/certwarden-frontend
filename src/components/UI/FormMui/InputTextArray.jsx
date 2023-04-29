@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { FormControl, Toolbar, Typography } from '@mui/material';
 
 import Button from '../Button/Button';
@@ -11,7 +12,7 @@ const InputTextArray = (props) => {
     event.target = {};
 
     event.target.id = props.id;
-    event.target.name = props.name;
+    event.target.name = props.name ? props.name : props.id;
     event.target.value = newArray;
 
     props.onChange(event);
@@ -51,9 +52,6 @@ const InputTextArray = (props) => {
     onChange(newArray);
   };
 
-  // use id as name if no name provided
-  const name = props.name ? props.name : props.id;
-
   return (
     <FormControl id={props.id} fullWidth sx={{ my: 1 }}>
       <Typography component='label' sx={{ mx: 1 }}>
@@ -66,7 +64,7 @@ const InputTextArray = (props) => {
         props.value.map((element, i) => (
           <InputTextField
             id={props.id + '_' + i}
-            name={name + '_' + i}
+            name={props.name ? props.name + '_' + i : props.id + '_' + i}
             key={i}
             value={element}
             onChange={stringChangeHandler}
@@ -86,6 +84,17 @@ const InputTextArray = (props) => {
       </Toolbar>
     </FormControl>
   );
+};
+
+InputTextArray.propTypes = {
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  label: PropTypes.string.isRequired,
+  value: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+  ).isRequired,
+  onChange: PropTypes.func,
+  error: PropTypes.arrayOf(PropTypes.number),
 };
 
 export default InputTextArray;

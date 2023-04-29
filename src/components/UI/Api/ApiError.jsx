@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import Alert from '@mui/material/Alert';
 
 const ApiError = (props) => {
@@ -7,5 +8,9 @@ const ApiError = (props) => {
     </Alert>
   );
 };
+
+ApiError.propTypes = {
+  children: PropTypes.node
+}
 
 export default ApiError;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Toolbar } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
@@ -21,6 +22,11 @@ const GridTitle = (props) => {
       </Typography>
     </Toolbar>
   );
+};
+
+GridTitle.propTypes = {
+  headerComponent: PropTypes.string,
+  title: PropTypes.string,
 };
 
 export default GridTitle;

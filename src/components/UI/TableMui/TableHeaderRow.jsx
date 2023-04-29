@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useSearchParams } from 'react-router-dom';
 
 import { TableRow } from '@mui/material';
@@ -62,6 +63,16 @@ const TableHeaderRow = (props) => {
       })}
     </TableRow>
   );
+};
+
+TableHeaderRow.propTypes = {
+  headers: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      label: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+        .isRequired,
+    }).isRequired
+  ),
 };
 
 export default TableHeaderRow;

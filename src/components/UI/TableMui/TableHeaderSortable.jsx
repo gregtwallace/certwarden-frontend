@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Box, TableCell, TableSortLabel } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 
@@ -22,6 +23,14 @@ const TableHeaderSortable = (props) => {
       </TableSortLabel>
     </TableCell>
   );
+};
+
+TableHeaderSortable.propTypes = {
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  orderBy: PropTypes.string.isRequired,
+  order: PropTypes.string.isRequired,
+  onClick: PropTypes.func,
 };
 
 export default TableHeaderSortable;

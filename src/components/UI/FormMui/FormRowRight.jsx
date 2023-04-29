@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Box, Toolbar } from '@mui/material';
 
 const FormRowRight = (props) => {
@@ -8,5 +9,9 @@ const FormRowRight = (props) => {
     </Toolbar>
   );
 };
+
+FormRowRight.propTypes = {
+  children: PropTypes.node,
+}
 
 export default FormRowRight;

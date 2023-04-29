@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import {
   Checkbox,
   FormControl,
@@ -37,6 +38,16 @@ const InputCheckbox = (props) => {
       {props.error && <FormHelperText error>{errorMessage}</FormHelperText>}
     </FormControl>
   );
+};
+
+InputCheckbox.propTypes = {
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  checked: PropTypes.bool,
+  disabled: PropTypes.bool,
+  error: PropTypes.bool,
+  onChange: PropTypes.func,
+  children: PropTypes.node,
 };
 
 export default InputCheckbox;

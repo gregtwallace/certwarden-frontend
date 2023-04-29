@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Button as ButtonMui } from '@mui/material';
 
 const Button = (props) => {
@@ -46,5 +47,13 @@ const Button = (props) => {
     </ButtonMui>
   );
 };
+
+Button.propTypes = {
+  type: PropTypes.string,
+  onClick: PropTypes.func,
+  disabled: PropTypes.bool,
+  size: PropTypes.string,
+  children: PropTypes.node,
+}
 
 export default Button;

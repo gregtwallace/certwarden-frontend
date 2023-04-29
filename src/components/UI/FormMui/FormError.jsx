@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import Alert from '@mui/material/Alert';
 
 const FormError = (props) => {
@@ -7,5 +8,9 @@ const FormError = (props) => {
     </Alert>
   );
 };
+
+FormError.propTypes = {
+  children: PropTypes.node,
+}
 
 export default FormError;

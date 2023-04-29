@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Paper } from '@mui/material';
 
 const TableContainer = (props) => {
@@ -13,5 +14,9 @@ const TableContainer = (props) => {
     </Paper>
   );
 };
+
+TableContainer.propTypes = {
+  children: PropTypes.node,
+}
 
 export default TableContainer;
