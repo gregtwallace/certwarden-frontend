@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, matchPath, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { useMediaQuery, useTheme } from '@mui/material';
@@ -23,29 +23,37 @@ import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 // ListItem is a single link in the Navbar. If it receives a 'to' prop
 // it renders as a Link.
 const NavLink = (props) => {
+  // selected logic (is current route the 'to' route)
+  const { pathname } = useLocation();
+  var selected = false;
+  // only possible to be selected if route 'to' is specified
+  // will error if try to match unspecified 'to'
+  if (props.to != null) {
+    selected = matchPath(pathname, props.to) != null;
+  }
+
   return (
-    <>
-      <ListItemButton
-        component={props.to && Link}
-        to={props.to}
-        onClick={props.onClick}
-        sx={props.sx}
-      >
-        <ListItemIcon>
-          <props.iconComponent />
-        </ListItemIcon>
-        <ListItemText
-          primary={props.children}
-          primaryTypographyProps={{
-            style: {
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-            },
-          }}
-        />
-      </ListItemButton>
-    </>
+    <ListItemButton
+      selected={selected}
+      component={props.to && Link}
+      to={props.to}
+      onClick={props.onClick}
+      sx={props.sx}
+    >
+      <ListItemIcon>
+        <props.iconComponent />
+      </ListItemIcon>
+      <ListItemText
+        primary={props.children}
+        primaryTypographyProps={{
+          style: {
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          },
+        }}
+      />
+    </ListItemButton>
   );
 };
 
