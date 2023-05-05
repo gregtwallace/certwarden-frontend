@@ -1,7 +1,4 @@
-import { useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-
-import useAuthExpires from './hooks/useAuthExpires';
 import ThemeProvider from './context/ThemeProvider';
 
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,20 +8,6 @@ import Main from './components/Main/Main';
 import Footer from './Footer';
 
 const App = () => {
-  const { setAuthExpires } = useAuthExpires();
-
-  // check for 'logged_in_expiration' cookie to set the initial login state
-  useEffect(() => {
-    const loggedInExpiration = document.cookie.match(
-      new RegExp(`(^| )logged_in_expiration=([^;]+)`)
-    );
-    if (loggedInExpiration) {
-      setAuthExpires(loggedInExpiration[2]);
-    } else {
-      setAuthExpires();
-    }
-  }, [setAuthExpires]);
-
   return (
     <ThemeProvider>
       <CssBaseline />

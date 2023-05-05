@@ -11,6 +11,7 @@ const ThemeModeContext = createContext();
 // Global theme management
 const ThemeProvider = (props) => {
   const [darkMode, setDarkMode] = useState(false);
+  const [renderThemedItems, setRenderThemedItems] = useState(false);
 
   // handle dark mode toggle
   const toggleDarkMode = () => {
@@ -39,7 +40,8 @@ const ThemeProvider = (props) => {
     localStorage.setItem('dark_mode', themeDarkMode);
 
     setDarkMode(themeDarkMode);
-  }, []);
+    setRenderThemedItems(true);
+  }, [prefersDarkMode, storageDarkMode, setDarkMode]);
 
   // create theme
   const theme = useMemo(
@@ -53,9 +55,13 @@ const ThemeProvider = (props) => {
   );
 
   return (
-    <ThemeModeContext.Provider value={toggleDarkMode}>
-      <ThemeProviderMui theme={theme}>{props.children}</ThemeProviderMui>
-    </ThemeModeContext.Provider>
+    <>
+      {renderThemedItems && (
+        <ThemeModeContext.Provider value={toggleDarkMode}>
+          <ThemeProviderMui theme={theme}>{props.children}</ThemeProviderMui>
+        </ThemeModeContext.Provider>
+      )}
+    </>
   );
 };
 
