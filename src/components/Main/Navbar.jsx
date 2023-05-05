@@ -20,24 +20,41 @@ import KeyIcon from '@mui/icons-material/Key';
 import SettingsIcon from '@mui/icons-material/Settings';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 
-// ListText is the list item text (when expanded)
-const ListText = (props) => {
+// ListItem is a single link in the Navbar. If it receives a 'to' prop
+// it renders as a Link.
+const NavLink = (props) => {
   return (
-    <ListItemText
-      primary={props.primary}
-      primaryTypographyProps={{
-        style: {
-          whiteSpace: 'nowrap',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-        },
-      }}
-    />
+    <>
+      <ListItemButton
+        component={props.to && Link}
+        to={props.to}
+        onClick={props.onClick}
+        sx={props.sx}
+      >
+        <ListItemIcon>
+          <props.iconComponent />
+        </ListItemIcon>
+        <ListItemText
+          primary={props.children}
+          primaryTypographyProps={{
+            style: {
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            },
+          }}
+        />
+      </ListItemButton>
+    </>
   );
 };
 
-ListText.propTypes = {
-  primary: PropTypes.string,
+NavLink.propTypes = {
+  children: PropTypes.any.isRequired,
+  iconComponent: PropTypes.elementType.isRequired,
+  to: PropTypes.string,
+  onClick: PropTypes.func,
+  sx: PropTypes.object,
 };
 
 // Navbar is the full Navbar
@@ -60,65 +77,41 @@ const Navbar = () => {
 
   return (
     <List component='nav' sx={sxList}>
-      <ListItemButton component={Link} to='/'>
-        <ListItemIcon>
-          <DashboardIcon />
-        </ListItemIcon>
-        <ListText primary='Dashboard' />
-      </ListItemButton>
+      <NavLink to='/' iconComponent={DashboardIcon}>
+        Dashboard
+      </NavLink>
 
-      <ListItemButton component={Link} to='/privatekeys'>
-        <ListItemIcon>
-          <KeyIcon />
-        </ListItemIcon>
-        <ListText primary='Private Keys' />
-      </ListItemButton>
+      <NavLink to='/privatekeys' iconComponent={KeyIcon}>
+        Private Keys
+      </NavLink>
 
-      <ListItemButton component={Link} to='/acmeaccounts'>
-        <ListItemIcon>
-          <BadgeIcon />
-        </ListItemIcon>
-        <ListText primary='ACME Accounts' />
-      </ListItemButton>
+      <NavLink to='/acmeaccounts' iconComponent={BadgeIcon}>
+        ACME Accounts
+      </NavLink>
 
-      <ListItemButton component={Link} to='/certificates'>
-        <ListItemIcon>
-          <CardMembershipIcon />
-        </ListItemIcon>
-        <ListText primary='Certificates' />
-      </ListItemButton>
+      <NavLink to='/certificates' iconComponent={CardMembershipIcon}>
+        Certificates
+      </NavLink>
 
       <Divider sx={{ my: 2 }} />
 
-      <ListItemButton component={Link} to='/logs'>
-        <ListItemIcon>
-          <TextSnippetIcon />
-        </ListItemIcon>
-        <ListText primary='Logs' />
-      </ListItemButton>
+      <NavLink to='/logs' iconComponent={TextSnippetIcon}>
+        Logs
+      </NavLink>
 
-      <ListItemButton component={Link} to='/settings'>
-        <ListItemIcon>
-          <SettingsIcon />
-        </ListItemIcon>
-        <ListText primary='Settings' />
-      </ListItemButton>
+      <NavLink to='/settings' iconComponent={SettingsIcon}>
+        Settings
+      </NavLink>
 
-      <ListItemButton
+      <NavLink
         sx={{ position: 'absolute', bottom: 0, width: 1 }}
         onClick={toggleDarkMode}
+        iconComponent={
+          theme.palette.mode === 'dark' ? Brightness7Icon : Brightness4Icon
+        }
       >
-        <ListItemIcon>
-          {theme.palette.mode === 'dark' ? (
-            <Brightness7Icon />
-          ) : (
-            <Brightness4Icon />
-          )}
-        </ListItemIcon>
-        <ListText
-          primary={theme.palette.mode === 'dark' ? 'Dark Mode' : 'Light Mode'}
-        />
-      </ListItemButton>
+        {theme.palette.mode === 'dark' ? 'Dark Mode' : 'Light Mode'}
+      </NavLink>
     </List>
   );
 };
