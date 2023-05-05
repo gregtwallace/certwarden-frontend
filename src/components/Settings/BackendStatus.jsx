@@ -38,34 +38,8 @@ const BackendStatus = () => {
           </Typography>
 
           <Typography variant='p' sx={{ my: 1 }} display='block'>
-            API URL:{' '}
-            <Link
-              href={apiGetState.server.api_url}
-              target='_blank'
-              rel='noreferrer'
-            >
-              {apiGetState.server.api_url}
-            </Link>
-          </Typography>
-
-          <Typography variant='p' sx={{ my: 1 }} display='block'>
             Development Mode:{' '}
             {apiGetState.server.development_mode ? 'Yes' : 'No'}
-          </Typography>
-
-          <Typography variant='p' sx={{ my: 1 }} display='block'>
-            Hosted Frontend:{' '}
-            {apiGetState.server.frontend_url ? (
-              <Link
-                href={apiGetState.server.frontend_url}
-                target='_blank'
-                rel='noreferrer'
-              >
-                {apiGetState.server.frontend_url}
-              </Link>
-            ) : (
-              'Disabled'
-            )}
           </Typography>
 
           <Typography variant='p' sx={{ my: 1 }} display='block'>
