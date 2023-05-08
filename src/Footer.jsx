@@ -15,7 +15,7 @@ const Footer = () => {
       }}
     >
       <Typography variant='body2' align='center'>
-        Copyright © 2022 Greg T. Wallace
+        Copyright © 2023 Greg T. Wallace
       </Typography>
     </Box>
   );
