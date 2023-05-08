@@ -117,7 +117,7 @@ const ChangePassword = () => {
           error={formState.validationErrors.confirm_new_password && true}
         />
 
-        {apiSendState.errorMessage && formState.validationErrors.length > 0 && (
+        {apiSendState.errorMessage && Object.keys(formState.validationErrors).length === 0 && (
           <ApiError
             code={apiSendState.errorCode}
             message={apiSendState.errorMessage}
