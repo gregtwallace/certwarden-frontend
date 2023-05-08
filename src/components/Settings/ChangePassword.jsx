@@ -9,6 +9,7 @@ import FormFooter from '../UI/FormMui/FormFooter';
 import Button from '../UI/Button/Button';
 import GridTitle from '../UI/Grid/GridTitle';
 import InputTextField from '../UI/FormMui/InputTextField';
+import { devMode } from '../../helpers/environment';
 
 const ChangePassword = () => {
   const [apiSendState, sendData] = useAxiosSend();
@@ -48,15 +49,19 @@ const ChangePassword = () => {
 
     // form validation
     let validationErrors = {};
-    // TODO: Additional password complexity requirements?
-    // new password
-    if (formState.form.new_password.length < 10) {
-      validationErrors.new_password = true;
-    }
 
     // confirm password
     if (formState.form.new_password !== formState.form.confirm_new_password) {
       validationErrors.confirm_new_password = true;
+    }
+
+    // TODO: Additional password complexity requirements?
+    // new password
+    // if in devmode, allow terrible passwords
+    if (!devMode) {
+      if (formState.form.new_password.length < 10) {
+        validationErrors.new_password = true;
+      }
     }
 
     setFormState((prevState) => ({
@@ -84,6 +89,7 @@ const ChangePassword = () => {
   return (
     <GridItemContainer>
       <GridTitle title='Change Password' />
+
       <Form onSubmit={submitFormHandler}>
         <InputTextField
           label='Current Password'
