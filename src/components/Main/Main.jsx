@@ -9,7 +9,7 @@ const Main = () => {
   const { authExpires, setAuthExpires } = useAuthExpires();
   const [renderMain, setRenderMain] = useState(false);
 
-  // check for 'logged_in_expiration' cookie to set the initial login state
+  // check for 'auth_expires' session item to set the initial login state
   useEffect(() => {
     const loggedInExpiration = sessionStorage.getItem('auth_expires');
     if (loggedInExpiration) {
@@ -26,8 +26,6 @@ const Main = () => {
       sx={{
         minHeight: 0,
         flexGrow: 1,
-        overflowY: 'auto',
-
         display: 'flex',
         flexDirection: 'row',
       }}

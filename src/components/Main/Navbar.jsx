@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { useMediaQuery, useTheme } from '@mui/material';
 import { ThemeModeContext } from '../../context/ThemeProvider';
 
+import Box from '@mui/material/Box';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import { Divider } from '@mui/material';
 import List from '@mui/material/List';
@@ -38,7 +39,6 @@ const NavLink = (props) => {
       component={props.to && Link}
       to={props.to}
       onClick={props.onClick}
-      sx={props.sx}
     >
       <ListItemIcon>
         <props.iconComponent />
@@ -62,7 +62,6 @@ NavLink.propTypes = {
   iconComponent: PropTypes.elementType.isRequired,
   to: PropTypes.string,
   onClick: PropTypes.func,
-  sx: PropTypes.object,
 };
 
 // Navbar is the full Navbar
@@ -71,13 +70,21 @@ const Navbar = () => {
   const toggleDarkMode = useContext(ThemeModeContext);
   const bigView = useMediaQuery(theme.breakpoints.up('md'));
 
+  // auto width for full size, else fixed
   let width = 'auto';
   if (!bigView) {
-    width = '56px';
+    width = 56;
   }
 
   const sxList = {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: 0,
+    overflowX: 'hidden',
+    overflowY: 'auto',
     width: width,
+    minWidth: width,
+    maxWidth: width,
     borderRight: 1,
     borderColor: 'grey.500',
     bgcolor: 'background.default',
@@ -85,41 +92,53 @@ const Navbar = () => {
 
   return (
     <List component='nav' sx={sxList}>
-      <NavLink to='/' iconComponent={DashboardIcon}>
-        Dashboard
-      </NavLink>
+      <Box>
+        <NavLink to='/' iconComponent={DashboardIcon}>
+          Dashboard
+        </NavLink>
 
-      <NavLink to='/privatekeys' iconComponent={KeyIcon}>
-        Private Keys
-      </NavLink>
+        <NavLink to='/privatekeys' iconComponent={KeyIcon}>
+          Private Keys
+        </NavLink>
 
-      <NavLink to='/acmeaccounts' iconComponent={BadgeIcon}>
-        ACME Accounts
-      </NavLink>
+        <NavLink to='/acmeaccounts' iconComponent={BadgeIcon}>
+          ACME Accounts
+        </NavLink>
 
-      <NavLink to='/certificates' iconComponent={CardMembershipIcon}>
-        Certificates
-      </NavLink>
+        <NavLink to='/certificates' iconComponent={CardMembershipIcon}>
+          Certificates
+        </NavLink>
 
-      <Divider sx={{ my: 2 }} />
+        <Divider sx={{ my: 1 }} />
 
-      <NavLink to='/logs' iconComponent={TextSnippetIcon}>
-        Logs
-      </NavLink>
+        <NavLink to='/logs' iconComponent={TextSnippetIcon}>
+          Logs
+        </NavLink>
 
-      <NavLink to='/settings' iconComponent={SettingsIcon}>
-        Settings
-      </NavLink>
+        <NavLink to='/settings' iconComponent={SettingsIcon}>
+          Settings
+        </NavLink>
+      </Box>
 
-      <NavLink
-        sx={{ position: 'absolute', bottom: 0, width: 1 }}
-        onClick={toggleDarkMode}
-        iconComponent={
-          theme.palette.mode === 'dark' ? Brightness7Icon : Brightness4Icon
-        }
-      >
-        {theme.palette.mode === 'dark' ? 'Dark Mode' : 'Light Mode'}
-      </NavLink>
+      <Box
+        sx={{
+          minHeight: 0,
+          flexGrow: 1,
+        }}
+      ></Box>
+
+      <Box>
+        <Divider sx={{ my: 1 }} />
+
+        <NavLink
+          onClick={toggleDarkMode}
+          iconComponent={
+            theme.palette.mode === 'dark' ? Brightness7Icon : Brightness4Icon
+          }
+        >
+          {theme.palette.mode === 'dark' ? 'Dark Mode' : 'Light Mode'}
+        </NavLink>
+      </Box>
     </List>
   );
 };
