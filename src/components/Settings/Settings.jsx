@@ -1,10 +1,11 @@
 import GridContainer from '../UI/Grid/GridContainer';
 import GridItemThird from '../UI/Grid/GridItemThird';
 
+import TitleBar from '../UI/TitleBar/TitleBar';
 import ChangePassword from './ChangePassword';
 import BackendStatus from './BackendStatus';
 import FrontendStatus from './FrontendStatus';
-import TitleBar from '../UI/TitleBar/TitleBar';
+import NewVersionInfo from './NewVersionInfo';
 
 const Settings = () => {
   return (
@@ -22,6 +23,10 @@ const Settings = () => {
 
         <GridItemThird>
           <ChangePassword />
+        </GridItemThird>
+
+        <GridItemThird>
+          <NewVersionInfo />
         </GridItemThird>
       </GridContainer>
     </>

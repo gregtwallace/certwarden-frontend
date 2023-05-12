@@ -1,6 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Box } from '@mui/system';
 
+import { NewVersionProvider } from '../../context/NewVersionProvider';
+
 import { newId } from '../../helpers/constants';
 import AddOneACMEAccount from '../ACMEAccounts/OneACMEAccount/AddOneACMEAccount';
 import AddOneCert from '../Certificates/OneCert/AddOneCert';
@@ -15,13 +17,13 @@ import EditOneCert from '../Certificates/OneCert/EditOneCert';
 import EditOnePrivateKey from '../PrivateKeys/OnePrivateKey/EditOnePrivateKey';
 import Logout from '../Authentication/Logout';
 import LogViewer from '../LogViewer/LogViewer';
-import Navbar from './Navbar';
+import Navbar from './Navbar/Navbar';
 import RolloverAccountKey from '../ACMEAccounts/OneACMEAccount/Edit/RolloverAccountKey';
 import Settings from '../Settings/Settings';
 
 const LoggedIn = () => {
   return (
-    <>
+    <NewVersionProvider>
       <Navbar />
 
       <Box
@@ -67,7 +69,7 @@ const LoggedIn = () => {
           <Route path='*' element={<Navigate to='/' replace />} />
         </Routes>
       </Box>
-    </>
+    </NewVersionProvider>
   );
 };
 
