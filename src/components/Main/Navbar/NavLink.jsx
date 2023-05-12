@@ -23,6 +23,7 @@ const NavLink = (props) => {
       component={props.to && Link}
       to={props.to}
       onClick={props.onClick}
+      sx={props.sx}
     >
       <ListItemIcon>
         <props.iconComponent />
@@ -47,6 +48,7 @@ NavLink.propTypes = {
   to: PropTypes.string,
   onClick: PropTypes.func,
   neverSelect: PropTypes.bool,
+  sx: PropTypes.object,
 };
 
 export default NavLink;
