@@ -38,12 +38,24 @@ const NewVersionInfo = () => {
             </Typography>
 
             <Typography variant='p' sx={{ my: 1 }} display='block'>
-              New Version: {newVersion.new_version.info.version}
+              {newVersion.new_version.info.version}
             </Typography>
 
             <Typography variant='p' sx={{ my: 1 }} display='block'>
               Channel: {newVersion.new_version.info.channel}
             </Typography>
+
+            {newVersion.new_version.config_version_matches && (
+              <Typography
+                variant='p'
+                sx={{ my: 1, color: 'error.main' }}
+                display='block'
+              >
+                Warning! New version config version does not match current
+                config version. <br /> Manual intervention is required to
+                upgrade.
+              </Typography>
+            )}
 
             {newVersion.new_version.info.url != '' && (
               <Typography
