@@ -18,7 +18,7 @@ const Main = () => {
       setAuthExpires();
     }
     setRenderMain(true);
-  }, [setAuthExpires]);
+  }, [setAuthExpires, setRenderMain]);
 
   return (
     <Box
