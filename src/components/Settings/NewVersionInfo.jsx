@@ -52,10 +52,7 @@ const NewVersionInfo = () => {
                 sx={{ my: 1, color: 'success.main' }}
                 display='block'
               >
-                Update Available!
-              </Typography>
-              <Typography variant='p' sx={{ my: 1 }} display='block'>
-                {newVersion.new_version.info.version}
+                Update Available ({newVersion.new_version.info.version}) !
               </Typography>
               <Typography variant='p' sx={{ my: 1 }} display='block'>
                 Channel: {newVersion.new_version.info.channel}
@@ -97,9 +94,7 @@ const NewVersionInfo = () => {
             />
           )}
 
-          <FormFooter
-            updatedAt={newVersion.new_version.last_checked_time}
-          >
+          <FormFooter updatedAt={newVersion.new_version.last_checked_time}>
             <Button onClick={checkNewVersion} disabled={apiSendState.isSending}>
               Check
             </Button>
