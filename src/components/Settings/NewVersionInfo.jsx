@@ -1,9 +1,8 @@
-import { Link } from 'react-router-dom';
-
 import useAxiosSend from '../../hooks/useAxiosSend';
 import useNewVersion from '../../hooks/useNewVersion';
 
-import { Typography } from '@mui/material';
+import Link from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
 import ApiError from '../UI/Api/ApiError';
 import ApiLoading from '../UI/Api/ApiLoading';
 import Button from '../UI/Button/Button';
@@ -74,10 +73,11 @@ const NewVersionInfo = () => {
                   component={Link}
                   href={newVersion.new_version.info.url}
                   target='_blank'
+                  rel='noreferrer'
                   sx={{ my: 1 }}
                   display='block'
                 >
-                  Link
+                  Click Here to View
                 </Typography>
               )}
             </>
