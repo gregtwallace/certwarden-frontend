@@ -86,7 +86,7 @@ const NewVersionInfo = () => {
             </>
           ) : (
             <Typography variant='p' sx={{ my: 1 }} display='block'>
-              No update in {newVersion.new_version.info?.channel} channel.
+              No update.
             </Typography>
           )}
 
@@ -97,7 +97,9 @@ const NewVersionInfo = () => {
             />
           )}
 
-          <FormFooter>
+          <FormFooter
+            updatedAt={newVersion.new_version.last_checked_time}
+          >
             <Button onClick={checkNewVersion} disabled={apiSendState.isSending}>
               Check
             </Button>

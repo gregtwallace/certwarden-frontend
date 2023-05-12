@@ -4,6 +4,10 @@ export const convertUnixTime = (unixTime) => {
     return ""
   }
 
+  if (unixTime < 0) {
+    return "Never"
+  }
+
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: '2-digit',
