@@ -57,7 +57,7 @@ const NewVersionInfo = () => {
                 Channel: {newVersion.new_version.info.channel}
               </Typography>
 
-              {newVersion.new_version.config_version_matches && (
+              {!newVersion.new_version.config_version_matches && (
                 <Typography
                   variant='p'
                   sx={{ my: 1, color: 'error.main' }}
