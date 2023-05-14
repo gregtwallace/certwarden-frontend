@@ -94,7 +94,7 @@ const NewVersionInfo = () => {
             />
           )}
 
-          <FormFooter updatedAt={newVersion.new_version.last_checked_time}>
+          <FormFooter checkedAt={newVersion.new_version.last_checked_time}>
             <Button onClick={checkNewVersion} disabled={apiSendState.isSending}>
               Check
             </Button>
