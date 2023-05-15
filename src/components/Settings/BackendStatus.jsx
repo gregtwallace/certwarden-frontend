@@ -38,6 +38,23 @@ const BackendStatus = () => {
           </Typography>
 
           <Typography variant='p' sx={{ my: 1 }} display='block'>
+            Config Version Match:{' '}
+            {apiGetState.server.config_version_match ? (
+              <>Yes</>
+            ) : (
+              <>
+                <Typography
+                  sx={{ color: 'error.main', fontWeight: 'bold' }}
+                  display='inline'
+                >
+                  No, Error!{' '}
+                </Typography>
+                Check and correct your config file immediately!
+              </>
+            )}
+          </Typography>
+
+          <Typography variant='p' sx={{ my: 1 }} display='block'>
             Development Mode:{' '}
             {apiGetState.server.development_mode ? 'Yes' : 'No'}
           </Typography>
