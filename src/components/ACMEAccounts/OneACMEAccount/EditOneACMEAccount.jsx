@@ -356,7 +356,7 @@ const EditOneACMEAccount = () => {
               checked={apiGetState.acme_account.accepted_tos}
               disabled
             >
-              Accept Let&apos;s Encrypt Terms of Service
+              Accept CA&apos;s Terms of Service
             </InputCheckbox>
 
             {apiSendState.errorMessage &&
