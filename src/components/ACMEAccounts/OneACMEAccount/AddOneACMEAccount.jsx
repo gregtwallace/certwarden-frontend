@@ -3,10 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import useAxiosGet from '../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../hooks/useAxiosSend';
-import {
-  isNameValid,
-  isEmailValidOrBlank,
-} from '../../../helpers/form-validation';
+import { isNameValid, isEmailValid } from '../../../helpers/form-validation';
 import { newId } from '../../../helpers/constants';
 
 import { Link } from '@mui/material';
@@ -107,8 +104,8 @@ const AddOneACMEAccount = () => {
     if (!isNameValid(formState.form.name)) {
       validationErrors.name = true;
     }
-    // check email format (if present)
-    if (!isEmailValidOrBlank(formState.form.email)) {
+    // check email format
+    if (!isEmailValid(formState.form.email)) {
       validationErrors.email = true;
     }
     // check private key is selected

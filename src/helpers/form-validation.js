@@ -25,21 +25,6 @@ export const isEmailValid = (email) => {
   return false;
 };
 
-// check if an email address is in a valid email address format
-export const isEmailValidOrBlank = (email) => {
-  // blank is permissible
-  if (email === '') {
-    return true;
-  }
-
-  // check email regex
-  if (isEmailValid(email)) {
-    return true;
-  }
-
-  return false;
-};
-
 // check if string is a valid domain format
 export const isDomainValid = (domain) => {
   // allow wildcard per RFC 8555 7.1.3
