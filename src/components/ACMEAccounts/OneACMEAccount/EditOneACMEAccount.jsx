@@ -6,7 +6,13 @@ import useAxiosSend from '../../../hooks/useAxiosSend';
 import { isNameValid } from '../../../helpers/form-validation';
 import { devMode } from '../../../helpers/environment';
 
-import { Typography } from '@mui/material';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Typography,
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
@@ -43,6 +49,8 @@ const EditOneACMEAccount = () => {
       form: {
         name: apiGetState.acme_account.name,
         description: apiGetState.acme_account.description,
+        eab_kid: '',
+        eab_hmac_key: '',
       },
       validationErrors: {},
     });
@@ -122,14 +130,17 @@ const EditOneACMEAccount = () => {
   const registerClickHandler = (event) => {
     event.preventDefault();
 
-    sendData(`/v1/acmeaccounts/${id}/new-account`, 'POST', null, true).then(
-      (response) => {
-        if (response.status >= 200 && response.status <= 299) {
-          // update account from backend
-          updateGet();
-        }
+    sendData(
+      `/v1/acmeaccounts/${id}/new-account`,
+      'POST',
+      formState.form,
+      true
+    ).then((response) => {
+      if (response.status >= 200 && response.status <= 299) {
+        // update account from backend
+        updateGet();
       }
-    );
+    });
   };
 
   // change email handler
@@ -267,6 +278,7 @@ const EditOneACMEAccount = () => {
             <InputTextField
               label='Description'
               id='description'
+              name='description'
               value={formState.form.description}
               onChange={inputChangeHandler}
             />
@@ -331,6 +343,44 @@ const EditOneACMEAccount = () => {
               {apiGetState.acme_account.status.charAt(0).toUpperCase() +
                 apiGetState.acme_account.status.slice(1)}
             </Typography>
+
+            {canRegister && (
+              <>
+                <Accordion sx={{ mb: 2 }}>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls='csr-fields-content'
+                    id='csr-fields-header'
+                  >
+                    <Typography>
+                      External Account Binding (if Required)
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography sx={{ mb: 2 }}>
+                      Only required by some CAs and even then only required for
+                      account creation (and not account recovery).
+                    </Typography>
+
+                    <InputTextField
+                      label='Key ID'
+                      id='eab_kid'
+                      name='eab_kid'
+                      value={formState.form.eab_kid}
+                      onChange={inputChangeHandler}
+                    />
+
+                    <InputTextField
+                      label='HMAC Key'
+                      id='eab_hmac_key'
+                      name='eab_hmac_key'
+                      value={formState.form.eab_hmac_key}
+                      onChange={inputChangeHandler}
+                    />
+                  </AccordionDetails>
+                </Accordion>
+              </>
+            )}
 
             <FormRowRight>
               <Button
