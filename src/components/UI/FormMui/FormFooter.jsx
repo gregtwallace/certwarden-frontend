@@ -9,17 +9,17 @@ const FormFooter = (props) => {
   return (
     <Toolbar variant='dense' disableGutters sx={{ mt: 2, pr: 2 }}>
       <Box sx={{ flexGrow: 1 }}>
-        {props.createdAt && (
+        {props.createdAt ? (
           <FormInfo>Created: {convertUnixTime(props.createdAt)}</FormInfo>
-        )}
-        {props.updatedAt && (
+        ) : null}
+        {props.updatedAt ? (
           <FormInfo>Last Updated: {convertUnixTime(props.updatedAt)}</FormInfo>
-        )}
-        {props.checkedAt && (
+        ) : null}
+        {props.checkedAt ? (
           <FormInfo>
             Last Checked: {convertUnixTime(props.checkedAt, true)}
           </FormInfo>
-        )}
+        ) : null}
       </Box>
       {props.children}
     </Toolbar>
