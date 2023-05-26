@@ -6,8 +6,9 @@ import useRefreshToken from './useRefreshToken';
 // name of anti-retry header
 const NO_RETRY_HEADER = 'x-no-retry';
 
-// var to monitor of an api call is already trying to refresh the
-// access_token. Used to skip refresh attempt if another call tried it.
+// var to globally monitor if an api call is already trying to refresh the
+// access_token. Used to skip refresh attempt if another call tried it or
+// is actively trying it.
 var isRefreshing = false;
 
 const useAxiosPrivate = () => {
@@ -41,7 +42,7 @@ const useAxiosPrivate = () => {
           prevRequest?.headers[NO_RETRY_HEADER] == null
         ) {
           // if refresh is already taking place, don't call refresh multiple times, just wait
-          // and then retry original request again
+          // and then retry original request after the other refresh attempt is done.
           if (isRefreshing) {
             while (isRefreshing) {
               // sleep before checking isRefreshing again
@@ -53,7 +54,8 @@ const useAxiosPrivate = () => {
               sessionStorage.getItem('access_token');
             return axiosPrivate(prevRequest);
           }
-          // no already refreshing - get new token, return error if refresh errors
+
+          // not already refreshing - get new token and try again
           try {
             isRefreshing = true;
             const newAccessToken = await refresh();
@@ -63,10 +65,15 @@ const useAxiosPrivate = () => {
             prevRequest.headers[NO_RETRY_HEADER] = 'true';
             prevRequest.headers['Authorization'] = newAccessToken;
             return axiosPrivate(prevRequest);
-          } catch (error) {
-            /* no-op */
+          } catch (e) {
+            // must ensure isRefreshing is set to false since refresh job has termed
+            // unlikely to be needed, but just in case
+            isRefreshing = false;
           }
         }
+
+        // any other error or if error ocurred during refresh
+        // return original error
         return Promise.reject(error);
       }
     );
