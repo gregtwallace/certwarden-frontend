@@ -8,6 +8,10 @@ export const apiUrl = useFile
   : import.meta.env.VITE_API_URL;
 
 // dev mode - DEV_MODE: '__DEV_MODE__',
+// devMode changes:
+// - Show accoount KID
+// - Disable password change complexity validation
+// - console.log() a number of things related to Axios
 export const devMode = useFile
   ? window.env.DEV_MODE
   : import.meta.env.VITE_DEV_MODE;
