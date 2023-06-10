@@ -59,7 +59,7 @@ const ChangePassword = () => {
     // new password
     // if in devmode, allow terrible passwords
     if (!devMode) {
-      if (formState.form.new_password.length < 10) {
+      if (formState.form.new_password.length < 8) {
         validationErrors.new_password = true;
       }
     }
