@@ -1,6 +1,6 @@
 import useAxiosGet from '../../hooks/useAxiosGet';
 
-import { Link, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
 import ApiError from '../UI/Api/ApiError';
 import ApiLoading from '../UI/Api/ApiLoading';
@@ -57,28 +57,6 @@ const BackendStatus = () => {
           <Typography variant='p' sx={{ my: 1 }} display='block'>
             Development Mode:{' '}
             {apiGetState.server.development_mode ? 'Yes' : 'No'}
-          </Typography>
-
-          <Typography variant='p' sx={{ my: 1 }} display='block'>
-            ACME Production Directory:{' '}
-            <Link
-              href={apiGetState.server.acme_directories.prod}
-              target='_blank'
-              rel='noreferrer'
-            >
-              {apiGetState.server.acme_directories.prod}
-            </Link>
-          </Typography>
-
-          <Typography variant='p' sx={{ my: 1 }} display='block'>
-            ACME Staging Directory:{' '}
-            <Link
-              href={apiGetState.server.acme_directories.staging}
-              target='_blank'
-              rel='noreferrer'
-            >
-              {apiGetState.server.acme_directories.staging}
-            </Link>
           </Typography>
         </>
       )}
