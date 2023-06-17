@@ -306,6 +306,23 @@ const EditOneACMEAccount = () => {
             </FormRowRight>
 
             <InputSelect
+              id='acme_server_id'
+              label='ACME Server'
+              options={[
+                {
+                  value: 0,
+                  name:
+                    apiGetState.acme_account.acme_server.name +
+                    (apiGetState.acme_account.acme_server.is_staging
+                      ? ' (Staging)'
+                      : ''),
+                },
+              ]}
+              value={0}
+              disabled
+            />
+
+            <InputSelect
               label='Private Key'
               id='private_key_id'
               options={[
@@ -392,14 +409,6 @@ const EditOneACMEAccount = () => {
                 Register
               </Button>
             </FormRowRight>
-
-            <InputCheckbox
-              id='is_staging'
-              checked={apiGetState.acme_account.is_staging}
-              disabled
-            >
-              Staging Environment Account
-            </InputCheckbox>
 
             <InputCheckbox
               id='accepted_tos'
