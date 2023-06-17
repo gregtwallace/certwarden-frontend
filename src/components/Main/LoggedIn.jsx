@@ -35,12 +35,18 @@ const LoggedIn = () => {
         }}
       >
         <Routes>
+          {/* ACME Servers */}
+          <Route path='/acmeservers' element={<AllACMEServers />} />
+
+          {/* Private Keys */}
           <Route
             path={`/privatekeys/${newId}`}
             element={<AddOnePrivateKey />}
           />
           <Route path='/privatekeys/:id' element={<EditOnePrivateKey />} />
           <Route path='/privatekeys' element={<AllPrivateKeys />} />
+
+          {/* ACME Accounts */}
           <Route
             path={`/acmeaccounts/${newId}`}
             element={<AddOneACMEAccount />}
@@ -55,19 +61,19 @@ const LoggedIn = () => {
             element={<RolloverAccountKey />}
           />
           <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
-          <Route path='/acmeservers' element={<AllACMEServers />} />
+
+          {/* Certificates */}
           <Route path='/certificates' element={<AllCertificates />} />
           <Route path='/certificates/:id' element={<EditOneCert />} />
           <Route path={`/certificates/${newId}`} element={<AddOneCert />} />
 
+          {/* Misc. */}
+          <Route path='/' element={<Dashboard />} />
           <Route path={'/logs'} element={<LogViewer />} />
-
           <Route path={'/settings'} element={<Settings />} />
-
           <Route path={'/logout'} element={<Logout />} />
 
-          <Route path='/' element={<Dashboard />} />
-
+          {/* Catch All */}
           <Route path='*' element={<Navigate to='/' replace />} />
         </Routes>
       </Box>
