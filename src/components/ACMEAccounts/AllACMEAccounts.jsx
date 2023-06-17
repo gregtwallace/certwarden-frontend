@@ -125,7 +125,7 @@ const AllACMEAccounts = () => {
                     </TableCell>
                     <TableCell>{a.email}</TableCell>
                     <TableCell>
-                      {a.is_staging ? 'Staging' : 'Production'}
+                      {a.acme_server.is_staging ? 'Staging' : 'Production'}
                     </TableCell>
                   </TableRow>
                 ))}
