@@ -381,7 +381,7 @@ const EditOneCert = () => {
                     value: 0,
                     name:
                       apiGetState.certificate.acme_account.name +
-                      (apiGetState.certificate.acme_account.is_staging
+                      (apiGetState.certificate.acme_account.acme_server.is_staging
                         ? ' (Staging)'
                         : ''),
                   },

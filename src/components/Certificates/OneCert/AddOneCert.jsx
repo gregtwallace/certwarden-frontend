@@ -195,7 +195,7 @@ const AddOneCert = () => {
       availableAccounts = apiGetState.certificate_options.acme_accounts.map(
         (a) => ({
           value: parseInt(a.id),
-          name: a.name + (a.is_staging ? ' (Staging)' : ''),
+          name: a.name + (a.acme_server.is_staging ? ' (Staging)' : ''),
         })
       );
     }

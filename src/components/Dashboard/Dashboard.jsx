@@ -95,7 +95,7 @@ const Dashboard = () => {
                     </TableCell>
                     <TableCell>{m.certificate.subject}</TableCell>
                     <TableCell>
-                      {m.certificate.acme_account.is_staging && (
+                      {m.certificate.acme_account.acme_server.is_staging && (
                         <Flag type='staging' />
                       )}
                       {m.certificate.api_key_via_url && (
