@@ -8,6 +8,7 @@ import AddOneACMEAccount from '../ACMEAccounts/OneACMEAccount/AddOneACMEAccount'
 import AddOneCert from '../Certificates/OneCert/AddOneCert';
 import AddOnePrivateKey from '../PrivateKeys/OnePrivateKey/AddOnePrivateKey';
 import AllACMEAccounts from '../ACMEAccounts/AllACMEAccounts';
+import AllACMEServers from '../ACMEServers/AllAcmeServers';
 import AllCertificates from '../Certificates/AllCertificates';
 import AllPrivateKeys from '../PrivateKeys/AllPrivateKeys';
 import ChangeAccountEmail from '../ACMEAccounts/OneACMEAccount/Edit/ChangeAccountEmail';
@@ -54,6 +55,7 @@ const LoggedIn = () => {
             element={<RolloverAccountKey />}
           />
           <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
+          <Route path='/acmeservers' element={<AllACMEServers />} />
           <Route path='/certificates' element={<AllCertificates />} />
           <Route path='/certificates/:id' element={<EditOneCert />} />
           <Route path={`/certificates/${newId}`} element={<AddOneCert />} />
