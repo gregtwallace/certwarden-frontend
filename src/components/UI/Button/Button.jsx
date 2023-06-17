@@ -54,6 +54,6 @@ Button.propTypes = {
   disabled: PropTypes.bool,
   size: PropTypes.string,
   children: PropTypes.node,
-}
+};
 
 export default Button;
