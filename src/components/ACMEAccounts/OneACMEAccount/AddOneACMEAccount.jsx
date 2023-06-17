@@ -36,8 +36,8 @@ const AddOneACMEAccount = () => {
       name: '',
       description: '',
       email: '',
+      acme_server_id: '',
       private_key_id: '',
-      is_staging: false,
       accepted_tos: false,
     },
     validationErrors: {},
@@ -108,6 +108,10 @@ const AddOneACMEAccount = () => {
     if (!isEmailValid(formState.form.email)) {
       validationErrors.email = true;
     }
+    // check ACME server us selected
+    if (formState.form.acme_server_id === '') {
+      validationErrors.acme_server_id = true;
+    }
     // check private key is selected
     if (formState.form.private_key_id === '') {
       validationErrors.private_key_id = true;
@@ -143,14 +147,29 @@ const AddOneACMEAccount = () => {
 
   // vars related to api
   var tos_url;
+  var availableServers;
   var availableKeys;
 
+  console.log(formState.form);
+
   if (renderApiItems) {
-    // tos URL (prod vs. staging)
-    if (!formState.form.is_staging) {
-      tos_url = apiGetState.acme_account_options.tos_url;
-    } else {
-      tos_url = apiGetState.acme_account_options.staging_tos_url;
+    // tos URL (use selected acme server)
+    if (formState.form.acme_server_id !== '') {
+      var selectedServer = apiGetState.acme_account_options.acme_servers.filter(
+        (s) => s.id === formState.form.acme_server_id
+      )[0];
+      tos_url = selectedServer.terms_of_service;
+      console.log(tos_url);
+    }
+
+    // build options for available servers
+    if (apiGetState?.acme_account_options?.acme_servers) {
+      availableServers = apiGetState.acme_account_options.acme_servers.map(
+        (m) => ({
+          value: parseInt(m.id),
+          name: m.name + (m.is_staging ? ' (Staging)' : ''),
+        })
+      );
     }
 
     // build options for available keys
@@ -205,6 +224,15 @@ const AddOneACMEAccount = () => {
           />
 
           <InputSelect
+            id='acme_server_id'
+            label='ACME Server'
+            options={availableServers}
+            value={formState.form.acme_server_id}
+            onChange={intInputChangeHandler}
+            error={formState.validationErrors.acme_server_id && true}
+          />
+
+          <InputSelect
             label='Private Key'
             id='private_key_id'
             options={availableKeys}
@@ -214,23 +242,20 @@ const AddOneACMEAccount = () => {
           />
 
           <InputCheckbox
-            id='is_staging'
-            checked={formState.form.is_staging}
-            onChange={checkChangeHandler}
-          >
-            Staging Environment Account
-          </InputCheckbox>
-
-          <InputCheckbox
             id='accepted_tos'
             checked={formState.form.accepted_tos}
             onChange={checkChangeHandler}
+            disabled={formState.form.acme_server_id === ''}
             error={formState.validationErrors.accepted_tos && true}
           >
             Accept{' '}
-            <Link href={tos_url} target='_blank' rel='noreferrer'>
-              CA&apos;s Terms of Service
-            </Link>
+            {formState.form.acme_server_id === '' ? (
+              "ACME Server's Terms of Service"
+            ) : (
+              <Link href={tos_url} target='_blank' rel='noreferrer'>
+                ACME Server&apos;s Terms of Service
+              </Link>
+            )}
           </InputCheckbox>
 
           {apiSendState.errorMessage &&

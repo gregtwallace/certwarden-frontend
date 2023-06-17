@@ -23,6 +23,9 @@ const InputSelect = (props) => {
     case 'key_source':
       errorMessage = 'Key source must be selected.';
       break;
+    case 'acme_server_id':
+      errorMessage = 'An ACME server must be selected.';
+      break;
     case 'private_key_id':
       errorMessage = 'A private key must be selected.';
       break;
