@@ -2,7 +2,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import useAxiosSend from '../../../hooks/useAxiosSend';
-import { isNameValid } from '../../../helpers/form-validation';
+import {
+  isDirectoryUrlValid,
+  isNameValid,
+} from '../../../helpers/form-validation';
 
 import ApiError from '../../UI/Api/ApiError';
 import Button from '../../UI/Button/Button';
@@ -74,7 +77,7 @@ const AddOneACMEServer = () => {
     }
 
     // directory_url
-    if (!formState.form.directory_url.startsWith('https://')) {
+    if (!isDirectoryUrlValid(formState.form.directory_url)) {
       validationErrors.directory_url = true;
     }
 

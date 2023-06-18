@@ -41,3 +41,9 @@ export const isDomainValid = (domain) => {
 
   return false;
 };
+
+// isDirectoryUrlValid validates an acme server url. It only verifies
+// the the url is https and relies on the backend for the rest.
+export const isDirectoryUrlValid = (url) => {
+  return url.startsWith('https://');
+};

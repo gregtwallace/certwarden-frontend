@@ -15,6 +15,7 @@ import AllPrivateKeys from '../PrivateKeys/AllPrivateKeys';
 import ChangeAccountEmail from '../ACMEAccounts/OneACMEAccount/Edit/ChangeAccountEmail';
 import Dashboard from '../Dashboard/Dashboard';
 import EditOneACMEAccount from '../ACMEAccounts/OneACMEAccount/EditOneACMEAccount';
+import EditOneACMEServer from '../ACMEServers/Edit/EditOneACMEServer';
 import EditOneCert from '../Certificates/OneCert/EditOneCert';
 import EditOnePrivateKey from '../PrivateKeys/OnePrivateKey/EditOnePrivateKey';
 import Logout from '../Authentication/Logout';
@@ -42,6 +43,7 @@ const LoggedIn = () => {
             path={`/acmeservers/${newId}`}
             element={<AddOneACMEServer />}
           />
+          <Route path='/acmeservers/:id' element={<EditOneACMEServer />} />
 
           {/* Private Keys */}
           <Route
