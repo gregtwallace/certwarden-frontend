@@ -68,6 +68,19 @@ const NewVersionInfo = () => {
                   upgrade.
                 </Typography>
               )}
+
+              {!newVersion.new_version.database_version_matches && (
+                <Typography
+                  variant='p'
+                  sx={{ my: 1, color: 'error.main' }}
+                  display='block'
+                >
+                  Warning! New version database version does not match current
+                  version. <br /> LeGo will modify the db after upgrade. You
+                  should backup your database file before upgrading.
+                </Typography>
+              )}
+
               {newVersion.new_version.info.url != '' && (
                 <Typography
                   component={Link}
