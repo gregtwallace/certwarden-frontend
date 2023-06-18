@@ -8,6 +8,8 @@ import {
   isNameValid,
 } from '../../../helpers/form-validation';
 
+import { Typography } from '@mui/material';
+
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
 import Button from '../../UI/Button/Button';
@@ -206,6 +208,12 @@ const EditOneACMEServer = () => {
               value={formState.form.description}
               onChange={inputChangeHandler}
             />
+
+            <Typography variant='subtitle2' sx={{ my: 2, px: 1, color: 'error.dark' }}>
+              You should only update the Directory URL if your provider has
+              actually changed it. If you are trying to change provider, create
+              a new server instead.
+            </Typography>
 
             <InputTextField
               label='Directory URL'
