@@ -5,6 +5,7 @@ import { NewVersionProvider } from '../../context/NewVersionProvider';
 
 import { newId } from '../../helpers/constants';
 import AddOneACMEAccount from '../ACMEAccounts/OneACMEAccount/AddOneACMEAccount';
+import AddOneACMEServer from '../ACMEServers/Edit/AddOneACMEServer';
 import AddOneCert from '../Certificates/OneCert/AddOneCert';
 import AddOnePrivateKey from '../PrivateKeys/OnePrivateKey/AddOnePrivateKey';
 import AllACMEAccounts from '../ACMEAccounts/AllACMEAccounts';
@@ -37,6 +38,10 @@ const LoggedIn = () => {
         <Routes>
           {/* ACME Servers */}
           <Route path='/acmeservers' element={<AllACMEServers />} />
+          <Route
+            path={`/acmeservers/${newId}`}
+            element={<AddOneACMEServer />}
+          />
 
           {/* Private Keys */}
           <Route

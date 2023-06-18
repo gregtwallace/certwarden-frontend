@@ -22,6 +22,9 @@ const InputTextField = (props) => {
     case 'confirm_new_password':
       errorMessage = 'Password confirmation must match new password.';
       break;
+    case 'directory_url':
+      errorMessage = 'Directory URL must be https.';
+      break;
     default:
       errorMessage = 'This field has an error.';
       break;
