@@ -12,17 +12,17 @@ import { TableCell } from '@mui/material';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
-import useAxiosGet from '../../hooks/useAxiosGet';
-import { getRowsPerPage, getPage, getSort } from '../UI/TableMui/query';
-import { newId } from '../../helpers/constants';
+import useAxiosGet from '../../../hooks/useAxiosGet';
+import { getRowsPerPage, getPage, getSort } from '../../UI/TableMui/query';
+import { newId } from '../../../helpers/constants';
 
-import ApiLoading from '../UI/Api/ApiLoading';
-import ApiError from '../UI/Api/ApiError';
-import Flag from '../UI/Flag/Flag';
-import TableContainer from '../UI/TableMui/TableContainer';
-import TableHeaderRow from '../UI/TableMui/TableHeaderRow';
-import TitleBar from '../UI/TitleBar/TitleBar';
-import TablePagination from '../UI/TableMui/TablePagination';
+import ApiLoading from '../../UI/Api/ApiLoading';
+import ApiError from '../../UI/Api/ApiError';
+import Flag from '../../UI/Flag/Flag';
+import TableContainer from '../../UI/TableMui/TableContainer';
+import TableHeaderRow from '../../UI/TableMui/TableHeaderRow';
+import TitleBar from '../../UI/TitleBar/TitleBar';
+import TablePagination from '../../UI/TableMui/TablePagination';
 
 // table headers and sortable param
 const tableHeaders = [
