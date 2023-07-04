@@ -1,10 +1,10 @@
 import { useCallback, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import useAxiosGet from '../../../hooks/useAxiosGet';
-import useAxiosSend from '../../../hooks/useAxiosSend';
-import { isNameValid } from '../../../helpers/form-validation';
-import { devMode } from '../../../helpers/environment';
+import useAxiosGet from '../../../../hooks/useAxiosGet';
+import useAxiosSend from '../../../../hooks/useAxiosSend';
+import { isNameValid } from '../../../../helpers/form-validation';
+import { devMode } from '../../../../helpers/environment';
 
 import {
   Accordion,
@@ -14,18 +14,18 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import ApiError from '../../UI/Api/ApiError';
-import ApiLoading from '../../UI/Api/ApiLoading';
-import Button from '../../UI/Button/Button';
-import DialogAlert from '../../UI/Dialog/DialogAlert';
-import Form from '../../UI/FormMui/Form';
-import FormContainer from '../../UI/FormMui/FormContainer';
-import FormFooter from '../../UI/FormMui/FormFooter';
-import FormRowRight from '../../UI/FormMui/FormRowRight';
-import InputCheckbox from '../../UI/FormMui/InputCheckbox';
-import InputSelect from '../../UI/FormMui/InputSelect';
-import InputTextField from '../../UI/FormMui/InputTextField';
-import TitleBar from '../../UI/TitleBar/TitleBar';
+import ApiError from '../../../UI/Api/ApiError';
+import ApiLoading from '../../../UI/Api/ApiLoading';
+import Button from '../../../UI/Button/Button';
+import DialogAlert from '../../../UI/Dialog/DialogAlert';
+import Form from '../../../UI/FormMui/Form';
+import FormContainer from '../../../UI/FormMui/FormContainer';
+import FormFooter from '../../../UI/FormMui/FormFooter';
+import FormRowRight from '../../../UI/FormMui/FormRowRight';
+import InputCheckbox from '../../../UI/FormMui/InputCheckbox';
+import InputSelect from '../../../UI/FormMui/InputSelect';
+import InputTextField from '../../../UI/FormMui/InputTextField';
+import TitleBar from '../../../UI/TitleBar/TitleBar';
 
 // TODO
 // Add: refresh LE status button

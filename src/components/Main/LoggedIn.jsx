@@ -4,24 +4,24 @@ import { Box } from '@mui/system';
 import { NewVersionProvider } from '../../context/NewVersionProvider';
 
 import { newId } from '../../helpers/constants';
-import AddOneACMEAccount from '../ACMEAccounts/OneACMEAccount/AddOneACMEAccount';
+import AddOneACMEAccount from '../Routes/ACMEAccounts/OneACMEAccount/AddOneACMEAccount';
 import AddOneACMEServer from '../ACMEServers/Edit/AddOneACMEServer';
 import AddOneCert from '../Certificates/OneCert/AddOneCert';
 import AddOnePrivateKey from '../Routes/PrivateKeys/OnePrivateKey/AddOnePrivateKey';
-import AllACMEAccounts from '../ACMEAccounts/AllACMEAccounts';
+import AllACMEAccounts from '../Routes/ACMEAccounts/AllACMEAccounts';
 import AllACMEServers from '../ACMEServers/AllACMEServers';
 import AllCertificates from '../Certificates/AllCertificates';
 import AllPrivateKeys from '../Routes/PrivateKeys/AllPrivateKeys';
-import ChangeAccountEmail from '../ACMEAccounts/OneACMEAccount/Edit/ChangeAccountEmail';
+import ChangeAccountEmail from '../Routes/ACMEAccounts/OneACMEAccount/Edit/ChangeAccountEmail';
 import Dashboard from '../Routes/Dashboard/Dashboard';
-import EditOneACMEAccount from '../ACMEAccounts/OneACMEAccount/EditOneACMEAccount';
+import EditOneACMEAccount from '../Routes/ACMEAccounts/OneACMEAccount/EditOneACMEAccount';
 import EditOneACMEServer from '../ACMEServers/Edit/EditOneACMEServer';
 import EditOneCert from '../Certificates/OneCert/EditOneCert';
 import EditOnePrivateKey from '../Routes/PrivateKeys/OnePrivateKey/EditOnePrivateKey';
 import Logout from '../Routes/Logout/Logout';
 import LogViewer from '../Routes/LogViewer/LogViewer';
 import Navbar from './Navbar/Navbar';
-import RolloverAccountKey from '../ACMEAccounts/OneACMEAccount/Edit/RolloverAccountKey';
+import RolloverAccountKey from '../Routes/ACMEAccounts/OneACMEAccount/Edit/RolloverAccountKey';
 import Settings from '../Routes/Settings/Settings';
 
 const LoggedIn = () => {
