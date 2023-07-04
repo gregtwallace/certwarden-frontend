@@ -25,6 +25,10 @@ const InputTextField = (props) => {
     case 'directory_url':
       errorMessage = 'Directory URL must be https.';
       break;
+    case 'api_key':
+    case 'api_key_new':
+      errorMessage = 'API keys must be at least 10 characters long.';
+      break;
     default:
       errorMessage = 'This field has an error.';
       break;

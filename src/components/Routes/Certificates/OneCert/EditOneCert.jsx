@@ -3,7 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
-import { isDomainValid, isNameValid } from '../../../../helpers/form-validation';
+import {
+  isDomainValid,
+  isNameValid,
+} from '../../../../helpers/form-validation';
 import { newId } from '../../../../helpers/constants';
 import { buildMethodsList } from './methods';
 import { downloadBlob } from '../../../../helpers/download';
@@ -175,6 +178,10 @@ const EditOneCert = () => {
         }
       }
     );
+  };
+
+  const editApiKeyClickHandler = () => {
+    navigate(`/certificates/${id}/apikeys`);
   };
 
   const resetClickHandler = (event) => {
@@ -381,7 +388,8 @@ const EditOneCert = () => {
                     value: 0,
                     name:
                       apiGetState.certificate.acme_account.name +
-                      (apiGetState.certificate.acme_account.acme_server.is_staging
+                      (apiGetState.certificate.acme_account.acme_server
+                        .is_staging
                         ? ' (Staging)'
                         : ''),
                   },
@@ -478,32 +486,29 @@ const EditOneCert = () => {
                 disabled={apiGetState.certificate.api_key === '[redacted]'}
               />
 
-              {apiGetState.certificate.api_key_new && (
-                <>
-                  <FormRowRight>
-                    <Button
-                      onClick={retireApiKeyClickHandler}
-                      disabled={
-                        apiSendState.isSending ||
-                        apiGetState.certificate.api_key === '[redacted]'
-                      }
-                    >
-                      Retire Old API Key
-                    </Button>
-                  </FormRowRight>
+              <FormRowRight>
+                <Button
+                  onClick={editApiKeyClickHandler}
+                  type='manually_edit'
+                  disabled={
+                    apiSendState.isSending ||
+                    apiGetState.certificate.api_key === '[redacted]'
+                  }
+                >
+                  Edit API Keys
+                </Button>
 
-                  <InputTextField
-                    label='New API Key'
-                    id='api_key_new'
-                    value={apiGetState.certificate.api_key_new}
-                    readOnly
-                    disabled={apiGetState.certificate.api_key === '[redacted]'}
-                  />
-                </>
-              )}
-
-              {!apiGetState.certificate.api_key_new && (
-                <FormRowRight>
+                {apiGetState.certificate.api_key_new ? (
+                  <Button
+                    onClick={retireApiKeyClickHandler}
+                    disabled={
+                      apiSendState.isSending ||
+                      apiGetState.certificate.api_key === '[redacted]'
+                    }
+                  >
+                    Retire Old API Key
+                  </Button>
+                ) : (
                   <Button
                     onClick={newApiKeyClickHandler}
                     disabled={
@@ -513,7 +518,17 @@ const EditOneCert = () => {
                   >
                     New API Key
                   </Button>
-                </FormRowRight>
+                )}
+              </FormRowRight>
+
+              {apiGetState.certificate.api_key_new && (
+                <InputTextField
+                  label='New API Key'
+                  id='api_key_new'
+                  value={apiGetState.certificate.api_key_new}
+                  readOnly
+                  disabled={apiGetState.certificate.api_key === '[redacted]'}
+                />
               )}
 
               <InputCheckbox

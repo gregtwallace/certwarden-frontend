@@ -12,6 +12,7 @@ const Button = (props) => {
       color = 'primary';
       break;
     case 'deactivate':
+    case 'manually_edit':
       color = 'warning';
       break;
     case 'delete':
