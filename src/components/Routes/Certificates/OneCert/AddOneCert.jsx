@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import useAxiosGet from '../../../hooks/useAxiosGet';
-import useAxiosSend from '../../../hooks/useAxiosSend';
-import { isDomainValid, isNameValid } from '../../../helpers/form-validation';
-import { newId } from '../../../helpers/constants';
+import useAxiosGet from '../../../../hooks/useAxiosGet';
+import useAxiosSend from '../../../../hooks/useAxiosSend';
+import { isDomainValid, isNameValid } from '../../../../helpers/form-validation';
+import { newId } from '../../../../helpers/constants';
 import { buildMethodsList } from './methods';
 
 import {
@@ -15,16 +15,16 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import ApiError from '../../UI/Api/ApiError';
-import ApiLoading from '../../UI/Api/ApiLoading';
-import Button from '../../UI/Button/Button';
-import InputSelect from '../../UI/FormMui/InputSelect';
-import Form from '../../UI/FormMui/Form';
-import FormContainer from '../../UI/FormMui/FormContainer';
-import FormFooter from '../../UI/FormMui/FormFooter';
-import InputTextArray from '../../UI/FormMui/InputTextArray';
-import InputTextField from '../../UI/FormMui/InputTextField';
-import TitleBar from '../../UI/TitleBar/TitleBar';
+import ApiError from '../../../UI/Api/ApiError';
+import ApiLoading from '../../../UI/Api/ApiLoading';
+import Button from '../../../UI/Button/Button';
+import InputSelect from '../../../UI/FormMui/InputSelect';
+import Form from '../../../UI/FormMui/Form';
+import FormContainer from '../../../UI/FormMui/FormContainer';
+import FormFooter from '../../../UI/FormMui/FormFooter';
+import InputTextArray from '../../../UI/FormMui/InputTextArray';
+import InputTextField from '../../../UI/FormMui/InputTextField';
+import TitleBar from '../../../UI/TitleBar/TitleBar';
 
 const AddOneCert = () => {
   // fetch valid options (for private keys this is the algorithms list)

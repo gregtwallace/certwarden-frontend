@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import useAxiosGet from '../../../hooks/useAxiosGet';
-import useAxiosSend from '../../../hooks/useAxiosSend';
-import { isDomainValid, isNameValid } from '../../../helpers/form-validation';
-import { newId } from '../../../helpers/constants';
+import useAxiosGet from '../../../../hooks/useAxiosGet';
+import useAxiosSend from '../../../../hooks/useAxiosSend';
+import { isDomainValid, isNameValid } from '../../../../helpers/form-validation';
+import { newId } from '../../../../helpers/constants';
 import { buildMethodsList } from './methods';
-import { downloadBlob } from '../../../helpers/download';
+import { downloadBlob } from '../../../../helpers/download';
 
 import {
   Accordion,
@@ -16,20 +16,20 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import ApiError from '../../UI/Api/ApiError';
-import ApiLoading from '../../UI/Api/ApiLoading';
-import Button from '../../UI/Button/Button';
-import DialogAlert from '../../UI/Dialog/DialogAlert';
-import Form from '../../UI/FormMui/Form';
-import FormContainer from '../../UI/FormMui/FormContainer';
-import FormFooter from '../../UI/FormMui/FormFooter';
-import FormRowRight from '../../UI/FormMui/FormRowRight';
-import InputCheckbox from '../../UI/FormMui/InputCheckbox';
-import InputSelect from '../../UI/FormMui/InputSelect';
-import InputTextArray from '../../UI/FormMui/InputTextArray';
-import InputTextField from '../../UI/FormMui/InputTextField';
+import ApiError from '../../../UI/Api/ApiError';
+import ApiLoading from '../../../UI/Api/ApiLoading';
+import Button from '../../../UI/Button/Button';
+import DialogAlert from '../../../UI/Dialog/DialogAlert';
+import Form from '../../../UI/FormMui/Form';
+import FormContainer from '../../../UI/FormMui/FormContainer';
+import FormFooter from '../../../UI/FormMui/FormFooter';
+import FormRowRight from '../../../UI/FormMui/FormRowRight';
+import InputCheckbox from '../../../UI/FormMui/InputCheckbox';
+import InputSelect from '../../../UI/FormMui/InputSelect';
+import InputTextArray from '../../../UI/FormMui/InputTextArray';
+import InputTextField from '../../../UI/FormMui/InputTextField';
 import Orders from './Orders/Orders';
-import TitleBar from '../../UI/TitleBar/TitleBar';
+import TitleBar from '../../../UI/TitleBar/TitleBar';
 
 const EditOneCert = () => {
   const [hasValidOrders, setHasValidOrders] = useState(false);
