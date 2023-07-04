@@ -18,7 +18,7 @@ import EditOneACMEAccount from '../ACMEAccounts/OneACMEAccount/EditOneACMEAccoun
 import EditOneACMEServer from '../ACMEServers/Edit/EditOneACMEServer';
 import EditOneCert from '../Certificates/OneCert/EditOneCert';
 import EditOnePrivateKey from '../Routes/PrivateKeys/OnePrivateKey/EditOnePrivateKey';
-import Logout from '../Authentication/Logout';
+import Logout from '../Routes/Logout/Logout';
 import LogViewer from '../Routes/LogViewer/LogViewer';
 import Navbar from './Navbar/Navbar';
 import RolloverAccountKey from '../ACMEAccounts/OneACMEAccount/Edit/RolloverAccountKey';

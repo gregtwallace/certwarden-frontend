@@ -3,7 +3,7 @@ import { Box } from '@mui/system';
 
 import useAuthExpires from '../../hooks/useAuthExpires';
 import LoggedIn from './LoggedIn';
-import Login from '../Authentication/Login';
+import Login from './Login/Login';
 
 const Main = () => {
   const { authExpires, setAuthExpires } = useAuthExpires();

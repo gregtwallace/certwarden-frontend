@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 
 import { Paper } from '@mui/material';
 
-import useAuthExpires from '../../hooks/useAuthExpires';
-import useAxiosSend from '../../hooks/useAxiosSend';
+import useAuthExpires from '../../../hooks/useAuthExpires';
+import useAxiosSend from '../../../hooks/useAxiosSend';
 
-import TitleBar from '../UI/TitleBar/TitleBar';
-import ApiError from '../UI/Api/ApiError';
-import ApiLoading from '../UI/Api/ApiLoading';
+import TitleBar from '../../UI/TitleBar/TitleBar';
+import ApiError from '../../UI/Api/ApiError';
+import ApiLoading from '../../UI/Api/ApiLoading';
 
 const Logout = () => {
   const { setAuthExpires } = useAuthExpires();

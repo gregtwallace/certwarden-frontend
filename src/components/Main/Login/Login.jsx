@@ -7,12 +7,12 @@ import Container from '@mui/material/Container';
 import { Paper } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import ApiError from '../UI/Api/ApiError';
+import ApiError from '../../UI/Api/ApiError';
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
-import useAuthExpires from '../../hooks/useAuthExpires';
-import useAxiosSend from '../../hooks/useAxiosSend';
+import useAuthExpires from '../../../hooks/useAuthExpires';
+import useAxiosSend from '../../../hooks/useAxiosSend';
 
 const LOGIN_URL = '/v1/auth/login';
 
