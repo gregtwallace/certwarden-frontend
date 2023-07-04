@@ -307,7 +307,8 @@ const EditOneCert = () => {
         formState.form.private_key_id &&
       apiGetState.certificate.challenge_method.value ===
         formState.form.challenge_method_value &&
-      apiGetState.certificate.subject_alts === formState.form.subject_alts &&
+      JSON.stringify(apiGetState.certificate.subject_alts) ===
+        JSON.stringify(formState.form.subject_alts) &&
       apiGetState.certificate.api_key_via_url ===
         formState.form.api_key_via_url &&
       apiGetState.certificate.country === formState.form.country &&
