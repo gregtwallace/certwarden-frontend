@@ -1,7 +1,7 @@
-import GridContainer from '../UI/Grid/GridContainer';
-import GridItemThird from '../UI/Grid/GridItemThird';
+import GridContainer from '../../UI/Grid/GridContainer';
+import GridItemThird from '../../UI/Grid/GridItemThird';
 
-import TitleBar from '../UI/TitleBar/TitleBar';
+import TitleBar from '../../UI/TitleBar/TitleBar';
 import ChangePassword from './ChangePassword';
 import BackendStatus from './BackendStatus';
 import FrontendStatus from './FrontendStatus';

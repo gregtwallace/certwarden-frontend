@@ -1,11 +1,11 @@
-import useAxiosGet from '../../hooks/useAxiosGet';
+import useAxiosGet from '../../../hooks/useAxiosGet';
 
 import { Typography } from '@mui/material';
 
-import ApiError from '../UI/Api/ApiError';
-import ApiLoading from '../UI/Api/ApiLoading';
-import GridItemContainer from '../UI/Grid/GridItemContainer';
-import GridTitle from '../UI/Grid/GridTitle';
+import ApiError from '../../UI/Api/ApiError';
+import ApiLoading from '../../UI/Api/ApiLoading';
+import GridItemContainer from '../../UI/Grid/GridItemContainer';
+import GridTitle from '../../UI/Grid/GridTitle';
 
 const BackendStatus = () => {
   const [apiGetState] = useAxiosGet('/status', 'server', true);

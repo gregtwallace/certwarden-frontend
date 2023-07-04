@@ -1,15 +1,15 @@
 import { useState } from 'react';
 
-import useAxiosSend from '../../hooks/useAxiosSend';
+import useAxiosSend from '../../../hooks/useAxiosSend';
 
-import ApiError from '../UI/Api/ApiError';
-import Form from '../UI/FormMui/Form';
-import GridItemContainer from '../UI/Grid/GridItemContainer';
-import FormFooter from '../UI/FormMui/FormFooter';
-import Button from '../UI/Button/Button';
-import GridTitle from '../UI/Grid/GridTitle';
-import InputTextField from '../UI/FormMui/InputTextField';
-import { devMode } from '../../helpers/environment';
+import ApiError from '../../UI/Api/ApiError';
+import Form from '../../UI/FormMui/Form';
+import GridItemContainer from '../../UI/Grid/GridItemContainer';
+import FormFooter from '../../UI/FormMui/FormFooter';
+import Button from '../../UI/Button/Button';
+import GridTitle from '../../UI/Grid/GridTitle';
+import InputTextField from '../../UI/FormMui/InputTextField';
+import { devMode } from '../../../helpers/environment';
 
 const ChangePassword = () => {
   const [apiSendState, sendData] = useAxiosSend();
@@ -117,12 +117,13 @@ const ChangePassword = () => {
           error={formState.validationErrors.confirm_new_password && true}
         />
 
-        {apiSendState.errorMessage && Object.keys(formState.validationErrors).length === 0 && (
-          <ApiError
-            code={apiSendState.errorCode}
-            message={apiSendState.errorMessage}
-          />
-        )}
+        {apiSendState.errorMessage &&
+          Object.keys(formState.validationErrors).length === 0 && (
+            <ApiError
+              code={apiSendState.errorCode}
+              message={apiSendState.errorMessage}
+            />
+          )}
 
         <FormFooter>
           <Button

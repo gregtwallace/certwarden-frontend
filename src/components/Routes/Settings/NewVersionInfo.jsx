@@ -1,14 +1,14 @@
-import useAxiosSend from '../../hooks/useAxiosSend';
-import useNewVersion from '../../hooks/useNewVersion';
+import useAxiosSend from '../../../hooks/useAxiosSend';
+import useNewVersion from '../../../hooks/useNewVersion';
 
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import ApiError from '../UI/Api/ApiError';
-import ApiLoading from '../UI/Api/ApiLoading';
-import Button from '../UI/Button/Button';
-import FormFooter from '../UI/FormMui/FormFooter';
-import GridItemContainer from '../UI/Grid/GridItemContainer';
-import GridTitle from '../UI/Grid/GridTitle';
+import ApiError from '../../UI/Api/ApiError';
+import ApiLoading from '../../UI/Api/ApiLoading';
+import Button from '../../UI/Button/Button';
+import FormFooter from '../../UI/FormMui/FormFooter';
+import GridItemContainer from '../../UI/Grid/GridItemContainer';
+import GridTitle from '../../UI/Grid/GridTitle';
 
 const NewVersionInfo = () => {
   const { newVersion, reloadNewVersion } = useNewVersion();

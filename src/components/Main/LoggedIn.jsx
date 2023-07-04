@@ -22,7 +22,7 @@ import Logout from '../Authentication/Logout';
 import LogViewer from '../LogViewer/LogViewer';
 import Navbar from './Navbar/Navbar';
 import RolloverAccountKey from '../ACMEAccounts/OneACMEAccount/Edit/RolloverAccountKey';
-import Settings from '../Settings/Settings';
+import Settings from '../Routes/Settings/Settings';
 
 const LoggedIn = () => {
   return (

@@ -1,11 +1,11 @@
-import { frontendVersion } from '../../helpers/constants';
-import { devMode } from '../../helpers/environment';
-import { apiUrl } from '../../helpers/environment';
+import { frontendVersion } from '../../../helpers/constants';
+import { devMode } from '../../../helpers/environment';
+import { apiUrl } from '../../../helpers/environment';
 
 import { Link, Typography } from '@mui/material';
 
-import GridItemContainer from '../UI/Grid/GridItemContainer';
-import GridTitle from '../UI/Grid/GridTitle';
+import GridItemContainer from '../../UI/Grid/GridItemContainer';
+import GridTitle from '../../UI/Grid/GridTitle';
 
 const FrontendStatus = () => {
   return (

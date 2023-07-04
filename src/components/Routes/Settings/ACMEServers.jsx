@@ -5,10 +5,10 @@
 import { useNavigate } from 'react-router';
 import { Typography } from '@mui/material';
 
-import Button from '../UI/Button/Button';
-import FormFooter from '../UI/FormMui/FormFooter';
-import GridItemContainer from '../UI/Grid/GridItemContainer';
-import GridTitle from '../UI/Grid/GridTitle';
+import Button from '../../UI/Button/Button';
+import FormFooter from '../../UI/FormMui/FormFooter';
+import GridItemContainer from '../../UI/Grid/GridItemContainer';
+import GridTitle from '../../UI/Grid/GridTitle';
 
 const ACMEServers = () => {
   // navigate to ACME Servers on click
