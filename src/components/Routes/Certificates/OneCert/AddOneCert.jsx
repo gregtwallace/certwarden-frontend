@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom';
 
 import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
-import { isDomainValid, isNameValid } from '../../../../helpers/form-validation';
+import {
+  isDomainValid,
+  isNameValid,
+} from '../../../../helpers/form-validation';
 import { newId } from '../../../../helpers/constants';
 import { buildMethodsList } from './methods';
 
@@ -41,7 +44,8 @@ const AddOneCert = () => {
     form: {
       name: '',
       description: '',
-      private_key_id: '',
+      private_key_id: newId,
+      algorithm_value: '',
       acme_account_id: '',
       challenge_method_value: '',
       subject: '',
@@ -58,17 +62,14 @@ const AddOneCert = () => {
   // data change handlers
   // string form field updates
   const stringInputChangeHandler = (event) => {
-    setFormState((prevState) => {
-      return {
-        ...prevState,
-        form: {
-          ...prevState.form,
-          [event.target.name]: event.target.value,
-        },
-      };
-    });
+    setFormState((prevState) => ({
+      ...prevState,
+      form: {
+        ...prevState.form,
+        [event.target.name]: event.target.value,
+      },
+    }));
   };
-
   // int form field updates
   const intInputChangeHandler = (event) => {
     setFormState((prevState) => {
@@ -80,6 +81,20 @@ const AddOneCert = () => {
         },
       };
     });
+  };
+  // private key change needs to check and reset alg if appropriate
+  const privKeyInputChangeHandler = (event) => {
+    setFormState((prevState) => ({
+      ...prevState,
+      form: {
+        ...prevState.form,
+        [event.target.name]: parseInt(event.target.value),
+        // always clear the algorithm value when key changes
+        // if key is setting to generate, start with blank value
+
+        algorithm_value: '',
+      },
+    }));
   };
 
   // button handlers
@@ -113,6 +128,14 @@ const AddOneCert = () => {
     // check private key is selected
     if (formState.form.private_key_id === '') {
       validationErrors.private_key_id = true;
+    }
+
+    // if generate new key is selected, confirm alg is selected
+    if (
+      formState.form.private_key_id === newId &&
+      formState.form.algorithm_value === ''
+    ) {
+      validationErrors.algorithm_value = true;
     }
 
     // check challenge method is selected
@@ -200,11 +223,21 @@ const AddOneCert = () => {
       );
     }
     // build options for available keys
+    // add option to generate new
+    availableKeys = [
+      {
+        value: newId,
+        name: 'Generate New Key',
+      },
+    ];
+    // add list of available existing keys
     if (apiGetState.certificate_options.private_keys) {
-      availableKeys = apiGetState.certificate_options.private_keys.map((k) => ({
-        value: parseInt(k.id),
-        name: k.name + ' (' + k.algorithm.name + ')',
-      }));
+      availableKeys.push(
+        ...apiGetState.certificate_options.private_keys.map((k) => ({
+          value: parseInt(k.id),
+          name: k.name + ' (' + k.algorithm.name + ')',
+        }))
+      );
     }
     // build options for challenge method
     if (apiGetState.certificate_options.challenge_methods) {
@@ -259,9 +292,20 @@ const AddOneCert = () => {
             id='private_key_id'
             options={availableKeys}
             value={formState.form.private_key_id}
-            onChange={intInputChangeHandler}
+            onChange={privKeyInputChangeHandler}
             error={formState.validationErrors.private_key_id}
           />
+
+          {formState.form.private_key_id === newId && (
+            <InputSelect
+              label='Key Generation Algorithm'
+              id='algorithm_value'
+              options={apiGetState.certificate_options.key_algorithms}
+              value={formState.form.algorithm_value}
+              onChange={stringInputChangeHandler}
+              error={formState.validationErrors.algorithm_value && true}
+            />
+          )}
 
           <InputSelect
             label='Challenge Method'
