@@ -4,7 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
 import { isNameValid } from '../../../../helpers/form-validation';
-import { newId } from '../../../../helpers/constants';
+import {
+  newId,
+  defaultKeyGenAlgorithmValue,
+} from '../../../../helpers/constants';
 
 import ApiError from '../../../UI/Api/ApiError';
 import ApiLoading from '../../../UI/Api/ApiLoading';
@@ -45,7 +48,7 @@ const AddOnePrivateKey = () => {
     form: {
       name: '',
       description: '',
-      algorithm_value: '',
+      algorithm_value: defaultKeyGenAlgorithmValue,
       pem: '',
       api_key_disabled: false,
     },
@@ -83,7 +86,7 @@ const AddOnePrivateKey = () => {
       key_source: event.target.value,
       form: {
         ...prevState.form,
-        algorithm_value: '',
+        algorithm_value: defaultKeyGenAlgorithmValue,
         pem: '',
       },
     }));

@@ -7,7 +7,10 @@ import {
   isDomainValid,
   isNameValid,
 } from '../../../../helpers/form-validation';
-import { newId } from '../../../../helpers/constants';
+import {
+  newId,
+  defaultKeyGenAlgorithmValue,
+} from '../../../../helpers/constants';
 import { buildMethodsList } from './methods';
 
 import {
@@ -45,7 +48,7 @@ const AddOneCert = () => {
       name: '',
       description: '',
       private_key_id: newId,
-      algorithm_value: '',
+      algorithm_value: defaultKeyGenAlgorithmValue,
       acme_account_id: '',
       challenge_method_value: '',
       subject: '',
@@ -84,17 +87,23 @@ const AddOneCert = () => {
   };
   // private key change needs to check and reset alg if appropriate
   const privKeyInputChangeHandler = (event) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      form: {
-        ...prevState.form,
-        [event.target.name]: parseInt(event.target.value),
-        // always clear the algorithm value when key changes
-        // if key is setting to generate, start with blank value
+    setFormState((prevState) => {
+      // set default alg if selected generating new key, otherwise
+      // clear the alg value
+      const newAlgorithmValue =
+        parseInt(event.target.value) === newId
+          ? defaultKeyGenAlgorithmValue
+          : '';
 
-        algorithm_value: '',
-      },
-    }));
+      return {
+        ...prevState,
+        form: {
+          ...prevState.form,
+          private_key_id: parseInt(event.target.value),
+          algorithm_value: newAlgorithmValue,
+        },
+      };
+    });
   };
 
   // button handlers
