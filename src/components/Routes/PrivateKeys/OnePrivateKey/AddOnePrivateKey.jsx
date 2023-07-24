@@ -41,7 +41,7 @@ const AddOnePrivateKey = () => {
   const navigate = useNavigate();
 
   const blankForm = {
-    key_source: '',
+    key_source: 0,
     form: {
       name: '',
       description: '',
