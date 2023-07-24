@@ -54,7 +54,7 @@ const AddOnePrivateKey = () => {
   const [formState, setFormState] = useState(blankForm);
 
   // data change handler
-  const inputChangeHandler = (event) => {
+  const stringInputChangeHandler = (event) => {
     setFormState((prevState) => ({
       ...prevState,
       form: {
@@ -163,7 +163,7 @@ const AddOnePrivateKey = () => {
             label='Name'
             id='name'
             value={formState.form.name}
-            onChange={inputChangeHandler}
+            onChange={stringInputChangeHandler}
             error={formState.validationErrors.name && true}
           />
 
@@ -171,7 +171,7 @@ const AddOnePrivateKey = () => {
             label='Description'
             id='description'
             value={formState.form.description}
-            onChange={inputChangeHandler}
+            onChange={stringInputChangeHandler}
           />
 
           <InputSelect
@@ -189,7 +189,7 @@ const AddOnePrivateKey = () => {
               id='algorithm_value'
               options={apiGetState.private_key_options.key_algorithms}
               value={formState.form.algorithm_value}
-              onChange={inputChangeHandler}
+              onChange={stringInputChangeHandler}
               error={formState.validationErrors.algorithm_value && true}
             />
           )}
@@ -199,7 +199,7 @@ const AddOnePrivateKey = () => {
               label='PEM Content'
               id='pem'
               value={formState.form.pem}
-              onChange={inputChangeHandler}
+              onChange={stringInputChangeHandler}
               invalid={formState.validationErrors.pem && true}
             />
           )}
