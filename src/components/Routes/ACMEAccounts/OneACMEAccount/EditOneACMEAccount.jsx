@@ -391,7 +391,7 @@ const EditOneACMEAccount = () => {
                 </>
               )}
 
-            {devMode && (
+            {devMode && apiGetState.acme_account.kid !== '' && (
               <Typography variant='p' sx={{ my: 1 }} display='block'>
                 Kid: {apiGetState.acme_account.kid}
               </Typography>
