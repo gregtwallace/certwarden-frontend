@@ -29,6 +29,12 @@ const InputTextField = (props) => {
     case 'api_key_new':
       errorMessage = 'API keys must be at least 10 characters long.';
       break;
+    case 'eab_kid':
+      errorMessage = 'External Account Binding requires a Key ID.';
+      break;
+    case 'eab_hmac_key':
+      errorMessage = 'External Account Binding requires a Key.';
+      break;
     default:
       errorMessage = 'This field has an error.';
       break;

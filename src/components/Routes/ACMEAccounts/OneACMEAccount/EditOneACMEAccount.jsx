@@ -6,13 +6,7 @@ import useAxiosSend from '../../../../hooks/useAxiosSend';
 import { isNameValid } from '../../../../helpers/form-validation';
 import { devMode } from '../../../../helpers/environment';
 
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Typography,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Typography } from '@mui/material';
 
 import ApiError from '../../../UI/Api/ApiError';
 import ApiLoading from '../../../UI/Api/ApiLoading';
@@ -129,6 +123,28 @@ const EditOneACMEAccount = () => {
   // register ACME account handler
   const registerClickHandler = (event) => {
     event.preventDefault();
+
+    // client side validation of EAB (if it is required)
+    if (apiGetState.acme_account.acme_server.external_account_required) {
+      let validationErrors = {};
+      // check Key ID is populated
+      if (formState.form.eab_kid == '') {
+        validationErrors.eab_kid = true;
+      }
+
+      // check HMAC Key is populated
+      if (formState.form.eab_hmac_key == '') {
+        validationErrors.eab_hmac_key = true;
+      }
+
+      setFormState((prevState) => ({
+        ...prevState,
+        validationErrors: validationErrors,
+      }));
+      if (Object.keys(validationErrors).length > 0) {
+        return false;
+      }
+    }
 
     sendData(
       `/v1/acmeaccounts/${id}/new-account`,
@@ -349,6 +365,32 @@ const EditOneACMEAccount = () => {
               </Button>
             </FormRowRight>
 
+            {canRegister &&
+              apiGetState.acme_account.acme_server
+                .external_account_required && (
+                <>
+                  <Typography>External Account Binding</Typography>
+
+                  <InputTextField
+                    label='Key ID'
+                    id='eab_kid'
+                    name='eab_kid'
+                    value={formState.form.eab_kid}
+                    onChange={inputChangeHandler}
+                    error={formState.validationErrors.eab_kid && true}
+                  />
+
+                  <InputTextField
+                    label='HMAC Key'
+                    id='eab_hmac_key'
+                    name='eab_hmac_key'
+                    value={formState.form.eab_hmac_key}
+                    onChange={inputChangeHandler}
+                    error={formState.validationErrors.eab_hmac_key && true}
+                  />
+                </>
+              )}
+
             {devMode && (
               <Typography variant='p' sx={{ my: 1 }} display='block'>
                 Kid: {apiGetState.acme_account.kid}
@@ -360,44 +402,6 @@ const EditOneACMEAccount = () => {
               {apiGetState.acme_account.status.charAt(0).toUpperCase() +
                 apiGetState.acme_account.status.slice(1)}
             </Typography>
-
-            {canRegister && (
-              <>
-                <Accordion sx={{ mb: 2 }}>
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls='csr-fields-content'
-                    id='csr-fields-header'
-                  >
-                    <Typography>
-                      External Account Binding (if Required)
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Typography sx={{ mb: 2 }}>
-                      Only required by some CAs and even then only required for
-                      account creation (and not account recovery).
-                    </Typography>
-
-                    <InputTextField
-                      label='Key ID'
-                      id='eab_kid'
-                      name='eab_kid'
-                      value={formState.form.eab_kid}
-                      onChange={inputChangeHandler}
-                    />
-
-                    <InputTextField
-                      label='HMAC Key'
-                      id='eab_hmac_key'
-                      name='eab_hmac_key'
-                      value={formState.form.eab_hmac_key}
-                      onChange={inputChangeHandler}
-                    />
-                  </AccordionDetails>
-                </Accordion>
-              </>
-            )}
 
             <FormRowRight>
               <Button
