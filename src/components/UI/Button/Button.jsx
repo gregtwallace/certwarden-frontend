@@ -13,9 +13,11 @@ const Button = (props) => {
       break;
     case 'deactivate':
     case 'manually_edit':
+    case 'restart':
       color = 'warning';
       break;
     case 'delete':
+    case 'shutdown':
       color = 'error';
       break;
     case 'info':
