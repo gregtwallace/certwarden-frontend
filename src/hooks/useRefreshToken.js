@@ -3,7 +3,7 @@ import axios from 'axios';
 import { axiosConfig } from '../api/axios';
 import useAuthExpires from './useAuthExpires';
 
-const REFRESH_NODE = 'v1/auth/refresh';
+const REFRESH_NODE = '/v1/app/auth/refresh';
 
 const useRefreshToken = () => {
   const { setAuthExpires } = useAuthExpires();

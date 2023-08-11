@@ -18,7 +18,7 @@ const NewVersionInfo = () => {
   const checkNewVersion = (event) => {
     event.preventDefault();
 
-    sendData(`/v1/app/new-version`, 'POST', null, true).then((response) => {
+    sendData(`/v1/app/updater/new-version`, 'POST', null, true).then((response) => {
       // refresh if success
       if (response.status >= 200 && response.status <= 299) {
         reloadNewVersion();

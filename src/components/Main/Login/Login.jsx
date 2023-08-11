@@ -14,7 +14,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import useAuthExpires from '../../../hooks/useAuthExpires';
 import useAxiosSend from '../../../hooks/useAxiosSend';
 
-const LOGIN_URL = '/v1/auth/login';
+const LOGIN_URL = '/v1/app/auth/login';
 
 const Login = () => {
   const [sendState, sendData] = useAxiosSend();

@@ -15,7 +15,7 @@ const NewVersionProvider = (props) => {
 
   // get new-version information
   const [apiGetState, reloadNewVersion] = useAxiosGet(
-    `/v1/app/new-version`,
+    `/v1/app/updater/new-version`,
     'new_version',
     true
   );

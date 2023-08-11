@@ -11,11 +11,11 @@ import Button from '../../UI/Button/Button';
 import TitleBar from '../../UI/TitleBar/TitleBar';
 
 const LogViewer = () => {
-  const [apiGetState] = useAxiosGet('/v1/log', 'log_entries', true);
+  const [apiGetState] = useAxiosGet('/v1/app/log', 'log_entries', true);
   const [, sendData] = useAxiosSend();
 
   const downloadAllClickHandler = () => {
-    sendData(`/v1/logs`, 'GET', null, true, 'blob').then((response) => {
+    sendData(`/v1/app/logs`, 'GET', null, true, 'blob').then((response) => {
       if (response.status >= 200 && response.status <= 299) {
         downloadBlob(response);
       }
