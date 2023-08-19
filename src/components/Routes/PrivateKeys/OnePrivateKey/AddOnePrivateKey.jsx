@@ -86,7 +86,7 @@ const AddOnePrivateKey = () => {
       key_source: event.target.value,
       form: {
         ...prevState.form,
-        algorithm_value: defaultKeyGenAlgorithmValue,
+        algorithm_value: '',
         pem: '',
       },
     }));
