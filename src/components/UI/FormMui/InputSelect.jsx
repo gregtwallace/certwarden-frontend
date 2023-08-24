@@ -16,10 +16,6 @@ const InputSelect = (props) => {
     case 'acme_account_id':
       errorMessage = 'An account must be selected.';
       break;
-    case 'challenge_method_value':
-      errorMessage =
-        'A challenge method must be selected. The method must be dns-01 for wildcards.';
-      break;
     case 'key_source':
       errorMessage = 'Key source must be selected.';
       break;

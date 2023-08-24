@@ -13,12 +13,6 @@ const Flag = (props) => {
       text = 'Staging';
       break;
 
-    case 'method':
-      color = 'white';
-      bgcolor = 'error.dark';
-      text = 'Invalid Method';
-      break;
-
     case 'legacy_api':
       color = 'white';
       bgcolor = 'warning.dark';

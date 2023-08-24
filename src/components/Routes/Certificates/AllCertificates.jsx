@@ -111,7 +111,6 @@ const AllCertificates = () => {
                     <TableCell>
                       {c.acme_account.acme_server.is_staging && <Flag type='staging' />}
                       {c.api_key_via_url && <Flag type='legacy_api' />}
-                      {!c.challenge_method.enabled && <Flag type='method' />}
                     </TableCell>
                     <TableCell>
                       <Link
@@ -142,8 +141,6 @@ const AllCertificates = () => {
       )}
     </TableContainer>
   );
-
-  //                   {!m.challenge_method.enabled && <Flag type='method' />}
 };
 
 export default AllCertificates;

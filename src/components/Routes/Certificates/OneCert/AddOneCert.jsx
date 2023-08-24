@@ -11,7 +11,6 @@ import {
   newId,
   defaultKeyGenAlgorithmValue,
 } from '../../../../helpers/constants';
-import { buildMethodsList } from './methods';
 
 import {
   Accordion,
@@ -50,7 +49,6 @@ const AddOneCert = () => {
       private_key_id: newId,
       algorithm_value: defaultKeyGenAlgorithmValue,
       acme_account_id: '',
-      challenge_method_value: '',
       subject: '',
       subject_alts: [],
       organization: '',
@@ -123,7 +121,6 @@ const AddOneCert = () => {
 
     // form validation
     let validationErrors = {};
-    let containsWildcard = false;
     // name
     if (!isNameValid(formState.form.name)) {
       validationErrors.name = true;
@@ -147,20 +144,10 @@ const AddOneCert = () => {
       validationErrors.algorithm_value = true;
     }
 
-    // check challenge method is selected
-    if (formState.form.challenge_method_value === '') {
-      validationErrors.challenge_method_value = true;
-    }
-
     // subject
     if (!isDomainValid(formState.form.subject)) {
       validationErrors.subject = true;
     }
-    // flag wildcard
-    if (formState.form.subject.startsWith('*.')) {
-      containsWildcard = true;
-    }
-
     // subject alts (use an array to record which specific
     // alts are not valid)
     var subject_alts = [];
@@ -168,27 +155,10 @@ const AddOneCert = () => {
       if (!isDomainValid(alt)) {
         subject_alts.push(i);
       }
-      // flag wildcard
-      if (alt.startsWith('*.')) {
-        containsWildcard = true;
-      }
     });
     // if any alts invalid, create the error array
     if (subject_alts.length !== 0) {
       validationErrors.subject_alts = subject_alts;
-    }
-    // if any wildcards exist, verify the selected method is dns-01
-    if (containsWildcard) {
-      // find full method details
-      let method = apiGetState?.certificate_options?.challenge_methods.find(
-        (method) => {
-          return method.value === formState.form.challenge_method_value;
-        }
-      );
-      // check the method's type
-      if (method?.type !== 'dns-01') {
-        validationErrors.challenge_method_value = true;
-      }
     }
     //TODO: CSR validation?
     // form validation -- end
@@ -219,7 +189,6 @@ const AddOneCert = () => {
   // vars related to api
   var availableAccounts;
   var availableKeys;
-  var availableMethods;
 
   if (renderApiItems) {
     // build options for available accounts
@@ -246,12 +215,6 @@ const AddOneCert = () => {
           value: parseInt(k.id),
           name: k.name + ' (' + k.algorithm.name + ')',
         }))
-      );
-    }
-    // build options for challenge method
-    if (apiGetState.certificate_options.challenge_methods) {
-      availableMethods = buildMethodsList(
-        apiGetState.certificate_options.challenge_methods
       );
     }
   }
@@ -315,15 +278,6 @@ const AddOneCert = () => {
               error={formState.validationErrors.algorithm_value && true}
             />
           )}
-
-          <InputSelect
-            label='Challenge Method'
-            id='challenge_method_value'
-            options={availableMethods}
-            value={formState.form.challenge_method_value}
-            onChange={stringInputChangeHandler}
-            error={formState.validationErrors.challenge_method_value}
-          />
 
           <InputTextField
             label='Subject (and Common Name)'

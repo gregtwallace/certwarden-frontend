@@ -8,7 +8,6 @@ import {
   isNameValid,
 } from '../../../../helpers/form-validation';
 import { newId } from '../../../../helpers/constants';
-import { buildMethodsList } from './methods';
 import { downloadBlob } from '../../../../helpers/download';
 
 import {
@@ -66,7 +65,6 @@ const EditOneCert = () => {
         name: apiGetState.certificate.name,
         description: apiGetState.certificate.description,
         private_key_id: apiGetState.certificate.private_key.id,
-        challenge_method_value: apiGetState.certificate.challenge_method.value,
         subject_alts: apiGetState.certificate.subject_alts,
         api_key_via_url: apiGetState.certificate.api_key_via_url,
         organization: apiGetState.certificate.organization,
@@ -200,7 +198,6 @@ const EditOneCert = () => {
 
     // form validation
     let validationErrors = {};
-    let containsWildcard = false;
     // name
     if (!isNameValid(formState.form.name)) {
       validationErrors.name = true;
@@ -213,28 +210,10 @@ const EditOneCert = () => {
       if (!isDomainValid(alt)) {
         subject_alts.push(i);
       }
-      // flag wildcard
-      if (alt.startsWith('*.')) {
-        containsWildcard = true;
-      }
     });
     // if any alts invalid, create the error array
     if (subject_alts.length !== 0) {
       validationErrors.subject_alts = subject_alts;
-    }
-    // if any wildcards exist, verify the selected method is dns-01
-    if (containsWildcard) {
-      // find full method details
-      let method =
-        apiGetCertOptionsState?.certificate_options?.challenge_methods.find(
-          (method) => {
-            return method.value === formState.form.challenge_method_value;
-          }
-        );
-      // check the method's type
-      if (method?.type !== 'dns-01') {
-        validationErrors.challenge_method_value = true;
-      }
     }
 
     //TODO: CSR validation?
@@ -271,7 +250,6 @@ const EditOneCert = () => {
 
   // vars related to api
   var availableKeys;
-  var availableMethods;
   var formUnchanged = true;
 
   if (renderApiItems) {
@@ -291,13 +269,6 @@ const EditOneCert = () => {
         }))
       );
     }
-    // build options for challenge method
-    if (apiGetCertOptionsState?.certificate_options?.challenge_methods) {
-      availableMethods = buildMethodsList(
-        apiGetCertOptionsState.certificate_options.challenge_methods,
-        apiGetState.certificate.challenge_method
-      );
-    }
 
     // does form match get api call
     formUnchanged =
@@ -305,8 +276,6 @@ const EditOneCert = () => {
       apiGetState.certificate.description === formState.form.description &&
       apiGetState.certificate.private_key.id ===
         formState.form.private_key_id &&
-      apiGetState.certificate.challenge_method.value ===
-        formState.form.challenge_method_value &&
       JSON.stringify(apiGetState.certificate.subject_alts) ===
         JSON.stringify(formState.form.subject_alts) &&
       apiGetState.certificate.api_key_via_url ===
@@ -405,15 +374,6 @@ const EditOneCert = () => {
                 value={formState.form.private_key_id}
                 onChange={intInputChangeHandler}
                 error={formState.validationErrors.private_key_id}
-              />
-
-              <InputSelect
-                label='Challenge Method'
-                id='challenge_method_value'
-                options={availableMethods}
-                value={formState.form.challenge_method_value}
-                onChange={stringInputChangeHandler}
-                error={formState.validationErrors.challenge_method_value}
               />
 
               <InputTextField

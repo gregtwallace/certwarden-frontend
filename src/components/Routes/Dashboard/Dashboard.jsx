@@ -101,9 +101,6 @@ const Dashboard = () => {
                       {m.certificate.api_key_via_url && (
                         <Flag type='legacy_api' />
                       )}
-                      {!m.certificate.challenge_method.enabled && (
-                        <Flag type='method' />
-                      )}
                     </TableCell>
                     <TableCell>
                       {convertUnixTime(m.valid_to)}{' '}
