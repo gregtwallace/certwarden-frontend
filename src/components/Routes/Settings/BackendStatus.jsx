@@ -42,15 +42,12 @@ const BackendStatus = () => {
             {apiGetState.server.config_version_match ? (
               <>Yes</>
             ) : (
-              <>
-                <Typography
-                  sx={{ color: 'error.main', fontWeight: 'bold' }}
-                  display='inline'
-                >
-                  No, Error!{' '}
-                </Typography>
-                Check and correct your config file immediately!
-              </>
+              <Typography
+                sx={{ color: 'error.main', fontWeight: 'bold' }}
+                display='inline'
+              >
+                No
+              </Typography>
             )}
           </Typography>
 
