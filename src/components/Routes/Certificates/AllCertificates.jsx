@@ -1,11 +1,6 @@
-import {
-  Link as RouterLink,
-  useNavigate,
-  useSearchParams,
-} from 'react-router-dom';
+import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 import { Link } from '@mui/material';
 
-import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { TableCell } from '@mui/material';
@@ -18,6 +13,7 @@ import { newId } from '../../../helpers/constants';
 
 import ApiLoading from '../../UI/Api/ApiLoading';
 import ApiError from '../../UI/Api/ApiError';
+import Button from '../../UI/Button/Button';
 import Flag from '../../UI/Flag/Flag';
 import TableContainer from '../../UI/TableMui/TableContainer';
 import TableHeaderRow from '../../UI/TableMui/TableHeaderRow';
@@ -70,18 +66,14 @@ const AllCertificates = () => {
     true
   );
 
-  // click new / navigation
-  const navigate = useNavigate();
-
-  const newClickHandler = (event) => {
-    event.preventDefault();
-    navigate(`/certificates/${newId}`);
-  };
-
   return (
     <TableContainer>
       <TitleBar title='Certificates'>
-        <Button variant='contained' type='submit' onClick={newClickHandler}>
+        <Button
+          variant='contained'
+          type='submit'
+          href={`/certificates/${newId}`}
+        >
           New Certificate
         </Button>
       </TitleBar>
@@ -109,7 +101,9 @@ const AllCertificates = () => {
                     </TableCell>
                     <TableCell>{c.subject}</TableCell>
                     <TableCell>
-                      {c.acme_account.acme_server.is_staging && <Flag type='staging' />}
+                      {c.acme_account.acme_server.is_staging && (
+                        <Flag type='staging' />
+                      )}
                       {c.api_key_via_url && <Flag type='legacy_api' />}
                     </TableCell>
                     <TableCell>

@@ -1,11 +1,6 @@
-import {
-  Link as RouterLink,
-  useNavigate,
-  useSearchParams,
-} from 'react-router-dom';
+import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 import { Link } from '@mui/material';
 
-import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { TableCell } from '@mui/material';
@@ -18,6 +13,7 @@ import { newId } from '../../../helpers/constants';
 
 import ApiLoading from '../../UI/Api/ApiLoading';
 import ApiError from '../../UI/Api/ApiError';
+import Button from '../../UI/Button/Button';
 import TableContainer from '../../UI/TableMui/TableContainer';
 import TableHeaderRow from '../../UI/TableMui/TableHeaderRow';
 import TitleBar from '../../UI/TitleBar/TitleBar';
@@ -74,18 +70,14 @@ const AllACMEAccounts = () => {
     true
   );
 
-  // click new / navigation
-  const navigate = useNavigate();
-
-  const newClickHandler = (event) => {
-    event.preventDefault();
-    navigate(`/acmeaccounts/${newId}`);
-  };
-
   return (
     <TableContainer>
       <TitleBar title='ACME Accounts'>
-        <Button variant='contained' type='submit' onClick={newClickHandler}>
+        <Button
+          variant='contained'
+          type='submit'
+          href={`/acmeaccounts/${newId}`}
+        >
           New Account
         </Button>
       </TitleBar>

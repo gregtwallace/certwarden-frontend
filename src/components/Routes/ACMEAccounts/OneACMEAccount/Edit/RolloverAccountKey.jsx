@@ -72,12 +72,6 @@ const RolloverAccountKey = () => {
     });
   };
 
-  // button handlers
-  const cancelClickHandler = (event) => {
-    event.preventDefault();
-    navigate(`/acmeaccounts/${id}`);
-  };
-
   // form submission handler
   const submitFormHandler = (event) => {
     event.preventDefault();
@@ -117,7 +111,7 @@ const RolloverAccountKey = () => {
         }));
     } else {
       // when loaded but none are available
-      availableKeys = []
+      availableKeys = [];
     }
   }
 
@@ -189,7 +183,7 @@ const RolloverAccountKey = () => {
           <FormFooter>
             <Button
               type='cancel'
-              onClick={cancelClickHandler}
+              href={`/acmeaccounts/${id}`}
               disabled={apiSendState.isSending}
             >
               Cancel

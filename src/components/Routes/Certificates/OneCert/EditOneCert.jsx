@@ -178,18 +178,10 @@ const EditOneCert = () => {
     );
   };
 
-  const editApiKeyClickHandler = () => {
-    navigate(`/certificates/${id}/apikeys`);
-  };
-
   const resetClickHandler = (event) => {
     event.preventDefault();
 
     setFormToApi();
-  };
-  const cancelClickHandler = (event) => {
-    event.preventDefault();
-    navigate('/certificates');
   };
 
   // form submission handler
@@ -449,7 +441,7 @@ const EditOneCert = () => {
 
               <FormRowRight>
                 <Button
-                  onClick={editApiKeyClickHandler}
+                  href={`/certificates/${id}/apikeys`}
                   type='manually_edit'
                   disabled={
                     apiSendState.isSending ||
@@ -514,7 +506,7 @@ const EditOneCert = () => {
               >
                 <Button
                   type='cancel'
-                  onClick={cancelClickHandler}
+                  href='/certificates'
                   disabled={apiSendState.isSending}
                 >
                   Cancel

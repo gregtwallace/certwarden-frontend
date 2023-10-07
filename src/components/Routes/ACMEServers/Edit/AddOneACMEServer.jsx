@@ -59,11 +59,6 @@ const AddOneACMEServer = () => {
     event.preventDefault();
     setFormState(blankForm);
   };
-  const cancelClickHandler = (event) => {
-    event.preventDefault();
-
-    navigate('/acmeservers');
-  };
 
   // form submission handler
   const submitFormHandler = (event) => {
@@ -146,7 +141,7 @@ const AddOneACMEServer = () => {
         <FormFooter>
           <Button
             type='cancel'
-            onClick={cancelClickHandler}
+            href='/acmeservers'
             disabled={apiSendState.isSending}
           >
             Cancel

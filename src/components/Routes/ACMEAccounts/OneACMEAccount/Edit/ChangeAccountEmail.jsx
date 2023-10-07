@@ -72,10 +72,6 @@ const ChangeAccountEmail = () => {
 
     setFormToApi();
   };
-  const cancelClickHandler = (event) => {
-    event.preventDefault();
-    navigate(`/acmeaccounts/${id}`);
-  };
 
   // form submission handler
   const submitFormHandler = (event) => {
@@ -173,7 +169,7 @@ const ChangeAccountEmail = () => {
           <FormFooter>
             <Button
               type='cancel'
-              onClick={cancelClickHandler}
+              href={`/acmeaccounts/${id}`}
               disabled={apiSendState.isSending}
             >
               Cancel

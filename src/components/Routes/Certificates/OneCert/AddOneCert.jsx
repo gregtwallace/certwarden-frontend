@@ -109,11 +109,6 @@ const AddOneCert = () => {
     event.preventDefault();
     setFormState(blankForm);
   };
-  const cancelClickHandler = (event) => {
-    event.preventDefault();
-
-    navigate('/certificates');
-  };
 
   // form submission handler
   const submitFormHandler = (event) => {
@@ -351,7 +346,7 @@ const AddOneCert = () => {
           <FormFooter>
             <Button
               type='cancel'
-              onClick={cancelClickHandler}
+              href='/certificates'
               disabled={apiSendState.isSending}
             >
               Cancel

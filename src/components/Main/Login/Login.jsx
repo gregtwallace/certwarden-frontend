@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import { Paper } from '@mui/material';
 import Stack from '@mui/material/Stack';
@@ -13,6 +12,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 import useAuthExpires from '../../../hooks/useAuthExpires';
 import useAxiosSend from '../../../hooks/useAxiosSend';
+
+import Button from '../../UI/Button/Button';
 
 const LOGIN_URL = '/v1/app/auth/login';
 

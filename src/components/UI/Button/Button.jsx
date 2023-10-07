@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+
 import { Button as ButtonMui } from '@mui/material';
 
 const Button = (props) => {
@@ -13,6 +15,7 @@ const Button = (props) => {
       break;
     case 'deactivate':
     case 'manually_edit':
+    case 'edit':
     case 'restart':
       color = 'warning';
       break;
@@ -36,6 +39,9 @@ const Button = (props) => {
 
   return (
     <ButtonMui
+      component={props.href ? Link : null}
+      to={props.href}
+      target={props.target}
       type={props.type}
       variant='contained'
       onClick={props.onClick}
@@ -52,6 +58,9 @@ const Button = (props) => {
 };
 
 Button.propTypes = {
+  href: PropTypes.string,
+  target: PropTypes.string,
+
   type: PropTypes.string,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,

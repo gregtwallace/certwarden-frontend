@@ -84,11 +84,6 @@ const EditOneACMEServer = () => {
 
     setFormToApi();
   };
-  const cancelClickHandler = (event) => {
-    event.preventDefault();
-
-    navigate('/acmeservers');
-  };
 
   // delete handlers
   const deleteClickHandler = () => {
@@ -209,7 +204,10 @@ const EditOneACMEServer = () => {
               onChange={inputChangeHandler}
             />
 
-            <Typography variant='subtitle2' sx={{ my: 2, px: 1, color: 'error.dark' }}>
+            <Typography
+              variant='subtitle2'
+              sx={{ my: 2, px: 1, color: 'error.dark' }}
+            >
               You should only update the Directory URL if your provider has
               actually changed it. If you are trying to change provider, create
               a new server instead.
@@ -245,7 +243,7 @@ const EditOneACMEServer = () => {
             >
               <Button
                 type='cancel'
-                onClick={cancelClickHandler}
+                href='/acmeservers'
                 disabled={apiSendState.isSending}
               >
                 Cancel

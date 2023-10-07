@@ -72,10 +72,6 @@ const EditAPIKeysPage = (props) => {
 
     setFormToApi();
   };
-  const cancelClickHandler = (event) => {
-    event.preventDefault();
-    navigate(`/${props.itemTypeApiPath}/${id}`);
-  };
 
   // form submission handler
   const submitFormHandler = (event) => {
@@ -155,7 +151,7 @@ const EditAPIKeysPage = (props) => {
             </Typography>
 
             <FormRowRight>
-              <Button onClick={cancelClickHandler}>Back</Button>
+              <Button href={`/${props.itemTypeApiPath}/${id}`}>Back</Button>
             </FormRowRight>
           </Form>
         ) : (
@@ -228,7 +224,7 @@ const EditAPIKeysPage = (props) => {
             <FormFooter>
               <Button
                 type='cancel'
-                onClick={cancelClickHandler}
+                href={`/${props.itemTypeApiPath}/${id}`}
                 disabled={apiSendState.isSending}
               >
                 Cancel

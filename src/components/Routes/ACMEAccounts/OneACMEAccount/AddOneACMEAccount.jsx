@@ -89,10 +89,6 @@ const AddOneACMEAccount = () => {
     event.preventDefault();
     setFormState(blankForm);
   };
-  const cancelClickHandler = (event) => {
-    event.preventDefault();
-    navigate('/acmeaccounts');
-  };
 
   // submit handler
   const submitFormHandler = (event) => {
@@ -266,7 +262,7 @@ const AddOneACMEAccount = () => {
           <FormFooter>
             <Button
               type='cancel'
-              onClick={cancelClickHandler}
+              href='/acmeaccounts'
               disabled={apiSendState.isSending}
             >
               Cancel

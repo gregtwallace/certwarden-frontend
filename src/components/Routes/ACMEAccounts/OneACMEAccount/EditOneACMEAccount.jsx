@@ -76,10 +76,6 @@ const EditOneACMEAccount = () => {
 
     setFormToApi();
   };
-  const cancelClickHandler = (event) => {
-    event.preventDefault();
-    navigate('/acmeaccounts');
-  };
 
   // delete handlers
   const deleteClickHandler = () => {
@@ -157,18 +153,6 @@ const EditOneACMEAccount = () => {
         updateGet();
       }
     });
-  };
-
-  // change email handler
-  const changeEmailClickHandler = (event) => {
-    event.preventDefault();
-    navigate(`/acmeaccounts/${id}/email`);
-  };
-
-  // rollover key handler
-  const rolloverClickHandler = (event) => {
-    event.preventDefault();
-    navigate(`/acmeaccounts/${id}/key-change`);
   };
 
   // form submission handler
@@ -314,7 +298,7 @@ const EditOneACMEAccount = () => {
             <FormRowRight>
               <Button
                 type='info'
-                onClick={changeEmailClickHandler}
+                href={`/acmeaccounts/${id}/email`}
                 disabled={apiSendState.isSending || !canDoAccountActions}
               >
                 Change Email
@@ -358,7 +342,7 @@ const EditOneACMEAccount = () => {
             <FormRowRight>
               <Button
                 type='info'
-                onClick={rolloverClickHandler}
+                href={`/acmeaccounts/${id}/key-change`}
                 disabled={apiSendState.isSending || !canDoAccountActions}
               >
                 Rollover Key
@@ -436,7 +420,7 @@ const EditOneACMEAccount = () => {
             >
               <Button
                 type='cancel'
-                onClick={cancelClickHandler}
+                href='/acmeaccounts'
                 disabled={apiSendState.isSending}
               >
                 Cancel

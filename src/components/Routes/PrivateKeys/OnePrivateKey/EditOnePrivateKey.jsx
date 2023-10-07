@@ -115,19 +115,10 @@ const EditOnePrivateKey = () => {
     );
   };
 
-  const editApiKeyClickHandler = () => {
-    navigate(`/privatekeys/${id}/apikeys`);
-  };
-
   const resetClickHandler = (event) => {
     event.preventDefault();
 
     setFormToApi();
-  };
-  const cancelClickHandler = (event) => {
-    event.preventDefault();
-
-    navigate('/privatekeys');
   };
 
   // delete handlers
@@ -279,7 +270,7 @@ const EditOnePrivateKey = () => {
 
             <FormRowRight>
               <Button
-                onClick={editApiKeyClickHandler}
+                href={`/privatekeys/${id}/apikeys`}
                 type='manually_edit'
                 disabled={
                   apiSendState.isSending ||
@@ -352,7 +343,7 @@ const EditOnePrivateKey = () => {
             >
               <Button
                 type='cancel'
-                onClick={cancelClickHandler}
+                href='/privatekeys'
                 disabled={apiSendState.isSending}
               >
                 Cancel

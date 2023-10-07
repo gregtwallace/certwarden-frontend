@@ -97,11 +97,6 @@ const AddOnePrivateKey = () => {
     event.preventDefault();
     setFormState(blankForm);
   };
-  const cancelClickHandler = (event) => {
-    event.preventDefault();
-
-    navigate('/privatekeys');
-  };
 
   // form submission handler
   const submitFormHandler = (event) => {
@@ -226,7 +221,7 @@ const AddOnePrivateKey = () => {
           <FormFooter>
             <Button
               type='cancel'
-              onClick={cancelClickHandler}
+              href='/privatekeys'
               disabled={apiSendState.isSending}
             >
               Cancel
