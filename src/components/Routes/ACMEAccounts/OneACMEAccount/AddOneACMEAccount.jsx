@@ -150,8 +150,6 @@ const AddOneACMEAccount = () => {
   var availableServers;
   var availableKeys;
 
-  console.log(formState.form);
-
   if (renderApiItems) {
     // tos URL (use selected acme server)
     if (formState.form.acme_server_id !== '') {
@@ -159,7 +157,6 @@ const AddOneACMEAccount = () => {
         (s) => s.id === formState.form.acme_server_id
       )[0];
       tos_url = selectedServer.terms_of_service;
-      console.log(tos_url);
     }
 
     // build options for available servers
