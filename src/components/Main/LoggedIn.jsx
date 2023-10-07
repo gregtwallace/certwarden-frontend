@@ -23,6 +23,7 @@ import EditOnePrivateKey from '../Routes/PrivateKeys/OnePrivateKey/EditOnePrivat
 import Logout from '../Routes/Logout/Logout';
 import LogViewer from '../Routes/LogViewer/LogViewer';
 import Navbar from './Navbar/Navbar';
+import AllProviders from '../Routes/Providers/AllProviders';
 import RolloverAccountKey from '../Routes/ACMEAccounts/OneACMEAccount/Edit/RolloverAccountKey';
 import Settings from '../Routes/Settings/Settings';
 
@@ -84,6 +85,7 @@ const LoggedIn = () => {
           {/* Misc. */}
           <Route path='/' element={<Dashboard />} />
           <Route path={'/logs'} element={<LogViewer />} />
+          <Route path={'/providers'} element={<AllProviders />} />
           <Route path={'/settings'} element={<Settings />} />
           <Route path={'/logout'} element={<Logout />} />
 

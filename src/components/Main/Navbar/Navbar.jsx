@@ -3,17 +3,19 @@ import { useMediaQuery, useTheme } from '@mui/material';
 
 import { ThemeModeContext } from '../../../context/ThemeProvider';
 
-import Box from '@mui/material/Box';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import { Divider } from '@mui/material';
-import List from '@mui/material/List';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import BadgeIcon from '@mui/icons-material/Badge';
 import CardMembershipIcon from '@mui/icons-material/CardMembership';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import KeyIcon from '@mui/icons-material/Key';
 import SettingsIcon from '@mui/icons-material/Settings';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
+import WidgetsIcon from '@mui/icons-material/Widgets';
+
+import Box from '@mui/material/Box';
+import { Divider } from '@mui/material';
+import List from '@mui/material/List';
 import NavLink from './NavLink';
 import NewVersionLink from './NewVersionLink';
 
@@ -66,6 +68,10 @@ const Navbar = () => {
 
         <NavLink to='/logs' iconComponent={TextSnippetIcon}>
           Logs
+        </NavLink>
+
+        <NavLink to='/providers' iconComponent={WidgetsIcon}>
+          Providers
         </NavLink>
 
         <NavLink to='/settings' iconComponent={SettingsIcon}>
