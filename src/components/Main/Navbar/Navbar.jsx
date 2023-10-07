@@ -10,6 +10,7 @@ import CardMembershipIcon from '@mui/icons-material/CardMembership';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import KeyIcon from '@mui/icons-material/Key';
 import SettingsIcon from '@mui/icons-material/Settings';
+import StorageIcon from '@mui/icons-material/Storage';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import WidgetsIcon from '@mui/icons-material/Widgets';
 
@@ -72,6 +73,10 @@ const Navbar = () => {
 
         <NavLink to='/providers' iconComponent={WidgetsIcon}>
           Providers
+        </NavLink>
+
+        <NavLink to='/acmeservers' iconComponent={StorageIcon}>
+          ACME Servers
         </NavLink>
 
         <NavLink to='/settings' iconComponent={SettingsIcon}>

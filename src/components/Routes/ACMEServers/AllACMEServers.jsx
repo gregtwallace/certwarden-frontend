@@ -11,6 +11,7 @@ import TableBody from '@mui/material/TableBody';
 import { TableCell } from '@mui/material';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
 
 import useAxiosGet from '../../../hooks/useAxiosGet';
 import { getRowsPerPage, getPage, getSort } from '../../UI/TableMui/query';
@@ -79,6 +80,12 @@ const AllACMEServers = () => {
           New Server
         </Button>
       </TitleBar>
+
+      <Typography variant='p' sx={{ m: 3 }} display='block'>
+        Support is primarily provided for Let&apos;s Encrypt compatibility, but
+        if you have issues with other ACME Servers feel free to open an issue.
+      </Typography>
+
       {!apiGetState.isLoaded && <ApiLoading />}
       {apiGetState.errorMessage && (
         <ApiError

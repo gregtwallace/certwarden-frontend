@@ -1,4 +1,9 @@
+import { useNavigate } from 'react-router-dom';
+
 import useAxiosGet from '../../../hooks/useAxiosGet';
+import { newId } from '../../../helpers/constants';
+
+import Button from '@mui/material/Button';
 
 import ApiLoading from '../../UI/Api/ApiLoading';
 import ApiError from '../../UI/Api/ApiError';
@@ -13,6 +18,14 @@ const AllProviders = () => {
     'providers',
     true
   );
+
+  // click new / navigation
+  const navigate = useNavigate();
+
+  const newClickHandler = (event) => {
+    event.preventDefault();
+    navigate(`/providers/${newId}`);
+  };
 
   // once loaded, sort providers array
   if (apiGetState.isLoaded === true && apiGetState?.providers?.length > 0) {
@@ -32,7 +45,11 @@ const AllProviders = () => {
 
   return (
     <>
-      <TitleBar title='Providers'></TitleBar>
+      <TitleBar title='Providers'>
+        <Button variant='contained' type='submit' onClick={newClickHandler}>
+          New Provider
+        </Button>
+      </TitleBar>
       {!apiGetState.isLoaded && <ApiLoading />}
       {apiGetState.errorMessage && (
         <ApiError

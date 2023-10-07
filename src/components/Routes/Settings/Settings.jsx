@@ -6,7 +6,6 @@ import ChangePassword from './ChangePassword';
 import BackendStatus from './BackendStatus';
 import FrontendStatus from './FrontendStatus';
 import NewVersionInfo from './NewVersionInfo';
-import ACMEServers from './ACMEServers';
 import Shutdown from './Shutdown';
 
 const Settings = () => {
@@ -29,10 +28,6 @@ const Settings = () => {
 
         <GridItemThird>
           <NewVersionInfo />
-        </GridItemThird>
-
-        <GridItemThird>
-          <ACMEServers />
         </GridItemThird>
 
         <GridItemThird>
