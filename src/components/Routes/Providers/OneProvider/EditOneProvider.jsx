@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 
 import useAxiosGet from '../../../../hooks/useAxiosGet';
@@ -72,6 +72,53 @@ const EditOneProvider = () => {
     ProviderFormComponent = DummyComponent;
   }
 
+  // set initial form state from api get
+  const setInitialFormState = useCallback(() => {
+    if (apiGetState.isLoaded && !apiGetState.errorMessage) {
+      setFormState({
+        form: apiGetState.provider.config,
+        validationErrors: {},
+      });
+    }
+  }, [setFormState, apiGetState]);
+
+  // set form fields on load
+  useEffect(() => {
+    setInitialFormState();
+  }, [setInitialFormState]);
+
+  // reset form fields
+  const resetForm = () => {
+    setInitialFormState();
+  };
+
+  // input handler
+  const inputChangeHandler = (event, isInt) => {
+    setFormState((prevState) => {
+      // new val based on int or not
+      var val = event.target.value;
+      if (isInt) {
+        val = parseInt(val);
+      }
+
+      // new form to set
+      const newForm = {
+        ...prevState.form,
+        [event.target.name]: val,
+      };
+
+      // does new form === original form
+      const changedForm =
+        JSON.stringify(prevState.formInitial) !== JSON.stringify(newForm);
+
+      return {
+        ...prevState,
+        changed: changedForm,
+        form: newForm,
+      };
+    });
+  };
+
   // form submit
   const submitFormHandler = (event) => {
     event.preventDefault();
@@ -107,18 +154,18 @@ const EditOneProvider = () => {
     });
   };
 
-  // reset to original form
-  const resetForm = () => {
-    setFormState((prevState) => ({
-      form: prevState.formOriginal,
-      formOriginal: prevState.formOriginal,
-      changed: false,
-      validationErrors: {},
-    }));
-  };
-
   // check if should render
-  const renderApiItems = apiGetState.isLoaded && !apiGetState.errorMessage;
+  const renderApiItems =
+    apiGetState.isLoaded &&
+    !apiGetState.errorMessage &&
+    JSON.stringify({}) !== JSON.stringify(formState);
+
+  var formUnchanged = true;
+  if (renderApiItems) {
+    formUnchanged =
+      JSON.stringify(apiGetState.provider.config) ===
+      JSON.stringify(formState.form);
+  }
 
   return (
     <FormContainer>
@@ -163,9 +210,8 @@ const EditOneProvider = () => {
 
           <Form onSubmit={submitFormHandler}>
             <ProviderFormComponent
-              apiGetState={apiGetState}
               formState={formState}
-              setFormState={setFormState}
+              onChange={inputChangeHandler}
             />
 
             {apiSendState.errorMessage &&
@@ -179,7 +225,7 @@ const EditOneProvider = () => {
             <FormFooter>
               <Button
                 type='cancel'
-                href='/privatekeys'
+                href='/providers'
                 disabled={apiSendState.isSending}
               >
                 Cancel
@@ -187,13 +233,13 @@ const EditOneProvider = () => {
               <Button
                 type='reset'
                 onClick={resetForm}
-                disabled={apiSendState.isSending || !formState.changed}
+                disabled={apiSendState.isSending || formUnchanged}
               >
                 Reset
               </Button>
               <Button
                 type='submit'
-                disabled={apiSendState.isSending || !formState.changed}
+                disabled={apiSendState.isSending || formUnchanged}
               >
                 Submit
               </Button>
