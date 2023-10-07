@@ -1,19 +1,10 @@
 import { useState } from 'react';
 
+import { providerTypes } from './provider-types';
+
 import InputSelect from '../../../UI/FormMui/InputSelect';
 import FormContainer from '../../../UI/FormMui/FormContainer';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
-
-import Http01InternalAdd from './Add/Http01InternalAdd';
-
-// provider types maps known types to their components
-const providerTypes = [
-  {
-    value: 'http01internal',
-    name: 'HTTP-01 Internal Server',
-    component: Http01InternalAdd,
-  },
-];
 
 // empty component to use if form component is undefined
 const DummyComponent = () => <></>;
@@ -30,7 +21,7 @@ const AddOneProvider = () => {
   // child form component
   var ProviderFormComponent = providerTypes.find((obj) => {
     return obj.value === providerType;
-  })?.component;
+  })?.addComponent;
 
   // prevent undefined error
   if (ProviderFormComponent == undefined) {
