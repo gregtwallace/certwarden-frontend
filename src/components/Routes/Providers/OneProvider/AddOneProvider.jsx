@@ -1,46 +1,154 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { providerTypes } from './provider-types';
+import useAxiosSend from '../../../../hooks/useAxiosSend';
+import { dummyProviderType, providerTypes } from './provider-types';
+import { formChangeHandlerFunc } from '../../../../helpers/input-handler';
 
+import ApiError from '../../../UI/Api/ApiError';
+import Button from '../../../UI/Button/Button';
+import Form from '../../../UI/FormMui/Form';
+import FormFooter from '../../../UI/FormMui/FormFooter';
 import InputSelect from '../../../UI/FormMui/InputSelect';
 import FormContainer from '../../../UI/FormMui/FormContainer';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
 
-// empty component to use if form component is undefined
-const DummyComponent = () => <></>;
-
 const AddOneProvider = () => {
-  const [providerType, setProviderType] = useState('');
+  const [apiSendState, sendData] = useAxiosSend();
+  const navigate = useNavigate();
 
-  // data change handlers
-  // string form field updates
-  const changeProviderTypeHandler = (event) => {
-    setProviderType(event.target.value);
+  // provider and form state
+  const [formState, setFormState] = useState({});
+
+  // set initial form state with dummy provider type
+  const setInitialFormState = useCallback(() => {
+    setFormState({
+      providerType: dummyProviderType,
+      validationErrors: {},
+    });
+  }, [setFormState]);
+
+  // set initial form on load
+  useEffect(() => {
+    setInitialFormState();
+  }, [setInitialFormState]);
+
+  // reset button resets form fields
+  const resetClickHandler = () => {
+    setInitialFormState();
   };
 
-  // child form component
-  var ProviderFormComponent = providerTypes.find((obj) => {
-    return obj.value === providerType;
-  })?.addComponent;
+  // input handlers
+  const formStateChangeHandler = formChangeHandlerFunc(setFormState);
+  const providerTypeFormChangeHandler = (event) => {
+    // get provider
+    var providerType = providerTypes.find((obj) => {
+      return obj.value === event.target.value;
+    });
 
-  // prevent undefined error
-  if (ProviderFormComponent == undefined) {
-    ProviderFormComponent = DummyComponent;
-  }
+    // if failed
+    if (providerType == undefined) {
+      providerType = dummyProviderType;
+    }
+
+    setFormState((prevState) => ({
+      ...prevState,
+      form: providerType.blankConfig,
+      providerType: providerType,
+    }));
+  };
+
+  // form submission handler
+  const submitFormHandler = (event) => {
+    event.preventDefault();
+
+    // form validation
+    const validationErrors = formState.providerType.validationErrorsFunc(
+      formState.form
+    );
+
+    setFormState((prevState) => ({
+      ...prevState,
+      validationErrors: validationErrors,
+    }));
+    if (Object.keys(validationErrors).length > 0) {
+      return false;
+    }
+    // form validation -- end
+
+    sendData(
+      `/v1/app/challenges/providers/services`,
+      'POST',
+      { [formState.providerType.config_name]: { ...formState.form } },
+      true
+    ).then((response) => {
+      if (response.status >= 200 && response.status <= 299) {
+        // back to the providers page
+        navigate(`/providers`);
+      }
+    });
+  };
+
+  // don't render until initial form state is set
+  const renderForm = JSON.stringify({}) !== JSON.stringify(formState);
 
   return (
     <FormContainer>
       <TitleBar title='New Challenge Provider' />
 
-      <InputSelect
-        label='Provider Type'
-        id='provider_type'
-        options={providerTypes}
-        value={providerType}
-        onChange={changeProviderTypeHandler}
-      />
+      {renderForm && (
+        <>
+          <InputSelect
+            label='Provider Type'
+            id='provider_type'
+            options={providerTypes}
+            value={formState.providerType.value}
+            onChange={providerTypeFormChangeHandler}
+          />
 
-      <ProviderFormComponent />
+          <Form onSubmit={submitFormHandler}>
+            <formState.providerType.FormComponent
+              formState={formState}
+              onChange={formStateChangeHandler}
+            />
+
+            {apiSendState.errorMessage &&
+              Object.keys(formState.validationErrors).length <= 0 && (
+                <ApiError
+                  code={apiSendState.errorCode}
+                  message={apiSendState.errorMessage}
+                />
+              )}
+
+            <FormFooter>
+              <Button
+                type='cancel'
+                href='/providers'
+                disabled={apiSendState.isSending}
+              >
+                Cancel
+              </Button>
+              <Button
+                type='reset'
+                onClick={resetClickHandler}
+                disabled={
+                  apiSendState.isSending || formState.providerType.value === ''
+                }
+              >
+                Reset
+              </Button>
+              <Button
+                type='submit'
+                disabled={
+                  apiSendState.isSending || formState.providerType.value === ''
+                }
+              >
+                Submit
+              </Button>
+            </FormFooter>
+          </Form>
+        </>
+      )}
     </FormContainer>
   );
 };

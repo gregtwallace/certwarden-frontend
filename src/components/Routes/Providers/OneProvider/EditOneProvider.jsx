@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router';
 import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
 import { devMode } from '../../../../helpers/environment';
+import { formChangeHandlerFunc } from '../../../../helpers/input-handler';
 import { providerTypes } from './provider-types';
 
 import ApiError from '../../../UI/Api/ApiError';
@@ -15,10 +16,8 @@ import FormContainer from '../../../UI/FormMui/FormContainer';
 import FormFooter from '../../../UI/FormMui/FormFooter';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
 
-// empty component to use if form component is undefined
-const DummyComponent = () => <></>;
-
 const EditOneProvider = () => {
+  const [apiSendState, sendData] = useAxiosSend();
   const navigate = useNavigate();
 
   // id from router path
@@ -31,12 +30,8 @@ const EditOneProvider = () => {
     true
   );
 
-  // form state will be set by the child edit provider component
-  // for a specific provider
+  // provider and form state
   const [formState, setFormState] = useState({});
-
-  // sender
-  const [apiSendState, sendData] = useAxiosSend();
 
   // delete handlers
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -60,29 +55,23 @@ const EditOneProvider = () => {
     });
   };
 
-  // get correct edit component and config name
-  const providerType = providerTypes.find((obj) => {
-    return obj.value === apiGetState?.provider?.type;
-  });
-  var ProviderFormComponent = providerType?.editComponent;
-  const providerConfigName = providerType?.config_name;
-
-  // prevent undefined error
-  if (ProviderFormComponent == undefined) {
-    ProviderFormComponent = DummyComponent;
-  }
-
   // set initial form state from api get
   const setInitialFormState = useCallback(() => {
     if (apiGetState.isLoaded && !apiGetState.errorMessage) {
+      // get provider
+      var providerType = providerTypes.find((obj) => {
+        return obj.value === apiGetState.provider.type;
+      });
+
       setFormState({
         form: apiGetState.provider.config,
+        providerType: providerType,
         validationErrors: {},
       });
     }
-  }, [setFormState, apiGetState]);
+  }, [apiGetState, setFormState]);
 
-  // set form fields on load
+  // set initial form on load
   useEffect(() => {
     setInitialFormState();
   }, [setInitialFormState]);
@@ -92,41 +81,17 @@ const EditOneProvider = () => {
     setInitialFormState();
   };
 
-  // input handler
-  const inputChangeHandler = (event, isInt) => {
-    setFormState((prevState) => {
-      // new val based on int or not
-      var val = event.target.value;
-      if (isInt) {
-        val = parseInt(val);
-      }
-
-      // new form to set
-      const newForm = {
-        ...prevState.form,
-        [event.target.name]: val,
-      };
-
-      // does new form === original form
-      const changedForm =
-        JSON.stringify(prevState.formInitial) !== JSON.stringify(newForm);
-
-      return {
-        ...prevState,
-        changed: changedForm,
-        form: newForm,
-      };
-    });
-  };
+  // input handlers
+  const formStateChangeHandler = formChangeHandlerFunc(setFormState);
 
   // form submit
   const submitFormHandler = (event) => {
     event.preventDefault();
 
     // client side validation
-    let validationErrors = {};
-
-    // TODO
+    const validationErrors = formState.providerType.validationErrorsFunc(
+      formState.form
+    );
 
     setFormState((prevState) => ({
       ...prevState,
@@ -142,7 +107,7 @@ const EditOneProvider = () => {
       `/v1/app/challenges/providers/services/${id}`,
       'PUT',
       {
-        [providerConfigName]: { ...formState.form },
+        [formState.providerType.config_name]: { ...formState.form },
         tag: apiGetState.provider.tag,
       },
       true
@@ -209,9 +174,9 @@ const EditOneProvider = () => {
           </DialogAlert>
 
           <Form onSubmit={submitFormHandler}>
-            <ProviderFormComponent
+            <formState.providerType.FormComponent
               formState={formState}
-              onChange={inputChangeHandler}
+              onChange={formStateChangeHandler}
             />
 
             {apiSendState.errorMessage &&

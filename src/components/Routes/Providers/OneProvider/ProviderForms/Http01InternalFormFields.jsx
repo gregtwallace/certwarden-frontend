@@ -3,7 +3,7 @@ import { PropTypes } from 'prop-types';
 import InputTextArray from '../../../../UI/FormMui/InputTextArray';
 import InputTextField from '../../../../UI/FormMui/InputTextField';
 
-const Http01InternalEdit = (props) => {
+const Http01InternalFormFields = (props) => {
   // destructure props
   const { formState, onChange } = props;
 
@@ -16,15 +16,15 @@ const Http01InternalEdit = (props) => {
         name='domains'
         minElems={1}
         value={formState.form.domains}
-        onChange={(e) => onChange(e, false)}
-        error={formState.validationErrors.domains && true}
+        onChange={onChange}
+        error={formState.validationErrors.domains}
       />
 
       <InputTextField
         label='HTTP Server Port Number'
         id='port'
         value={formState.form.port}
-        onChange={(e) => onChange(e, true)}
+        onChange={(e) => onChange(e, 'int')}
         error={formState.validationErrors.port && true}
       />
     </>
@@ -32,15 +32,18 @@ const Http01InternalEdit = (props) => {
 };
 
 // define props for linter
-Http01InternalEdit.propTypes = {
+Http01InternalFormFields.propTypes = {
   formState: PropTypes.shape({
     form: PropTypes.shape({
       domains: PropTypes.arrayOf(PropTypes.string).isRequired,
-      port: PropTypes.number.isRequired,
+      port: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+        .isRequired,
     }).isRequired,
-    validationErrors: PropTypes.objectOf(PropTypes.bool),
+    validationErrors: PropTypes.objectOf(
+      PropTypes.oneOfType([PropTypes.bool, PropTypes.arrayOf(PropTypes.number)])
+    ).isRequired,
   }).isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
-export default Http01InternalEdit;
+export default Http01InternalFormFields;
