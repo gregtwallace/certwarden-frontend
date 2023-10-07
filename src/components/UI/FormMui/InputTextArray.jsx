@@ -5,6 +5,12 @@ import Button from '../Button/Button';
 import InputTextField from './InputTextField';
 
 const InputTextArray = (props) => {
+  // set min elements, default 0
+  var minElems = 0;
+  if (props.minElems) {
+    minElems = props.minElems;
+  }
+
   // send the array value as an event
   // state will be managed by the parent
   const onChange = (newArray) => {
@@ -77,7 +83,7 @@ const InputTextArray = (props) => {
         <Button type='add' size='small' onClick={addElementHandler}>
           Add
         </Button>
-        {props.value.length > 0 && (
+        {props.value.length > minElems && (
           <Button type='delete' size='small' onClick={removeElementHandler}>
             Remove
           </Button>
@@ -92,6 +98,7 @@ InputTextArray.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string.isRequired,
   subLabel: PropTypes.string.isRequired,
+  minElems: PropTypes.number,
   value: PropTypes.arrayOf(
     PropTypes.oneOfType([PropTypes.number, PropTypes.string])
   ).isRequired,
