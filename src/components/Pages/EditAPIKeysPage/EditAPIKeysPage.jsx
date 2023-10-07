@@ -124,11 +124,15 @@ const EditAPIKeysPage = (props) => {
 
   var formUnchanged = false;
   if (renderApiItems) {
+    // if api_key_new doesn't exist, do comparison against ''
+    const new_key_unchanged =
+      (apiGetState[props.itemTypeApiObjectName].api_key_new
+        ? apiGetState[props.itemTypeApiObjectName].api_key_new
+        : '') === formState.form.api_key_new;
+
     formUnchanged =
       apiGetState[props.itemTypeApiObjectName].api_key ===
-        formState.form.api_key &&
-      apiGetState[props.itemTypeApiObjectName].api_key_new ===
-        formState.form.api_key_new;
+        formState.form.api_key && new_key_unchanged;
   }
 
   return (
