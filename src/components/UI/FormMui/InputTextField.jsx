@@ -16,6 +16,10 @@ const InputTextField = (props) => {
       errorMessage =
         'Subject name must be a valid (sub)domain name and may start with a wildcard (*.).';
       break;
+    case props?.id?.match(/^domains/)?.input:
+      errorMessage =
+        "Domain must be valid. Or for a wildcard provider use one domain set to '*'.";
+      break;
     case 'new_password':
       errorMessage = 'New password must be at least 10 characters long.';
       break;
@@ -34,6 +38,9 @@ const InputTextField = (props) => {
       break;
     case 'eab_hmac_key':
       errorMessage = 'External Account Binding requires a Key.';
+      break;
+    case 'port':
+      errorMessage = 'Port number must be between 1 and 65535.';
       break;
     default:
       errorMessage = 'This field has an error.';

@@ -1,16 +1,23 @@
 import PropTypes from 'prop-types';
 
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import GridItemContainer from '../../../UI/Grid/GridItemContainer';
+import FormRowRight from '../../../UI/FormMui/FormRowRight';
+import Button from '../../../UI/Button/Button';
+
 import ProviderTitle from './Common/ProviderTitle';
 import ProviderDomainsView from './Common/ProviderDomainsView';
-
 import ConfigView from './Common/ConfigView';
+
+const sxContainer = {
+  display: 'flex',
+  flexDirection: 'column',
+};
 
 const ViewOneProvider = (props) => {
   return (
-    <GridItemContainer>
+    <GridItemContainer sx={sxContainer}>
       <ProviderTitle provider={props.provider} />
       <ProviderDomainsView domains={props.provider.config.domains} />
 
@@ -19,6 +26,23 @@ const ViewOneProvider = (props) => {
       </Typography>
 
       <ConfigView config={props.provider.config} />
+
+      <Box
+        sx={{
+          minHeight: 0,
+          flexGrow: 1,
+        }}
+      ></Box>
+
+      <FormRowRight>
+        <Button
+          href={`/providers/${props.provider.id}`}
+          type='edit'
+        >
+          Edit
+        </Button>
+      </FormRowRight>
+
     </GridItemContainer>
   );
 };

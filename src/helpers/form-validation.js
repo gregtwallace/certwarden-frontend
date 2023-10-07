@@ -47,3 +47,19 @@ export const isDomainValid = (domain) => {
 export const isDirectoryUrlValid = (url) => {
   return url.startsWith('https://');
 };
+
+// isPortValid confirms that port is a number and is between the range
+// of 1 to 65535, inclusive
+export const isPortValid = (port) => {
+  // port isn't a number
+  if (typeof port !== 'number') {
+    return false;
+  }
+
+  // invalid port - out of range
+  if (port < 1 || port > 65535) {
+    return false;
+  }
+
+  return true;
+};

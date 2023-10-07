@@ -2,8 +2,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Box } from '@mui/system';
 
 import { NewVersionProvider } from '../../context/NewVersionProvider';
-
 import { newId } from '../../helpers/constants';
+
 import AddOneACMEAccount from '../Routes/ACMEAccounts/OneACMEAccount/AddOneACMEAccount';
 import AddOneACMEServer from '../Routes/ACMEServers/Edit/AddOneACMEServer';
 import AddOneCert from '../Routes/Certificates/OneCert/AddOneCert';
@@ -20,10 +20,12 @@ import EditOneACMEAccount from '../Routes/ACMEAccounts/OneACMEAccount/EditOneACM
 import EditOneACMEServer from '../Routes/ACMEServers/Edit/EditOneACMEServer';
 import EditOneCert from '../Routes/Certificates/OneCert/EditOneCert';
 import EditOnePrivateKey from '../Routes/PrivateKeys/OnePrivateKey/EditOnePrivateKey';
+import EditOneProvider from '../Routes/Providers/OneProvider/EditOneProvider';
 import Logout from '../Routes/Logout/Logout';
 import LogViewer from '../Routes/LogViewer/LogViewer';
 import Navbar from './Navbar/Navbar';
 import AllProviders from '../Routes/Providers/AllProviders';
+import AddOneProvider from '../Routes/Providers/OneProvider/AddOneProvider';
 import RolloverAccountKey from '../Routes/ACMEAccounts/OneACMEAccount/Edit/RolloverAccountKey';
 import Settings from '../Routes/Settings/Settings';
 
@@ -40,13 +42,8 @@ const LoggedIn = () => {
         }}
       >
         <Routes>
-          {/* ACME Servers */}
-          <Route path='/acmeservers' element={<AllACMEServers />} />
-          <Route
-            path={`/acmeservers/${newId}`}
-            element={<AddOneACMEServer />}
-          />
-          <Route path='/acmeservers/:id' element={<EditOneACMEServer />} />
+          {/* Dashboard */}
+          <Route path='/' element={<Dashboard />} />
 
           {/* Private Keys */}
           <Route
@@ -82,11 +79,26 @@ const LoggedIn = () => {
           />
           <Route path={`/certificates/${newId}`} element={<AddOneCert />} />
 
-          {/* Misc. */}
-          <Route path='/' element={<Dashboard />} />
+          {/* Logs */}
           <Route path={'/logs'} element={<LogViewer />} />
+
+          {/* Providers */}
           <Route path={'/providers'} element={<AllProviders />} />
+          <Route path={`/providers/${newId}`} element={<AddOneProvider />} />
+          <Route path={'/providers/:id'} element={<EditOneProvider />} />
+
+          {/* ACME Servers */}
+          <Route path='/acmeservers' element={<AllACMEServers />} />
+          <Route
+            path={`/acmeservers/${newId}`}
+            element={<AddOneACMEServer />}
+          />
+          <Route path='/acmeservers/:id' element={<EditOneACMEServer />} />
+
+          {/* Settings */}
           <Route path={'/settings'} element={<Settings />} />
+
+          {/* Misc. */}
           <Route path={'/logout'} element={<Logout />} />
 
           {/* Catch All */}
