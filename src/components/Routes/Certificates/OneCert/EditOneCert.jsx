@@ -443,7 +443,7 @@ const EditOneCert = () => {
               <InputCheckbox
                 id='form.api_key_via_url'
                 checked={formState.form.api_key_via_url}
-                onChange={(event) => inputChangeHandler(event, 'checkbox')}
+                onChange={inputChangeHandler}
               >
                 Allow API Key via URL (for Legacy Clients)
               </InputCheckbox>

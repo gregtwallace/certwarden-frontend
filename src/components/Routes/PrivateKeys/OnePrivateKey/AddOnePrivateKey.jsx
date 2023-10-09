@@ -178,7 +178,7 @@ const AddOnePrivateKey = () => {
           <InputCheckbox
             id='form.api_key_disabled'
             checked={formState.form.api_key_disabled}
-            onChange={(event) => inputChangeHandler(event, 'checkbox')}
+            onChange={inputChangeHandler}
           >
             Disable API Key
           </InputCheckbox>

@@ -100,7 +100,7 @@ const AddOneACMEServer = () => {
         <InputCheckbox
           id='form.is_staging'
           checked={formState.form.is_staging}
-          onChange={(event) => inputChangeHandler(event, 'checkbox')}
+          onChange={inputChangeHandler}
         >
           Staging Environment Server
         </InputCheckbox>

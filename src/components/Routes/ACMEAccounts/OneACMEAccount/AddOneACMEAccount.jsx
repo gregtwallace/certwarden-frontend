@@ -194,9 +194,9 @@ const AddOneACMEAccount = () => {
           <InputCheckbox
             id='form.accepted_tos'
             checked={formState.form.accepted_tos}
-            onChange={(event) => inputChangeHandler(event, 'checkbox')}
-            disabled={formState.form.acme_server_id === ''}
+            onChange={inputChangeHandler}
             error={formState.validationErrors.accepted_tos && true}
+            disabled={formState.form.acme_server_id === ''}
           >
             Accept{' '}
             {formState.form.acme_server_id === '' ? (

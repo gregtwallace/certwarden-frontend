@@ -5,49 +5,42 @@ import {
   FormControlLabel,
   FormHelperText,
 } from '@mui/material';
+import fieldInformation from './fields-info';
 
 const InputCheckbox = (props) => {
-  let errorMessage = '';
-  switch (props.id) {
-    case 'form.accepted_tos':
-      errorMessage = 'You must accept the Terms of Service.';
-      break;
+  // destructure props
+  const { checked, children, disabled, error, id, name, onChange } = props;
 
-    default:
-      errorMessage = 'This field has an error.';
-      break;
-  }
-
-  // needed to avoid error about uncontrolled becoming controlled
-  const checked = props.checked ? true : false;
+  // get error message
+  const { errorMessage } = fieldInformation(name || id);
 
   return (
     <FormControl fullWidth sx={{ my: 1 }}>
       <FormControlLabel
         control={
           <Checkbox
-            id={props.id}
-            name={props.name ? props.name : props.id}
-            onChange={props.onChange}
-            checked={checked}
-            disabled={props.disabled}
+            id={id}
+            name={name || id}
+            onChange={(event) => onChange(event, 'checkbox')}
+            checked={!!checked}
+            disabled={!!disabled}
           />
         }
-        label={props.children}
+        label={children}
       />
-      {props.error && <FormHelperText error>{errorMessage}</FormHelperText>}
+      {!!error && <FormHelperText error>{errorMessage}</FormHelperText>}
     </FormControl>
   );
 };
 
 InputCheckbox.propTypes = {
   id: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
   name: PropTypes.string,
-  checked: PropTypes.bool,
-  disabled: PropTypes.bool,
-  error: PropTypes.bool,
+  checked: PropTypes.bool.isRequired,
   onChange: PropTypes.func,
-  children: PropTypes.node,
+  error: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
 
 export default InputCheckbox;
