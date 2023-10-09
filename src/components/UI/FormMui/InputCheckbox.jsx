@@ -11,7 +11,7 @@ const InputCheckbox = (props) => {
   // destructure props
   const { checked, children, disabled, error, id, name, onChange } = props;
 
-  // get error message
+  // get field info
   const { errorMessage } = fieldInformation(name || id);
 
   return (

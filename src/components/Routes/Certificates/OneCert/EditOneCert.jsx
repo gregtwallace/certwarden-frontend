@@ -289,16 +289,16 @@ const EditOneCert = () => {
 
             <Form onSubmit={submitFormHandler}>
               <InputTextField
-                label='Name'
                 id='form.name'
+                label='Name'
                 value={formState.form.name}
                 onChange={inputChangeHandler}
-                error={formState.validationErrors.name && true}
+                error={formState.validationErrors.name}
               />
 
               <InputTextField
-                label='Description'
                 id='form.description'
+                label='Description'
                 value={formState.form.description}
                 onChange={inputChangeHandler}
               />
@@ -331,8 +331,8 @@ const EditOneCert = () => {
               />
 
               <InputTextField
-                label='Subject (and Common Name)'
                 id='form.subject'
+                label='Subject (and Common Name)'
                 value={apiGetState.certificate.subject}
                 disabled
               />
@@ -361,29 +361,29 @@ const EditOneCert = () => {
                   </Typography>
 
                   <InputTextField
-                    label='Country (2 Letter Code)'
                     id='form.country'
+                    label='Country (2 Letter Code)'
                     value={formState.form.country}
                     onChange={inputChangeHandler}
                   />
 
                   <InputTextField
-                    label='City'
                     id='form.city'
+                    label='City'
                     value={formState.form.city}
                     onChange={inputChangeHandler}
                   />
 
                   <InputTextField
-                    label='Organization'
                     id='form.organization'
+                    label='Organization'
                     value={formState.form.organization}
                     onChange={inputChangeHandler}
                   />
 
                   <InputTextField
-                    label='Organizational Unit'
                     id='form.organizational_unit'
+                    label='Organizational Unit'
                     value={formState.form.organizational_unit}
                     onChange={inputChangeHandler}
                   />
@@ -391,11 +391,11 @@ const EditOneCert = () => {
               </Accordion>
 
               <InputTextField
+                id='form.api_key'
                 label={
                   (apiGetState.certificate.api_key_new ? 'Old ' : '') +
                   'API Key'
                 }
-                id='form.api_key'
                 value={apiGetState.certificate.api_key}
                 readOnly
                 disabled={apiGetState.certificate.api_key.includes('*')}
@@ -432,8 +432,8 @@ const EditOneCert = () => {
 
               {apiGetState.certificate.api_key_new && (
                 <InputTextField
-                  label='New API Key'
                   id='form.api_key_new'
+                  label='New API Key'
                   value={apiGetState.certificate.api_key_new}
                   readOnly
                   disabled={apiGetState.certificate.api_key.includes('*')}

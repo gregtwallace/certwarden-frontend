@@ -18,7 +18,6 @@ import Form from '../../../UI/FormMui/Form';
 import FormContainer from '../../../UI/FormMui/FormContainer';
 import FormFooter from '../../../UI/FormMui/FormFooter';
 import InputCheckbox from '../../../UI/FormMui/InputCheckbox';
-import InputTextArea from '../../../UI/FormMui/InputTextArea';
 import InputTextField from '../../../UI/FormMui/InputTextField';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
 
@@ -94,6 +93,11 @@ const AddOnePrivateKey = () => {
       validationErrors.algorithm_value = true;
     }
 
+    // if pem, confirm not blank
+    if (formState.key_source === 1 && formState.form.pem === '') {
+      validationErrors.pem = true;
+    }
+
     setFormState((prevState) => ({
       ...prevState,
       validationErrors: validationErrors,
@@ -131,16 +135,16 @@ const AddOnePrivateKey = () => {
       {renderApiItems && (
         <Form onSubmit={submitFormHandler}>
           <InputTextField
-            label='Name'
             id='form.name'
+            label='Name'
             value={formState.form.name}
             onChange={inputChangeHandler}
-            error={formState.validationErrors.name && true}
+            error={formState.validationErrors.name}
           />
 
           <InputTextField
-            label='Description'
             id='form.description'
+            label='Description'
             value={formState.form.description}
             onChange={inputChangeHandler}
           />
@@ -151,7 +155,7 @@ const AddOnePrivateKey = () => {
             value={formState.key_source}
             onChange={keySourceChangeHandler}
             options={keySources}
-            error={formState.validationErrors.key_source && true}
+            error={formState.validationErrors.key_source}
           />
 
           {formState.key_source === 0 && (
@@ -161,17 +165,18 @@ const AddOnePrivateKey = () => {
               value={formState.form.algorithm_value}
               onChange={inputChangeHandler}
               options={apiGetState.private_key_options.key_algorithms}
-              error={formState.validationErrors.algorithm_value && true}
+              error={formState.validationErrors.algorithm_value}
             />
           )}
 
           {formState.key_source === 1 && (
-            <InputTextArea
-              label='PEM Content'
+            <InputTextField
               id='form.pem'
+              label='PEM Content'
               value={formState.form.pem}
               onChange={inputChangeHandler}
-              invalid={formState.validationErrors.pem && true}
+              error={formState.validationErrors.pem}
+              multiline
             />
           )}
 

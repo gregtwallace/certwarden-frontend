@@ -206,16 +206,16 @@ const AddOneCert = () => {
       {renderApiItems && (
         <Form onSubmit={submitFormHandler}>
           <InputTextField
-            label='Name'
             id='form.name'
+            label='Name'
             value={formState.form.name}
             onChange={inputChangeHandler}
-            error={formState.validationErrors.name && true}
+            error={formState.validationErrors.name}
           />
 
           <InputTextField
-            label='Description'
             id='form.description'
+            label='Description'
             value={formState.form.description}
             onChange={inputChangeHandler}
           />
@@ -245,13 +245,13 @@ const AddOneCert = () => {
               value={formState.form.algorithm_value}
               onChange={inputChangeHandler}
               options={apiGetState.certificate_options.key_algorithms}
-              error={formState.validationErrors.algorithm_value && true}
+              error={formState.validationErrors.algorithm_value}
             />
           )}
 
           <InputTextField
-            label='Subject (and Common Name)'
             id='form.subject'
+            label='Subject (and Common Name)'
             value={formState.form.subject}
             onChange={inputChangeHandler}
             error={formState.validationErrors.subject}
@@ -280,29 +280,29 @@ const AddOneCert = () => {
               </Typography>
 
               <InputTextField
-                label='Country (2 Letter Code)'
                 id='form.country'
+                label='Country (2 Letter Code)'
                 value={formState.form.country}
                 onChange={inputChangeHandler}
               />
 
               <InputTextField
-                label='City'
                 id='form.city'
+                label='City'
                 value={formState.form.city}
                 onChange={inputChangeHandler}
               />
 
               <InputTextField
-                label='Organization'
                 id='form.organization'
+                label='Organization'
                 value={formState.form.organization}
                 onChange={inputChangeHandler}
               />
 
               <InputTextField
-                label='Organizational Unit'
                 id='form.organizational_unit'
+                label='Organizational Unit'
                 value={formState.form.organizational_unit}
                 onChange={inputChangeHandler}
               />

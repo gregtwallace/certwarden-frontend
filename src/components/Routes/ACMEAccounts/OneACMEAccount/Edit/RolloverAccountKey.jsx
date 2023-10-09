@@ -134,15 +134,15 @@ const RolloverAccountKey = () => {
       {renderApiItems && (
         <Form onSubmit={submitFormHandler}>
           <InputTextField
-            label='Name'
             id='form.name'
+            label='Name'
             value={apiGetAccountState.acme_account.name}
             disabled
           />
 
           <InputTextField
-            label='Description'
             id='form.description'
+            label='Description'
             value={
               apiGetAccountState.acme_account.description
                 ? apiGetAccountState.acme_account.description
@@ -174,7 +174,7 @@ const RolloverAccountKey = () => {
             value={formState.form.private_key_id}
             onChange={inputChangeHandler}
             options={availableKeys}
-            error={formState.validationErrors.private_key_id && true}
+            error={formState.validationErrors.private_key_id}
           />
 
           {apiSendState.errorMessage &&

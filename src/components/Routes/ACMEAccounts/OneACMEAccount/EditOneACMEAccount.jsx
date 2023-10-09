@@ -257,19 +257,19 @@ const EditOneACMEAccount = () => {
               id='form.name'
               value={formState.form.name}
               onChange={inputChangeHandler}
-              error={formState.validationErrors.name && true}
+              error={formState.validationErrors.name}
             />
 
             <InputTextField
-              label='Description'
               id='form.description'
+              label='Description'
               value={formState.form.description}
               onChange={inputChangeHandler}
             />
 
             <InputTextField
-              label='Contact E-Mail Address'
               id='form.email'
+              label='Contact E-Mail Address'
               value={
                 apiGetState.acme_account.email
                   ? apiGetState.acme_account.email
@@ -339,19 +339,19 @@ const EditOneACMEAccount = () => {
                   <Typography>External Account Binding</Typography>
 
                   <InputTextField
-                    label='Key ID'
                     id='form.eab_kid'
+                    label='Key ID'
                     value={formState.form.eab_kid}
                     onChange={inputChangeHandler}
-                    error={formState.validationErrors.eab_kid && true}
+                    error={formState.validationErrors.eab_kid}
                   />
 
                   <InputTextField
-                    label='HMAC Key'
                     id='form.eab_hmac_key'
+                    label='HMAC Key'
                     value={formState.form.eab_hmac_key}
                     onChange={inputChangeHandler}
-                    error={formState.validationErrors.eab_hmac_key && true}
+                    error={formState.validationErrors.eab_hmac_key}
                   />
                 </>
               )}

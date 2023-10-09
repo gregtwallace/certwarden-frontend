@@ -75,26 +75,26 @@ const AddOneACMEServer = () => {
       <TitleBar title='New ACME Server' />
       <Form onSubmit={submitFormHandler}>
         <InputTextField
-          label='Name'
           id='form.name'
+          label='Name'
           value={formState.form.name}
           onChange={inputChangeHandler}
-          error={formState.validationErrors.name && true}
+          error={formState.validationErrors.name}
         />
 
         <InputTextField
-          label='Description'
           id='form.description'
+          label='Description'
           value={formState.form.description}
           onChange={inputChangeHandler}
         />
 
         <InputTextField
-          label='Directory URL'
           id='form.directory_url'
+          label='Directory URL'
           value={formState.form.directory_url}
           onChange={inputChangeHandler}
-          error={formState.validationErrors.directory_url && true}
+          error={formState.validationErrors.directory_url}
         />
 
         <InputCheckbox

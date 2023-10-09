@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import useAxiosGet from '../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../hooks/useAxiosSend';
+import { formChangeHandlerFunc } from '../../../helpers/input-handler';
 
 import { Typography } from '@mui/material';
 
@@ -56,22 +57,7 @@ const EditAPIKeysPage = (props) => {
   }, [apiGetState, setFormToApi, navigate, props.itemTypeApiPath]);
 
   // data change handler
-  const inputChangeHandler = (event) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      form: {
-        ...prevState.form,
-        [event.target.name]: event.target.value,
-      },
-    }));
-  };
-
-  // button handlers
-  const resetClickHandler = (event) => {
-    event.preventDefault();
-
-    setFormToApi();
-  };
+  const inputChangeHandler = formChangeHandlerFunc(setFormState);
 
   // form submission handler
   const submitFormHandler = (event) => {
@@ -172,15 +158,15 @@ const EditAPIKeysPage = (props) => {
             </Typography>
 
             <InputTextField
+              id='form.name'
               label='Name'
-              id='name'
               value={apiGetState[props.itemTypeApiObjectName].name}
               disabled
             />
 
             <InputTextField
+              id='form.description'
               label='Description'
-              id='description'
               value={
                 apiGetState[props.itemTypeApiObjectName].description
                   ? apiGetState[props.itemTypeApiObjectName].description
@@ -195,12 +181,11 @@ const EditAPIKeysPage = (props) => {
             </Typography>
 
             <InputTextField
+              id='form.api_key'
               label='API Key 1'
-              id='api_key'
-              name='api_key'
               value={formState.form.api_key}
               onChange={inputChangeHandler}
-              error={formState.validationErrors.api_key && true}
+              error={formState.validationErrors.api_key}
             />
 
             <Typography sx={{ px: 1, my: 3 }}>
@@ -209,12 +194,11 @@ const EditAPIKeysPage = (props) => {
             </Typography>
 
             <InputTextField
+              id='form.api_key_new'
               label='API Key 2'
-              id='api_key_new'
-              name='api_key_new'
               value={formState.form.api_key_new}
               onChange={inputChangeHandler}
-              error={formState.validationErrors.api_key_new && true}
+              error={formState.validationErrors.api_key_new}
             />
 
             {apiSendState.errorMessage &&
@@ -235,7 +219,7 @@ const EditAPIKeysPage = (props) => {
               </Button>
               <Button
                 type='reset'
-                onClick={resetClickHandler}
+                onClick={() => setFormToApi()}
                 disabled={apiSendState.isSending || formUnchanged}
               >
                 Reset

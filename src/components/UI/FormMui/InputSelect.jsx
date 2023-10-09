@@ -22,7 +22,7 @@ const InputSelect = (props) => {
     value,
   } = props;
 
-  // get error message
+  // get field info
   const { errorMessage, type } = fieldInformation(name || id);
 
   return (

@@ -140,7 +140,7 @@ const ChangeAccountEmail = () => {
             label='Contact E-Mail Address'
             value={formState.form.email}
             onChange={inputChangeHandler}
-            error={formState.validationErrors.email && true}
+            error={formState.validationErrors.email}
           />
 
           {apiSendState.errorMessage &&

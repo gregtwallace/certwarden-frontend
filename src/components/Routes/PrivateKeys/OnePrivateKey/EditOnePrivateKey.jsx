@@ -212,16 +212,16 @@ const EditOnePrivateKey = () => {
 
           <Form onSubmit={submitFormHandler}>
             <InputTextField
-              label='Name'
               id='form.name'
+              label='Name'
               value={formState.form.name}
               onChange={inputChangeHandler}
-              error={formState.validationErrors.name && true}
+              error={formState.validationErrors.name}
             />
 
             <InputTextField
-              label='Description'
               id='form.description'
+              label='Description'
               value={formState.form.description}
               onChange={inputChangeHandler}
             />
@@ -237,10 +237,10 @@ const EditOnePrivateKey = () => {
             />
 
             <InputTextField
+              id='form.api_key'
               label={
                 (apiGetState.private_key.api_key_new ? 'Old ' : '') + 'API Key'
               }
-              id='form.api_key'
               value={apiGetState.private_key.api_key}
               readOnly
               disabled={apiGetState.private_key.api_key.includes('*')}
@@ -277,8 +277,8 @@ const EditOnePrivateKey = () => {
 
             {apiGetState.private_key.api_key_new && (
               <InputTextField
-                label='New API Key'
                 id='form.api_key_new'
+                label='New API Key'
                 value={apiGetState.private_key.api_key_new}
                 readOnly
                 disabled={apiGetState.private_key.api_key.includes('*')}

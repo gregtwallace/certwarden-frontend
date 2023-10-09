@@ -151,26 +151,26 @@ const AddOneACMEAccount = () => {
       {renderApiItems && (
         <Form onSubmit={submitFormHandler}>
           <InputTextField
-            label='Name'
             id='form.name'
+            label='Name'
             value={formState.form.name}
             onChange={inputChangeHandler}
-            error={formState.validationErrors.name && true}
+            error={formState.validationErrors.name}
           />
 
           <InputTextField
-            label='Description'
             id='form.description'
+            label='Description'
             value={formState.form.description}
             onChange={inputChangeHandler}
           />
 
           <InputTextField
-            label='Contact E-Mail Address'
             id='form.email'
+            label='Contact E-Mail Address'
             value={formState.form.email}
             onChange={inputChangeHandler}
-            error={formState.validationErrors.email && true}
+            error={formState.validationErrors.email}
           />
 
           <InputSelect
@@ -179,7 +179,7 @@ const AddOneACMEAccount = () => {
             value={formState.form.acme_server_id}
             onChange={inputChangeHandler}
             options={availableServers}
-            error={formState.validationErrors.acme_server_id && true}
+            error={formState.validationErrors.acme_server_id}
           />
 
           <InputSelect
@@ -188,7 +188,7 @@ const AddOneACMEAccount = () => {
             value={formState.form.private_key_id}
             onChange={inputChangeHandler}
             options={availableKeys}
-            error={formState.validationErrors.private_key_id && true}
+            error={formState.validationErrors.private_key_id}
           />
 
           <InputCheckbox

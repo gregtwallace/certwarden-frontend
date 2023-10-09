@@ -79,29 +79,29 @@ const ChangePassword = () => {
 
       <Form onSubmit={submitFormHandler}>
         <InputTextField
-          label='Current Password'
           id='form.current_password'
+          label='Current Password'
           type='password'
           value={formState.form.current_password}
           onChange={inputChangeHandler}
         />
 
         <InputTextField
-          label='New Password'
           id='form.new_password'
+          label='New Password'
           type='password'
           value={formState.form.new_password}
           onChange={inputChangeHandler}
-          error={formState.validationErrors.new_password && true}
+          error={formState.validationErrors.new_password}
         />
 
         <InputTextField
-          label='Confirm New Password'
           id='form.confirm_new_password'
+          label='Confirm New Password'
           type='password'
           value={formState.form.confirm_new_password}
           onChange={inputChangeHandler}
-          error={formState.validationErrors.confirm_new_password && true}
+          error={formState.validationErrors.confirm_new_password}
         />
 
         {apiSendState.errorMessage &&
