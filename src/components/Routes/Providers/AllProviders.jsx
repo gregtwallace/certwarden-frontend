@@ -1,13 +1,13 @@
 import useAxiosGet from '../../../hooks/useAxiosGet';
-import { newId } from '../../../helpers/constants';
+// import { newId } from '../../../helpers/constants';
 
 import ApiLoading from '../../UI/Api/ApiLoading';
 import ApiError from '../../UI/Api/ApiError';
-import Button from '../../UI/Button/Button';
+// import Button from '../../UI/Button/Button';
 import GridContainer from '../../UI/Grid/GridContainer';
 import GridItemThird from '../../UI/Grid/GridItemThird';
 import TitleBar from '../../UI/TitleBar/TitleBar';
-import ViewOneProvider from './OneProvider/ViewOneProvider';
+import ViewOneProvider from './ViewOneProvider/ViewOneProvider';
 
 const AllProviders = () => {
   const [apiGetState] = useAxiosGet(
@@ -35,9 +35,9 @@ const AllProviders = () => {
   return (
     <>
       <TitleBar title='Challenge Providers'>
-        <Button variant='contained' type='submit' href={`/providers/${newId}`}>
+        {/* <Button variant='contained' type='submit' href={`/providers/${newId}`}>
           New Provider
-        </Button>
+        </Button> */}
       </TitleBar>
       {!apiGetState.isLoaded && <ApiLoading />}
       {apiGetState.errorMessage && (

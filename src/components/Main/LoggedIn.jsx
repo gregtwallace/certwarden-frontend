@@ -20,12 +20,10 @@ import EditOneACMEAccount from '../Routes/ACMEAccounts/OneACMEAccount/EditOneACM
 import EditOneACMEServer from '../Routes/ACMEServers/Edit/EditOneACMEServer';
 import EditOneCert from '../Routes/Certificates/OneCert/EditOneCert';
 import EditOnePrivateKey from '../Routes/PrivateKeys/OnePrivateKey/EditOnePrivateKey';
-import EditOneProvider from '../Routes/Providers/OneProvider/EditOneProvider';
 import Logout from '../Routes/Logout/Logout';
 import LogViewer from '../Routes/LogViewer/LogViewer';
 import Navbar from './Navbar/Navbar';
 import AllProviders from '../Routes/Providers/AllProviders';
-import AddOneProvider from '../Routes/Providers/OneProvider/AddOneProvider';
 import RolloverAccountKey from '../Routes/ACMEAccounts/OneACMEAccount/Edit/RolloverAccountKey';
 import Settings from '../Routes/Settings/Settings';
 
@@ -84,8 +82,6 @@ const LoggedIn = () => {
 
           {/* Providers */}
           <Route path={'/providers'} element={<AllProviders />} />
-          <Route path={`/providers/${newId}`} element={<AddOneProvider />} />
-          <Route path={'/providers/:id'} element={<EditOneProvider />} />
 
           {/* ACME Servers */}
           <Route path='/acmeservers' element={<AllACMEServers />} />

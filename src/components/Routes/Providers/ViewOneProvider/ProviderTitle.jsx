@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 
-import { devMode } from '../../../../../helpers/environment';
+import { devMode } from '../../../../helpers/environment';
 
-import GridTitle from '../../../../UI/Grid/GridTitle';
+import GridTitle from '../../../UI/Grid/GridTitle';
 
 const ProviderTitle = (props) => {
   const titleText =

@@ -4,11 +4,11 @@ import { Box, Typography } from '@mui/material';
 
 import GridItemContainer from '../../../UI/Grid/GridItemContainer';
 import FormRowRight from '../../../UI/FormMui/FormRowRight';
-import Button from '../../../UI/Button/Button';
+// import Button from '../../../UI/Button/Button';
 
-import ProviderTitle from './Common/ProviderTitle';
-import ProviderDomainsView from './Common/ProviderDomainsView';
-import ConfigView from './Common/ConfigView';
+import ProviderTitle from './ProviderTitle';
+import ProviderDomainsView from './ProviderDomainsView';
+import ConfigView from './ConfigView';
 
 const sxContainer = {
   display: 'flex',
@@ -35,12 +35,12 @@ const ViewOneProvider = (props) => {
       ></Box>
 
       <FormRowRight>
-        <Button
+        {/* <Button
           href={`/providers/${props.provider.id}`}
           type='edit'
         >
           Edit
-        </Button>
+        </Button> */}
       </FormRowRight>
 
     </GridItemContainer>
