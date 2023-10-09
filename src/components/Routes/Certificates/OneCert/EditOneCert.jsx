@@ -120,7 +120,9 @@ const EditOneCert = () => {
     }
   };
 
-  const newApiKeyClickHandler = () => {
+  const newApiKeyClickHandler = (event) => {
+    event.preventDefault();
+
     sendData(`/v1/certificates/${id}/apikey`, 'POST', null, true).then(
       (response) => {
         if (response.status >= 200 && response.status <= 299) {
@@ -131,7 +133,9 @@ const EditOneCert = () => {
     );
   };
 
-  const retireApiKeyClickHandler = () => {
+  const retireApiKeyClickHandler = (event) => {
+    event.preventDefault();
+
     sendData(`/v1/certificates/${id}/apikey`, 'DELETE', null, true).then(
       (response) => {
         if (response.status >= 200 && response.status <= 299) {
@@ -412,20 +416,14 @@ const EditOneCert = () => {
                 {apiGetState.certificate.api_key_new ? (
                   <Button
                     onClick={retireApiKeyClickHandler}
-                    disabled={
-                      apiSendState.isSending ||
-                      apiGetState.certificate.api_key.includes('*')
-                    }
+                    disabled={apiSendState.isSending}
                   >
                     Retire Old API Key
                   </Button>
                 ) : (
                   <Button
                     onClick={newApiKeyClickHandler}
-                    disabled={
-                      apiSendState.isSending ||
-                      apiGetState.certificate.api_key.includes('*')
-                    }
+                    disabled={apiSendState.isSending}
                   >
                     New API Key
                   </Button>

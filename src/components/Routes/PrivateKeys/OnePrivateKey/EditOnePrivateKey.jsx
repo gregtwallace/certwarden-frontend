@@ -72,7 +72,9 @@ const EditOnePrivateKey = () => {
     }
   };
 
-  const newApiKeyClickHandler = () => {
+  const newApiKeyClickHandler = (event) => {
+    event.preventDefault();
+
     sendData(`/v1/privatekeys/${id}/apikey`, 'POST', null, true).then(
       (response) => {
         if (response.status >= 200 && response.status <= 299) {
@@ -83,7 +85,9 @@ const EditOnePrivateKey = () => {
     );
   };
 
-  const retireApiKeyClickHandler = () => {
+  const retireApiKeyClickHandler = (event) => {
+    event.preventDefault();
+
     sendData(`/v1/privatekeys/${id}/apikey`, 'DELETE', null, true).then(
       (response) => {
         if (response.status >= 200 && response.status <= 299) {
@@ -257,20 +261,14 @@ const EditOnePrivateKey = () => {
               {apiGetState.private_key.api_key_new ? (
                 <Button
                   onClick={retireApiKeyClickHandler}
-                  disabled={
-                    apiSendState.isSending ||
-                    apiGetState.private_key.api_key.includes('*')
-                  }
+                  disabled={apiSendState.isSending}
                 >
                   Retire Old API Key
                 </Button>
               ) : (
                 <Button
                   onClick={newApiKeyClickHandler}
-                  disabled={
-                    apiSendState.isSending ||
-                    apiGetState.private_key.api_key.includes('*')
-                  }
+                  disabled={apiSendState.isSending}
                 >
                   New API Key
                 </Button>
