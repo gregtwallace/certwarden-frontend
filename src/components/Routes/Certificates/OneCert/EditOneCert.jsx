@@ -394,7 +394,7 @@ const EditOneCert = () => {
                 id='form.api_key'
                 value={apiGetState.certificate.api_key}
                 readOnly
-                disabled={apiGetState.certificate.api_key === '[redacted]'}
+                disabled={apiGetState.certificate.api_key.includes('*')}
               />
 
               <FormRowRight>
@@ -403,7 +403,7 @@ const EditOneCert = () => {
                   type='manually_edit'
                   disabled={
                     apiSendState.isSending ||
-                    apiGetState.certificate.api_key === '[redacted]'
+                    apiGetState.certificate.api_key.includes('*')
                   }
                 >
                   Edit API Keys
@@ -414,7 +414,7 @@ const EditOneCert = () => {
                     onClick={retireApiKeyClickHandler}
                     disabled={
                       apiSendState.isSending ||
-                      apiGetState.certificate.api_key === '[redacted]'
+                      apiGetState.certificate.api_key.includes('*')
                     }
                   >
                     Retire Old API Key
@@ -424,7 +424,7 @@ const EditOneCert = () => {
                     onClick={newApiKeyClickHandler}
                     disabled={
                       apiSendState.isSending ||
-                      apiGetState.certificate.api_key === '[redacted]'
+                      apiGetState.certificate.api_key.includes('*')
                     }
                   >
                     New API Key
@@ -438,7 +438,7 @@ const EditOneCert = () => {
                   id='form.api_key_new'
                   value={apiGetState.certificate.api_key_new}
                   readOnly
-                  disabled={apiGetState.certificate.api_key === '[redacted]'}
+                  disabled={apiGetState.certificate.api_key.includes('*')}
                 />
               )}
 

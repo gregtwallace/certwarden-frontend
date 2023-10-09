@@ -171,7 +171,7 @@ const EditOnePrivateKey = () => {
               onClick={downloadClickHandler}
               disabled={
                 apiSendState.isSending ||
-                apiGetState.private_key.api_key === '[redacted]'
+                apiGetState.private_key.api_key.includes('*')
               }
             >
               Download Key
@@ -239,7 +239,7 @@ const EditOnePrivateKey = () => {
               id='form.api_key'
               value={apiGetState.private_key.api_key}
               readOnly
-              disabled={apiGetState.private_key.api_key === '[redacted]'}
+              disabled={apiGetState.private_key.api_key.includes('*')}
             />
 
             <FormRowRight>
@@ -248,7 +248,7 @@ const EditOnePrivateKey = () => {
                 type='manually_edit'
                 disabled={
                   apiSendState.isSending ||
-                  apiGetState.private_key.api_key === '[redacted]'
+                  apiGetState.private_key.api_key.includes('*')
                 }
               >
                 Edit API Keys
@@ -259,7 +259,7 @@ const EditOnePrivateKey = () => {
                   onClick={retireApiKeyClickHandler}
                   disabled={
                     apiSendState.isSending ||
-                    apiGetState.private_key.api_key === '[redacted]'
+                    apiGetState.private_key.api_key.includes('*')
                   }
                 >
                   Retire Old API Key
@@ -269,7 +269,7 @@ const EditOnePrivateKey = () => {
                   onClick={newApiKeyClickHandler}
                   disabled={
                     apiSendState.isSending ||
-                    apiGetState.private_key.api_key === '[redacted]'
+                    apiGetState.private_key.api_key.includes('*')
                   }
                 >
                   New API Key
@@ -283,7 +283,7 @@ const EditOnePrivateKey = () => {
                 id='form.api_key_new'
                 value={apiGetState.private_key.api_key_new}
                 readOnly
-                disabled={apiGetState.private_key.api_key === '[redacted]'}
+                disabled={apiGetState.private_key.api_key.includes('*')}
               />
             )}
 

@@ -148,7 +148,7 @@ const EditAPIKeysPage = (props) => {
 
       {renderApiItems &&
         /* Render unavailable message if server returns redacted */
-        (apiGetState[props.itemTypeApiObjectName].api_key === '[redacted]' ? (
+        (apiGetState[props.itemTypeApiObjectName].api_key.includes('*') ? (
           <Form>
             <Typography sx={{ px: 1, mt: 1, mb: 3 }}>
               This feature is not available when server is running as http.
