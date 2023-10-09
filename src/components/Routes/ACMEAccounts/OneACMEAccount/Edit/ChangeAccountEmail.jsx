@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import useAxiosGet from '../../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../../hooks/useAxiosSend';
+import { formChangeHandlerFunc } from '../../../../../helpers/input-handler';
 import { isEmailValid } from '../../../../../helpers/form-validation';
 
 import ApiError from '../../../../UI/Api/ApiError';
@@ -56,22 +57,7 @@ const ChangeAccountEmail = () => {
   }, [apiGetState, id, setFormToApi, navigate]);
 
   // data change handler
-  const inputChangeHandler = (event) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      form: {
-        ...prevState.form,
-        [event.target.name]: event.target.value,
-      },
-    }));
-  };
-
-  // button handlers
-  const resetClickHandler = (event) => {
-    event.preventDefault();
-
-    setFormToApi();
-  };
+  const inputChangeHandler = formChangeHandlerFunc(setFormState);
 
   // form submission handler
   const submitFormHandler = (event) => {
@@ -132,15 +118,15 @@ const ChangeAccountEmail = () => {
       {renderApiItems && (
         <Form onSubmit={submitFormHandler}>
           <InputTextField
+            id='form.name'
             label='Name'
-            id='name'
             value={apiGetState.acme_account.name}
             disabled
           />
 
           <InputTextField
+            id='form.description'
             label='Description'
-            id='description'
             value={
               apiGetState.acme_account.description
                 ? apiGetState.acme_account.description
@@ -150,9 +136,8 @@ const ChangeAccountEmail = () => {
           />
 
           <InputTextField
+            id='form.email'
             label='Contact E-Mail Address'
-            id='email'
-            name='email'
             value={formState.form.email}
             onChange={inputChangeHandler}
             error={formState.validationErrors.email && true}
@@ -176,7 +161,7 @@ const ChangeAccountEmail = () => {
             </Button>
             <Button
               type='reset'
-              onClick={resetClickHandler}
+              onClick={() => setFormToApi()}
               disabled={apiSendState.isSending || formUnchanged}
             >
               Reset
