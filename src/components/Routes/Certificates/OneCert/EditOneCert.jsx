@@ -304,8 +304,8 @@ const EditOneCert = () => {
               />
 
               <InputSelect
-                label='ACME Account'
                 id='form.acme_account_id'
+                label='ACME Account'
                 value={0}
                 options={[
                   {
@@ -322,11 +322,11 @@ const EditOneCert = () => {
               />
 
               <InputSelect
-                label='Private Key'
                 id='form.private_key_id'
-                options={availableKeys}
+                label='Private Key'
                 value={formState.form.private_key_id}
                 onChange={(event) => inputChangeHandler(event, 'number')}
+                options={availableKeys}
                 error={formState.validationErrors.private_key_id}
               />
 

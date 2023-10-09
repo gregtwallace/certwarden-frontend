@@ -227,8 +227,8 @@ const EditOnePrivateKey = () => {
             />
 
             <InputSelect
-              label='Key Algorithm'
               id='form.algorithm_value'
+              label='Key Algorithm'
               value={0}
               options={[
                 { value: 0, name: apiGetState.private_key.algorithm.name },

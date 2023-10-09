@@ -176,18 +176,18 @@ const AddOneACMEAccount = () => {
           <InputSelect
             id='form.acme_server_id'
             label='ACME Server'
-            options={availableServers}
             value={formState.form.acme_server_id}
-            onChange={(event) => inputChangeHandler(event, 'number')}
+            onChange={inputChangeHandler}
+            options={availableServers}
             error={formState.validationErrors.acme_server_id && true}
           />
 
           <InputSelect
-            label='Private Key'
             id='form.private_key_id'
-            options={availableKeys}
+            label='Private Key'
             value={formState.form.private_key_id}
-            onChange={(event) => inputChangeHandler(event, 'number')}
+            onChange={inputChangeHandler}
+            options={availableKeys}
             error={formState.validationErrors.private_key_id && true}
           />
 

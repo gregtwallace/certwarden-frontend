@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import useAxiosGet from '../../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../../hooks/useAxiosSend';
+import { formChangeHandlerFunc } from '../../../../../helpers/input-handler';
 import { newId } from '../../../../../helpers/constants';
 
 import ApiError from '../../../../UI/Api/ApiError';
@@ -59,25 +60,28 @@ const RolloverAccountKey = () => {
     }
   }, [apiGetAccountState, id, navigate]);
 
-  // int form field updates
-  const intInputChangeHandler = (event) => {
-    setFormState((prevState) => {
-      return {
-        ...prevState,
-        form: {
-          ...prevState.form,
-          [event.target.name]: parseInt(event.target.value),
-        },
-      };
-    });
-  };
+  // data change handler
+  const inputChangeHandler = formChangeHandlerFunc(setFormState);
 
   // form submission handler
   const submitFormHandler = (event) => {
     event.preventDefault();
 
     // client side validation
-    // not needed w/ only select box
+    let validationErrors = {};
+    // check email (can't edit ACME to blank)
+    if (formState.form.private_key_id === '') {
+      validationErrors.private_key_id = true;
+    }
+
+    setFormState((prevState) => ({
+      ...prevState,
+      validationErrors: validationErrors,
+    }));
+    if (Object.keys(validationErrors).length > 0) {
+      return false;
+    }
+    // client side validation -- end
 
     sendData(
       `/v1/acmeaccounts/${id}/key-change`,
@@ -131,14 +135,14 @@ const RolloverAccountKey = () => {
         <Form onSubmit={submitFormHandler}>
           <InputTextField
             label='Name'
-            id='name'
+            id='form.name'
             value={apiGetAccountState.acme_account.name}
             disabled
           />
 
           <InputTextField
             label='Description'
-            id='description'
+            id='form.description'
             value={
               apiGetAccountState.acme_account.description
                 ? apiGetAccountState.acme_account.description
@@ -148,8 +152,9 @@ const RolloverAccountKey = () => {
           />
 
           <InputSelect
+            id='form.current_private_key_id'
             label='Current Private Key'
-            id='private_key_id'
+            value={0}
             options={[
               {
                 value: 0,
@@ -160,16 +165,16 @@ const RolloverAccountKey = () => {
                   ')',
               },
             ]}
-            value={0}
             disabled
           />
 
           <InputSelect
+            id='form.private_key_id'
             label='New Private Key'
-            id='private_key_id'
-            options={availableKeys}
             value={formState.form.private_key_id}
-            onChange={intInputChangeHandler}
+            onChange={inputChangeHandler}
+            options={availableKeys}
+            error={formState.validationErrors.private_key_id && true}
           />
 
           {apiSendState.errorMessage &&

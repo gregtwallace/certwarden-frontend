@@ -291,6 +291,7 @@ const EditOneACMEAccount = () => {
             <InputSelect
               id='form.acme_server_id'
               label='ACME Server'
+              value={0}
               options={[
                 {
                   value: 0,
@@ -301,13 +302,13 @@ const EditOneACMEAccount = () => {
                       : ''),
                 },
               ]}
-              value={0}
               disabled
             />
 
             <InputSelect
-              label='Private Key'
               id='form.private_key_id'
+              label='Private Key'
+              value={0}
               options={[
                 {
                   value: 0,
@@ -318,7 +319,6 @@ const EditOneACMEAccount = () => {
                     ')',
                 },
               ]}
-              value={0}
               disabled
             />
 

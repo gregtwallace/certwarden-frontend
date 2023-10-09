@@ -146,21 +146,21 @@ const AddOnePrivateKey = () => {
           />
 
           <InputSelect
-            label='Key Source'
             id='form.key_source'
-            options={keySources}
+            label='Key Source'
             value={formState.key_source}
             onChange={keySourceChangeHandler}
+            options={keySources}
             error={formState.validationErrors.key_source && true}
           />
 
           {formState.key_source === 0 && (
             <InputSelect
-              label='Key Generation Algorithm'
               id='form.algorithm_value'
-              options={apiGetState.private_key_options.key_algorithms}
+              label='Key Generation Algorithm'
               value={formState.form.algorithm_value}
               onChange={inputChangeHandler}
+              options={apiGetState.private_key_options.key_algorithms}
               error={formState.validationErrors.algorithm_value && true}
             />
           )}

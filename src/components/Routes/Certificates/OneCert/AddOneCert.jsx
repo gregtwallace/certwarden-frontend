@@ -221,30 +221,30 @@ const AddOneCert = () => {
           />
 
           <InputSelect
-            label='ACME Account'
             id='form.acme_account_id'
-            options={availableAccounts}
+            label='ACME Account'
             value={formState.form.acme_account_id}
             onChange={(event) => inputChangeHandler(event, 'number')}
+            options={availableAccounts}
             error={formState.validationErrors.acme_account_id}
           />
 
           <InputSelect
-            label='Private Key'
             id='form.private_key_id'
-            options={availableKeys}
+            label='Private Key'
             value={formState.form.private_key_id}
             onChange={privKeyInputChangeHandler}
+            options={availableKeys}
             error={formState.validationErrors.private_key_id}
           />
 
           {formState.form.private_key_id === newId && (
             <InputSelect
-              label='Key Generation Algorithm'
               id='form.algorithm_value'
-              options={apiGetState.certificate_options.key_algorithms}
+              label='Key Generation Algorithm'
               value={formState.form.algorithm_value}
               onChange={inputChangeHandler}
+              options={apiGetState.certificate_options.key_algorithms}
               error={formState.validationErrors.algorithm_value && true}
             />
           )}
