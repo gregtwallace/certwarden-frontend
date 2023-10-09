@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import useAxiosSend from '../../../../hooks/useAxiosSend';
+import { formChangeHandlerFunc } from '../../../../helpers/input-handler';
 import {
   isDirectoryUrlValid,
   isNameValid,
@@ -32,33 +33,7 @@ const AddOneACMEServer = () => {
   const [formState, setFormState] = useState(blankForm);
 
   // data change handler
-  const inputChangeHandler = (event) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      form: {
-        ...prevState.form,
-        [event.target.name]: event.target.value,
-      },
-    }));
-  };
-  // checkbox updates
-  const checkChangeHandler = (event) => {
-    setFormState((prevState) => {
-      return {
-        ...prevState,
-        form: {
-          ...prevState.form,
-          [event.target.name]: event.target.checked,
-        },
-      };
-    });
-  };
-
-  // button handlers
-  const resetClickHandler = (event) => {
-    event.preventDefault();
-    setFormState(blankForm);
-  };
+  const inputChangeHandler = formChangeHandlerFunc(setFormState);
 
   // form submission handler
   const submitFormHandler = (event) => {
@@ -101,7 +76,7 @@ const AddOneACMEServer = () => {
       <Form onSubmit={submitFormHandler}>
         <InputTextField
           label='Name'
-          id='name'
+          id='form.name'
           value={formState.form.name}
           onChange={inputChangeHandler}
           error={formState.validationErrors.name && true}
@@ -109,23 +84,23 @@ const AddOneACMEServer = () => {
 
         <InputTextField
           label='Description'
-          id='description'
+          id='form.description'
           value={formState.form.description}
           onChange={inputChangeHandler}
         />
 
         <InputTextField
           label='Directory URL'
-          id='directory_url'
+          id='form.directory_url'
           value={formState.form.directory_url}
           onChange={inputChangeHandler}
           error={formState.validationErrors.directory_url && true}
         />
 
         <InputCheckbox
-          id='is_staging'
+          id='form.is_staging'
           checked={formState.form.is_staging}
-          onChange={checkChangeHandler}
+          onChange={(event) => inputChangeHandler(event, 'checkbox')}
         >
           Staging Environment Server
         </InputCheckbox>
@@ -148,7 +123,7 @@ const AddOneACMEServer = () => {
           </Button>
           <Button
             type='reset'
-            onClick={resetClickHandler}
+            onClick={() => setFormState(blankForm)}
             disabled={apiSendState.isSending}
           >
             Reset

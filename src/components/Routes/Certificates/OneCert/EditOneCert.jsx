@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
+import { formChangeHandlerFunc } from '../../../../helpers/input-handler';
 import {
   isDomainValid,
   isNameValid,
@@ -35,8 +36,6 @@ import TitleBar from '../../../UI/TitleBar/TitleBar';
 
 const EditOneCert = () => {
   const [hasValidOrders, setHasValidOrders] = useState(false);
-
-  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const [apiSendState, sendData] = useAxiosSend();
   const navigate = useNavigate();
@@ -82,46 +81,11 @@ const EditOneCert = () => {
     }
   }, [apiGetState, setFormToApi]);
 
-  // data change handlers
-  // string form field updates
-  const stringInputChangeHandler = (event) => {
-    setFormState((prevState) => {
-      return {
-        ...prevState,
-        form: {
-          ...prevState.form,
-          [event.target.name]: event.target.value,
-        },
-      };
-    });
-  };
-  // checkbox updates
-  const checkChangeHandler = (event) => {
-    setFormState((prevState) => {
-      return {
-        ...prevState,
-        form: {
-          ...prevState.form,
-          [event.target.name]: event.target.checked,
-        },
-      };
-    });
-  };
-
-  // int form field updates
-  const intInputChangeHandler = (event) => {
-    setFormState((prevState) => {
-      return {
-        ...prevState,
-        form: {
-          ...prevState.form,
-          [event.target.name]: parseInt(event.target.value),
-        },
-      };
-    });
-  };
+  // data change handler
+  const inputChangeHandler = formChangeHandlerFunc(setFormState);
 
   // delete handlers
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const deleteClickHandler = () => {
     setDeleteOpen(true);
   };
@@ -176,12 +140,6 @@ const EditOneCert = () => {
         }
       }
     );
-  };
-
-  const resetClickHandler = (event) => {
-    event.preventDefault();
-
-    setFormToApi();
   };
 
   // form submission handler
@@ -328,22 +286,22 @@ const EditOneCert = () => {
             <Form onSubmit={submitFormHandler}>
               <InputTextField
                 label='Name'
-                id='name'
+                id='form.name'
                 value={formState.form.name}
-                onChange={stringInputChangeHandler}
+                onChange={inputChangeHandler}
                 error={formState.validationErrors.name && true}
               />
 
               <InputTextField
                 label='Description'
-                id='description'
+                id='form.description'
                 value={formState.form.description}
-                onChange={stringInputChangeHandler}
+                onChange={inputChangeHandler}
               />
 
               <InputSelect
                 label='ACME Account'
-                id='acme_account_id'
+                id='form.acme_account_id'
                 value={0}
                 options={[
                   {
@@ -361,16 +319,16 @@ const EditOneCert = () => {
 
               <InputSelect
                 label='Private Key'
-                id='private_key_id'
+                id='form.private_key_id'
                 options={availableKeys}
                 value={formState.form.private_key_id}
-                onChange={intInputChangeHandler}
+                onChange={(event) => inputChangeHandler(event, 'number')}
                 error={formState.validationErrors.private_key_id}
               />
 
               <InputTextField
                 label='Subject (and Common Name)'
-                id='subject'
+                id='form.subject'
                 value={apiGetState.certificate.subject}
                 disabled
               />
@@ -378,9 +336,9 @@ const EditOneCert = () => {
               <InputTextArray
                 label='Subject Alternate Names'
                 subLabel='Alternate Name'
-                id='subject_alts'
+                id='form.subject_alts'
                 value={formState.form.subject_alts}
-                onChange={stringInputChangeHandler}
+                onChange={inputChangeHandler}
                 error={formState.validationErrors.subject_alts}
               />
 
@@ -400,30 +358,30 @@ const EditOneCert = () => {
 
                   <InputTextField
                     label='Country (2 Letter Code)'
-                    id='country'
+                    id='form.country'
                     value={formState.form.country}
-                    onChange={stringInputChangeHandler}
+                    onChange={inputChangeHandler}
                   />
 
                   <InputTextField
                     label='City'
-                    id='city'
+                    id='form.city'
                     value={formState.form.city}
-                    onChange={stringInputChangeHandler}
+                    onChange={inputChangeHandler}
                   />
 
                   <InputTextField
                     label='Organization'
-                    id='organization'
+                    id='form.organization'
                     value={formState.form.organization}
-                    onChange={stringInputChangeHandler}
+                    onChange={inputChangeHandler}
                   />
 
                   <InputTextField
                     label='Organizational Unit'
-                    id='organizational_unit'
+                    id='form.organizational_unit'
                     value={formState.form.organizational_unit}
-                    onChange={stringInputChangeHandler}
+                    onChange={inputChangeHandler}
                   />
                 </AccordionDetails>
               </Accordion>
@@ -433,7 +391,7 @@ const EditOneCert = () => {
                   (apiGetState.certificate.api_key_new ? 'Old ' : '') +
                   'API Key'
                 }
-                id='api_key'
+                id='form.api_key'
                 value={apiGetState.certificate.api_key}
                 readOnly
                 disabled={apiGetState.certificate.api_key === '[redacted]'}
@@ -477,7 +435,7 @@ const EditOneCert = () => {
               {apiGetState.certificate.api_key_new && (
                 <InputTextField
                   label='New API Key'
-                  id='api_key_new'
+                  id='form.api_key_new'
                   value={apiGetState.certificate.api_key_new}
                   readOnly
                   disabled={apiGetState.certificate.api_key === '[redacted]'}
@@ -485,9 +443,9 @@ const EditOneCert = () => {
               )}
 
               <InputCheckbox
-                id='api_key_via_url'
+                id='form.api_key_via_url'
                 checked={formState.form.api_key_via_url}
-                onChange={checkChangeHandler}
+                onChange={(event) => inputChangeHandler(event, 'checkbox')}
               >
                 Allow API Key via URL (for Legacy Clients)
               </InputCheckbox>
@@ -513,7 +471,7 @@ const EditOneCert = () => {
                 </Button>
                 <Button
                   type='reset'
-                  onClick={resetClickHandler}
+                  onClick={() => setFormToApi()}
                   disabled={apiSendState.isSending || formUnchanged}
                 >
                   Reset

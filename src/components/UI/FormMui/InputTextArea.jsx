@@ -4,21 +4,21 @@ import { TextField } from '@mui/material';
 const InputTextArea = (props) => {
   let errorMessage = '';
   switch (props.id) {
-    case 'name':
+    case 'form.name':
       errorMessage =
         'The name cannot be blank and must only contain these symbols - _ . ~ letters and numbers.';
       break;
-    case 'email':
+    case 'form.email':
       errorMessage = 'Email address must be in a valid format.';
       break;
-    case 'subject':
+    case 'form.subject':
     case props?.id?.match(/^subject_alts/)?.input:
       errorMessage = 'Subject must be a valid (sub)domain name.';
       break;
-    case 'new_password':
+    case 'form.new_password':
       errorMessage = 'New password must be at least 10 characters long.';
       break;
-    case 'confirm_new_password':
+    case 'form.confirm_new_password':
       errorMessage = 'Password confirmation must match new password.';
       break;
     default:
@@ -26,17 +26,12 @@ const InputTextArea = (props) => {
       break;
   }
 
-  let type = 'text';
-  if (props.type === 'password') {
-    type = 'password';
-  }
-
   return (
     <TextField
       required={props.required && true}
       id={props.id}
       name={props.name ? props.name : props.id}
-      type={type}
+      type={props.type || 'text'}
       label={props.label}
       fullWidth
       variant='outlined'

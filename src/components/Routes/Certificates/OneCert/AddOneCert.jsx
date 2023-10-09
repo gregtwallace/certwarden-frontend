@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
+import { formChangeHandlerFunc } from '../../../../helpers/input-handler';
 import {
   isDomainValid,
   isNameValid,
@@ -60,29 +61,9 @@ const AddOneCert = () => {
   };
   const [formState, setFormState] = useState(blankForm);
 
-  // data change handlers
-  // string form field updates
-  const stringInputChangeHandler = (event) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      form: {
-        ...prevState.form,
-        [event.target.name]: event.target.value,
-      },
-    }));
-  };
-  // int form field updates
-  const intInputChangeHandler = (event) => {
-    setFormState((prevState) => {
-      return {
-        ...prevState,
-        form: {
-          ...prevState.form,
-          [event.target.name]: parseInt(event.target.value),
-        },
-      };
-    });
-  };
+  // data change handler
+  const inputChangeHandler = formChangeHandlerFunc(setFormState);
+
   // private key change needs to check and reset alg if appropriate
   const privKeyInputChangeHandler = (event) => {
     setFormState((prevState) => {
@@ -102,12 +83,6 @@ const AddOneCert = () => {
         },
       };
     });
-  };
-
-  // button handlers
-  const resetClickHandler = (event) => {
-    event.preventDefault();
-    setFormState(blankForm);
   };
 
   // form submission handler
@@ -232,31 +207,31 @@ const AddOneCert = () => {
         <Form onSubmit={submitFormHandler}>
           <InputTextField
             label='Name'
-            id='name'
+            id='form.name'
             value={formState.form.name}
-            onChange={stringInputChangeHandler}
+            onChange={inputChangeHandler}
             error={formState.validationErrors.name && true}
           />
 
           <InputTextField
             label='Description'
-            id='description'
+            id='form.description'
             value={formState.form.description}
-            onChange={stringInputChangeHandler}
+            onChange={inputChangeHandler}
           />
 
           <InputSelect
             label='ACME Account'
-            id='acme_account_id'
+            id='form.acme_account_id'
             options={availableAccounts}
             value={formState.form.acme_account_id}
-            onChange={intInputChangeHandler}
+            onChange={(event) => inputChangeHandler(event, 'number')}
             error={formState.validationErrors.acme_account_id}
           />
 
           <InputSelect
             label='Private Key'
-            id='private_key_id'
+            id='form.private_key_id'
             options={availableKeys}
             value={formState.form.private_key_id}
             onChange={privKeyInputChangeHandler}
@@ -266,29 +241,28 @@ const AddOneCert = () => {
           {formState.form.private_key_id === newId && (
             <InputSelect
               label='Key Generation Algorithm'
-              id='algorithm_value'
+              id='form.algorithm_value'
               options={apiGetState.certificate_options.key_algorithms}
               value={formState.form.algorithm_value}
-              onChange={stringInputChangeHandler}
+              onChange={inputChangeHandler}
               error={formState.validationErrors.algorithm_value && true}
             />
           )}
 
           <InputTextField
             label='Subject (and Common Name)'
-            id='subject'
+            id='form.subject'
             value={formState.form.subject}
-            onChange={stringInputChangeHandler}
+            onChange={inputChangeHandler}
             error={formState.validationErrors.subject}
           />
 
           <InputTextArray
             label='Subject Alternate Names'
             subLabel='Alternate Name'
-            id='subject_alts'
-            name='subject_alts'
+            id='form.subject_alts'
             value={formState.form.subject_alts}
-            onChange={stringInputChangeHandler}
+            onChange={inputChangeHandler}
             error={formState.validationErrors.subject_alts}
           />
 
@@ -307,30 +281,30 @@ const AddOneCert = () => {
 
               <InputTextField
                 label='Country (2 Letter Code)'
-                id='country'
+                id='form.country'
                 value={formState.form.country}
-                onChange={stringInputChangeHandler}
+                onChange={inputChangeHandler}
               />
 
               <InputTextField
                 label='City'
-                id='city'
+                id='form.city'
                 value={formState.form.city}
-                onChange={stringInputChangeHandler}
+                onChange={inputChangeHandler}
               />
 
               <InputTextField
                 label='Organization'
-                id='organization'
+                id='form.organization'
                 value={formState.form.organization}
-                onChange={stringInputChangeHandler}
+                onChange={inputChangeHandler}
               />
 
               <InputTextField
                 label='Organizational Unit'
-                id='organizational_unit'
+                id='form.organizational_unit'
                 value={formState.form.organizational_unit}
-                onChange={stringInputChangeHandler}
+                onChange={inputChangeHandler}
               />
             </AccordionDetails>
           </Accordion>
@@ -353,7 +327,7 @@ const AddOneCert = () => {
             </Button>
             <Button
               type='reset'
-              onClick={resetClickHandler}
+              onClick={() => setFormState(blankForm)}
               disabled={apiSendState.isSending}
             >
               Reset

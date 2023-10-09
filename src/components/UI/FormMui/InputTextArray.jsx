@@ -72,6 +72,7 @@ const InputTextArray = (props) => {
             id={props.id + '_' + i}
             label={props.subLabel + ' ' + parseInt(i + 1)}
             name={props.name ? props.name + '_' + i : props.id + '_' + i}
+            type={props.type || 'text'}
             key={i}
             value={element}
             onChange={stringChangeHandler}
@@ -96,6 +97,7 @@ const InputTextArray = (props) => {
 InputTextArray.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string,
+  type: PropTypes.string,
   label: PropTypes.string.isRequired,
   subLabel: PropTypes.string.isRequired,
   minElems: PropTypes.number,

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
+import { formChangeHandlerFunc } from '../../../../helpers/input-handler';
 import { isNameValid } from '../../../../helpers/form-validation';
 import {
   newId,
@@ -57,27 +58,7 @@ const AddOnePrivateKey = () => {
   const [formState, setFormState] = useState(blankForm);
 
   // data change handler
-  const stringInputChangeHandler = (event) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      form: {
-        ...prevState.form,
-        [event.target.name]: event.target.value,
-      },
-    }));
-  };
-  // checkbox updates
-  const checkChangeHandler = (event) => {
-    setFormState((prevState) => {
-      return {
-        ...prevState,
-        form: {
-          ...prevState.form,
-          [event.target.name]: event.target.checked,
-        },
-      };
-    });
-  };
+  const inputChangeHandler = formChangeHandlerFunc(setFormState);
 
   // on key change, clear out alg value and pem also
   const keySourceChangeHandler = (event) => {
@@ -90,12 +71,6 @@ const AddOnePrivateKey = () => {
         pem: '',
       },
     }));
-  };
-
-  // button handlers
-  const resetClickHandler = (event) => {
-    event.preventDefault();
-    setFormState(blankForm);
   };
 
   // form submission handler
@@ -138,9 +113,7 @@ const AddOnePrivateKey = () => {
     );
   };
 
-  // consts related to rendering
-  // no check on blank form as blank is the starting state
-  // which isn't changed by the apiGet
+  // render once api loads
   const renderApiItems = apiGetState.isLoaded && !apiGetState.errorMessage;
 
   return (
@@ -159,22 +132,22 @@ const AddOnePrivateKey = () => {
         <Form onSubmit={submitFormHandler}>
           <InputTextField
             label='Name'
-            id='name'
+            id='form.name'
             value={formState.form.name}
-            onChange={stringInputChangeHandler}
+            onChange={inputChangeHandler}
             error={formState.validationErrors.name && true}
           />
 
           <InputTextField
             label='Description'
-            id='description'
+            id='form.description'
             value={formState.form.description}
-            onChange={stringInputChangeHandler}
+            onChange={inputChangeHandler}
           />
 
           <InputSelect
             label='Key Source'
-            id='key_source'
+            id='form.key_source'
             options={keySources}
             value={formState.key_source}
             onChange={keySourceChangeHandler}
@@ -184,10 +157,10 @@ const AddOnePrivateKey = () => {
           {formState.key_source === 0 && (
             <InputSelect
               label='Key Generation Algorithm'
-              id='algorithm_value'
+              id='form.algorithm_value'
               options={apiGetState.private_key_options.key_algorithms}
               value={formState.form.algorithm_value}
-              onChange={stringInputChangeHandler}
+              onChange={inputChangeHandler}
               error={formState.validationErrors.algorithm_value && true}
             />
           )}
@@ -195,17 +168,17 @@ const AddOnePrivateKey = () => {
           {formState.key_source === 1 && (
             <InputTextArea
               label='PEM Content'
-              id='pem'
+              id='form.pem'
               value={formState.form.pem}
-              onChange={stringInputChangeHandler}
+              onChange={inputChangeHandler}
               invalid={formState.validationErrors.pem && true}
             />
           )}
 
           <InputCheckbox
-            id='api_key_disabled'
+            id='form.api_key_disabled'
             checked={formState.form.api_key_disabled}
-            onChange={checkChangeHandler}
+            onChange={(event) => inputChangeHandler(event, 'checkbox')}
           >
             Disable API Key
           </InputCheckbox>
@@ -228,7 +201,7 @@ const AddOnePrivateKey = () => {
             </Button>
             <Button
               type='reset'
-              onClick={resetClickHandler}
+              onClick={() => setFormState(blankForm)}
               disabled={apiSendState.isSending}
             >
               Reset

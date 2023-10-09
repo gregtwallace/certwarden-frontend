@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import useAxiosSend from '../../../hooks/useAxiosSend';
+import { formChangeHandlerFunc } from '../../../helpers/input-handler';
 
 import ApiError from '../../UI/Api/ApiError';
 import Form from '../../UI/FormMui/Form';
@@ -27,21 +28,7 @@ const ChangePassword = () => {
   const [formState, setFormState] = useState(blankFormState);
 
   // data change handler
-  const inputChangeHandler = (event) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      form: {
-        ...prevState.form,
-        [event.target.name]: event.target.value,
-      },
-    }));
-  };
-
-  // button handlers
-  const resetClickHandler = (event) => {
-    event.preventDefault();
-    setFormState(blankFormState);
-  };
+  const inputChangeHandler = formChangeHandlerFunc(setFormState);
 
   // form submission handler
   const submitFormHandler = (event) => {
@@ -93,7 +80,7 @@ const ChangePassword = () => {
       <Form onSubmit={submitFormHandler}>
         <InputTextField
           label='Current Password'
-          id='current_password'
+          id='form.current_password'
           type='password'
           value={formState.form.current_password}
           onChange={inputChangeHandler}
@@ -101,7 +88,7 @@ const ChangePassword = () => {
 
         <InputTextField
           label='New Password'
-          id='new_password'
+          id='form.new_password'
           type='password'
           value={formState.form.new_password}
           onChange={inputChangeHandler}
@@ -110,7 +97,7 @@ const ChangePassword = () => {
 
         <InputTextField
           label='Confirm New Password'
-          id='confirm_new_password'
+          id='form.confirm_new_password'
           type='password'
           value={formState.form.confirm_new_password}
           onChange={inputChangeHandler}
@@ -128,7 +115,7 @@ const ChangePassword = () => {
         <FormFooter>
           <Button
             type='reset'
-            onClick={resetClickHandler}
+            onClick={() => setFormState(blankFormState)}
             disabled={apiSendState.isSending}
           >
             Reset

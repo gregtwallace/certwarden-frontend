@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
+import { formChangeHandlerFunc } from '../../../../helpers/input-handler';
 import { isNameValid } from '../../../../helpers/form-validation';
 import { devMode } from '../../../../helpers/environment';
 
@@ -50,34 +51,17 @@ const EditOneACMEAccount = () => {
     });
   }, [apiGetState]);
 
-  const [deleteOpen, setDeleteOpen] = useState(false);
-  const [deactivateOpen, setDeactivateOpen] = useState(false);
-
   useEffect(() => {
     if (apiGetState.isLoaded && !apiGetState.errorMessage) {
       setFormToApi();
     }
   }, [apiGetState, setFormToApi]);
 
-  // data change handlers
-  const inputChangeHandler = (event) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      form: {
-        ...prevState.form,
-        [event.target.name]: event.target.value,
-      },
-    }));
-  };
-
-  // button handlers
-  const resetClickHandler = (event) => {
-    event.preventDefault();
-
-    setFormToApi();
-  };
+  // data change handler
+  const inputChangeHandler = formChangeHandlerFunc(setFormState);
 
   // delete handlers
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const deleteClickHandler = () => {
     setDeleteOpen(true);
   };
@@ -97,6 +81,7 @@ const EditOneACMEAccount = () => {
   };
 
   // deactivate handlers
+  const [deactivateOpen, setDeactivateOpen] = useState(false);
   const deactivateClickHandler = () => {
     setDeactivateOpen(true);
   };
@@ -269,7 +254,7 @@ const EditOneACMEAccount = () => {
           <Form onSubmit={submitFormHandler}>
             <InputTextField
               label='Name'
-              id='name'
+              id='form.name'
               value={formState.form.name}
               onChange={inputChangeHandler}
               error={formState.validationErrors.name && true}
@@ -277,16 +262,14 @@ const EditOneACMEAccount = () => {
 
             <InputTextField
               label='Description'
-              id='description'
-              name='description'
+              id='form.description'
               value={formState.form.description}
               onChange={inputChangeHandler}
             />
 
             <InputTextField
               label='Contact E-Mail Address'
-              id='email'
-              name='email'
+              id='form.email'
               value={
                 apiGetState.acme_account.email
                   ? apiGetState.acme_account.email
@@ -306,7 +289,7 @@ const EditOneACMEAccount = () => {
             </FormRowRight>
 
             <InputSelect
-              id='acme_server_id'
+              id='form.acme_server_id'
               label='ACME Server'
               options={[
                 {
@@ -324,7 +307,7 @@ const EditOneACMEAccount = () => {
 
             <InputSelect
               label='Private Key'
-              id='private_key_id'
+              id='form.private_key_id'
               options={[
                 {
                   value: 0,
@@ -357,8 +340,7 @@ const EditOneACMEAccount = () => {
 
                   <InputTextField
                     label='Key ID'
-                    id='eab_kid'
-                    name='eab_kid'
+                    id='form.eab_kid'
                     value={formState.form.eab_kid}
                     onChange={inputChangeHandler}
                     error={formState.validationErrors.eab_kid && true}
@@ -366,8 +348,7 @@ const EditOneACMEAccount = () => {
 
                   <InputTextField
                     label='HMAC Key'
-                    id='eab_hmac_key'
-                    name='eab_hmac_key'
+                    id='form.eab_hmac_key'
                     value={formState.form.eab_hmac_key}
                     onChange={inputChangeHandler}
                     error={formState.validationErrors.eab_hmac_key && true}
@@ -399,7 +380,7 @@ const EditOneACMEAccount = () => {
             </FormRowRight>
 
             <InputCheckbox
-              id='accepted_tos'
+              id='form.accepted_tos'
               checked={apiGetState.acme_account.accepted_tos}
               disabled
             >
@@ -427,7 +408,7 @@ const EditOneACMEAccount = () => {
               </Button>
               <Button
                 type='reset'
-                onClick={resetClickHandler}
+                onClick={() => setFormToApi()}
                 disabled={apiSendState.isSending || formUnchanged}
               >
                 Reset

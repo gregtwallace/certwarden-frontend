@@ -4,42 +4,42 @@ import { TextField } from '@mui/material';
 const InputTextField = (props) => {
   let errorMessage = '';
   switch (props.id) {
-    case 'name':
+    case 'form.name':
       errorMessage =
         'The name cannot be blank and must only contain these symbols - _ . ~ letters and numbers.';
       break;
-    case 'email':
+    case 'form.email':
       errorMessage = 'Email address must be in a valid format.';
       break;
-    case 'subject':
-    case props?.id?.match(/^subject_alts/)?.input:
+    case 'form.subject':
+    case props?.id?.match(/^form.subject_alts/)?.input:
       errorMessage =
         'Subject name must be a valid (sub)domain name and may start with a wildcard (*.).';
       break;
-    case props?.id?.match(/^domains/)?.input:
+    case props?.id?.match(/^form.domains/)?.input:
       errorMessage =
         "Domain must be valid. Or for a wildcard provider use one domain set to '*'.";
       break;
-    case 'new_password':
+    case 'form.new_password':
       errorMessage = 'New password must be at least 10 characters long.';
       break;
-    case 'confirm_new_password':
+    case 'form.confirm_new_password':
       errorMessage = 'Password confirmation must match new password.';
       break;
-    case 'directory_url':
+    case 'form.directory_url':
       errorMessage = 'Directory URL must be https.';
       break;
-    case 'api_key':
-    case 'api_key_new':
+    case 'form.api_key':
+    case 'form.api_key_new':
       errorMessage = 'API keys must be at least 10 characters long.';
       break;
-    case 'eab_kid':
+    case 'form.eab_kid':
       errorMessage = 'External Account Binding requires a Key ID.';
       break;
-    case 'eab_hmac_key':
+    case 'form.eab_hmac_key':
       errorMessage = 'External Account Binding requires a Key.';
       break;
-    case 'port':
+    case 'form.port':
       errorMessage = 'Port number must be between 1 and 65535.';
       break;
     default:
@@ -47,17 +47,12 @@ const InputTextField = (props) => {
       break;
   }
 
-  let type = 'text';
-  if (props.type === 'password') {
-    type = 'password';
-  }
-
   return (
     <TextField
       required={props.required && true}
       id={props.id}
       name={props.name ? props.name : props.id}
-      type={type}
+      type={props.type || 'text'}
       label={props.label}
       fullWidth
       variant='outlined'

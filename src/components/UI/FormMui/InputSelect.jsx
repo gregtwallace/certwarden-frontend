@@ -10,19 +10,19 @@ import {
 const InputSelect = (props) => {
   let errorMessage = '';
   switch (props.id) {
-    case 'algorithm_value':
+    case 'form.algorithm_value':
       errorMessage = 'Algorithm must be selected to generate a key.';
       break;
-    case 'acme_account_id':
+    case 'form.acme_account_id':
       errorMessage = 'An account must be selected.';
       break;
-    case 'key_source':
+    case 'form.key_source':
       errorMessage = 'Key source must be selected.';
       break;
-    case 'acme_server_id':
+    case 'form.acme_server_id':
       errorMessage = 'An ACME server must be selected.';
       break;
-    case 'private_key_id':
+    case 'form.private_key_id':
       errorMessage = 'A private key must be selected.';
       break;
 

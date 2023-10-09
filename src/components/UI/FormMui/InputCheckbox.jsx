@@ -9,7 +9,7 @@ import {
 const InputCheckbox = (props) => {
   let errorMessage = '';
   switch (props.id) {
-    case 'accepted_tos':
+    case 'form.accepted_tos':
       errorMessage = 'You must accept the Terms of Service.';
       break;
 

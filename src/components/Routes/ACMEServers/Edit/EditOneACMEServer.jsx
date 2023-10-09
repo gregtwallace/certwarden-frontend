@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
+import { formChangeHandlerFunc } from '../../../../helpers/input-handler';
 import {
   isDirectoryUrlValid,
   isNameValid,
@@ -47,45 +48,17 @@ const EditOneACMEServer = () => {
     });
   }, [apiGetState]);
 
-  const [deleteOpen, setDeleteOpen] = useState(false);
-
   useEffect(() => {
     if (apiGetState.isLoaded && !apiGetState.errorMessage) {
       setFormToApi();
     }
   }, [apiGetState, setFormToApi]);
 
-  // data change handlers
-  const inputChangeHandler = (event) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      form: {
-        ...prevState.form,
-        [event.target.name]: event.target.value,
-      },
-    }));
-  };
-  // checkbox updates
-  const checkChangeHandler = (event) => {
-    setFormState((prevState) => {
-      return {
-        ...prevState,
-        form: {
-          ...prevState.form,
-          [event.target.name]: event.target.checked,
-        },
-      };
-    });
-  };
-
-  // button handlers
-  const resetClickHandler = (event) => {
-    event.preventDefault();
-
-    setFormToApi();
-  };
+  // data change handler
+  const inputChangeHandler = formChangeHandlerFunc(setFormState);
 
   // delete handlers
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const deleteClickHandler = () => {
     setDeleteOpen(true);
   };
@@ -191,7 +164,7 @@ const EditOneACMEServer = () => {
           <Form onSubmit={submitFormHandler}>
             <InputTextField
               label='Name'
-              id='name'
+              id='form.name'
               value={formState.form.name}
               onChange={inputChangeHandler}
               error={formState.validationErrors.name && true}
@@ -199,7 +172,7 @@ const EditOneACMEServer = () => {
 
             <InputTextField
               label='Description'
-              id='description'
+              id='form.description'
               value={formState.form.description}
               onChange={inputChangeHandler}
             />
@@ -215,7 +188,7 @@ const EditOneACMEServer = () => {
 
             <InputTextField
               label='Directory URL'
-              id='directory_url'
+              id='form.directory_url'
               value={formState.form.directory_url}
               onChange={inputChangeHandler}
               error={formState.validationErrors.directory_url && true}
@@ -224,7 +197,7 @@ const EditOneACMEServer = () => {
             <InputCheckbox
               id='is_staging'
               checked={formState.form.is_staging}
-              onChange={checkChangeHandler}
+              onChange={(event) => inputChangeHandler(event, 'checkbox')}
             >
               Staging Environment Server
             </InputCheckbox>
@@ -250,7 +223,7 @@ const EditOneACMEServer = () => {
               </Button>
               <Button
                 type='reset'
-                onClick={resetClickHandler}
+                onClick={() => setFormToApi()}
                 disabled={apiSendState.isSending || formUnchanged}
               >
                 Reset

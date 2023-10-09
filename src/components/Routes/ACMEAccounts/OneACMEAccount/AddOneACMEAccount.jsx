@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
+import { formChangeHandlerFunc } from '../../../../helpers/input-handler';
 import { isNameValid, isEmailValid } from '../../../../helpers/form-validation';
 import { newId } from '../../../../helpers/constants';
 
@@ -44,51 +45,8 @@ const AddOneACMEAccount = () => {
   };
   const [formState, setFormState] = useState(blankForm);
 
-  // data change handlers
-  // string form field updates
-  const stringInputChangeHandler = (event) => {
-    setFormState((prevState) => {
-      return {
-        ...prevState,
-        form: {
-          ...prevState.form,
-          [event.target.name]: event.target.value,
-        },
-      };
-    });
-  };
-
-  // int form field updates
-  const intInputChangeHandler = (event) => {
-    setFormState((prevState) => {
-      return {
-        ...prevState,
-        form: {
-          ...prevState.form,
-          [event.target.name]: parseInt(event.target.value),
-        },
-      };
-    });
-  };
-
-  // checkbox updates
-  const checkChangeHandler = (event) => {
-    setFormState((prevState) => {
-      return {
-        ...prevState,
-        form: {
-          ...prevState.form,
-          [event.target.name]: event.target.checked,
-        },
-      };
-    });
-  };
-
-  // button handlers
-  const resetClickHandler = (event) => {
-    event.preventDefault();
-    setFormState(blankForm);
-  };
+  // data change handler
+  const inputChangeHandler = formChangeHandlerFunc(setFormState);
 
   // submit handler
   const submitFormHandler = (event) => {
@@ -194,50 +152,49 @@ const AddOneACMEAccount = () => {
         <Form onSubmit={submitFormHandler}>
           <InputTextField
             label='Name'
-            id='name'
+            id='form.name'
             value={formState.form.name}
-            onChange={stringInputChangeHandler}
+            onChange={inputChangeHandler}
             error={formState.validationErrors.name && true}
           />
 
           <InputTextField
             label='Description'
-            id='description'
+            id='form.description'
             value={formState.form.description}
-            onChange={stringInputChangeHandler}
+            onChange={inputChangeHandler}
           />
 
           <InputTextField
             label='Contact E-Mail Address'
-            id='email'
-            name='email'
+            id='form.email'
             value={formState.form.email}
-            onChange={stringInputChangeHandler}
+            onChange={inputChangeHandler}
             error={formState.validationErrors.email && true}
           />
 
           <InputSelect
-            id='acme_server_id'
+            id='form.acme_server_id'
             label='ACME Server'
             options={availableServers}
             value={formState.form.acme_server_id}
-            onChange={intInputChangeHandler}
+            onChange={(event) => inputChangeHandler(event, 'number')}
             error={formState.validationErrors.acme_server_id && true}
           />
 
           <InputSelect
             label='Private Key'
-            id='private_key_id'
+            id='form.private_key_id'
             options={availableKeys}
             value={formState.form.private_key_id}
-            onChange={intInputChangeHandler}
+            onChange={(event) => inputChangeHandler(event, 'number')}
             error={formState.validationErrors.private_key_id && true}
           />
 
           <InputCheckbox
-            id='accepted_tos'
+            id='form.accepted_tos'
             checked={formState.form.accepted_tos}
-            onChange={checkChangeHandler}
+            onChange={(event) => inputChangeHandler(event, 'checkbox')}
             disabled={formState.form.acme_server_id === ''}
             error={formState.validationErrors.accepted_tos && true}
           >
@@ -269,7 +226,7 @@ const AddOneACMEAccount = () => {
             </Button>
             <Button
               type='reset'
-              onClick={resetClickHandler}
+              onClick={() => setFormState(blankForm)}
               disabled={apiSendState.isSending}
             >
               Reset

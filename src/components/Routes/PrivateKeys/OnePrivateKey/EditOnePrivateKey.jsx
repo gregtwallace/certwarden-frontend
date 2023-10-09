@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
+import { formChangeHandlerFunc } from '../../../../helpers/input-handler';
 import { isNameValid } from '../../../../helpers/form-validation';
 import { downloadBlob } from '../../../../helpers/download';
 
@@ -45,36 +46,14 @@ const EditOnePrivateKey = () => {
     });
   }, [apiGetState]);
 
-  const [deleteOpen, setDeleteOpen] = useState(false);
-
   useEffect(() => {
     if (apiGetState.isLoaded && !apiGetState.errorMessage) {
       setFormToApi();
     }
   }, [apiGetState, setFormToApi]);
 
-  // data change handlers
-  const inputChangeHandler = (event) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      form: {
-        ...prevState.form,
-        [event.target.name]: event.target.value,
-      },
-    }));
-  };
-  // checkbox updates
-  const checkChangeHandler = (event) => {
-    setFormState((prevState) => {
-      return {
-        ...prevState,
-        form: {
-          ...prevState.form,
-          [event.target.name]: event.target.checked,
-        },
-      };
-    });
-  };
+  // data change handler
+  const inputChangeHandler = formChangeHandlerFunc(setFormState);
 
   // button handlers
   const downloadClickHandler = () => {
@@ -115,13 +94,8 @@ const EditOnePrivateKey = () => {
     );
   };
 
-  const resetClickHandler = (event) => {
-    event.preventDefault();
-
-    setFormToApi();
-  };
-
   // delete handlers
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const deleteClickHandler = () => {
     setDeleteOpen(true);
   };
@@ -235,7 +209,7 @@ const EditOnePrivateKey = () => {
           <Form onSubmit={submitFormHandler}>
             <InputTextField
               label='Name'
-              id='name'
+              id='form.name'
               value={formState.form.name}
               onChange={inputChangeHandler}
               error={formState.validationErrors.name && true}
@@ -243,14 +217,14 @@ const EditOnePrivateKey = () => {
 
             <InputTextField
               label='Description'
-              id='description'
+              id='form.description'
               value={formState.form.description}
               onChange={inputChangeHandler}
             />
 
             <InputSelect
               label='Key Algorithm'
-              id='algorithm_value'
+              id='form.algorithm_value'
               value={0}
               options={[
                 { value: 0, name: apiGetState.private_key.algorithm.name },
@@ -262,7 +236,7 @@ const EditOnePrivateKey = () => {
               label={
                 (apiGetState.private_key.api_key_new ? 'Old ' : '') + 'API Key'
               }
-              id='api_key'
+              id='form.api_key'
               value={apiGetState.private_key.api_key}
               readOnly
               disabled={apiGetState.private_key.api_key === '[redacted]'}
@@ -306,7 +280,7 @@ const EditOnePrivateKey = () => {
             {apiGetState.private_key.api_key_new && (
               <InputTextField
                 label='New API Key'
-                id='api_key_new'
+                id='form.api_key_new'
                 value={apiGetState.private_key.api_key_new}
                 readOnly
                 disabled={apiGetState.private_key.api_key === '[redacted]'}
@@ -314,17 +288,17 @@ const EditOnePrivateKey = () => {
             )}
 
             <InputCheckbox
-              id='api_key_disabled'
+              id='form.api_key_disabled'
               checked={formState.form.api_key_disabled}
-              onChange={checkChangeHandler}
+              onChange={(event) => inputChangeHandler(event, 'checkbox')}
             >
               Disable API Key
             </InputCheckbox>
 
             <InputCheckbox
-              id='api_key_via_url'
+              id='form.api_key_via_url'
               checked={formState.form.api_key_via_url}
-              onChange={checkChangeHandler}
+              onChange={(event) => inputChangeHandler(event, 'checkbox')}
             >
               Allow API Key via URL (for Legacy Clients)
             </InputCheckbox>
@@ -350,7 +324,7 @@ const EditOnePrivateKey = () => {
               </Button>
               <Button
                 type='reset'
-                onClick={resetClickHandler}
+                onClick={() => setFormToApi()}
                 disabled={apiSendState.isSending || formUnchanged}
               >
                 Reset
