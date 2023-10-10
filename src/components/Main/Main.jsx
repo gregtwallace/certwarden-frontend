@@ -9,9 +9,9 @@ const Main = () => {
   const { authExpires, setAuthExpires } = useAuthExpires();
   const [renderMain, setRenderMain] = useState(false);
 
-  // check for 'auth_expires' session item to set the initial login state
+  // check for 'session_expiration' session item to set the initial login state
   useEffect(() => {
-    const loggedInExpiration = sessionStorage.getItem('auth_expires');
+    const loggedInExpiration = sessionStorage.getItem('session_expiration');
     if (loggedInExpiration) {
       setAuthExpires(loggedInExpiration);
     } else {

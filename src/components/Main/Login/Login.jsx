@@ -74,7 +74,11 @@ const Login = () => {
           'access_token',
           response.data.response.access_token
         );
-        setAuthExpires(response.data.response.session.exp);
+        sessionStorage.setItem(
+          'access_token_expiration',
+          response.data.response.access_token_claims.exp
+        );
+        setAuthExpires(response.data.response.session_claims.exp);
       } else {
         setFormState(blankForm);
       }

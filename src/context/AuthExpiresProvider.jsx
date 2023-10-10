@@ -3,22 +3,23 @@ import { createContext, useCallback, useEffect, useState } from 'react';
 
 const AuthExpiresContext = createContext();
 
-// Global logout time to track when auth to the backend
-// will expire.
+// Global logout time to track when auth to the backend will expire.
 const AuthExpiresProvider = (props) => {
   const [authExpires, setAuthExpiresState] = useState();
 
-  // any time set authExpires is called, it should also set the
-  // storage item for persistence
+  // any time setAuthExpires is called, it should also set storage
+  // for persistence
   const setAuthExpires = useCallback(
     (expiration) => {
-      // in addition to changing state, update storage
       if (expiration == null) {
-        sessionStorage.removeItem('auth_expires');
+        // null == logged out / expired
+        sessionStorage.removeItem('session_expiration');
         // also clear access token if logged out
         sessionStorage.removeItem('access_token');
+        sessionStorage.removeItem('access_token_expiration');
       } else {
-        sessionStorage.setItem('auth_expires', expiration);
+        // not null, set expire time
+        sessionStorage.setItem('session_expiration', expiration);
       }
 
       setAuthExpiresState(expiration);
