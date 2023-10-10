@@ -249,9 +249,9 @@ const AddOneCert = () => {
           />
 
           <InputTextArray
+            id='form.subject_alts'
             label='Subject Alternate Names'
             subLabel='Alternate Name'
-            id='form.subject_alts'
             value={formState.form.subject_alts}
             onChange={inputChangeHandler}
             error={formState.validationErrors.subject_alts}

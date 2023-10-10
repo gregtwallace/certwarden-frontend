@@ -30,6 +30,7 @@ const InputSelect = (props) => {
       <InputLabel id={`${id}-label`} error={!!error}>
         {label}
       </InputLabel>
+
       <Select
         labelId={`${id}-label`}
         id={id}
@@ -51,6 +52,7 @@ const InputSelect = (props) => {
           <MenuItem disabled>None Available</MenuItem>
         )}
       </Select>
+
       {!!error && <FormHelperText error>{errorMessage}</FormHelperText>}
     </FormControl>
   );

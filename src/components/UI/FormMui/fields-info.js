@@ -89,12 +89,12 @@ const fieldsInfo = [
   {
     name: 'form.subject',
     errorMessage:
-      'Subject name must be a valid (sub)domain name and may start with a wildcard (*.).',
+      'Subject name must be a valid (sub)domain and may start with a wildcard (*.).',
   },
   {
     name: 'form.subject_alts',
     errorMessage:
-      'Subject name must be a valid (sub)domain name and may start with a wildcard (*.).',
+      'Subject name must be a valid (sub)domain and may start with a wildcard (*.).',
   },
   // {
   //   name: 'form.',
@@ -104,9 +104,13 @@ const fieldsInfo = [
 
 // fieldInformation returns information for the named field
 const fieldInformation = (fieldName) => {
+  // check if ends in underscore number, indicating an array member
+  // if part of array, strip the index portion of name to get field's real name
+  fieldName = fieldName.replace(/_[0-9]+$/, '');
+
   // find desired field's info
   const thisFieldInfo = fieldsInfo.find((field) => {
-    return fieldName.startsWith(field.name);
+    return fieldName === field.name;
   });
 
   // return object rules and error message, or generic if doesn't exist
