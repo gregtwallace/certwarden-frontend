@@ -36,7 +36,7 @@ const InputSelect = (props) => {
         name={name || id}
         label={label}
         value={value}
-        onChange={(event) => onChange(event, type || 'text')}
+        onChange={(event) => onChange(event, type || 'text', options)}
         readOnly={!!readOnly}
         disabled={!!disabled}
       >
@@ -67,6 +67,12 @@ InputSelect.propTypes = {
       name: PropTypes.string.isRequired,
       value: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
         .isRequired,
+      alsoSet: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.string.isRequired,
+          value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+        })
+      ),
     })
   ),
   error: PropTypes.bool,

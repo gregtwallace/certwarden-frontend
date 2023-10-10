@@ -64,27 +64,6 @@ const AddOneCert = () => {
   // data change handler
   const inputChangeHandler = formChangeHandlerFunc(setFormState);
 
-  // private key change needs to check and reset alg if appropriate
-  const privKeyInputChangeHandler = (event) => {
-    setFormState((prevState) => {
-      // set default alg if selected generating new key, otherwise
-      // clear the alg value
-      const newAlgorithmValue =
-        parseInt(event.target.value) === newId
-          ? defaultKeyGenAlgorithmValue
-          : '';
-
-      return {
-        ...prevState,
-        form: {
-          ...prevState.form,
-          private_key_id: parseInt(event.target.value),
-          algorithm_value: newAlgorithmValue,
-        },
-      };
-    });
-  };
-
   // form submission handler
   const submitFormHandler = (event) => {
     event.preventDefault();
@@ -176,6 +155,12 @@ const AddOneCert = () => {
       {
         value: newId,
         name: 'Generate New Key',
+        alsoSet: [
+          {
+            name: 'form.algorithm_value',
+            value: defaultKeyGenAlgorithmValue,
+          },
+        ],
       },
     ];
     // add list of available existing keys
@@ -184,6 +169,12 @@ const AddOneCert = () => {
         ...apiGetState.certificate_options.private_keys.map((k) => ({
           value: parseInt(k.id),
           name: k.name + ' (' + k.algorithm.name + ')',
+          alsoSet: [
+            {
+              name: 'form.algorithm_value',
+              value: undefined,
+            },
+          ],
         }))
       );
     }
@@ -224,7 +215,7 @@ const AddOneCert = () => {
             id='form.acme_account_id'
             label='ACME Account'
             value={formState.form.acme_account_id}
-            onChange={(event) => inputChangeHandler(event, 'number')}
+            onChange={inputChangeHandler}
             options={availableAccounts}
             error={formState.validationErrors.acme_account_id}
           />
@@ -233,7 +224,7 @@ const AddOneCert = () => {
             id='form.private_key_id'
             label='Private Key'
             value={formState.form.private_key_id}
-            onChange={privKeyInputChangeHandler}
+            onChange={inputChangeHandler}
             options={availableKeys}
             error={formState.validationErrors.private_key_id}
           />

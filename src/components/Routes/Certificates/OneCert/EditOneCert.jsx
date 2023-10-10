@@ -325,7 +325,7 @@ const EditOneCert = () => {
                 id='form.private_key_id'
                 label='Private Key'
                 value={formState.form.private_key_id}
-                onChange={(event) => inputChangeHandler(event, 'number')}
+                onChange={inputChangeHandler}
                 options={availableKeys}
                 error={formState.validationErrors.private_key_id}
               />

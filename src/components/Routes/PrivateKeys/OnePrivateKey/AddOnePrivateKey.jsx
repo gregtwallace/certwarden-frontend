@@ -25,10 +25,30 @@ const keySources = [
   {
     value: 0,
     name: 'Generate',
+    alsoSet: [
+      {
+        name: 'form.algorithm_value',
+        value: defaultKeyGenAlgorithmValue,
+      },
+      {
+        name: 'form.pem',
+        value: undefined,
+      },
+    ],
   },
   {
     value: 1,
     name: 'Paste PEM',
+    alsoSet: [
+      {
+        name: 'form.algorithm_value',
+        value: undefined,
+      },
+      {
+        name: 'form.pem',
+        value: '',
+      },
+    ],
   },
 ];
 
@@ -49,7 +69,7 @@ const AddOnePrivateKey = () => {
       name: '',
       description: '',
       algorithm_value: defaultKeyGenAlgorithmValue,
-      pem: '',
+      // pem: '',
       api_key_disabled: false,
     },
     validationErrors: {},
@@ -58,19 +78,6 @@ const AddOnePrivateKey = () => {
 
   // data change handler
   const inputChangeHandler = formChangeHandlerFunc(setFormState);
-
-  // on key change, clear out alg value and pem also
-  const keySourceChangeHandler = (event) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      key_source: event.target.value,
-      form: {
-        ...prevState.form,
-        algorithm_value: '',
-        pem: '',
-      },
-    }));
-  };
 
   // form submission handler
   const submitFormHandler = (event) => {
@@ -150,10 +157,10 @@ const AddOnePrivateKey = () => {
           />
 
           <InputSelect
-            id='form.key_source'
+            id='key_source'
             label='Key Source'
             value={formState.key_source}
-            onChange={keySourceChangeHandler}
+            onChange={inputChangeHandler}
             options={keySources}
             error={formState.validationErrors.key_source}
           />

@@ -58,7 +58,7 @@ const fieldsInfo = [
     errorMessage: 'Email address must be in a valid format.',
   },
   {
-    name: 'form.key_source',
+    name: 'key_source',
     errorMessage: 'Key source must be selected.',
     type: 'number',
   },
