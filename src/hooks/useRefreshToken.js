@@ -16,7 +16,6 @@ const useRefreshToken = () => {
         ...axiosConfig,
         method: 'POST',
         url: REFRESH_NODE,
-        withCredentials: true,
       });
 
       // error if no access_token or blank

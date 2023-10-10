@@ -2,19 +2,19 @@ import { useEffect, useState, useCallback } from 'react';
 
 import { devMode } from '../helpers/environment';
 import { parseAxiosError } from '../helpers/axios-error';
-import axios from '../api/axios';
-import useAxiosPrivate from './useAxiosPrivate';
+import { axiosNoToken } from '../api/axios';
+import useAxiosWithToken from './useAxiosWithToken';
 
 // Hook to query the API and return a state based on the query
-const useAxiosGet = (apiNode, expectedJsonName, withCredentials = false) => {
-  const axiosPrivate = useAxiosPrivate();
+const useAxiosGet = (apiNode, expectedJsonName, withAccessToken = false) => {
+  const axiosWithToken = useAxiosWithToken();
 
   // select instance based on if route is secured
   var axiosInstance;
-  if (withCredentials) {
-    axiosInstance = axiosPrivate;
+  if (withAccessToken) {
+    axiosInstance = axiosWithToken;
   } else {
-    axiosInstance = axios;
+    axiosInstance = axiosNoToken;
   }
 
   const [state, setState] = useState({

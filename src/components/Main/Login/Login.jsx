@@ -68,7 +68,7 @@ const Login = () => {
     }
     // form validation - end
 
-    sendData(LOGIN_URL, 'POST', formState.login, true).then((response) => {
+    sendData(LOGIN_URL, 'POST', formState.login, false).then((response) => {
       if (response.status === 200) {
         sessionStorage.setItem(
           'access_token',

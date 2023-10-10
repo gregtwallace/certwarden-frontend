@@ -2,8 +2,8 @@ import { useCallback, useState } from 'react';
 
 import { devMode } from '../helpers/environment';
 import { parseAxiosError } from '../helpers/axios-error';
-import axios from '../api/axios';
-import useAxiosPrivate from './useAxiosPrivate';
+import { axiosNoToken } from '../api/axios';
+import useAxiosWithToken from './useAxiosWithToken';
 
 const useAxiosSend = () => {
   const [state, setState] = useState({
@@ -12,7 +12,7 @@ const useAxiosSend = () => {
     errorMessage: null,
   });
 
-  const axiosPrivate = useAxiosPrivate();
+  const axiosWithToken = useAxiosWithToken();
 
   // Send data to the node using the specified method and a payload from the specified event
   // return true if success and no error, return false if something goes wrong
@@ -21,15 +21,15 @@ const useAxiosSend = () => {
       apiNode,
       method,
       payloadObj,
-      withCredentials = false,
+      withAccessToken = false,
       responseType = 'json'
     ) => {
       // select instance based on if route is secured
       var axiosInstance;
-      if (withCredentials) {
-        axiosInstance = axiosPrivate;
+      if (withAccessToken) {
+        axiosInstance = axiosWithToken;
       } else {
-        axiosInstance = axios;
+        axiosInstance = axiosNoToken;
       }
 
       // set state to sending
@@ -81,7 +81,7 @@ const useAxiosSend = () => {
         return false;
       }
     },
-    [axiosPrivate, setState]
+    [axiosWithToken, setState]
   );
 
   return [state, sendData];

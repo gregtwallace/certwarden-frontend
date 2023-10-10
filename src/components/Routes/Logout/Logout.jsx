@@ -17,7 +17,7 @@ const Logout = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    sendData(`/v1/app/auth/logout`, 'POST', null, true).then((response) => {
+    sendData(`/v1/app/auth/logout`, 'POST', null, false).then((response) => {
       if (response.status >= 200 && response.status <= 299) {
         // if success, clear login and go to root
         sessionStorage.removeItem('access_token');

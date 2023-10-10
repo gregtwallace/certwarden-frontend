@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { axiosPrivate } from '../api/axios';
+import { axiosWithToken } from '../api/axios';
 import useRefreshToken from './useRefreshToken';
 
 // name of anti-retry header
@@ -11,12 +11,12 @@ const NO_RETRY_HEADER = 'x-no-retry';
 // is actively trying it.
 var isRefreshing = false;
 
-const useAxiosPrivate = () => {
+const useAxiosWithToken = () => {
   const refresh = useRefreshToken();
 
   useEffect(() => {
     // add the Authorization header to all Private requests
-    const requestIntercept = axiosPrivate.interceptors.request.use(
+    const requestIntercept = axiosWithToken.interceptors.request.use(
       (config) => {
         if (!config.headers['Authorization']) {
           config.headers['Authorization'] =
@@ -32,7 +32,7 @@ const useAxiosPrivate = () => {
     // also add a retry header so this won't endlessly loop (i.e.
     // if it retries a second time, it won't proceed because the flag
     // already shows a retry)
-    const responseIntercept = axiosPrivate.interceptors.response.use(
+    const responseIntercept = axiosWithToken.interceptors.response.use(
       (response) => response,
       async (error) => {
         var prevRequest = error?.config;
@@ -52,7 +52,7 @@ const useAxiosPrivate = () => {
             prevRequest.headers[NO_RETRY_HEADER] = 'true';
             prevRequest.headers['Authorization'] =
               sessionStorage.getItem('access_token');
-            return axiosPrivate(prevRequest);
+            return axiosWithToken(prevRequest);
           }
 
           // not already refreshing - get new token and try again
@@ -64,7 +64,7 @@ const useAxiosPrivate = () => {
             // retry with new token
             prevRequest.headers[NO_RETRY_HEADER] = 'true';
             prevRequest.headers['Authorization'] = newAccessToken;
-            return axiosPrivate(prevRequest);
+            return axiosWithToken(prevRequest);
           } catch (e) {
             // must ensure isRefreshing is set to false since refresh job has termed
             // unlikely to be needed, but just in case
@@ -79,12 +79,12 @@ const useAxiosPrivate = () => {
     );
 
     return () => {
-      axiosPrivate.interceptors.request.eject(requestIntercept);
-      axiosPrivate.interceptors.response.eject(responseIntercept);
+      axiosWithToken.interceptors.request.eject(requestIntercept);
+      axiosWithToken.interceptors.response.eject(responseIntercept);
     };
   }, [refresh]);
 
-  return axiosPrivate;
+  return axiosWithToken;
 };
 
-export default useAxiosPrivate;
+export default useAxiosWithToken;

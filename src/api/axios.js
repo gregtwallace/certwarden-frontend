@@ -1,20 +1,15 @@
 import axios from 'axios';
 import { apiUrl } from '../helpers/environment';
 
-// base config
+// base config (always allow cookies)
 export const axiosConfig = {
   baseURL: apiUrl,
   headers: { 'Content-Type': 'application/json' },
+  withCredentials: true,
 };
 
-// insecure axios (no token sent)
-// default, insecure
-export default axios.create({
-  ...axiosConfig,
-});
+// axios instance which will not be modified to add access_token and refresh
+export const axiosNoToken = axios.create(axiosConfig);
 
-// with credentials (cookies)
-export const axiosPrivate = axios.create({
-  ...axiosConfig,
-  withCredentials: true,
-});
+// axios instance to modify with access_token functionality
+export const axiosWithToken = axios.create(axiosConfig);
