@@ -14,7 +14,7 @@ import Button from '../../../UI/Button/Button';
 import DialogAlert from '../../../UI/Dialog/DialogAlert';
 import Form from '../../../UI/FormMui/Form';
 import InputSelect from '../../../UI/FormMui/InputSelect';
-import InputTextArray from '../../../UI/FormMui/InputTextArray';
+import InputArrayText from '../../../UI/FormMui/InputArrayText';
 import FormContainer from '../../../UI/FormMui/FormContainer';
 import FormFooter from '../../../UI/FormMui/FormFooter';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
@@ -194,7 +194,7 @@ const EditOneProvider = () => {
               disabled
             />
 
-            <InputTextArray
+            <InputArrayText
               id='form.domains'
               label='Domains'
               subLabel='Domain'

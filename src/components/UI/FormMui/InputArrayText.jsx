@@ -8,7 +8,7 @@ import InputTextField from './InputTextField';
 // doesnt currently support numbers or other input types that need
 // manipulation of the target.value (e.g. ParseInt) !
 
-const InputTextArray = (props) => {
+const InputArrayText = (props) => {
   // destructure props
   const { error, id, label, minElements, name, onChange, subLabel, value } =
     props;
@@ -51,12 +51,11 @@ const InputTextArray = (props) => {
   const fieldChangeHandler = (event) => {
     let newArray = [...value];
 
-    // get element index based on id
-    let idPrefix = id + '_';
-    let i = event.target.id.slice(idPrefix.length);
+    // get element index (id is in format ID-Index)
+    const elementIndex = event.target.id.split('-')[1];
 
     // update element
-    newArray[i] = event.target.value;
+    newArray[elementIndex] = event.target.value;
 
     const syntheticEvent = {
       target: {
@@ -80,8 +79,8 @@ const InputTextArray = (props) => {
         value.map((subValue, i) => (
           <FormRowRight key={`${id}.${i}`}>
             <InputTextField
-              id={id + '_' + i}
-              name={name ? name + '_' + i : undefined}
+              id={id + '-' + i}
+              name={name ? name + '-' + i : undefined}
               label={subLabel + ' ' + parseInt(i + 1)}
               value={subValue}
               onChange={fieldChangeHandler}
@@ -110,7 +109,7 @@ const InputTextArray = (props) => {
   );
 };
 
-InputTextArray.propTypes = {
+InputArrayText.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string,
   label: PropTypes.string.isRequired,
@@ -121,4 +120,4 @@ InputTextArray.propTypes = {
   error: PropTypes.arrayOf(PropTypes.number),
 };
 
-export default InputTextArray;
+export default InputArrayText;

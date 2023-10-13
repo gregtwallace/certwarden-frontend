@@ -11,7 +11,7 @@ import Button from '../../../UI/Button/Button';
 import Form from '../../../UI/FormMui/Form';
 import FormFooter from '../../../UI/FormMui/FormFooter';
 import InputSelect from '../../../UI/FormMui/InputSelect';
-import InputTextArray from '../../../UI/FormMui/InputTextArray';
+import InputArrayText from '../../../UI/FormMui/InputArrayText';
 import FormContainer from '../../../UI/FormMui/FormContainer';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
 
@@ -112,7 +112,7 @@ const AddOneProvider = () => {
               listed in another provider.
             </Typography>
 
-            <InputTextArray
+            <InputArrayText
               id='form.domains'
               label='Domains'
               subLabel='Domain'

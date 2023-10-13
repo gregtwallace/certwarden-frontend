@@ -28,7 +28,7 @@ import InputSelect from '../../../UI/FormMui/InputSelect';
 import Form from '../../../UI/FormMui/Form';
 import FormContainer from '../../../UI/FormMui/FormContainer';
 import FormFooter from '../../../UI/FormMui/FormFooter';
-import InputTextArray from '../../../UI/FormMui/InputTextArray';
+import InputArrayText from '../../../UI/FormMui/InputArrayText';
 import InputTextField from '../../../UI/FormMui/InputTextField';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
 
@@ -248,7 +248,7 @@ const AddOneCert = () => {
             error={formState.validationErrors.subject}
           />
 
-          <InputTextArray
+          <InputArrayText
             id='form.subject_alts'
             label='Subject Alternate Names'
             subLabel='Alternate Name'

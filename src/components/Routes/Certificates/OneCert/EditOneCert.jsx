@@ -29,7 +29,7 @@ import FormFooter from '../../../UI/FormMui/FormFooter';
 import FormRowRight from '../../../UI/FormMui/FormRowRight';
 import InputCheckbox from '../../../UI/FormMui/InputCheckbox';
 import InputSelect from '../../../UI/FormMui/InputSelect';
-import InputTextArray from '../../../UI/FormMui/InputTextArray';
+import InputArrayText from '../../../UI/FormMui/InputArrayText';
 import InputTextField from '../../../UI/FormMui/InputTextField';
 import Orders from './Orders/Orders';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
@@ -337,7 +337,7 @@ const EditOneCert = () => {
                 disabled
               />
 
-              <InputTextArray
+              <InputArrayText
                 id='form.subject_alts'
                 label='Subject Alternate Names'
                 subLabel='Alternate Name'

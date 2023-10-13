@@ -2,6 +2,7 @@ import { isEmailValid, isPortValid } from '../../../../helpers/form-validation';
 
 import DummyFormFields from './ProviderForms/DummyFormFields';
 import Http01InternalFormFields from './ProviderForms/Http01InternalFormFields';
+import Dns01AcmeDnsFormFields from './ProviderForms/Dns01AcmeDnsFormFields';
 import Dns01AcmeShFormFields from './ProviderForms/Dns01AcmeShFormFields';
 import Dns01CloudflareFormFields from './ProviderForms/Dns01CloudflareFormFields';
 import Dns01ManualFormFields from './ProviderForms/Dns01ManualFormFields';
@@ -36,16 +37,24 @@ const dummyProvider = {
 // to be used in add or edit operations
 export const providerTypes = [
   {
-    value: 'http01internal',
-    name: 'HTTP-01 Internal Server',
-    FormComponent: Http01InternalFormFields,
-    configName: 'http_01_internal',
+    value: 'dns01acmedns',
+    name: 'DNS-01 acme-dns',
+    FormComponent: Dns01AcmeDnsFormFields,
+    configName: 'dns_01_acme_dns',
     alsoSet: [
       {
         name: 'form',
         value: {
           domains: [''],
-          port: '',
+          acme_dns_address: '',
+          resources: [
+            {
+              real_domain: '',
+              full_domain: '',
+              username: '',
+              password: '',
+            },
+          ],
         },
       },
       {
@@ -56,10 +65,27 @@ export const providerTypes = [
     validationFunc: (formState) => {
       let validationErrors = {};
 
-      // must set a valid port number
-      if (!isPortValid(formState.form.port)) {
-        validationErrors.port = true;
+      // must specify server address
+      if (
+        formState.form.acme_dns_address == undefined ||
+        formState.form.acme_dns_address === ''
+      ) {
+        validationErrors.acme_dns_address = true;
       }
+
+      // each resource must have all fields populated
+      let resources = [];
+      Object.values(formState.form.resources).forEach((val, i) => {
+        if (
+          val.real_domain === '' ||
+          val.full_domain === '' ||
+          val.username === '' ||
+          val.password === ''
+        ) {
+          resources.push(i);
+        }
+      });
+      validationErrors.resources = resources;
 
       return validationErrors;
     },
@@ -91,7 +117,7 @@ export const providerTypes = [
 
       // must specify path
       if (
-        formState.form.acme_sh_path != undefined &&
+        formState.form.acme_sh_path == undefined ||
         formState.form.acme_sh_path === ''
       ) {
         validationErrors.acme_sh_path = true;
@@ -99,7 +125,7 @@ export const providerTypes = [
 
       // must specify hook name
       if (
-        formState.form.dns_hook != undefined &&
+        formState.form.dns_hook == undefined ||
         formState.form.dns_hook === ''
       ) {
         validationErrors.dns_hook = true;
@@ -200,6 +226,39 @@ export const providerTypes = [
       }
       if (formState.form.delete_script === '') {
         validationErrors.delete_script = true;
+      }
+
+      return validationErrors;
+    },
+  },
+
+  {
+    value: 'http01internal',
+    name: 'HTTP-01 Internal Server',
+    FormComponent: Http01InternalFormFields,
+    configName: 'http_01_internal',
+    alsoSet: [
+      {
+        name: 'form',
+        value: {
+          domains: [''],
+          port: '',
+        },
+      },
+      {
+        name: 'provider_options',
+        value: undefined,
+      },
+    ],
+    validationFunc: (formState) => {
+      let validationErrors = {};
+
+      // must set a valid port number
+      if (
+        formState.form.port == undefined ||
+        !isPortValid(formState.form.port)
+      ) {
+        validationErrors.port = true;
       }
 
       return validationErrors;

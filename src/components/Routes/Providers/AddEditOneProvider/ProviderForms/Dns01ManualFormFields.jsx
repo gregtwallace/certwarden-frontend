@@ -1,7 +1,7 @@
 import { PropTypes } from 'prop-types';
 
 import { Typography } from '@mui/material';
-import InputTextArray from '../../../../UI/FormMui/InputTextArray';
+import InputArrayText from '../../../../UI/FormMui/InputArrayText';
 import InputTextField from '../../../../UI/FormMui/InputTextField';
 
 const Dns01ManualFormFields = (props) => {
@@ -19,7 +19,7 @@ const Dns01ManualFormFields = (props) => {
         my_api_key=abcdef12345
       </Typography>
 
-      <InputTextArray
+      <InputArrayText
         id='form.environment'
         label='Environment Variables'
         subLabel='Variable'

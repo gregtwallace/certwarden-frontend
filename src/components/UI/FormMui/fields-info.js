@@ -18,6 +18,10 @@ const fieldsInfo = [
     type: 'number',
   },
   {
+    name: 'form.acme_dns_address',
+    errorMessage: 'An acme-dns address must be specified.',
+  },
+  {
     name: 'form.acme_server_id',
     errorMessage: 'An ACME server must be selected.',
     type: 'number',
@@ -98,6 +102,11 @@ const fieldsInfo = [
     type: 'number',
   },
   {
+    name: 'form.resources',
+    errorMessage: 'All fields of a resource must be populated.',
+    type: 'number',
+  },
+  {
     name: 'form.subject',
     errorMessage:
       'Subject name must be a valid (sub)domain and may start with a wildcard (*.).',
@@ -119,9 +128,9 @@ const fieldsInfo = [
 
 // fieldInformation returns information for the named field
 const fieldInformation = (fieldName) => {
-  // check if ends in underscore number, indicating an array member
+  // check if ends in -number, indicating an array member
   // if part of array, strip the index portion of name to get field's real name
-  fieldName = fieldName.replace(/_[0-9]+$/, '');
+  fieldName = fieldName.replace(/-[0-9]+$/, '');
 
   // find desired field's info
   const thisFieldInfo = fieldsInfo.find((field) => {
