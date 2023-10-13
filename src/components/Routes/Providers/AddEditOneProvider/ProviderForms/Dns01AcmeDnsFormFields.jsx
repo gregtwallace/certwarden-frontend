@@ -1,6 +1,6 @@
 import { PropTypes } from 'prop-types';
 
-import { Typography } from '@mui/material';
+import FormInfo from '../../../../UI/FormMui/FormInfo';
 import InputArrayObjectsOfText from '../../../../UI/FormMui/InputArrayObjectsOfText';
 import InputTextField from '../../../../UI/FormMui/InputTextField';
 
@@ -9,10 +9,10 @@ const Dns01AcmeDnsFormFields = (props) => {
 
   return (
     <>
-      <Typography variant='body2' sx={{ m: 2 }}>
+      <FormInfo>
         Server address including protocol and port (e.g.
         https://myacmedns.example.com:8880)
-      </Typography>
+      </FormInfo>
 
       <InputTextField
         id='form.acme_dns_address'
@@ -22,10 +22,10 @@ const Dns01AcmeDnsFormFields = (props) => {
         error={formState.validationErrors.acme_dns_address}
       />
 
-      <Typography variant='body2' sx={{ m: 2 }}>
+      <FormInfo>
         You must manually create each resource in acme-dns and then populate the
         information about each here.
-      </Typography>
+      </FormInfo>
 
       <InputArrayObjectsOfText
         id='form.resources'

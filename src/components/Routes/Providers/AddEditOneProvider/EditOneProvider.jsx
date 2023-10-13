@@ -17,6 +17,7 @@ import InputSelect from '../../../UI/FormMui/InputSelect';
 import InputArrayText from '../../../UI/FormMui/InputArrayText';
 import FormContainer from '../../../UI/FormMui/FormContainer';
 import FormFooter from '../../../UI/FormMui/FormFooter';
+import FormInfo from '../../../UI/FormMui/FormInfo';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
 
 const EditOneProvider = () => {
@@ -193,6 +194,14 @@ const EditOneProvider = () => {
               ]}
               disabled
             />
+
+            <FormInfo>
+              Either list the domains you want this provider to be used for or
+              list a single domain with the value of an asterisk (*) to use this
+              provider as a catch-all (wildcard). Only one provider can be a
+              wildcard provider and LeGo uses it for any domain not explicitly
+              listed in another provider.
+            </FormInfo>
 
             <InputArrayText
               id='form.domains'

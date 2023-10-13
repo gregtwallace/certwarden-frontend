@@ -9,8 +9,6 @@ import {
   isNameValid,
 } from '../../../../helpers/form-validation';
 
-import { Typography } from '@mui/material';
-
 import ApiError from '../../../UI/Api/ApiError';
 import ApiLoading from '../../../UI/Api/ApiLoading';
 import Button from '../../../UI/Button/Button';
@@ -18,6 +16,7 @@ import DialogAlert from '../../../UI/Dialog/DialogAlert';
 import Form from '../../../UI/FormMui/Form';
 import FormContainer from '../../../UI/FormMui/FormContainer';
 import FormFooter from '../../../UI/FormMui/FormFooter';
+import FormInfo from '../../../UI/FormMui/FormInfo';
 import InputCheckbox from '../../../UI/FormMui/InputCheckbox';
 import InputTextField from '../../../UI/FormMui/InputTextField';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
@@ -177,14 +176,11 @@ const EditOneACMEServer = () => {
               onChange={inputChangeHandler}
             />
 
-            <Typography
-              variant='subtitle2'
-              sx={{ my: 2, px: 1, color: 'error.dark' }}
-            >
+            <FormInfo sxColor='error.main'>
               You should only update the Directory URL if your provider has
               actually changed it. If you are trying to change provider, create
               a new server instead.
-            </Typography>
+            </FormInfo>
 
             <InputTextField
               id='form.directory_url'

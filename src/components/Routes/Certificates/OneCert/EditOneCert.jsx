@@ -26,6 +26,7 @@ import DialogAlert from '../../../UI/Dialog/DialogAlert';
 import Form from '../../../UI/FormMui/Form';
 import FormContainer from '../../../UI/FormMui/FormContainer';
 import FormFooter from '../../../UI/FormMui/FormFooter';
+import FormInfo from '../../../UI/FormMui/FormInfo';
 import FormRowRight from '../../../UI/FormMui/FormRowRight';
 import InputCheckbox from '../../../UI/FormMui/InputCheckbox';
 import InputSelect from '../../../UI/FormMui/InputSelect';
@@ -355,10 +356,10 @@ const EditOneCert = () => {
                   <Typography>CSR Fields</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <Typography sx={{ mb: 2 }}>
+                  <FormInfo>
                     These fields are optional and appear to be ignored by some
                     CAs.
-                  </Typography>
+                  </FormInfo>
 
                   <InputTextField
                     id='form.country'

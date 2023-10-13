@@ -6,15 +6,13 @@ import useAxiosGet from '../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../hooks/useAxiosSend';
 import { formChangeHandlerFunc } from '../../../helpers/input-handler';
 
-import { Typography } from '@mui/material';
-
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
 import Button from '../../UI/Button/Button';
 import Form from '../../UI/FormMui/Form';
 import FormContainer from '../../UI/FormMui/FormContainer';
 import FormFooter from '../../UI/FormMui/FormFooter';
-import FormRowRight from '../../UI/FormMui/FormRowRight';
+import FormInfo from '../../UI/FormMui/FormInfo';
 import InputTextField from '../../UI/FormMui/InputTextField';
 import TitleBar from '../../UI/TitleBar/TitleBar';
 
@@ -134,15 +132,18 @@ const EditAPIKeysPage = (props) => {
 
       {renderApiItems && (
         <Form onSubmit={submitFormHandler}>
-          <Typography sx={{ px: 1, mt: 1, mb: 3, color: 'error.main' }}>
+          <FormInfo sxColor='error.main'>
             Do not manually edit the API Keys unless you have a specific need.
-          </Typography>
+            Use the &quot;New&quot; and &quot;Retire&quot; buttons on the
+            previous page instead, as these generate cryptographically random
+            API keys.
+          </FormInfo>
 
-          <Typography sx={{ px: 1, mt: 1, mb: 3 }}>
+          <FormInfo>
             Keys should be generated securely to avoid breaches and must be at
             least 10 characters in length, though practically you should make
-            them much longer.
-          </Typography>
+            them longer.
+          </FormInfo>
 
           <InputTextField
             id='form.name'
@@ -162,10 +163,10 @@ const EditAPIKeysPage = (props) => {
             disabled
           />
 
-          <Typography sx={{ px: 1, my: 3 }}>
+          <FormInfo>
             API Key 1 corresponds to the &apos;Old&apos; API Key. It must be
             populated.
-          </Typography>
+          </FormInfo>
 
           <InputTextField
             id='form.api_key'
@@ -175,10 +176,10 @@ const EditAPIKeysPage = (props) => {
             error={formState.validationErrors.api_key}
           />
 
-          <Typography sx={{ px: 1, my: 3 }}>
+          <FormInfo>
             API Key 2 corresponds to the &apos;New&apos; API Key. It may be
             blank in which case only API Key 1 will be used.
-          </Typography>
+          </FormInfo>
 
           <InputTextField
             id='form.api_key_new'

@@ -5,11 +5,11 @@ import { getProvider, providerTypes } from './provider-types';
 import { formChangeHandlerFunc } from '../../../../helpers/input-handler';
 import { isDomainValid } from '../../../../helpers/form-validation';
 
-import { Typography } from '@mui/material';
 import ApiError from '../../../UI/Api/ApiError';
 import Button from '../../../UI/Button/Button';
 import Form from '../../../UI/FormMui/Form';
 import FormFooter from '../../../UI/FormMui/FormFooter';
+import FormInfo from '../../../UI/FormMui/FormInfo';
 import InputSelect from '../../../UI/FormMui/InputSelect';
 import InputArrayText from '../../../UI/FormMui/InputArrayText';
 import FormContainer from '../../../UI/FormMui/FormContainer';
@@ -98,19 +98,19 @@ const AddOneProvider = () => {
         {formState.provider_type_value !== '' && (
           <>
             {!!provider.noWindows && (
-              <Typography color='error' variant='subtitle2' sx={{ m: 2 }}>
+              <FormInfo sxColor='error.main'>
                 Warning: This provider does not work if the backend is running
                 on Windows OS.
-              </Typography>
+              </FormInfo>
             )}
 
-            <Typography variant='body2' sx={{ m: 2 }}>
+            <FormInfo>
               Either list the domains you want this provider to be used for or
               list a single domain with the value of an asterisk (*) to use this
               provider as a catch-all (wildcard). Only one provider can be a
               wildcard provider and LeGo uses it for any domain not explicitly
               listed in another provider.
-            </Typography>
+            </FormInfo>
 
             <InputArrayText
               id='form.domains'

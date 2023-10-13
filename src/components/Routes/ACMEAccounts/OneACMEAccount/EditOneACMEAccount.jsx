@@ -7,8 +7,7 @@ import { formChangeHandlerFunc } from '../../../../helpers/input-handler';
 import { isNameValid } from '../../../../helpers/form-validation';
 import { showDebugInfo } from '../../../../helpers/environment';
 
-import { Typography } from '@mui/material';
-
+import { Box, Typography } from '@mui/material';
 import ApiError from '../../../UI/Api/ApiError';
 import ApiLoading from '../../../UI/Api/ApiLoading';
 import Button from '../../../UI/Button/Button';
@@ -16,6 +15,7 @@ import DialogAlert from '../../../UI/Dialog/DialogAlert';
 import Form from '../../../UI/FormMui/Form';
 import FormContainer from '../../../UI/FormMui/FormContainer';
 import FormFooter from '../../../UI/FormMui/FormFooter';
+import FormInfo from '../../../UI/FormMui/FormInfo';
 import FormRowRight from '../../../UI/FormMui/FormRowRight';
 import InputCheckbox from '../../../UI/FormMui/InputCheckbox';
 import InputSelect from '../../../UI/FormMui/InputSelect';
@@ -335,8 +335,18 @@ const EditOneACMEAccount = () => {
             {canRegister &&
               apiGetState.acme_account.acme_server
                 .external_account_required && (
-                <>
-                  <Typography>External Account Binding</Typography>
+                <Box
+                  sx={{
+                    mt: 1,
+                    p: 1,
+                    border: 1,
+                    borderRadius: '4px',
+                    borderColor: 'grey.800',
+                  }}
+                >
+                  <Typography sx={{ m: 1 }}>
+                    External Account Binding
+                  </Typography>
 
                   <InputTextField
                     id='form.eab_kid'
@@ -353,20 +363,18 @@ const EditOneACMEAccount = () => {
                     onChange={inputChangeHandler}
                     error={formState.validationErrors.eab_hmac_key}
                   />
-                </>
+                </Box>
               )}
 
             {showDebugInfo && apiGetState.acme_account.kid !== '' && (
-              <Typography variant='p' sx={{ my: 1 }} display='block'>
-                Kid: {apiGetState.acme_account.kid}
-              </Typography>
+              <FormInfo>KID: {apiGetState.acme_account.kid}</FormInfo>
             )}
 
-            <Typography variant='p' sx={{ my: 1 }} display='block'>
+            <FormInfo>
               Account Status:{' '}
               {apiGetState.acme_account.status.charAt(0).toUpperCase() +
                 apiGetState.acme_account.status.slice(1)}
-            </Typography>
+            </FormInfo>
 
             <FormRowRight>
               <Button

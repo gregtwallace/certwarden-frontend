@@ -1,6 +1,7 @@
 import { PropTypes } from 'prop-types';
 
-import { Link, Typography } from '@mui/material';
+import { Link } from '@mui/material';
+import FormInfo from '../../../../UI/FormMui/FormInfo';
 import InputArrayText from '../../../../UI/FormMui/InputArrayText';
 import InputTextField from '../../../../UI/FormMui/InputTextField';
 
@@ -9,10 +10,10 @@ const Dns01AcmeShFormFields = (props) => {
 
   return (
     <>
-      <Typography variant='body2' sx={{ m: 2 }}>
+      <FormInfo>
         Paths where acme.sh is unpacked (including dnsapi folder). May be
         relative to LeGo or absolute.
-      </Typography>
+      </FormInfo>
 
       <InputTextField
         id='form.acme_sh_path'
@@ -22,7 +23,7 @@ const Dns01AcmeShFormFields = (props) => {
         error={formState.validationErrors.acme_sh_path}
       />
 
-      <Typography variant='body2' sx={{ m: 2 }}>
+      <FormInfo>
         For hook name and environment variables, look up your DNS provider at{' '}
         <Link
           href='https://github.com/acmesh-official/acme.sh/wiki/dnsapi'
@@ -31,12 +32,12 @@ const Dns01AcmeShFormFields = (props) => {
         >
           https://github.com/acmesh-official/acme.sh/wiki/dnsapi
         </Link>
-      </Typography>
+      </FormInfo>
 
-      <Typography variant='body2' sx={{ m: 2 }}>
+      <FormInfo>
         Hook name is the value following the --dns flag in the &quot;issue a
         cert&quot; command for your provider. For example, Cloudflare is dns_cf.
-      </Typography>
+      </FormInfo>
 
       <InputTextField
         id='form.dns_hook'
@@ -46,7 +47,7 @@ const Dns01AcmeShFormFields = (props) => {
         error={formState.validationErrors.dns_hook}
       />
 
-      <Typography variant='body2' sx={{ m: 2 }}>
+      <FormInfo>
         Format must be:
         <br />
         variable_name=variable_value
@@ -54,7 +55,7 @@ const Dns01AcmeShFormFields = (props) => {
         <br />
         For example: <br />
         my_api_key=abcdef12345
-      </Typography>
+      </FormInfo>
 
       <InputArrayText
         id='form.environment'

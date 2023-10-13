@@ -1,24 +1,36 @@
 import PropTypes from 'prop-types';
 import { convertUnixTime } from '../../../helpers/time';
 
-import { Box, Toolbar } from '@mui/material';
+import { Box, Toolbar, Typography } from '@mui/material';
 
-import FormInfo from './FormInfo';
+const FooterInfo = (props) => {
+  return (
+    <Typography variant='subtitle2' fontWeight='regular'>
+      {props.children}
+    </Typography>
+  );
+};
+
+FooterInfo.propTypes = {
+  children: PropTypes.node,
+};
 
 const FormFooter = (props) => {
   return (
     <Toolbar variant='dense' disableGutters sx={{ mt: 2, pr: 2 }}>
       <Box sx={{ flexGrow: 1 }}>
         {props.createdAt ? (
-          <FormInfo>Created: {convertUnixTime(props.createdAt)}</FormInfo>
+          <FooterInfo>Created: {convertUnixTime(props.createdAt)}</FooterInfo>
         ) : null}
         {props.updatedAt ? (
-          <FormInfo>Last Updated: {convertUnixTime(props.updatedAt)}</FormInfo>
+          <FooterInfo>
+            Last Updated: {convertUnixTime(props.updatedAt)}
+          </FooterInfo>
         ) : null}
         {props.checkedAt ? (
-          <FormInfo>
+          <FooterInfo>
             Last Checked: {convertUnixTime(props.checkedAt, true)}
-          </FormInfo>
+          </FooterInfo>
         ) : null}
       </Box>
       {props.children}

@@ -1,6 +1,6 @@
 import { PropTypes } from 'prop-types';
 
-import { Typography } from '@mui/material';
+import FormInfo from '../../../../UI/FormMui/FormInfo';
 import InputArrayText from '../../../../UI/FormMui/InputArrayText';
 import InputTextField from '../../../../UI/FormMui/InputTextField';
 
@@ -9,7 +9,7 @@ const Dns01ManualFormFields = (props) => {
 
   return (
     <>
-      <Typography variant='body2' sx={{ m: 2 }}>
+      <FormInfo>
         Format must be:
         <br />
         variable_name=variable_value
@@ -17,7 +17,7 @@ const Dns01ManualFormFields = (props) => {
         <br />
         For example: <br />
         my_api_key=abcdef12345
-      </Typography>
+      </FormInfo>
 
       <InputArrayText
         id='form.environment'
@@ -27,10 +27,10 @@ const Dns01ManualFormFields = (props) => {
         onChange={onChange}
       />
 
-      <Typography variant='body2' sx={{ m: 2 }}>
+      <FormInfo>
         Paths to scripts, including filename. May be relative to LeGo or
         absolute.
-      </Typography>
+      </FormInfo>
 
       <InputTextField
         id='form.create_script'
