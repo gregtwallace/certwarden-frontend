@@ -9,9 +9,11 @@ const Dns01ManualFormFields = (props) => {
 
   return (
     <>
-      <Typography sx={{ m: 2 }}>
-        Environment variables must be specified in the format
-        variable_name=variable_value.
+      <Typography variant='body2' sx={{ m: 2 }}>
+        Format must be:
+        <br />
+        variable_name=variable_value
+        <br />
         <br />
         For example: <br />
         my_api_key=abcdef12345
@@ -25,8 +27,9 @@ const Dns01ManualFormFields = (props) => {
         onChange={onChange}
       />
 
-      <Typography sx={{ m: 2 }}>
-        These paths can be relative to LeGo or absolute. Include the file name.
+      <Typography variant='body2' sx={{ m: 2 }}>
+        Paths to scripts, including filename. May be relative to LeGo or
+        absolute.
       </Typography>
 
       <InputTextField

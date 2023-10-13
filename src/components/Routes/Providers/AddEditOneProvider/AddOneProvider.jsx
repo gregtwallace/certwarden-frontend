@@ -97,12 +97,19 @@ const AddOneProvider = () => {
 
         {formState.provider_type_value !== '' && (
           <>
-            <Typography sx={{ m: 2 }}>
-              For Domains, either list the domains you want this provider to be
-              used for or list a single domain with the value of an asterisk (*)
-              to use this provider as a catch-all (wildcard). Only one provider
-              can be a wildcard provider and LeGo uses it for any domain not
-              explicitly listed in another provider.
+            {!!provider.noWindows && (
+              <Typography color='error' variant='subtitle2' sx={{ m: 2 }}>
+                Warning: This provider does not work if the backend is running
+                on Windows OS.
+              </Typography>
+            )}
+
+            <Typography variant='body2' sx={{ m: 2 }}>
+              Either list the domains you want this provider to be used for or
+              list a single domain with the value of an asterisk (*) to use this
+              provider as a catch-all (wildcard). Only one provider can be a
+              wildcard provider and LeGo uses it for any domain not explicitly
+              listed in another provider.
             </Typography>
 
             <InputTextArray

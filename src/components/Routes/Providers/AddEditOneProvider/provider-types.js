@@ -2,6 +2,7 @@ import { isEmailValid, isPortValid } from '../../../../helpers/form-validation';
 
 import DummyFormFields from './ProviderForms/DummyFormFields';
 import Http01InternalFormFields from './ProviderForms/Http01InternalFormFields';
+import Dns01AcmeShFormFields from './ProviderForms/Dns01AcmeShFormFields';
 import Dns01CloudflareFormFields from './ProviderForms/Dns01CloudflareFormFields';
 import Dns01ManualFormFields from './ProviderForms/Dns01ManualFormFields';
 
@@ -58,6 +59,50 @@ export const providerTypes = [
       // must set a valid port number
       if (!isPortValid(formState.form.port)) {
         validationErrors.port = true;
+      }
+
+      return validationErrors;
+    },
+  },
+
+  {
+    value: 'dns01acmesh',
+    name: 'DNS-01 acme.sh',
+    noWindows: true,
+    FormComponent: Dns01AcmeShFormFields,
+    configName: 'dns_01_acme_sh',
+    alsoSet: [
+      {
+        name: 'form',
+        value: {
+          domains: [''],
+          acme_sh_path: '',
+          dns_hook: '',
+          environment: [],
+        },
+      },
+      {
+        name: 'provider_options',
+        value: undefined,
+      },
+    ],
+    validationFunc: (formState) => {
+      let validationErrors = {};
+
+      // must specify path
+      if (
+        formState.form.acme_sh_path != undefined &&
+        formState.form.acme_sh_path === ''
+      ) {
+        validationErrors.acme_sh_path = true;
+      }
+
+      // must specify hook name
+      if (
+        formState.form.dns_hook != undefined &&
+        formState.form.dns_hook === ''
+      ) {
+        validationErrors.dns_hook = true;
       }
 
       return validationErrors;
