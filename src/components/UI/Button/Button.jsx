@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom';
 import { Button as ButtonMui } from '@mui/material';
 
 const Button = (props) => {
-  var color = '';
+  const { disabled, children, href, onClick, size, sx, target, type } = props;
 
-  switch (props.type) {
+  var color = undefined;
+  switch (type) {
     case 'add':
       color = 'success';
       break;
@@ -40,20 +41,21 @@ const Button = (props) => {
 
   return (
     <ButtonMui
-      component={props.href ? Link : null}
-      to={props.href}
-      target={props.target}
-      type={props.type}
+      component={href ? Link : null}
+      to={href}
+      target={target}
+      type={type}
       variant='contained'
-      onClick={props.onClick}
-      disabled={props.disabled}
+      onClick={onClick}
+      disabled={disabled}
       sx={{
+        ...sx,
         ml: 2,
       }}
       color={color}
-      size={props.size}
+      size={size}
     >
-      {props.children}
+      {children}
     </ButtonMui>
   );
 };
@@ -65,6 +67,7 @@ Button.propTypes = {
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
   size: PropTypes.string,
+  sx: PropTypes.object,
   children: PropTypes.node,
 };
 

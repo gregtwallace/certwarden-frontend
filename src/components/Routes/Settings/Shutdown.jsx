@@ -79,6 +79,7 @@ const Shutdown = () => {
         variant='contained'
         type='shutdown'
         disabled={apiSendState.isSending}
+        sx={{ mb: 2 }}
       >
         Shutdown
       </Button>
