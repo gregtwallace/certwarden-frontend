@@ -21,6 +21,7 @@ const Button = (props) => {
       break;
     case 'delete':
     case 'shutdown':
+    case 'revoke':
       color = 'error';
       break;
     case 'info':
@@ -60,7 +61,6 @@ const Button = (props) => {
 Button.propTypes = {
   href: PropTypes.string,
   target: PropTypes.string,
-
   type: PropTypes.string,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,

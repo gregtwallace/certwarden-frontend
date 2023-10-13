@@ -246,8 +246,7 @@ const Orders = (props) => {
                             <Button
                               variant='contained'
                               size='small'
-                              color='error'
-                              type='submit'
+                              type='revoke'
                               disabled={apiSendState.isSending}
                               onClick={(event) =>
                                 revokeCertHandler(event, o.id)
