@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material';
 
 import GridItemContainer from '../../../UI/Grid/GridItemContainer';
 import FormRowRight from '../../../UI/FormMui/FormRowRight';
-// import Button from '../../../UI/Button/Button';
+import Button from '../../../UI/Button/Button';
 
 import ProviderTitle from './ProviderTitle';
 import ProviderDomainsView from './ProviderDomainsView';
@@ -35,14 +35,10 @@ const ViewOneProvider = (props) => {
       ></Box>
 
       <FormRowRight>
-        {/* <Button
-          href={`/providers/${props.provider.id}`}
-          type='edit'
-        >
+        <Button href={`/providers/${props.provider.id}`} type='edit'>
           Edit
-        </Button> */}
+        </Button>
       </FormRowRight>
-
     </GridItemContainer>
   );
 };

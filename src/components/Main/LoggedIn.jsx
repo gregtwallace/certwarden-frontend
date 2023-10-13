@@ -12,6 +12,7 @@ import AllACMEAccounts from '../Routes/ACMEAccounts/AllACMEAccounts';
 import AllACMEServers from '../Routes/ACMEServers/AllACMEServers';
 import AllCertificates from '../Routes/Certificates/AllCertificates';
 import AllPrivateKeys from '../Routes/PrivateKeys/AllPrivateKeys';
+import AddOneProvider from '../Routes/Providers/AddEditOneProvider/AddOneProvider';
 import ChangeAccountEmail from '../Routes/ACMEAccounts/OneACMEAccount/Edit/ChangeAccountEmail';
 import Dashboard from '../Routes/Dashboard/Dashboard';
 import EditCertApiKeys from '../Routes/Certificates/OneCert/Edit/EditCertApiKeys';
@@ -20,6 +21,7 @@ import EditOneACMEAccount from '../Routes/ACMEAccounts/OneACMEAccount/EditOneACM
 import EditOneACMEServer from '../Routes/ACMEServers/Edit/EditOneACMEServer';
 import EditOneCert from '../Routes/Certificates/OneCert/EditOneCert';
 import EditOnePrivateKey from '../Routes/PrivateKeys/OnePrivateKey/EditOnePrivateKey';
+import EditOneProvider from '../Routes/Providers/AddEditOneProvider/EditOneProvider';
 import Logout from '../Routes/Logout/Logout';
 import LogViewer from '../Routes/LogViewer/LogViewer';
 import Navbar from './Navbar/Navbar';
@@ -82,6 +84,8 @@ const LoggedIn = () => {
 
           {/* Providers */}
           <Route path={'/providers'} element={<AllProviders />} />
+          <Route path={`/providers/${newId}`} element={<AddOneProvider />} />
+          <Route path={'/providers/:id'} element={<EditOneProvider />} />
 
           {/* ACME Servers */}
           <Route path='/acmeservers' element={<AllACMEServers />} />

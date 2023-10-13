@@ -72,7 +72,7 @@ InputSelect.propTypes = {
       alsoSet: PropTypes.arrayOf(
         PropTypes.shape({
           name: PropTypes.string.isRequired,
-          value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+          value: PropTypes.any,
         })
       ),
     })

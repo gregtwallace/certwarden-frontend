@@ -5,6 +5,14 @@ const fieldsInfo = [
     errorMessage: 'You must accept the Terms of Service.',
   },
   {
+    name: 'form.account.email',
+    errorMessage: 'Account email must be specified and in a valid format.',
+  },
+  {
+    name: 'form.account.global_api_key',
+    errorMessage: 'Global API key must be specified.',
+  },
+  {
     name: 'form.acme_account_id',
     errorMessage: 'An account must be selected.',
     type: 'number',
@@ -27,6 +35,10 @@ const fieldsInfo = [
     errorMessage: 'API keys must be at least 10 characters long.',
   },
   {
+    name: 'form.api_token',
+    errorMessage: 'API token must be specified.',
+  },
+  {
     name: 'form.current_password',
     type: 'password',
   },
@@ -42,8 +54,7 @@ const fieldsInfo = [
   {
     name: 'form.domains',
     errorMessage:
-      'Domain must be valid. Or for a wildcard provider use one domain set to ' *
-      '.',
+      'Domain must be valid. Or for a wildcard provider use one domain set to * .',
   },
   {
     name: 'form.eab_hmac_key',
@@ -95,6 +106,10 @@ const fieldsInfo = [
     name: 'form.subject_alts',
     errorMessage:
       'Subject name must be a valid (sub)domain and may start with a wildcard (*.).',
+  },
+  {
+    name: 'provider_options.api_access_method',
+    errorMessage: 'API Access Method must be selected.',
   },
   // {
   //   name: 'form.',
