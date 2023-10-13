@@ -41,8 +41,8 @@ const makeListObjects = (obj) => {
 const ConfigView = (props) => {
   return (
     <List dense={true}>
-      {makeListObjects(props.config).map((elem) => (
-        <ListItem key={elem.key}>
+      {makeListObjects(props.config).map((elem, index) => (
+        <ListItem key={`${index}_${elem.key}`}>
           <ListItemText primary={`${elem.key}: ${elem.value}`} />
         </ListItem>
       ))}
