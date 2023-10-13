@@ -1,8 +1,9 @@
 import { isEmailValid, isPortValid } from '../../../../helpers/form-validation';
 
 import DummyFormFields from './ProviderForms/DummyFormFields';
-import Dns01CloudflareFormFields from './ProviderForms/Dns01CloudflareFormFields';
 import Http01InternalFormFields from './ProviderForms/Http01InternalFormFields';
+import Dns01CloudflareFormFields from './ProviderForms/Dns01CloudflareFormFields';
+import Dns01ManualFormFields from './ProviderForms/Dns01ManualFormFields';
 
 // dummy provider holds a dummy component to prevent errors if something goes wrong
 const dummyProvider = {
@@ -18,10 +19,10 @@ const dummyProvider = {
   // name of config to use when sending POST to backend
   configName: 'dummy_config',
 
-  // fields to also set when this provider type is selected
+  // [OPTIONAL] fields to also set when this provider type is selected
   // alsoSet: [{}]
 
-  // function to set provider_options when editing the provider
+  // [OPTIONAL] function to set provider_options when editing the provider
   // setProviderOptionsForEdit: () => {},
 
   // function to return validation object prior to POST
@@ -33,6 +34,36 @@ const dummyProvider = {
 // providerTypes lists all of the provider type options and related details
 // to be used in add or edit operations
 export const providerTypes = [
+  {
+    value: 'http01internal',
+    name: 'HTTP-01 Internal Server',
+    FormComponent: Http01InternalFormFields,
+    configName: 'http_01_internal',
+    alsoSet: [
+      {
+        name: 'form',
+        value: {
+          domains: [''],
+          port: '',
+        },
+      },
+      {
+        name: 'provider_options',
+        value: undefined,
+      },
+    ],
+    validationFunc: (formState) => {
+      let validationErrors = {};
+
+      // must set a valid port number
+      if (!isPortValid(formState.form.port)) {
+        validationErrors.port = true;
+      }
+
+      return validationErrors;
+    },
+  },
+
   {
     value: 'dns01cloudflare',
     name: 'DNS-01 Cloudflare',
@@ -94,17 +125,20 @@ export const providerTypes = [
       return validationErrors;
     },
   },
+
   {
-    value: 'http01internal',
-    name: 'HTTP-01 Internal Server',
-    FormComponent: Http01InternalFormFields,
-    configName: 'http_01_internal',
+    value: 'dns01manual',
+    name: 'DNS-01 Manual Script',
+    FormComponent: Dns01ManualFormFields,
+    configName: 'dns_01_manual',
     alsoSet: [
       {
         name: 'form',
         value: {
           domains: [''],
-          port: '',
+          environment: [],
+          create_script: '',
+          delete_script: '',
         },
       },
       {
@@ -115,9 +149,12 @@ export const providerTypes = [
     validationFunc: (formState) => {
       let validationErrors = {};
 
-      // must set a valid port number
-      if (!isPortValid(formState.form.port)) {
-        validationErrors.port = true;
+      // must set path to create and delete
+      if (formState.form.create_script === '') {
+        validationErrors.create_script = true;
+      }
+      if (formState.form.delete_script === '') {
+        validationErrors.delete_script = true;
       }
 
       return validationErrors;
