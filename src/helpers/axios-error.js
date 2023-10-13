@@ -1,6 +1,6 @@
-export const parseAxiosError = async (err, devMode = false) => {
+export const parseAxiosError = async (err, showDebugInfo = false) => {
   // dev log error
-  if (devMode) {
+  if (showDebugInfo) {
     console.log(err);
   }
 
@@ -24,7 +24,7 @@ export const parseAxiosError = async (err, devMode = false) => {
       errorMessage = err.response.data.error.message;
     } catch (errorInner) {
       // log inner error if in devmode
-      if (devMode) {
+      if (showDebugInfo) {
         console.log(errorInner);
       }
     }

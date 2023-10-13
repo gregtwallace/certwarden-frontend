@@ -1,5 +1,5 @@
 import { frontendVersion } from '../../../helpers/constants';
-import { devMode } from '../../../helpers/environment';
+import { showDebugInfo } from '../../../helpers/environment';
 import { apiUrl } from '../../../helpers/environment';
 
 import { Link, Typography } from '@mui/material';
@@ -28,7 +28,7 @@ const FrontendStatus = () => {
       </Typography>
 
       <Typography variant='p' sx={{ my: 1 }} display='block'>
-        Development Mode: {devMode ? 'Yes' : 'No'}
+        Show Debug Info: {showDebugInfo ? 'Yes' : 'No'}
       </Typography>
     </GridItemContainer>
   );

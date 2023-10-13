@@ -132,107 +132,94 @@ const EditAPIKeysPage = (props) => {
         />
       )}
 
-      {renderApiItems &&
-        /* Render unavailable message if server returns redacted */
-        (apiGetState[props.itemTypeApiObjectName].api_key.includes('*') ? (
-          <Form>
-            <Typography sx={{ px: 1, mt: 1, mb: 3 }}>
-              This feature is not available when server is running as http.
-            </Typography>
+      {renderApiItems && (
+        <Form onSubmit={submitFormHandler}>
+          <Typography sx={{ px: 1, mt: 1, mb: 3, color: 'error.main' }}>
+            Do not manually edit the API Keys unless you have a specific need.
+          </Typography>
 
-            <FormRowRight>
-              <Button href={`/${props.itemTypeApiPath}/${id}`}>Back</Button>
-            </FormRowRight>
-          </Form>
-        ) : (
-          /* Function is available */
-          <Form onSubmit={submitFormHandler}>
-            <Typography sx={{ px: 1, mt: 1, mb: 3, color: 'error.main' }}>
-              Do not manually edit the API Keys unless you have a specific need.
-            </Typography>
+          <Typography sx={{ px: 1, mt: 1, mb: 3 }}>
+            Keys should be generated securely to avoid breaches and must be at
+            least 10 characters in length, though practically you should make
+            them much longer.
+          </Typography>
 
-            <Typography sx={{ px: 1, mt: 1, mb: 3 }}>
-              Keys should be generated securely to avoid breaches and must be at
-              least 10 characters in length, though practically you should make
-              them much longer.
-            </Typography>
+          <InputTextField
+            id='form.name'
+            label='Name'
+            value={apiGetState[props.itemTypeApiObjectName].name}
+            disabled
+          />
 
-            <InputTextField
-              id='form.name'
-              label='Name'
-              value={apiGetState[props.itemTypeApiObjectName].name}
-              disabled
-            />
+          <InputTextField
+            id='form.description'
+            label='Description'
+            value={
+              apiGetState[props.itemTypeApiObjectName].description
+                ? apiGetState[props.itemTypeApiObjectName].description
+                : 'None'
+            }
+            disabled
+          />
 
-            <InputTextField
-              id='form.description'
-              label='Description'
-              value={
-                apiGetState[props.itemTypeApiObjectName].description
-                  ? apiGetState[props.itemTypeApiObjectName].description
-                  : 'None'
-              }
-              disabled
-            />
+          <Typography sx={{ px: 1, my: 3 }}>
+            API Key 1 corresponds to the &apos;Old&apos; API Key. It must be
+            populated.
+          </Typography>
 
-            <Typography sx={{ px: 1, my: 3 }}>
-              API Key 1 corresponds to the &apos;Old&apos; API Key. It must be
-              populated.
-            </Typography>
+          <InputTextField
+            id='form.api_key'
+            label='API Key 1'
+            value={formState.form.api_key}
+            onChange={inputChangeHandler}
+            error={formState.validationErrors.api_key}
+          />
 
-            <InputTextField
-              id='form.api_key'
-              label='API Key 1'
-              value={formState.form.api_key}
-              onChange={inputChangeHandler}
-              error={formState.validationErrors.api_key}
-            />
+          <Typography sx={{ px: 1, my: 3 }}>
+            API Key 2 corresponds to the &apos;New&apos; API Key. It may be
+            blank in which case only API Key 1 will be used.
+          </Typography>
 
-            <Typography sx={{ px: 1, my: 3 }}>
-              API Key 2 corresponds to the &apos;New&apos; API Key. It may be
-              blank in which case only API Key 1 will be used.
-            </Typography>
+          <InputTextField
+            id='form.api_key_new'
+            label='API Key 2'
+            value={formState.form.api_key_new}
+            onChange={inputChangeHandler}
+            error={formState.validationErrors.api_key_new}
+          />
 
-            <InputTextField
-              id='form.api_key_new'
-              label='API Key 2'
-              value={formState.form.api_key_new}
-              onChange={inputChangeHandler}
-              error={formState.validationErrors.api_key_new}
-            />
+          {apiSendState.errorMessage &&
+            Object.keys(formState.validationErrors).length <= 0 && (
+              <ApiError
+                code={apiSendState.errorCode}
+                message={apiSendState.errorMessage}
+              />
+            )}
 
-            {apiSendState.errorMessage &&
-              Object.keys(formState.validationErrors).length <= 0 && (
-                <ApiError
-                  code={apiSendState.errorCode}
-                  message={apiSendState.errorMessage}
-                />
-              )}
-
-            <FormFooter>
-              <Button
-                type='cancel'
-                href={`/${props.itemTypeApiPath}/${id}`}
-                disabled={apiSendState.isSending}
-              >
-                Cancel
-              </Button>
-              <Button
-                type='reset'
-                onClick={() => setFormToApi()}
-                disabled={apiSendState.isSending || formUnchanged}
-              >
-                Reset
-              </Button>
-              <Button
-                type='submit'
-                disabled={apiSendState.isSending || formUnchanged}
-              >
-                Submit
-              </Button>
-            </FormFooter>
-          </Form>
-        ))}
+          <FormFooter>
+            <Button
+              type='cancel'
+              href={`/${props.itemTypeApiPath}/${id}`}
+              disabled={apiSendState.isSending}
+            >
+              Cancel
+            </Button>
+            <Button
+              type='reset'
+              onClick={() => setFormToApi()}
+              disabled={apiSendState.isSending || formUnchanged}
+            >
+              Reset
+            </Button>
+            <Button
+              type='submit'
+              disabled={apiSendState.isSending || formUnchanged}
+            >
+              Submit
+            </Button>
+          </FormFooter>
+        </Form>
+      )}
     </FormContainer>
   );
 };

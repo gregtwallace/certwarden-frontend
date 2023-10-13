@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 
-import { devMode } from '../helpers/environment';
+import { showDebugInfo } from '../helpers/environment';
 import { parseAxiosError } from '../helpers/axios-error';
 import { axiosNoToken } from '../api/axios';
 import useAxiosWithToken from './useAxiosWithToken';
@@ -39,7 +39,7 @@ const useAxiosGet = (apiNode, expectedJsonName, withAccessToken = false) => {
       });
 
       // dev log response
-      if (devMode) {
+      if (showDebugInfo) {
         console.log(response);
       }
 
@@ -51,7 +51,7 @@ const useAxiosGet = (apiNode, expectedJsonName, withAccessToken = false) => {
       });
     } catch (err) {
       // use common axios error parser
-      const [errCode, errMessage] = await parseAxiosError(err, devMode);
+      const [errCode, errMessage] = await parseAxiosError(err, showDebugInfo);
 
       setState({
         [expectedJsonName]: {},

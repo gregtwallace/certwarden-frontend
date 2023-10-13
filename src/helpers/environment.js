@@ -7,11 +7,11 @@ export const apiUrl = useFile
   ? window.env.API_URL
   : import.meta.env.VITE_API_URL;
 
-// dev mode - DEV_MODE: '__DEV_MODE__',
-// devMode changes:
-// - Show accoount KID
-// - Disable password change complexity validation
-// - console.log() a number of things related to Axios
-export const devMode = useFile
-  ? window.env.DEV_MODE
-  : import.meta.env.VITE_DEV_MODE;
+// debug logging - SHOW_DEBUG_INFO: '__SHOW_DEBUG_INFO__',
+// Note: This is SAFE to run in production, it just provides extra info to users
+// Changes:
+// - provides some extra console.log() information
+// - provides some additional information on various pages (such as IDs)
+export const showDebugInfo = useFile
+  ? window.env.SHOW_DEBUG_INFO
+  : import.meta.env.VITE_SHOW_DEBUG_INFO;

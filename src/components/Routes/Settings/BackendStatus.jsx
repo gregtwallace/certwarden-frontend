@@ -52,8 +52,7 @@ const BackendStatus = () => {
           </Typography>
 
           <Typography variant='p' sx={{ my: 1 }} display='block'>
-            Development Mode:{' '}
-            {apiGetState.server.development_mode ? 'Yes' : 'No'}
+            Show Debug Info: {apiGetState.server.show_debug_info ? 'Yes' : 'No'}
           </Typography>
         </>
       )}

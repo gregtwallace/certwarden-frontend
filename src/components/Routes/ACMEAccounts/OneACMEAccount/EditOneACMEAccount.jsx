@@ -5,7 +5,7 @@ import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
 import { formChangeHandlerFunc } from '../../../../helpers/input-handler';
 import { isNameValid } from '../../../../helpers/form-validation';
-import { devMode } from '../../../../helpers/environment';
+import { showDebugInfo } from '../../../../helpers/environment';
 
 import { Typography } from '@mui/material';
 
@@ -356,7 +356,7 @@ const EditOneACMEAccount = () => {
                 </>
               )}
 
-            {devMode && apiGetState.acme_account.kid !== '' && (
+            {showDebugInfo && apiGetState.acme_account.kid !== '' && (
               <Typography variant='p' sx={{ my: 1 }} display='block'>
                 Kid: {apiGetState.acme_account.kid}
               </Typography>

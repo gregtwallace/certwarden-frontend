@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router';
 
 import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
-import { devMode } from '../../../../helpers/environment';
+import { showDebugInfo } from '../../../../helpers/environment';
 import { formChangeHandlerFunc } from '../../../../helpers/input-handler';
 import { getProvider } from './provider-types';
 import { isDomainValid } from '../../../../helpers/form-validation';
@@ -169,7 +169,7 @@ const EditOneProvider = () => {
           <DialogAlert
             title={`Are you sure you want to delete provider ${
               apiGetState.provider.type
-            }${devMode ? ' (id:' + apiGetState.provider.id + ') ' : ''}?`}
+            }${showDebugInfo ? ' (id:' + apiGetState.provider.id + ') ' : ''}?`}
             open={deleteOpen}
             onCancel={deleteCancelHandler}
             onConfirm={deleteConfirmHandler}

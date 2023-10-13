@@ -398,17 +398,13 @@ const EditOneCert = () => {
                 }
                 value={apiGetState.certificate.api_key}
                 readOnly
-                disabled={apiGetState.certificate.api_key.includes('*')}
               />
 
               <FormRowRight>
                 <Button
                   href={`/certificates/${id}/apikeys`}
                   type='manually_edit'
-                  disabled={
-                    apiSendState.isSending ||
-                    apiGetState.certificate.api_key.includes('*')
-                  }
+                  disabled={apiSendState.isSending}
                 >
                   Edit API Keys
                 </Button>
@@ -436,7 +432,6 @@ const EditOneCert = () => {
                   label='New API Key'
                   value={apiGetState.certificate.api_key_new}
                   readOnly
-                  disabled={apiGetState.certificate.api_key.includes('*')}
                 />
               )}
 

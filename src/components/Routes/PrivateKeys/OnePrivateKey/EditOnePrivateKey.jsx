@@ -173,10 +173,7 @@ const EditOnePrivateKey = () => {
           <>
             <Button
               onClick={downloadClickHandler}
-              disabled={
-                apiSendState.isSending ||
-                apiGetState.private_key.api_key.includes('*')
-              }
+              disabled={apiSendState.isSending}
             >
               Download Key
             </Button>
@@ -243,17 +240,13 @@ const EditOnePrivateKey = () => {
               }
               value={apiGetState.private_key.api_key}
               readOnly
-              disabled={apiGetState.private_key.api_key.includes('*')}
             />
 
             <FormRowRight>
               <Button
                 href={`/privatekeys/${id}/apikeys`}
                 type='manually_edit'
-                disabled={
-                  apiSendState.isSending ||
-                  apiGetState.private_key.api_key.includes('*')
-                }
+                disabled={apiSendState.isSending}
               >
                 Edit API Keys
               </Button>
@@ -281,7 +274,6 @@ const EditOnePrivateKey = () => {
                 label='New API Key'
                 value={apiGetState.private_key.api_key_new}
                 readOnly
-                disabled={apiGetState.private_key.api_key.includes('*')}
               />
             )}
 
