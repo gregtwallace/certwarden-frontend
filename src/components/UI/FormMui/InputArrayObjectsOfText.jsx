@@ -107,7 +107,10 @@ const InputArrayObjectsOfText = (props) => {
               p: 1,
               border: 1,
               borderRadius: '4px',
-              borderColor: error?.includes(i) ? 'rgb(244, 67, 54)' : 'grey.800',
+              /* Note: action.disabled isn't the exact default field border color, but it is close */
+              borderColor: error?.includes(i)
+                ? 'error.main'
+                : 'action.disabled',
             }}
           >
             <Toolbar
@@ -115,7 +118,7 @@ const InputArrayObjectsOfText = (props) => {
               disableGutters
               sx={{
                 mb: 1,
-                color: error?.includes(i) ? 'rgb(244, 67, 54)' : undefined,
+                color: error?.includes(i) ? 'error.main' : undefined,
               }}
             >
               <Typography id={id + '-' + i} sx={{ mb: 1 }}>
