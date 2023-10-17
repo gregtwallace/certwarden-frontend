@@ -55,11 +55,36 @@ const tableHeaders = [
   },
 ];
 
+// func for if a unix timestamp is expired
+const isExpired = (unixTime) => Date.now() / 1000 > unixTime;
+
+// calculate the order status value to display
+const orderStatus = (order) => {
+  // if in order queue
+  if (order.fulfillment_worker != undefined) {
+    if (order.fulfillment_worker < 0) {
+      return 'Waiting in Order Queue';
+    }
+
+    return 'With Order Worker ' + order.fulfillment_worker;
+  }
+
+  // if revoked
+  if (order.known_revoked) {
+    return 'Revoked';
+  }
+
+  // if expired
+  if (order.status === 'valid' && isExpired(order.valid_to)) {
+    return 'Expired';
+  }
+
+  // anything else
+  return order.status.charAt(0).toUpperCase() + order.status.slice(1);
+};
+
 const Orders = (props) => {
   const [searchParams] = useSearchParams();
-
-  // func for if a unix timestamp is expired
-  const isExpired = (unixTime) => Date.now() / 1000 > unixTime;
 
   // get calculated query params
   const rowsPerPage = getRowsPerPage(searchParams, 5);
@@ -198,14 +223,11 @@ const Orders = (props) => {
                 apiGetState.all_orders.orders.map((o) => (
                   <TableRow key={o.id}>
                     <TableCell>{convertUnixTime(o.created_at)}</TableCell>
+
                     <TableCell>{convertUnixTime(o.valid_to)}</TableCell>
-                    <TableCell>
-                      {o.known_revoked
-                        ? 'Revoked'
-                        : o.status === 'valid' && isExpired(o.valid_to)
-                        ? 'Expired'
-                        : o.status.charAt(0).toUpperCase() + o.status.slice(1)}
-                    </TableCell>
+
+                    <TableCell>{orderStatus(o)}</TableCell>
+
                     <TableCell>
                       {o.finalized_key && (
                         <Link
@@ -216,19 +238,23 @@ const Orders = (props) => {
                         </Link>
                       )}
                     </TableCell>
+
                     <TableCell>
-                      {o.status !== 'valid' && o.status !== 'invalid' && (
-                        <Button
-                          variant='contained'
-                          size='small'
-                          color='info'
-                          type='submit'
-                          disabled={apiSendState.isSending}
-                          onClick={(event) => retryOrderHandler(event, o.id)}
-                        >
-                          Retry
-                        </Button>
-                      )}
+                      {o.status !== 'valid' &&
+                        o.status !== 'invalid' &&
+                        o.fulfillment_worker == undefined && (
+                          <Button
+                            variant='contained'
+                            size='small'
+                            color='info'
+                            type='submit'
+                            disabled={apiSendState.isSending}
+                            onClick={(event) => retryOrderHandler(event, o.id)}
+                          >
+                            Retry
+                          </Button>
+                        )}
+
                       {o.status === 'valid' &&
                         !o.known_revoked &&
                         Date.now() / 1000 < o.valid_to && (
