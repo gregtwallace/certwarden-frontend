@@ -2,7 +2,7 @@ import { frontendVersion } from '../../../helpers/constants';
 import { showDebugInfo } from '../../../helpers/environment';
 import { apiUrl } from '../../../helpers/environment';
 
-import { Link, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
 import GridItemContainer from '../../UI/Grid/GridItemContainer';
 import GridTitle from '../../UI/Grid/GridTitle';
@@ -21,10 +21,7 @@ const FrontendStatus = () => {
       </Typography>
 
       <Typography variant='p' sx={{ my: 1 }} display='block'>
-        API URL:{' '}
-        <Link href={apiUrl} target='_blank' rel='noreferrer'>
-          {apiUrl}
-        </Link>
+        API URL: {apiUrl}
       </Typography>
 
       <Typography variant='p' sx={{ my: 1 }} display='block'>
