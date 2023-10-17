@@ -12,6 +12,7 @@ import AllACMEAccounts from '../Routes/ACMEAccounts/AllACMEAccounts';
 import AllACMEServers from '../Routes/ACMEServers/AllACMEServers';
 import AllCertificates from '../Routes/Certificates/AllCertificates';
 import AllPrivateKeys from '../Routes/PrivateKeys/AllPrivateKeys';
+import AllProviders from '../Routes/Providers/AllProviders';
 import AddOneProvider from '../Routes/Providers/AddEditOneProvider/AddOneProvider';
 import ChangeAccountEmail from '../Routes/ACMEAccounts/OneACMEAccount/Edit/ChangeAccountEmail';
 import Dashboard from '../Routes/Dashboard/Dashboard';
@@ -25,7 +26,7 @@ import EditOneProvider from '../Routes/Providers/AddEditOneProvider/EditOneProvi
 import Logout from '../Routes/Logout/Logout';
 import LogViewer from '../Routes/LogViewer/LogViewer';
 import Navbar from './Navbar/Navbar';
-import AllProviders from '../Routes/Providers/AllProviders';
+import OrderQueue from '../Routes/OrderQueue/OrderQueue';
 import RolloverAccountKey from '../Routes/ACMEAccounts/OneACMEAccount/Edit/RolloverAccountKey';
 import Settings from '../Routes/Settings/Settings';
 
@@ -78,6 +79,9 @@ const LoggedIn = () => {
             element={<EditCertApiKeys />}
           />
           <Route path={`/certificates/${newId}`} element={<AddOneCert />} />
+
+          {/* Order Queue */}
+          <Route path={'/orderqueue'} element={<OrderQueue />} />
 
           {/* Logs */}
           <Route path={'/logs'} element={<LogViewer />} />

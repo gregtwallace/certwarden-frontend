@@ -8,6 +8,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import BadgeIcon from '@mui/icons-material/Badge';
 import CardMembershipIcon from '@mui/icons-material/CardMembership';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import KeyIcon from '@mui/icons-material/Key';
 import SettingsIcon from '@mui/icons-material/Settings';
 import StorageIcon from '@mui/icons-material/Storage';
@@ -67,9 +68,15 @@ const Navbar = () => {
 
         <Divider sx={{ my: 1 }} />
 
+        <NavLink to='/orderqueue' iconComponent={FormatListNumberedIcon}>
+          Order Queue
+        </NavLink>
+
         <NavLink to='/logs' iconComponent={TextSnippetIcon}>
           Logs
         </NavLink>
+
+        <Divider sx={{ my: 1 }} />
 
         <NavLink to='/providers' iconComponent={WidgetsIcon}>
           Providers

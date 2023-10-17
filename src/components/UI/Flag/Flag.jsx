@@ -7,6 +7,12 @@ const Flag = (props) => {
   let text = '';
 
   switch (props.type) {
+    case 'idle':
+      color = 'white';
+      bgcolor = 'success.dark';
+      text = 'Idle';
+      break;
+
     case 'staging':
       color = 'white';
       bgcolor = 'info.dark';
@@ -57,7 +63,8 @@ const Flag = (props) => {
       noWrap
       sx={{
         mx: 0.5,
-        padding: '5px',
+        paddingX: '10px',
+        paddingY: '5px',
         borderRadius: '7px',
         color: color,
         bgcolor: bgcolor,
@@ -71,6 +78,6 @@ const Flag = (props) => {
 Flag.propTypes = {
   type: PropTypes.string,
   days: PropTypes.number,
-}
+};
 
 export default Flag;
