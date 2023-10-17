@@ -8,7 +8,7 @@ import ApiError from '../../UI/Api/ApiError';
 import Flag from '../../UI/Flag/Flag';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import { TableCell } from '@mui/material';
+import { TableCell, Typography } from '@mui/material';
 import TableContainer from '../../UI/TableMui/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableHeaderRow from '../../UI/TableMui/TableHeaderRow';
@@ -54,6 +54,13 @@ const OrderQueue = () => {
     <TableContainer>
       <TitleBar title='Order Queue' />
 
+      <Typography variant='p' sx={{ m: 3 }} display='block'>
+        The Order Queue shows all active orders that LeGo is working on. If an
+        order is assigned to a Worker ID, that order is being actively worked
+        with the ACME provider. If an order does not have a Worker ID, it is
+        queued up and waiting to be worked once a worker becomes available.
+      </Typography>
+
       {!apiGetState.isLoaded && <ApiLoading />}
       {apiGetState.errorMessage && (
         <ApiError
@@ -63,93 +70,88 @@ const OrderQueue = () => {
       )}
 
       {apiGetState.isLoaded && !apiGetState.errorMessage && (
-        <>
-          <Table size='small'>
-            <TableHead>
-              <TableHeaderRow headers={tableHeaders} />
-            </TableHead>
-            <TableBody>
-              {/* Workers */}
-              {Object.keys(apiGetState?.work_status?.worker_jobs || {}).length >
-                0 &&
-                Object.entries(apiGetState.work_status.worker_jobs).map(
-                  (workers) => {
-                    const [key, val] = workers;
+        <Table size='small'>
+          <TableHead>
+            <TableHeaderRow headers={tableHeaders} />
+          </TableHead>
 
-                    return (
-                      <TableRow key={key}>
-                        <TableCell>{key}</TableCell>
+          <TableBody>
+            {/* Workers */}
+            {Object.keys(apiGetState?.work_status?.worker_jobs || {}).length >
+              0 &&
+              Object.entries(apiGetState.work_status.worker_jobs).map(
+                (workers) => {
+                  const [key, val] = workers;
 
-                        <TableCell>
-                          {val?.order.id || <Flag type='idle' />}
-                        </TableCell>
-
-                        <TableCell>
-                          {val?.order.certificate.name && (
-                            <Link
-                              component={RouterLink}
-                              to={'/certificates/' + val.order.certificate.id}
-                            >
-                              {val.order.certificate.name}
-                            </Link>
-                          )}
-                        </TableCell>
-
-                        <TableCell>
-                          {convertUnixTime(val?.added_to_queue, true) || ''}
-                        </TableCell>
-
-                        <TableCell>
-                          {val?.high_priority != undefined
-                            ? val.high_priority
-                              ? 'High'
-                              : 'Low'
-                            : ''}
-                        </TableCell>
-
-                        <TableCell>
-                          {val?.order.certificate.subject || ''}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  }
-                )}
-
-              {/* Waiting */}
-              {apiGetState?.work_status?.jobs_waiting.length > 0 &&
-                apiGetState.work_status.jobs_waiting.map((job) => {
                   return (
-                    <TableRow key={job.order.id}>
-                      <TableCell>None (Waiting)</TableCell>
-
-                      <TableCell>{job.order.id}</TableCell>
+                    <TableRow key={key}>
+                      <TableCell>{key}</TableCell>
 
                       <TableCell>
-                        <Link
-                          component={RouterLink}
-                          to={'/certificates/' + job.order.certificate.id}
-                        >
-                          {job.order.certificate.name}
-                        </Link>
+                        {val?.order.id || <Flag type='idle' />}
                       </TableCell>
 
                       <TableCell>
-                        {convertUnixTime(job.added_to_queue, true) || ''}
+                        {val?.order.certificate.name && (
+                          <Link
+                            component={RouterLink}
+                            to={'/certificates/' + val.order.certificate.id}
+                          >
+                            {val.order.certificate.name}
+                          </Link>
+                        )}
                       </TableCell>
 
                       <TableCell>
-                        {job.high_priority ? 'High' : 'Low'}
+                        {convertUnixTime(val?.added_to_queue, true) || ''}
                       </TableCell>
 
                       <TableCell>
-                        {job.order.certificate.subject || ''}
+                        {val?.high_priority != undefined
+                          ? val.high_priority
+                            ? 'High'
+                            : 'Low'
+                          : ''}
+                      </TableCell>
+
+                      <TableCell>
+                        {val?.order.certificate.subject || ''}
                       </TableCell>
                     </TableRow>
                   );
-                })}
-            </TableBody>
-          </Table>
-        </>
+                }
+              )}
+
+            {/* Waiting */}
+            {apiGetState?.work_status?.jobs_waiting.length > 0 &&
+              apiGetState.work_status.jobs_waiting.map((job) => {
+                return (
+                  <TableRow key={job.order.id}>
+                    <TableCell>None (Waiting)</TableCell>
+
+                    <TableCell>{job.order.id}</TableCell>
+
+                    <TableCell>
+                      <Link
+                        component={RouterLink}
+                        to={'/certificates/' + job.order.certificate.id}
+                      >
+                        {job.order.certificate.name}
+                      </Link>
+                    </TableCell>
+
+                    <TableCell>
+                      {convertUnixTime(job.added_to_queue, true) || ''}
+                    </TableCell>
+
+                    <TableCell>{job.high_priority ? 'High' : 'Low'}</TableCell>
+
+                    <TableCell>{job.order.certificate.subject || ''}</TableCell>
+                  </TableRow>
+                );
+              })}
+          </TableBody>
+        </Table>
       )}
     </TableContainer>
   );
