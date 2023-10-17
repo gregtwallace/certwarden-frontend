@@ -30,8 +30,8 @@ const tableHeaders = [
     label: 'Certificate Name',
   },
   {
-    id: 'placedat',
-    label: 'Placed At',
+    id: 'addedtoqueue',
+    label: 'Added To Queue',
   },
   {
     id: 'priority',
@@ -80,23 +80,23 @@ const OrderQueue = () => {
                       <TableRow key={key}>
                         <TableCell>{key}</TableCell>
 
-                        <TableCell>{val?.order.id || ''}</TableCell>
+                        <TableCell>
+                          {val?.order.id || <Flag type='idle' />}
+                        </TableCell>
 
                         <TableCell>
-                          {val?.order.certificate.name ? (
+                          {val?.order.certificate.name && (
                             <Link
                               component={RouterLink}
                               to={'/certificates/' + val.order.certificate.id}
                             >
                               {val.order.certificate.name}
                             </Link>
-                          ) : (
-                            <Flag type='idle' />
                           )}
                         </TableCell>
 
                         <TableCell>
-                          {convertUnixTime(val?.placed_at, true) || ''}
+                          {convertUnixTime(val?.added_to_queue, true) || ''}
                         </TableCell>
 
                         <TableCell>
@@ -125,20 +125,16 @@ const OrderQueue = () => {
                       <TableCell>{job.order.id}</TableCell>
 
                       <TableCell>
-                        {job.order.certificate.name ? (
-                          <Link
-                            component={RouterLink}
-                            to={'/certificates/' + job.order.certificate.id}
-                          >
-                            {job.order.certificate.name}
-                          </Link>
-                        ) : (
-                          <Flag type='idle' />
-                        )}
+                        <Link
+                          component={RouterLink}
+                          to={'/certificates/' + job.order.certificate.id}
+                        >
+                          {job.order.certificate.name}
+                        </Link>
                       </TableCell>
 
                       <TableCell>
-                        {convertUnixTime(job.placed_at, true) || ''}
+                        {convertUnixTime(job.added_to_queue, true) || ''}
                       </TableCell>
 
                       <TableCell>
