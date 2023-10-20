@@ -1,10 +1,5 @@
-import { useContext } from 'react';
 import { useMediaQuery, useTheme } from '@mui/material';
 
-import { ThemeModeContext } from '../../../context/ThemeProvider';
-
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
 import BadgeIcon from '@mui/icons-material/Badge';
 import CardMembershipIcon from '@mui/icons-material/CardMembership';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -24,7 +19,6 @@ import NewVersionLink from './NewVersionLink';
 // Navbar is the full Navbar
 const Navbar = () => {
   const theme = useTheme();
-  const toggleDarkMode = useContext(ThemeModeContext);
   const bigView = useMediaQuery(theme.breakpoints.up('md'));
 
   // auto width for full size, else fixed
@@ -100,15 +94,6 @@ const Navbar = () => {
 
       <Box>
         <NewVersionLink />
-
-        <NavLink
-          onClick={toggleDarkMode}
-          iconComponent={
-            theme.palette.mode === 'dark' ? Brightness7Icon : Brightness4Icon
-          }
-        >
-          {theme.palette.mode === 'dark' ? 'Dark Mode' : 'Light Mode'}
-        </NavLink>
       </Box>
     </List>
   );
