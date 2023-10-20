@@ -1,6 +1,12 @@
 import { Link } from 'react-router-dom';
 
-import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
+import {
+  AppBar,
+  IconButton,
+  Toolbar,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 import useAuthExpires from './hooks/useAuthExpires';
@@ -23,9 +29,11 @@ const Header = () => {
         </Typography>
 
         {authExpires && (
-          <IconButton LinkComponent={Link} color='inherit' to='/logout'>
-            <LogoutIcon />
-          </IconButton>
+          <Tooltip title='Logout'>
+            <IconButton LinkComponent={Link} color='inherit' to='/logout'>
+              <LogoutIcon />
+            </IconButton>
+          </Tooltip>
         )}
       </Toolbar>
     </AppBar>
