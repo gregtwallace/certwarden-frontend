@@ -22,7 +22,7 @@ const Navbar = () => {
   const bigView = useMediaQuery(theme.breakpoints.up('md'));
 
   // auto width for full size, else fixed
-  let width = 210;
+  let width = 200;
   if (!bigView) {
     width = 56;
   }
@@ -44,43 +44,43 @@ const Navbar = () => {
   return (
     <List component='nav' sx={sxList}>
       <Box>
-        <NavLink to='/' iconComponent={DashboardIcon}>
+        <NavLink to='/' IconComponent={DashboardIcon}>
           Dashboard
         </NavLink>
 
-        <NavLink to='/privatekeys' iconComponent={KeyIcon}>
+        <NavLink to='/privatekeys' IconComponent={KeyIcon}>
           Private Keys
         </NavLink>
 
-        <NavLink to='/acmeaccounts' iconComponent={BadgeIcon}>
+        <NavLink to='/acmeaccounts' IconComponent={BadgeIcon}>
           ACME Accounts
         </NavLink>
 
-        <NavLink to='/certificates' iconComponent={CardMembershipIcon}>
+        <NavLink to='/certificates' IconComponent={CardMembershipIcon}>
           Certificates
         </NavLink>
 
         <Divider sx={{ my: 1 }} />
 
-        <NavLink to='/orderqueue' iconComponent={FormatListNumberedIcon}>
+        <NavLink to='/orderqueue' IconComponent={FormatListNumberedIcon}>
           Order Queue
         </NavLink>
 
-        <NavLink to='/logs' iconComponent={TextSnippetIcon}>
+        <NavLink to='/logs' IconComponent={TextSnippetIcon}>
           Logs
         </NavLink>
 
         <Divider sx={{ my: 1 }} />
 
-        <NavLink to='/providers' iconComponent={WidgetsIcon}>
+        <NavLink to='/providers' IconComponent={WidgetsIcon}>
           Providers
         </NavLink>
 
-        <NavLink to='/acmeservers' iconComponent={StorageIcon}>
+        <NavLink to='/acmeservers' IconComponent={StorageIcon}>
           ACME Servers
         </NavLink>
 
-        <NavLink to='/settings' iconComponent={SettingsIcon}>
+        <NavLink to='/settings' IconComponent={SettingsIcon}>
           Settings
         </NavLink>
       </Box>
@@ -93,7 +93,7 @@ const Navbar = () => {
       ></Box>
 
       <Box>
-        <NewVersionLink />
+        <NewVersionLink bigView={bigView} />
       </Box>
     </List>
   );

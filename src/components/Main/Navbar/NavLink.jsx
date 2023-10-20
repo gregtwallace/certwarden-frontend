@@ -1,6 +1,7 @@
 import { Link, matchPath, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
+import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -8,47 +9,56 @@ import ListItemText from '@mui/material/ListItemText';
 // NavLink is a single link in the Navbar. If it receives a 'to' prop
 // it renders as a Link, otherwise it renders as ListItemButton
 const NavLink = (props) => {
+  const {
+    children,
+    color,
+    IconComponent,
+    onClick,
+    secondaryAction,
+    target,
+    to,
+  } = props;
+
   // selected logic (is current route the 'to' route)
   const { pathname } = useLocation();
-  var selected = false;
-  // only possible to be selected if route 'to' is specified
-  // will error if try to match unspecified 'to'
-  if (props.to != null && !props.neverSelect) {
-    selected = matchPath(pathname, props.to) != null;
-  }
+  const selected = matchPath(pathname, to) != null;
 
   return (
-    <ListItemButton
-      selected={selected}
-      component={props.to && Link}
-      to={props.to}
-      onClick={props.onClick}
-      sx={props.sx}
-    >
-      <ListItemIcon>
-        <props.iconComponent />
-      </ListItemIcon>
-      <ListItemText
-        primary={props.children}
-        primaryTypographyProps={{
-          style: {
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          },
-        }}
-      />
-    </ListItemButton>
+    <ListItem disablePadding secondaryAction={secondaryAction}>
+      <ListItemButton
+        selected={selected}
+        component={to && Link}
+        to={to}
+        target={target}
+        onClick={onClick}
+      >
+        <ListItemIcon style={{ minWidth: '40px' }}>
+          <IconComponent color={color} />
+        </ListItemIcon>
+
+        <ListItemText
+          primary={children}
+          primaryTypographyProps={{
+            style: {
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            },
+          }}
+        />
+      </ListItemButton>
+    </ListItem>
   );
 };
 
 NavLink.propTypes = {
   children: PropTypes.any.isRequired,
-  iconComponent: PropTypes.elementType.isRequired,
+  IconComponent: PropTypes.elementType.isRequired,
   to: PropTypes.string,
+  target: PropTypes.string,
   onClick: PropTypes.func,
-  neverSelect: PropTypes.bool,
-  sx: PropTypes.object,
+  color: PropTypes.string,
+  secondaryAction: PropTypes.element,
 };
 
 export default NavLink;
