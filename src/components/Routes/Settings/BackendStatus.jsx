@@ -1,4 +1,5 @@
 import useAxiosGet from '../../../hooks/useAxiosGet';
+import { showDebugInfo } from '../../../helpers/environment';
 
 import { Typography } from '@mui/material';
 
@@ -37,22 +38,22 @@ const BackendStatus = () => {
             Version: {apiGetState.server.version}
           </Typography>
 
-          <Typography variant='p' sx={{ my: 1 }} display='block'>
-            Config Version Match:{' '}
-            {apiGetState.server.config_version_match ? (
-              <>Yes</>
-            ) : (
-              <Typography
-                sx={{ color: 'error.main', fontWeight: 'bold' }}
-                display='inline'
-              >
-                No
+          {showDebugInfo && (
+            <>
+              <Typography variant='p' sx={{ my: 1 }} display='block'>
+                Config Version: {apiGetState.server.config_version}
               </Typography>
-            )}
-          </Typography>
+
+              <Typography variant='p' sx={{ my: 1 }} display='block'>
+                Database Version: {apiGetState.server.database_version}
+              </Typography>
+            </>
+          )}
 
           <Typography variant='p' sx={{ my: 1 }} display='block'>
-            Show Debug Info: {apiGetState.server.show_debug_info ? 'Yes' : 'No'}
+            Log Level:{' '}
+            {apiGetState.server.log_level.charAt(0).toUpperCase() +
+              apiGetState.server.log_level.slice(1)}
           </Typography>
         </>
       )}

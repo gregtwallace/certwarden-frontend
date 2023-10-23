@@ -18,12 +18,14 @@ const NewVersionInfo = () => {
   const checkNewVersion = (event) => {
     event.preventDefault();
 
-    sendData(`/v1/app/updater/new-version`, 'POST', null, true).then((response) => {
-      // refresh if success
-      if (response.status >= 200 && response.status <= 299) {
-        reloadNewVersion();
+    sendData(`/v1/app/updater/new-version`, 'POST', null, true).then(
+      (response) => {
+        // refresh if success
+        if (response.status >= 200 && response.status <= 299) {
+          reloadNewVersion();
+        }
       }
-    });
+    );
   };
 
   // only render when loaded and not error
@@ -54,30 +56,29 @@ const NewVersionInfo = () => {
                 Update Available ({newVersion.new_version.info.version}) !
               </Typography>
               <Typography variant='p' sx={{ my: 1 }} display='block'>
-                Channel: {newVersion.new_version.info.channel}
+                Channel:{' '}
+                {newVersion.new_version.info.channel.charAt(0).toUpperCase() +
+                  newVersion.new_version.info.channel.slice(1)}
               </Typography>
 
               {!newVersion.new_version.config_version_matches && (
                 <Typography
-                  variant='p'
-                  sx={{ my: 1, color: 'error.main' }}
-                  display='block'
+                  variant='body2'
+                  sx={{ mx: 1, my: 3, color: 'error.main' }}
                 >
-                  Warning! New version config version does not match current
-                  config version. <br /> Manual intervention is required to
-                  upgrade.
+                  Warning: Update config version does not match current config
+                  version. Please review the release notes.
                 </Typography>
               )}
 
               {!newVersion.new_version.database_version_matches && (
                 <Typography
-                  variant='p'
-                  sx={{ my: 1, color: 'error.main' }}
-                  display='block'
+                  variant='body2'
+                  sx={{ mx: 1, my: 3, color: 'error.main' }}
                 >
-                  Warning! New version database version does not match current
-                  version. <br /> LeGo will modify the db after upgrade. You
-                  should backup your database file before upgrading.
+                  Warning: Update database version does not match current
+                  database version. LeGo will modify the database after upgrade.
+                  You should backup your database file before upgrading.
                 </Typography>
               )}
 
