@@ -1,3 +1,5 @@
+// import { redactJSONObject } from "./logging";
+
 // modifyValueObject takes the original object and modifies the
 // property with name and sets it to value
 const modifyValueObject = (originalValueObject, name, value) => {
@@ -93,7 +95,7 @@ export const formChangeHandlerFunc = (setFormState) => {
         );
       }
 
-      // console.log(newState)
+      // console.log(redactJSONObject(newState))
 
       return newState;
     });

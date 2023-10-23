@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { redactJSONObject } from '../helpers/logging';
 
 import { showDebugInfo } from '../helpers/environment';
 import { parseAxiosError } from '../helpers/axios-error';
@@ -41,11 +42,7 @@ const useAxiosSend = () => {
 
       // debugging
       if (showDebugInfo) {
-        if (payloadObj === null) {
-          console.log('send payload is null');
-        } else {
-          console.log(payloadObj);
-        }
+        console.log(redactJSONObject(payloadObj));
       }
 
       try {
@@ -58,7 +55,7 @@ const useAxiosSend = () => {
 
         // dev log response
         if (showDebugInfo) {
-          console.log(response);
+          console.log(redactJSONObject(response));
         }
 
         // done sending, success

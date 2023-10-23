@@ -1,36 +1,33 @@
-export const parseAxiosError = async (err, showDebugInfo = false) => {
-  // dev log error
+import { redactJSONObject } from './logging';
+
+export const parseAxiosError = (err, showDebugInfo = false) => {
+  // log if showDebugInfo
   if (showDebugInfo) {
-    console.log(err);
+    // try to parse config.data to an object for better logging and redaction
+    try {
+      err.config.data = JSON.parse(err.config.data);
+    } catch {
+      // ignore failed to parse, leave as-is
+    }
+    console.log(redactJSONObject(err));
   }
 
-  // check for status code and message
-  let errorCode = 'none';
-  let errorMessage;
-  if (err?.response?.status) {
+  // default error return (if fail to get more from axios response)
+  let errorCode = err.code;
+  let errorMessage = err.message;
+
+  // try to set response error code
+  try {
     errorCode = err.response.status;
+  } catch {
+    // leave default
+  }
 
-    // try to append an error message, if present
-    try {
-      // if response data doesn't have an error text object (e.g. a blob), try to make it text
-      if (!err.response.data.error) {
-        let errorDataText = await err.response.data.text();
-        let jsonError = JSON.parse(errorDataText);
-
-        // update the data with the new json data
-        err.response.data = jsonError;
-      }
-
-      errorMessage = err.response.data.error.message;
-    } catch (errorInner) {
-      // log inner error if in devmode
-      if (showDebugInfo) {
-        console.log(errorInner);
-      }
-    }
-  } else {
-    // if no status code, use message only
-    errorMessage = err.message;
+  // try to set response error message
+  try {
+    errorMessage = err.response.data.error.message;
+  } catch (err) {
+    // leave default
   }
 
   return [errorCode, errorMessage];

@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { redactJSONObject } from '../helpers/logging';
 
 import { showDebugInfo } from '../helpers/environment';
 import { parseAxiosError } from '../helpers/axios-error';
@@ -40,7 +41,7 @@ const useAxiosGet = (apiNode, expectedJsonName, withAccessToken = false) => {
 
       // dev log response
       if (showDebugInfo) {
-        console.log(response);
+        console.log(redactJSONObject(response));
       }
 
       setState({
