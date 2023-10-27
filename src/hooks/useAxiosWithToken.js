@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { axiosWithToken } from '../api/axios';
-import useRefreshToken from './useRefreshToken';
+import useRefreshAccessToken from './useRefreshAccessToken';
 
 // name of anti-retry header
 const NO_RETRY_HEADER = 'x-no-retry';
@@ -12,7 +12,7 @@ const NO_RETRY_HEADER = 'x-no-retry';
 var isRefreshing = false;
 
 const useAxiosWithToken = () => {
-  const refresh = useRefreshToken();
+  const refreshAccessToken = useRefreshAccessToken();
 
   useEffect(() => {
     // add the Authorization header to all Private requests
@@ -24,7 +24,7 @@ const useAxiosWithToken = () => {
         }
         return config;
       },
-      (error) => Promise.reject(error)
+      (error) => error
     );
 
     // if response is 401, try refreshing access token and then retry
@@ -36,45 +36,41 @@ const useAxiosWithToken = () => {
       (response) => response,
       async (error) => {
         var prevRequest = error?.config;
+
         // if the error was 401 & not already a retry, try refresh
         if (
           error?.response?.status === 401 &&
           prevRequest?.headers[NO_RETRY_HEADER] == null
         ) {
-          // if refresh is already taking place, don't call refresh multiple times, just wait
-          // and then retry original request after the other refresh attempt is done.
-          if (isRefreshing) {
+          // do refresh only if not already refreshing, otherwise sleep until the other
+          // refresh job is done
+          if (!isRefreshing) {
+            isRefreshing = true;
+            await refreshAccessToken();
+            isRefreshing = false;
+          } else {
             while (isRefreshing) {
               // sleep before checking isRefreshing again
               await new Promise((resolve) => setTimeout(resolve, 100));
             }
-            // try new access token, don't allow retry
-            prevRequest.headers[NO_RETRY_HEADER] = 'true';
-            prevRequest.headers['Authorization'] =
-              sessionStorage.getItem('access_token');
-            return axiosWithToken(prevRequest);
           }
 
-          // not already refreshing - get new token and try again
-          try {
-            isRefreshing = true;
-            const newAccessToken = await refresh();
-            isRefreshing = false;
-
-            // retry with new token
-            prevRequest.headers[NO_RETRY_HEADER] = 'true';
-            prevRequest.headers['Authorization'] = newAccessToken;
-            return axiosWithToken(prevRequest);
-          } catch (e) {
-            // must ensure isRefreshing is set to false since refresh job has termed
-            // unlikely to be needed, but just in case
-            isRefreshing = false;
+          // don't retry if token appears invalid
+          const newAccessToken = sessionStorage.getItem('access_token');
+          if (newAccessToken == null || newAccessToken === '') {
+            // new token doesn't look valid, return original error
+            return error;
           }
+
+          // new token seemed ok, retry with it & no retry header
+          prevRequest.headers[NO_RETRY_HEADER] = 'true';
+          prevRequest.headers['Authorization'] = newAccessToken;
+          return axiosWithToken(prevRequest);
         }
 
         // any other error or if error ocurred during refresh
         // return original error
-        return Promise.reject(error);
+        return error;
       }
     );
 
@@ -82,7 +78,7 @@ const useAxiosWithToken = () => {
       axiosWithToken.interceptors.request.eject(requestIntercept);
       axiosWithToken.interceptors.response.eject(responseIntercept);
     };
-  }, [refresh]);
+  }, [refreshAccessToken]);
 
   return axiosWithToken;
 };
