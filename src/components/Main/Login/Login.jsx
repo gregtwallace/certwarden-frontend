@@ -1,25 +1,22 @@
 import { useState } from 'react';
+import useAuth from '../../../hooks/useAuth';
+import useAxiosSend from '../../../hooks/useAxiosSend';
 
+import ApiError from '../../UI/Api/ApiError';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
+import Button from '../../UI/Button/Button';
 import Container from '@mui/material/Container';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Paper } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import ApiError from '../../UI/Api/ApiError';
-
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-
-import useAuthExpires from '../../../hooks/useAuthExpires';
-import useAxiosSend from '../../../hooks/useAxiosSend';
-
-import Button from '../../UI/Button/Button';
 
 const LOGIN_URL = '/v1/app/auth/login';
 
 const Login = () => {
   const [sendState, sendData] = useAxiosSend();
-  const { setAuthExpires } = useAuthExpires();
+  const { setAuth } = useAuth();
 
   // set blank form state
   const blankForm = {
@@ -70,15 +67,7 @@ const Login = () => {
 
     sendData(LOGIN_URL, 'POST', formState.login, false).then((response) => {
       if (response.status === 200) {
-        sessionStorage.setItem(
-          'access_token',
-          response.data.response.access_token
-        );
-        sessionStorage.setItem(
-          'access_token_expiration',
-          response.data.response.access_token_claims.exp
-        );
-        setAuthExpires(response.data.response.session_claims.exp);
+        setAuth(response.data.response);
       } else {
         setFormState(blankForm);
       }

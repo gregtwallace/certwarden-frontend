@@ -1,31 +1,26 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import { Paper } from '@mui/material';
-
-import useAuthExpires from '../../../hooks/useAuthExpires';
+import useAuth from '../../../hooks/useAuth';
 import useAxiosSend from '../../../hooks/useAxiosSend';
 
+import { Paper } from '@mui/material';
 import TitleBar from '../../UI/TitleBar/TitleBar';
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
 
 const Logout = () => {
-  const { setAuthExpires } = useAuthExpires();
+  const { setAuth } = useAuth();
   const [sendState, sendData] = useAxiosSend();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    sendData(`/v1/app/auth/logout`, 'POST', null, true).then((response) => {
-      if (response.status >= 200 && response.status <= 299) {
-        // if success, clear login and go to root
-        sessionStorage.removeItem('access_token');
-        setAuthExpires();
-        navigate('/');
-      }
+    sendData(`/v1/app/auth/logout`, 'POST', null, true).then(() => {
+      // regardless of result, clear auth state and redirect
+      setAuth();
+      navigate('/');
     });
-  }, [navigate, sendData, setAuthExpires]);
+  }, [navigate, sendData, setAuth]);
 
   return (
     <Paper

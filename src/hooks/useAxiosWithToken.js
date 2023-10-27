@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-
 import { axiosWithToken } from '../api/axios';
 import useRefreshAccessToken from './useRefreshAccessToken';
+import useAuth from './useAuth';
 
 // name of anti-retry header
 const NO_RETRY_HEADER = 'x-no-retry';
@@ -13,14 +13,14 @@ var isRefreshing = false;
 
 const useAxiosWithToken = () => {
   const refreshAccessToken = useRefreshAccessToken();
+  const { accessToken } = useAuth();
 
   useEffect(() => {
     // add the Authorization header to all Private requests
     const requestIntercept = axiosWithToken.interceptors.request.use(
       (config) => {
         if (!config.headers['Authorization']) {
-          config.headers['Authorization'] =
-            sessionStorage.getItem('access_token');
+          config.headers['Authorization'] = accessToken();
         }
         return config;
       },
@@ -56,7 +56,7 @@ const useAxiosWithToken = () => {
           }
 
           // don't retry if token appears invalid
-          const newAccessToken = sessionStorage.getItem('access_token');
+          const newAccessToken = accessToken();
           if (newAccessToken == null || newAccessToken === '') {
             // new token doesn't look valid, return original error
             return error;
@@ -78,7 +78,7 @@ const useAxiosWithToken = () => {
       axiosWithToken.interceptors.request.eject(requestIntercept);
       axiosWithToken.interceptors.response.eject(responseIntercept);
     };
-  }, [refreshAccessToken]);
+  }, [accessToken, refreshAccessToken]);
 
   return axiosWithToken;
 };

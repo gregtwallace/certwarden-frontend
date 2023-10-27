@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import useAuth from './hooks/useAuth';
 
 import {
   AppBar,
@@ -9,10 +10,8 @@ import {
 } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-import useAuthExpires from './hooks/useAuthExpires';
-
 const Header = () => {
-  const { authExpires } = useAuthExpires();
+  const { isLoggedIn } = useAuth();
 
   return (
     <AppBar
@@ -28,7 +27,7 @@ const Header = () => {
           LeGo CertHub
         </Typography>
 
-        {authExpires && (
+        {isLoggedIn && (
           <Tooltip title='Logout'>
             <IconButton LinkComponent={Link} color='inherit' to='/logout'>
               <LogoutIcon />

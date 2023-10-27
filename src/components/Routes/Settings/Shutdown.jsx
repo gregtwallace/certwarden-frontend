@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router';
 import { Typography } from '@mui/material';
-
-import useAuthExpires from '../../../hooks/useAuthExpires';
+import useAuth from '../../../hooks/useAuth';
 import useAxiosSend from '../../../hooks/useAxiosSend';
 
 import ApiError from '../../UI/Api/ApiError';
@@ -14,15 +13,14 @@ const Shutdown = () => {
   const navigate = useNavigate();
 
   // auth expires for frontend logout
-  const { setAuthExpires } = useAuthExpires();
+  const { setAuth } = useAuth();
 
   // for sending shutdown / restart commands
   const [apiSendState, sendData] = useAxiosSend();
 
   // logout frontend only (backend stop/restart forces backend logout)
   const logoutFrontend = () => {
-    sessionStorage.removeItem('access_token');
-    setAuthExpires();
+    setAuth();
     navigate('/');
   };
 

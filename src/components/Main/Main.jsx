@@ -1,24 +1,11 @@
-import { useEffect, useState } from 'react';
-import { Box } from '@mui/system';
+import useAuth from '../../hooks/useAuth';
 
-import useAuthExpires from '../../hooks/useAuthExpires';
+import { Box } from '@mui/system';
 import LoggedIn from './LoggedIn';
 import Login from './Login/Login';
 
 const Main = () => {
-  const { authExpires, setAuthExpires } = useAuthExpires();
-  const [renderMain, setRenderMain] = useState(false);
-
-  // check for 'session_expiration' session item to set the initial login state
-  useEffect(() => {
-    const loggedInExpiration = sessionStorage.getItem('session_expiration');
-    if (loggedInExpiration) {
-      setAuthExpires(loggedInExpiration);
-    } else {
-      setAuthExpires();
-    }
-    setRenderMain(true);
-  }, [setAuthExpires, setRenderMain]);
+  const { isLoggedIn } = useAuth();
 
   return (
     <Box
@@ -31,7 +18,7 @@ const Main = () => {
       }}
     >
       {/* Not Logged In vs. Logged In */}
-      {renderMain && (authExpires == null ? <Login /> : <LoggedIn />)}
+      {isLoggedIn ? <LoggedIn /> : <Login />}
     </Box>
   );
 };
