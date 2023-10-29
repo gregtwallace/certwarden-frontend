@@ -191,7 +191,7 @@ const EditOneACMEServer = () => {
             />
 
             <InputCheckbox
-              id='is_staging'
+              id='form.is_staging'
               checked={formState.form.is_staging}
               onChange={inputChangeHandler}
             >
