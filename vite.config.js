@@ -16,8 +16,10 @@ export default defineConfig({
           if (
             p1 === 'style' ||
             p1 === 'script' ||
-            // if link, only nonce for stylesheet
-            (p1 === 'link' && p2.includes('rel="stylesheet"'))
+            // if link, only nonce for stylesheet and modulepreload
+            (p1 === 'link' &&
+              (p2.includes('rel="stylesheet"') ||
+                p2.includes('rel="modulepreload"')))
           ) {
             p2 = `nonce="{SERVER-CSP-NONCE}" ${p2}`;
           }
