@@ -1,6 +1,8 @@
-import { Typography } from "@mui/material";
+import { type FC } from 'react';
 
-const FormHeader = () => {
+import { Typography } from '@mui/material';
+
+const FormHeader: FC = () => {
   return (
     <Typography component='h1' variant='h4' align='center'>
       Checkout

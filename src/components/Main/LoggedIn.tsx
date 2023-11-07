@@ -92,9 +92,6 @@ const LoggedIn: FC = () => {
   //   {/* Settings */}
   //   <Route path={'/settings'} element={<Settings />} />
 
-  //   {/* Misc. */}
-  //   <Route path={'/logout'} element={<Logout />} />
-
   return (
     <NewVersionProvider>
       <Navbar />
@@ -109,6 +106,9 @@ const LoggedIn: FC = () => {
         <Routes>
           {/* Dashboard */}
           <Route path='/' element={<Dashboard />} />
+
+          {/* Misc. */}
+          <Route path={'/logout'} element={<Logout />} />
 
           {/* Catch All */}
           <Route path='*' element={<Navigate to='/' replace />} />

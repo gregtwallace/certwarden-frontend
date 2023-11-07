@@ -1,4 +1,6 @@
-import PropTypes from 'prop-types';
+import { type FC, type MouseEvent } from 'react';
+import { type inputHandlerFunc } from '../../../helpers/input-handler';
+
 import fieldInformation from './fields-info';
 
 import {
@@ -14,7 +16,21 @@ import InputTextField from './InputTextField';
 // doesnt currently support numbers or other input types that need
 // manipulation of the target.value (e.g. ParseInt) !
 
-const InputArrayObjectsOfText = (props) => {
+type propTypes<valueObject extends object> = {
+  id: string;
+  name?: string;
+  label: string;
+  subLabel: string;
+  minElements?: number;
+  newObject: valueObject;
+  value: valueObject[];
+  onChange: inputHandlerFunc;
+  error: number[];
+};
+
+const InputArrayObjectsOfText = <valueObject extends object>(
+  props: propTypes<valueObject>
+): FC => {
   // destructure props
   const {
     error,
@@ -32,10 +48,12 @@ const InputArrayObjectsOfText = (props) => {
   const { errorMessage } = fieldInformation(name || id);
 
   // add an additional field to the array
-  const addElementHandler = (event) => {
+  const addElementHandler = (
+    event: MouseEvent<HTMLButtonElement, MouseEvent>
+  ): void => {
     event.preventDefault();
 
-    let newArray = [...value];
+    const newArray = [...value];
     newArray.push(newObject);
 
     const syntheticEvent = {
@@ -49,10 +67,10 @@ const InputArrayObjectsOfText = (props) => {
   };
 
   // remove the field with specified index from the array
-  const removeElementHandler = (event, index) => {
+  const removeElementHandler = (event: MouseEvent, index: number): void => {
     event.preventDefault();
 
-    let newArray = [...value];
+    const newArray = [...value];
     newArray.splice(index, 1);
 
     const syntheticEvent = {
@@ -66,8 +84,8 @@ const InputArrayObjectsOfText = (props) => {
   };
 
   // handle field value updates
-  const fieldChangeHandler = (event) => {
-    let newArray = [...value];
+  const fieldChangeHandler = (event): void => {
+    const newArray = [...value];
 
     // get element index (id is in format ID-Index-MemberField)
     const splitTargetId = event.target.id.split('-');
@@ -122,14 +140,14 @@ const InputArrayObjectsOfText = (props) => {
               }}
             >
               <Typography id={id + '-' + i} sx={{ mb: 1 }}>
-                {subLabel + ' ' + parseInt(i + 1)}
+                {subLabel + ' ' + (i + 1).toString()}
               </Typography>
 
               <Box sx={{ flexGrow: 1 }}></Box>
 
               {value.length > (minElements || 0) && (
                 <Button
-                  type='delete'
+                  color='error'
                   size='small'
                   onClick={(event) => removeElementHandler(event, i)}
                 >
@@ -144,11 +162,10 @@ const InputArrayObjectsOfText = (props) => {
                 const [key, value] = member;
 
                 // make key pretty
-                const words = key.split('_');
-                for (let i = 0; i < words.length; i++) {
-                  words[i] = words[i][0].toUpperCase() + words[i].substring(1);
-                }
-                const keyPretty = words.join(' ');
+                const keyPretty = key
+                  .split('_')
+                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(' ');
 
                 return (
                   <InputTextField
@@ -170,24 +187,12 @@ const InputArrayObjectsOfText = (props) => {
       )}
 
       <Toolbar variant='dense' disableGutters sx={{ m: 0, p: 0 }}>
-        <Button type='add' size='small' onClick={addElementHandler}>
+        <Button color='success' size='small' onClick={addElementHandler}>
           Add
         </Button>
       </Toolbar>
     </FormControl>
   );
-};
-
-InputArrayObjectsOfText.propTypes = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string,
-  label: PropTypes.string.isRequired,
-  subLabel: PropTypes.string.isRequired,
-  minElements: PropTypes.number,
-  newObject: PropTypes.object.isRequired,
-  value: PropTypes.arrayOf(PropTypes.PropTypes.object).isRequired,
-  onChange: PropTypes.func,
-  error: PropTypes.arrayOf(PropTypes.number),
 };
 
 export default InputArrayObjectsOfText;

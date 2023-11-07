@@ -1,13 +1,15 @@
-import PropTypes from 'prop-types';
+import { type ElementType, type FC } from 'react';
+
 import { Toolbar } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
-const GridTitle = (props) => {
-  // if headerComponent not specified, set to h3
-  let headerComponent = 'h3';
-  if (props.headerComponent) {
-    headerComponent = props.headerComponent;
-  }
+type propTypes = {
+  title: string;
+  headerComponent: ElementType;
+};
+
+const GridTitle: FC<propTypes> = (props) => {
+  const { headerComponent, title } = props;
 
   return (
     <Toolbar variant='dense' disableGutters sx={{ m: 0, px: 1 }}>
@@ -18,15 +20,10 @@ const GridTitle = (props) => {
         sx={{ flexGrow: 1 }}
         gutterBottom
       >
-        {props.title}
+        {title}
       </Typography>
     </Toolbar>
   );
-};
-
-GridTitle.propTypes = {
-  headerComponent: PropTypes.string,
-  title: PropTypes.string,
 };
 
 export default GridTitle;

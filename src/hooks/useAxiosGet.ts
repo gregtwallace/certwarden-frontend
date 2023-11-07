@@ -10,7 +10,7 @@ type axiosGetStateType<ExpectedResponseType> = {
   responseData: ExpectedResponseType | undefined;
   error:
     | {
-        code: number | string;
+        statusCode: number | string;
         message: string;
       }
     | undefined;
@@ -78,7 +78,7 @@ const useAxiosGet = <ExpectedResponseType>(
       setGetState({
         responseData: undefined,
         error: {
-          code: errorCode,
+          statusCode: errorCode,
           message: errorMessage,
         },
       });

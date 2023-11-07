@@ -1,20 +1,25 @@
+import { type AxiosResponse } from 'axios';
+
 // downloadBlob
-export const downloadBlob = (response) => {
+export const downloadBlob = (response: AxiosResponse): void => {
   // create file link in browser's memory
-  var href = window.URL.createObjectURL(response.data);
+  const href = window.URL.createObjectURL(response.data);
 
   // create "a" HTML element with href to file & click
-  var link = document.createElement('a');
+  const link = document.createElement('a');
   link.href = href;
 
   // capture the filename from content-disposition
   const filenameRegex = /filename="(.*)"/;
-  let filenameMatches = filenameRegex.exec(
+  const filenameMatches = filenameRegex.exec(
     response.headers['content-disposition']
   );
-  if (filenameMatches?.length >= 2) {
-    let filename = filenameMatches[1];
-    link.setAttribute('download', filename);
+
+  if (filenameMatches !== null && filenameMatches.length >= 2) {
+    const filename = filenameMatches[1];
+    if (filename) {
+      link.setAttribute('download', filename);
+    }
   }
 
   document.body.appendChild(link);

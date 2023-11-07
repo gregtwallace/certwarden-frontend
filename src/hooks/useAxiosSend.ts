@@ -10,7 +10,7 @@ type axiosSendStateType = {
   isSending: boolean;
   error:
     | {
-        code: number | string;
+        statusCode: number | string;
         message: string;
       }
     | undefined;
@@ -101,7 +101,7 @@ const useAxiosSend = (): {
         setSendState({
           isSending: false,
           error: {
-            code: errorCode,
+            statusCode: errorCode,
             message: errorMessage,
           },
         });

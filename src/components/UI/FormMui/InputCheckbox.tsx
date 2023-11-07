@@ -1,4 +1,6 @@
-import PropTypes from 'prop-types';
+import { type FC, type ReactNode } from 'react';
+import { type inputHandlerFunc } from '../../../helpers/input-handler';
+
 import {
   Checkbox,
   FormControl,
@@ -7,7 +9,17 @@ import {
 } from '@mui/material';
 import fieldInformation from './fields-info';
 
-const InputCheckbox = (props) => {
+type propTypes = {
+  children: ReactNode;
+  id: string;
+  name?: string;
+  checked: boolean;
+  onChange: inputHandlerFunc;
+  error?: boolean;
+  disabled?: boolean;
+};
+
+const InputCheckbox: FC<propTypes> = (props) => {
   // destructure props
   const { checked, children, disabled, error, id, name, onChange } = props;
 
@@ -31,16 +43,6 @@ const InputCheckbox = (props) => {
       {!!error && <FormHelperText error>{errorMessage}</FormHelperText>}
     </FormControl>
   );
-};
-
-InputCheckbox.propTypes = {
-  id: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-  name: PropTypes.string,
-  checked: PropTypes.bool.isRequired,
-  onChange: PropTypes.func,
-  error: PropTypes.bool,
-  disabled: PropTypes.bool,
 };
 
 export default InputCheckbox;

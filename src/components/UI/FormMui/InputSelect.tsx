@@ -1,4 +1,9 @@
-import PropTypes from 'prop-types';
+import { type FC } from 'react';
+import {
+  type inputHandlerFunc,
+  type inputOption,
+} from '../../../helpers/input-handler';
+
 import {
   FormControl,
   FormHelperText,
@@ -8,7 +13,19 @@ import {
 } from '@mui/material';
 import fieldInformation from './fields-info';
 
-const InputSelect = (props) => {
+type propTypes = {
+  id: string;
+  name?: string;
+  label: string;
+  value: inputOption;
+  onChange: inputHandlerFunc;
+  options: inputOption[];
+  error?: boolean;
+  readOnly?: boolean;
+  disabled?: boolean;
+};
+
+const InputSelect: FC<propTypes> = (props) => {
   // destructure props
   const {
     disabled,
@@ -56,30 +73,6 @@ const InputSelect = (props) => {
       {!!error && <FormHelperText error>{errorMessage}</FormHelperText>}
     </FormControl>
   );
-};
-
-InputSelect.propTypes = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string,
-  label: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  onChange: PropTypes.func,
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      value: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
-        .isRequired,
-      alsoSet: PropTypes.arrayOf(
-        PropTypes.shape({
-          name: PropTypes.string.isRequired,
-          value: PropTypes.any,
-        })
-      ),
-    })
-  ),
-  error: PropTypes.bool,
-  readOnly: PropTypes.bool,
-  disabled: PropTypes.bool,
 };
 
 export default InputSelect;

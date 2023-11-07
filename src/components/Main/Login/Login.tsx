@@ -130,7 +130,7 @@ const Login: FC = () => {
           {sendState.error &&
             Object.keys(formState.validationErrors).length <= 0 && (
               <ApiError
-                statusCode={sendState.error.code}
+                statusCode={sendState.error.statusCode}
                 message={sendState.error.message}
               />
             )}

@@ -25,7 +25,7 @@
     ],
     "@typescript-eslint/no-unused-vars": [
       "error",
-      { "argsIgnorePattern": "__" }
+      { "argsIgnorePattern": "_" }
     ],
 
     "react-refresh/only-export-components": "warn",

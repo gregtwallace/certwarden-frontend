@@ -19,7 +19,7 @@ const TablePagination: FC<propTypes> = (props) => {
 
   // page change handler
   const pageChangeHandler = (
-    __event: MouseEvent | null,
+    _event: MouseEvent | null,
     page: number
   ): void => {
     searchParams.set('page', page.toString());

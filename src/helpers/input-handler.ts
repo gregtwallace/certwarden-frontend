@@ -69,7 +69,7 @@ const modifyValueObject = <T extends object>(
 };
 
 // object for other values to set
-type inputOption = {
+export type inputOption = {
   value: number | string;
   name: string;
   alsoSet?: {
@@ -81,7 +81,7 @@ type inputOption = {
 // type for custom inputHandlerFunc
 export type inputHandlerFunc = (
   event: ChangeEvent<HTMLInputElement>,
-  type: string,
+  type?: string | undefined,
   inputOptions?: inputOption[]
 ) => void;
 
@@ -96,7 +96,7 @@ export const inputHandlerFuncMaker = <T extends object>(
   //   if changing the select alters other parts of the form
   return (
     event: ChangeEvent<HTMLInputElement>,
-    type: string,
+    type?: string | undefined,
     inputOptions?: inputOption[]
   ) => {
     // new val based on the input type, default is to just
