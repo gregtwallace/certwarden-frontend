@@ -57,7 +57,7 @@ const OrderQueue = () => {
       <Typography variant='p' sx={{ m: 3 }} display='block'>
         The Order Queue shows all active orders that LeGo is working on. If an
         order is assigned to a Worker ID, that order is being actively worked
-        with the ACME provider. If an order does not have a Worker ID, it is
+        with the ACME server. If an order does not have a Worker ID, it is
         queued up and waiting to be worked once a worker becomes available.
       </Typography>
 
