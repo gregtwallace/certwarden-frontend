@@ -1,13 +1,20 @@
+import { type FC } from 'react';
+
 import { BrowserRouter as Router } from 'react-router-dom';
-import ThemeProvider from './context/ThemeProvider.tsx';
+
+import { ThemeProvider } from './context/ThemeProvider';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
+
 import Header from './Header';
 import Main from './components/Main/Main';
 import Footer from './Footer';
 
-const App = () => {
+// no props
+
+// component
+const App: FC = () => {
   return (
     <ThemeProvider>
       <CssBaseline />

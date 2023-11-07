@@ -9,12 +9,14 @@ import {
 } from '@mui/material';
 
 // context type
-interface ThemeContextType {
+export type themeContextType = {
+  themeIsDarkMode: boolean;
   toggleThemeIsDarkMode: () => void;
-}
+};
 
 // create theme context
-const ThemeContext = createContext<ThemeContextType>({
+const ThemeContext = createContext<themeContextType>({
+  themeIsDarkMode: false,
   toggleThemeIsDarkMode: () => {},
 });
 
@@ -27,24 +29,25 @@ interface ThemeProviderPropsType {
 const ThemeProvider: FC<ThemeProviderPropsType> = ({ children }) => {
   // calculate initial theme
   let initialThemeIsDarkMode: boolean = false;
+  const userPrefersDark = useMediaQuery('(prefers-color-scheme: dark)');
   const localStorageThemeDarkMode: string | null =
     localStorage.getItem('theme_dark_mode');
 
-  // if theme_dark_mode is set, use it
+  // if storage is set, use it
   if (localStorageThemeDarkMode !== null) {
     initialThemeIsDarkMode = localStorageThemeDarkMode === 'true';
   } else {
-    // if theme_dark_mode is not set, use media query
-    initialThemeIsDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+    // if storage is not set, use media query
+    initialThemeIsDarkMode = userPrefersDark;
   }
 
-  // creat themeIsDarkMode state
+  // create themeIsDarkMode state
   const [themeIsDarkMode, setThemeIsDarkMode] = useState<boolean>(
     initialThemeIsDarkMode
   );
 
   // toggle themeIsDarkMode
-  const toggleThemeIsDarkMode = () => {
+  const toggleThemeIsDarkMode = (): void => {
     setThemeIsDarkMode((prevState) => {
       // reverse prior state
       const newIsDarkMode: boolean = !prevState;
@@ -62,14 +65,11 @@ const ThemeProvider: FC<ThemeProviderPropsType> = ({ children }) => {
   });
 
   return (
-    <ThemeContext.Provider
-      value={{ toggleThemeIsDarkMode: toggleThemeIsDarkMode }}
-    >
+    <ThemeContext.Provider value={{ themeIsDarkMode, toggleThemeIsDarkMode }}>
       <ThemeProviderMui theme={theme}>{children}</ThemeProviderMui>
     </ThemeContext.Provider>
   );
 };
 
 // exports
-export { ThemeContext };
-export default ThemeProvider;
+export { ThemeContext, ThemeProvider };
