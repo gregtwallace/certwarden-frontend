@@ -1,5 +1,5 @@
 import { BrowserRouter as Router } from 'react-router-dom';
-import ThemeProvider from './context/ThemeProvider';
+import ThemeProvider from './context/ThemeProvider.tsx';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';

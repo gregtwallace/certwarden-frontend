@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { useTheme } from '@mui/material';
-import { ThemeModeContext } from './context/ThemeProvider';
+import { ThemeContext } from './context/ThemeProvider.tsx';
 
 import { Box, IconButton, Tooltip, Typography } from '@mui/material';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
@@ -12,7 +12,7 @@ const themeToggleIconProps = {
 
 const Footer = () => {
   const theme = useTheme();
-  const toggleDarkMode = useContext(ThemeModeContext);
+  const { toggleThemeIsDarkMode } = useContext(ThemeContext);
 
   const isDarkTheme = theme.palette.mode === 'dark';
 
@@ -29,7 +29,7 @@ const Footer = () => {
       <Tooltip title='Toggle Theme'>
         <IconButton
           aria-label='toggletheme'
-          onClick={toggleDarkMode}
+          onClick={toggleThemeIsDarkMode}
           sx={{
             position: 'absolute',
             p: 0,
