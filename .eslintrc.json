@@ -17,13 +17,18 @@
   "plugins": ["react", "react-refresh", "react-hooks"],
   "rules": {
     "@typescript-eslint/no-use-before-define": ["error"],
-    "react-refresh/only-export-components": "warn",
     "@typescript-eslint/explicit-function-return-type": [
       "error",
       {
         "allowExpressions": true
       }
     ],
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "__" }
+    ],
+
+    "react-refresh/only-export-components": "warn",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn"
   },
