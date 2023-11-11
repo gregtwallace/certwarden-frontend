@@ -67,7 +67,7 @@ const Dashboard: FC = () => {
 
       {getState.error && (
         <ApiError
-          statusCode={getState.error.code}
+          statusCode={getState.error.statusCode}
           message={getState.error.message}
         />
       )}
