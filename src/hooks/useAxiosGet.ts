@@ -1,3 +1,5 @@
+import { type frontendErrorType } from '../types/frontend';
+
 import { useEffect, useState, useCallback, useMemo } from 'react';
 
 import useAxiosWithToken from './useAxiosWithToken';
@@ -8,12 +10,7 @@ import { parseAxiosError } from '../helpers/axios';
 // get state
 type axiosGetStateType<ExpectedResponseType> = {
   responseData: ExpectedResponseType | undefined;
-  error:
-    | {
-        statusCode: number | string;
-        message: string;
-      }
-    | undefined;
+  error: frontendErrorType | undefined;
 };
 
 // func to refresh get data (send get again)
@@ -73,14 +70,9 @@ const useAxiosGet = <ExpectedResponseType>(
       });
     } catch (err: unknown) {
       // done, set error
-      const { errorCode, errorMessage } = parseAxiosError(err);
-
       setGetState({
         responseData: undefined,
-        error: {
-          statusCode: errorCode,
-          message: errorMessage,
-        },
+        error: parseAxiosError(err),
       });
     }
   }, [apiNode, axiosInstance, emptyUnloadedState, isResponseDataValidFunc]);

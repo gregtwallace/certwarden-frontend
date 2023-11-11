@@ -8,19 +8,21 @@ import { z } from 'zod';
 // Basic Responses
 //
 
-// Response
-const basicResponse = z.object({
+// Good Response
+const basicGoodResponse = z.object({
   status_code: z.number().gte(200).lte(299),
   message: z.string(),
 });
 
-export type basicResponseType = z.infer<typeof basicResponse>;
-export const isBasicResponseType = (unk: unknown): unk is basicResponseType => {
-  const { success } = basicResponse.safeParse(unk);
-  return success;
-};
+// type basicGoodResponseType = z.infer<typeof basicGoodResponse>;
+// const isBasicGoodResponseType = (
+//   unk: unknown
+// ): unk is basicGoodResponseType => {
+//   const { success } = basicGoodResponse.safeParse(unk);
+//   return success;
+// };
 
-// Error
+// Error Response
 const errorResponse = z.object({
   status_code: z.number().gte(400).lte(599),
   message: z.string(),
@@ -35,6 +37,8 @@ export const isErrorResponseType = (unk: unknown): unk is errorResponseType => {
 //
 // Authorization
 //
+
+// login and refresh
 const authorizationTokenClaims = z.object({
   exp: z.number(),
 });
@@ -51,7 +55,7 @@ export const isAuthorizationType = (unk: unknown): unk is authorizationType => {
   return success;
 };
 
-const authorizationResponse = basicResponse.extend({
+const authorizationResponse = basicGoodResponse.extend({
   authorization: authorization,
 });
 
@@ -63,6 +67,19 @@ export const isAuthorizationResponseType = (
   return success;
 };
 
+// logout
+const logoutResponse = basicGoodResponse.extend({
+  status_code: z.literal(200),
+});
+
+export type logoutResponseType = z.infer<typeof logoutResponse>;
+export const isLogoutResponseType = (
+  unk: unknown
+): unk is logoutResponseType => {
+  const { success } = logoutResponse.safeParse(unk);
+  return success;
+};
+
 //
 // New Version
 //
@@ -70,20 +87,22 @@ export const isAuthorizationResponseType = (
 const newVersion = z.object({
   last_checked_time: z.number(),
   available: z.boolean(),
-  // config_version_matches: z.boolean(),
-  // database_version_matches: z.boolean(),
-  info: z.object({
-    //   channel: z.string(),
-    version: z.string(),
-    //   config_version: z.number(),
-    //   database_version: z.number(),
-    url: z.string(),
-  }),
+  config_version_matches: z.boolean(),
+  database_version_matches: z.boolean(),
+  info: z
+    .object({
+      channel: z.string(),
+      version: z.string(),
+      //   config_version: z.number(),
+      //   database_version: z.number(),
+      url: z.string(),
+    })
+    .optional(),
 });
 
 export type newVersionType = z.infer<typeof newVersion>;
 
-const newVersionResponse = basicResponse.extend({
+const newVersionResponse = basicGoodResponse.extend({
   new_version: newVersion,
 });
 
@@ -96,10 +115,69 @@ export const isNewVersionResponseType = (
 };
 
 //
+// Settings
+//
+
+// status
+const backendStatusResponse = basicGoodResponse.extend({
+  server: z.object({
+    status: z.string(),
+    log_level: z.string(),
+    version: z.string(),
+    config_version: z.number(),
+    database_version: z.number(),
+  }),
+});
+
+export type backendStatusResponseType = z.infer<typeof backendStatusResponse>;
+export const isBackendStatusResponse = (
+  unk: unknown
+): unk is backendStatusResponseType => {
+  const { success } = backendStatusResponse.safeParse(unk);
+  return success;
+};
+
+// change password
+const changePasswordResponse = basicGoodResponse.extend({
+  status_code: z.literal(200),
+});
+
+export type changePasswordResponseType = z.infer<typeof changePasswordResponse>;
+export const isChangePasswordResponse = (
+  unk: unknown
+): unk is changePasswordResponseType => {
+  const { success } = changePasswordResponse.safeParse(unk);
+  return success;
+};
+
+// shutdown & restart
+const shutdownResponse = basicGoodResponse.extend({
+  status_code: z.literal(200),
+});
+
+export type shutdownResponseType = z.infer<typeof shutdownResponse>;
+export const isShutdownResponse = (
+  unk: unknown
+): unk is shutdownResponseType => {
+  const { success } = shutdownResponse.safeParse(unk);
+  return success;
+};
+
+const restartResponse = basicGoodResponse.extend({
+  status_code: z.literal(200),
+});
+
+export type restartResponseType = z.infer<typeof restartResponse>;
+export const isRestartResponse = (unk: unknown): unk is restartResponseType => {
+  const { success } = restartResponse.safeParse(unk);
+  return success;
+};
+
+//
 // Dashboard
 //
 
-const currentValidOrdersResponse = basicResponse.extend({
+const currentValidOrdersResponse = basicGoodResponse.extend({
   total_records: z.number(),
   orders: z.array(
     z.object({

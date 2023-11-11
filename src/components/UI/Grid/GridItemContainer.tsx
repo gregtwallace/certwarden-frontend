@@ -5,7 +5,7 @@ import { Container, Paper } from '@mui/material';
 
 type propTypes = {
   children: ReactNode;
-  sx: SxProps;
+  sx?: SxProps;
 };
 
 const GridItemContainer: FC<propTypes> = (props) => {

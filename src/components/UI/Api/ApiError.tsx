@@ -13,7 +13,7 @@ const ApiError: FC<propTypes> = (props) => {
   const { statusCode, message } = props;
 
   return (
-    <Alert sx={{ m: 2 }} severity='error'>
+    <Alert sx={{ m: 1 }} severity='error'>
       An API error has occurred.
       <br />
       Status Code: {statusCode}

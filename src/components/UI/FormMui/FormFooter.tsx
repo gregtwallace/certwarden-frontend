@@ -26,7 +26,6 @@ const FooterInfo: FC<propTypesInfo> = (props) => {
 type propTypesFooter = {
   createdAt?: number;
   updatedAt?: number;
-  checkedAt?: number;
 
   cancelHref?: string;
   resetOnClick?: MouseEventHandler<HTMLButtonElement>;
@@ -38,7 +37,6 @@ type propTypesFooter = {
 const FormFooter: FC<propTypesFooter> = (props) => {
   const {
     cancelHref,
-    checkedAt,
     createdAt,
     disabledAllButtons,
     disabledSubmitResetButtons,
@@ -55,12 +53,6 @@ const FormFooter: FC<propTypesFooter> = (props) => {
 
         {updatedAt ? (
           <FooterInfo>Last Updated: {convertUnixTime(updatedAt)}</FooterInfo>
-        ) : null}
-
-        {checkedAt ? (
-          <FooterInfo>
-            Last Checked: {convertUnixTime(checkedAt, true)}
-          </FooterInfo>
         ) : null}
       </Box>
 

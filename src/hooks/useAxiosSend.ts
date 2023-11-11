@@ -1,3 +1,5 @@
+import { type frontendErrorType } from '../types/frontend';
+
 import { useCallback, useState } from 'react';
 
 import { redactJSONObject } from '../helpers/logging';
@@ -8,12 +10,6 @@ import useAxiosWithToken from './useAxiosWithToken';
 // sending state
 type axiosSendStateType = {
   isSending: boolean;
-  error:
-    | {
-        statusCode: number | string;
-        message: string;
-      }
-    | undefined;
 };
 
 // func to actually send data
@@ -24,7 +20,10 @@ type axiosDoSendDataType = <ExpectedResponseType>(
   isResponseDataValidFunc: (
     response: unknown
   ) => response is ExpectedResponseType
-) => Promise<ExpectedResponseType | undefined>;
+) => Promise<{
+  responseData: ExpectedResponseType | undefined;
+  error: frontendErrorType | undefined;
+}>;
 
 // hook
 const useAxiosSend = (): {
@@ -47,7 +46,6 @@ const useAxiosSend = (): {
       // set state to sending
       setSendState({
         isSending: true,
-        error: undefined,
       });
 
       // debugging
@@ -90,23 +88,16 @@ const useAxiosSend = (): {
         // success, return
         setSendState({
           isSending: false,
-          error: undefined,
         });
 
-        return response.data;
+        return { responseData: response.data, error: undefined };
       } catch (err: unknown) {
-        // done, set error
-        const { errorCode, errorMessage } = parseAxiosError(err);
-
+        // done & return error
         setSendState({
           isSending: false,
-          error: {
-            statusCode: errorCode,
-            message: errorMessage,
-          },
         });
 
-        return undefined;
+        return { responseData: undefined, error: parseAxiosError(err) };
       }
     },
     [axiosInstance]

@@ -1,3 +1,5 @@
+import { type FC } from 'react';
+
 import GridContainer from '../../UI/Grid/GridContainer';
 import GridItemThird from '../../UI/Grid/GridItemThird';
 
@@ -8,7 +10,7 @@ import FrontendStatus from './FrontendStatus';
 import NewVersionInfo from './NewVersionInfo';
 import Shutdown from './Shutdown';
 
-const Settings = () => {
+const Settings: FC = () => {
   return (
     <>
       <TitleBar title='Settings' />

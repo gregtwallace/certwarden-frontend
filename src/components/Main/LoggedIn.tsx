@@ -107,6 +107,9 @@ const LoggedIn: FC = () => {
           {/* Dashboard */}
           <Route path='/' element={<Dashboard />} />
 
+          {/* Settings */}
+          <Route path={'/settings'} element={<Settings />} />
+
           {/* Misc. */}
           <Route path={'/logout'} element={<Logout />} />
 

@@ -1,8 +1,12 @@
-import { type FC, type SyntheticEvent } from 'react';
+import { type FC, type FormEventHandler } from 'react';
 import {
   type authorizationResponseType,
   isAuthorizationResponseType,
 } from '../../../types/api';
+import {
+  type frontendErrorType,
+  type validationErrorsType,
+} from '../../../types/frontend';
 
 import { useState } from 'react';
 
@@ -29,7 +33,8 @@ type formObj = {
     username: string;
     password: string;
   };
-  validationErrors: { [key: string]: boolean };
+  sendError: frontendErrorType | undefined;
+  validationErrors: validationErrorsType;
 };
 
 // component
@@ -43,7 +48,8 @@ const Login: FC = () => {
       username: '',
       password: '',
     },
-    validationErrors: {},
+    sendError: undefined,
+    validationErrors: new Map<string, boolean>(),
   };
   const [formState, setFormState] = useState(blankForm);
 
@@ -51,27 +57,27 @@ const Login: FC = () => {
   const inputChangeHandler = inputHandlerFuncMaker(setFormState);
 
   // submit login form
-  const submitFormHandler = (event: SyntheticEvent): void => {
+  const submitFormHandler: FormEventHandler = (event) => {
     event.preventDefault();
 
     // form validation
-    const validationErrors: { [key: string]: boolean } = {};
+    const validationErrors= new Map<string, boolean>();
 
     // username (not blank)
     if (formState.dataToSubmit.username.length <= 0) {
-      validationErrors['username'] = true;
+      validationErrors.set('dataToSubmit.username', true);
     }
 
     // password (not blank)
     if (formState.dataToSubmit.password.length <= 0) {
-      validationErrors['password'] = true;
+      validationErrors.set('dataToSubmit.password', true);
     }
 
     setFormState((prevState) => ({
       ...prevState,
       validationErrors: validationErrors,
     }));
-    if (Object.keys(validationErrors).length > 0) {
+    if (validationErrors.size > 0) {
       return;
     }
     // form validation - end
@@ -81,13 +87,16 @@ const Login: FC = () => {
       LOGIN_URL,
       formState.dataToSubmit,
       isAuthorizationResponseType
-    ).then((responseData) => {
+    ).then(({ responseData, error }) => {
       // set auth if success
       if (responseData && responseData.status_code === 200) {
         setAuth(responseData.authorization);
       } else {
-        // failed, clear form
-        setFormState(blankForm);
+        // failed, clear form and set error
+        setFormState({
+          ...blankForm,
+          sendError: error,
+        });
       }
     });
   };
@@ -116,7 +125,7 @@ const Login: FC = () => {
             label='Username'
             value={formState.dataToSubmit.username}
             onChange={inputChangeHandler}
-            error={formState.validationErrors['username']}
+            error={formState.validationErrors.get('dataToSubmit.username')}
           />
 
           <InputTextField
@@ -124,14 +133,14 @@ const Login: FC = () => {
             label='Password'
             value={formState.dataToSubmit.password}
             onChange={inputChangeHandler}
-            error={formState.validationErrors['password']}
+            error={formState.validationErrors.get('dataToSubmit.password')}
           />
 
-          {sendState.error &&
+          {formState.sendError &&
             Object.keys(formState.validationErrors).length <= 0 && (
               <ApiError
-                statusCode={sendState.error.statusCode}
-                message={sendState.error.message}
+                statusCode={formState.sendError.statusCode}
+                message={formState.sendError.message}
               />
             )}
 

@@ -1,5 +1,5 @@
 // function to convert unix time to something friendlier
-export const convertUnixTime = (unixTime: number, withTime = false) => {
+export const convertUnixTime = (unixTime: number, withTime = false): string => {
   if (!unixTime) {
     return '';
   }
@@ -31,7 +31,7 @@ export const convertUnixTime = (unixTime: number, withTime = false) => {
 };
 
 // function to return number of days until the specified time
-export const daysUntil = (unixTime: number) => {
+export const daysUntil = (unixTime: number): number => {
   return Math.floor((unixTime - Date.now() / 1000) / (3600 * 24));
 };
 

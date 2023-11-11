@@ -1,5 +1,6 @@
 import { type AxiosRequestConfig, isAxiosError } from 'axios';
 import { isErrorResponseType } from '../types/api';
+import { type frontendErrorType } from '../types/frontend';
 
 import axios from 'axios';
 import { apiUrl } from './environment';
@@ -15,9 +16,7 @@ export const axiosConfig: AxiosRequestConfig = {
 export const axiosInstance = axios.create(axiosConfig);
 
 // error parser
-export const parseAxiosError = (
-  err: unknown
-): { errorCode: number | string; errorMessage: string } => {
+export const parseAxiosError = (err: unknown): frontendErrorType => {
   // if err is an error response from backend api, use its code and message
   // first possible spot for backend response
   if (
@@ -27,8 +26,8 @@ export const parseAxiosError = (
     isErrorResponseType(err.data)
   ) {
     return {
-      errorCode: err.data.status_code,
-      errorMessage: err.data.message,
+      statusCode: err.data.status_code,
+      message: err.data.message,
     };
   }
 
@@ -43,8 +42,8 @@ export const parseAxiosError = (
     isErrorResponseType(err.response.data)
   ) {
     return {
-      errorCode: err.response.data.status_code,
-      errorMessage: err.response.data.message,
+      statusCode: err.response.data.status_code,
+      message: err.response.data.message,
     };
   }
 
@@ -52,8 +51,8 @@ export const parseAxiosError = (
   if (isAxiosError(err)) {
     const errorCode = err.code;
     const errorMessage = err.message;
-    return { errorCode: errorCode || 'unknown', errorMessage };
+    return { statusCode: errorCode || 'unknown', message: errorMessage };
   }
 
-  return { errorCode: 'unknown', errorMessage: 'unknown' };
+  return { statusCode: 'unknown', message: 'unknown' };
 };

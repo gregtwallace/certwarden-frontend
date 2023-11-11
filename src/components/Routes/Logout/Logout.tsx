@@ -1,17 +1,18 @@
 import { type FC } from 'react';
 import {
-  type basicResponseType,
-  isBasicResponseType,
+  type logoutResponseType,
+  isLogoutResponseType,
 } from '../../../types/api';
 
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import useAuth from '../../../hooks/useAuth';
 import useAxiosSend from '../../../hooks/useAxiosSend';
 
 import { Paper } from '@mui/material';
+
 import TitleBar from '../../UI/TitleBar/TitleBar';
-import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
 
 // backend API path
@@ -24,12 +25,12 @@ const Logout: FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    doSendData<basicResponseType>(
+    doSendData<logoutResponseType>(
       'POST',
       LOGOUT_URL,
       {},
-      isBasicResponseType
-    ).then(() => {
+      isLogoutResponseType
+    ).then(({ responseData: _r, error: _e }) => {
       // regardless of result, clear auth state and redirect
       setAuth(undefined);
       navigate('/');
@@ -46,13 +47,6 @@ const Logout: FC = () => {
       <TitleBar title='Logging Out...' />
 
       {sendState.isSending && <ApiLoading />}
-
-      {sendState.error && (
-        <ApiError
-          statusCode={sendState.error.statusCode}
-          message={sendState.error.message}
-        />
-      )}
     </Paper>
   );
 };

@@ -1,32 +1,27 @@
+import { type FC } from 'react';
+
 import { frontendVersion } from '../../../helpers/constants';
 import { showDebugInfo } from '../../../helpers/environment';
 import { apiUrl } from '../../../helpers/environment';
 
-import { Typography } from '@mui/material';
-
 import GridItemContainer from '../../UI/Grid/GridItemContainer';
+import GridItemText from '../../UI/Grid/GridItemText';
 import GridTitle from '../../UI/Grid/GridTitle';
 
-const FrontendStatus = () => {
+const FrontendStatus: FC = () => {
   return (
     <GridItemContainer>
       <GridTitle title='Frontend Status' />
 
-      <Typography variant='p' sx={{ my: 1 }} display='block'>
-        Status: Available
-      </Typography>
+      <GridItemText>Status: Available</GridItemText>
 
-      <Typography variant='p' sx={{ my: 1 }} display='block'>
-        Version: {frontendVersion}
-      </Typography>
+      <GridItemText>Version: {frontendVersion}</GridItemText>
 
-      <Typography variant='p' sx={{ my: 1 }} display='block'>
-        API URL: {apiUrl}
-      </Typography>
+      <GridItemText wordBreak='break-word'>API URL: {apiUrl}</GridItemText>
 
-      <Typography variant='p' sx={{ my: 1 }} display='block'>
+      <GridItemText>
         Show Debug Info: {showDebugInfo ? 'Yes' : 'No'}
-      </Typography>
+      </GridItemText>
     </GridItemContainer>
   );
 };

@@ -45,6 +45,12 @@ const fieldsInfo = [
   {
     name: 'dataToSubmit.current_password',
     type: 'password',
+    errorMessage: 'Current password must not be blank.',
+  },
+  {
+    name: 'dataToSubmit.new_password',
+    type: 'password',
+    errorMessage: 'New password must not be blank.',
   },
   {
     name: 'dataToSubmit.confirm_new_password',
@@ -81,11 +87,6 @@ const fieldsInfo = [
     name: 'dataToSubmit.name',
     errorMessage:
       'The name cannot be blank and must only contain these symbols - _ . ~ letters and numbers.',
-  },
-  {
-    name: 'dataToSubmit.new_password',
-    errorMessage: 'New password must be at least 10 characters long.',
-    type: 'password',
   },
   {
     name: 'dataToSubmit.password',

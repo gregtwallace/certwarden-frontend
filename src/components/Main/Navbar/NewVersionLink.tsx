@@ -28,7 +28,7 @@ const NewVersionLink: FC<propTypes> = (props) => {
 
   // close update notice, save to local storage
   const closeHandler = (): void => {
-    if (newVersion?.info.version) {
+    if (newVersion?.info?.version) {
       localStorage.setItem('ignore_update_version', newVersion.info.version);
       setIgnoreVersion(newVersion.info.version);
     }
@@ -38,6 +38,7 @@ const NewVersionLink: FC<propTypes> = (props) => {
     <>
       {newVersion &&
         newVersion.available &&
+        newVersion.info &&
         ignoreVersion != newVersion.info.version && (
           <NavLink
             to={newVersion.info.url}
