@@ -5,66 +5,108 @@ import { z } from 'zod';
 
 // import { redactJSONObject } from "./logging";
 
-type valueConversionTypes = 'unchanged' | 'number' | false | true;
-
-// modify an object in place using its path
-// WARNING: IF CHANGE TYPES, MANUALLY UPDATE ZOD consts too!
-type settableValuesType =
-  | string
-  | number
-  | boolean
-  | settableObjectType
-  | settableArrayType
-  | undefined;
-// WARNING SEE ABOVE
-type settableObjectType = { [key: string]: settableValuesType };
-type settableArrayType = Array<settableValuesType>;
-
-let settableObject: z.ZodType<settableObjectType>;
-let settableArray: z.ZodType<settableArrayType>;
-
-// WARNING: SEE ABOVE - must stay in sync with above types
-const settableValues: z.ZodType<settableValuesType> = z.union([
+// base without circular
+const baseSettableValuesSchema = z.union([
   z.string(),
   z.number(),
   z.boolean(),
-  z.lazy(() => settableObject),
-  z.lazy(() => settableArray),
   z.undefined(),
 ]);
-settableObject = z.record(
-  z.string(),
-  z.lazy(() => settableValues)
-);
-settableArray = z.array(z.lazy(() => settableValues));
 
+// main type
+type settableValuesType =
+  | z.infer<typeof baseSettableValuesSchema>
+  | settableObjectType
+  | settableArrayType;
+
+// two circular types + node
+type settableObjectType = { [key: string]: settableValuesType };
+type settableArrayType = Array<settableValuesType>;
+type settableNodeType = settableObjectType | settableArrayType;
+
+// lazy load for zod circular (temporary values to avoid lint prefer-const error)
+let settableObjectSchema: z.ZodType<settableObjectType> = z.object({});
+let settableArraySchema: z.ZodType<settableArrayType> = z.array(z.string());
+
+const settableValuesSchema: z.ZodType<settableValuesType> = z.union([
+  baseSettableValuesSchema,
+  z.lazy(() => settableObjectSchema),
+  z.lazy(() => settableArraySchema),
+]);
+
+settableObjectSchema = z.record(
+  z.string(),
+  z.lazy(() => settableValuesSchema)
+);
+settableArraySchema = z.array(z.lazy(() => settableValuesSchema));
+
+// type guards for circulars (nodes)
 const isSettableObjectType = (unk: unknown): unk is settableObjectType => {
-  const { success } = settableObject.safeParse(unk);
+  const { success } = settableObjectSchema.safeParse(unk);
   return success;
 };
 const isSettableArrayType = (unk: unknown): unk is settableArrayType => {
-  const { success } = settableArray.safeParse(unk);
+  const { success } = settableArraySchema.safeParse(unk);
   return success;
 };
 
-// const settableValues: z.ZodType<settableValuesType> = z.lazy()
+// next node calculator (creates empty node if next doesn't exist or
+// it isn't a node or it isn't the right node type)
+const nextNodeToSet = (
+  currentNode: settableNodeType,
+  // current key is always initially string (it is part of the string path)
+  currentKey: string,
+  nextKey: string
+): settableNodeType => {
+  // for use if next node needs to be created (depending on next node type (string or number))
+  const nextIsNum = !isNaN(parseInt(nextKey)) ? true : false;
+  const nextEmptyNode = nextIsNum
+    ? <settableArrayType>[]
+    : <settableObjectType>{};
 
+  // nextNode is narrowed to node later
+  let nextNode: settableValuesType;
+  if (isSettableObjectType(currentNode)) {
+    nextNode = currentNode[currentKey];
+  } else {
+    const currentKeyInt = parseInt(currentKey);
+    nextNode = currentNode[currentKeyInt];
+  }
+
+  // invalid next node type, set empty
+  if (
+    !nextNode ||
+    (!isSettableArrayType(nextNode) && !isSettableObjectType(nextNode))
+  ) {
+    return nextEmptyNode;
+  } else if (
+    // next node is wrong type for next val, set empty
+    (nextIsNum && !isSettableArrayType(nextNode)) ||
+    (!nextIsNum && !isSettableObjectType(nextNode))
+  ) {
+    return nextEmptyNode;
+  } else {
+    // node is correct type, no change
+    return nextNode;
+  }
+};
+
+// actual object modifier function
 const setObjPathVal = <T extends settableObjectType | settableArrayType>(
   obj: T,
   path: string,
   value: settableValuesType
 ): T => {
   // missing args
-  if (!obj) return {} as T;
+  if (!obj) return <T>{};
   if (!path || value === undefined) return obj;
 
   // split path
   const segments = path.split(/[.[\]]/g).filter((x) => !!x.trim());
 
   // setter
-  const _set = (node: settableValuesType): void => {
-    // more nesting to do
-
+  const setNode = (node: settableNodeType): void => {
+    // case 1: more nesting to handle
     if (segments.length > 1) {
       const key = segments.shift();
       if (!key) {
@@ -76,43 +118,10 @@ const setObjPathVal = <T extends settableObjectType | settableArrayType>(
         throw '(should be) impossible error happened in object setter (next segment undefined)';
       }
 
-      const nextIsNum = !isNaN(parseInt(nextSegment)) ? true : false;
-
-      // set next node based on next segment type (string or number)
-      if (isSettableObjectType(node)) {
-        // make new node if doesn't exist
-        // or make new if it isn't the right kind
-        if (
-          !node[key] ||
-          (nextIsNum && !isSettableArrayType(node[key])) ||
-          (!nextIsNum && !isSettableObjectType(node[key]))
-        ) {
-          node[key] = nextIsNum
-            ? <settableArrayType>[]
-            : <settableObjectType>{};
-        }
-
-        _set(node[key]);
-      } else if (isSettableArrayType(node)) {
-        // make new node if doesn't exist
-        // or make new if it isn't the right kind
-        const keyInt = parseInt(key);
-        if (
-          !node[keyInt] ||
-          (nextIsNum && !isSettableArrayType(node[keyInt])) ||
-          (!nextIsNum && !isSettableObjectType(node[keyInt]))
-        ) {
-          node[keyInt] = nextIsNum
-            ? <settableArrayType>[]
-            : <settableObjectType>{};
-        }
-
-        _set(node[keyInt]);
-      } else {
-        throw '(should be) impossible error happened in object setter (node is not object or array)';
-      }
+      // do next node
+      setNode(nextNodeToSet(node, key, nextSegment));
     } else {
-      // set final val
+      // case 2: final node
       const finalKey = segments[0];
       if (!finalKey) {
         throw '(should be) impossible error happened in object setter (final key undefined)';
@@ -121,18 +130,17 @@ const setObjPathVal = <T extends settableObjectType | settableArrayType>(
       // obj or array?
       if (isSettableObjectType(node)) {
         node[finalKey] = value;
-      } else if (isSettableArrayType(node)) {
+      } else {
+        // must be array
         const finalKeyInt = parseInt(finalKey);
         node[finalKeyInt] = value;
-      } else {
-        throw '(should be) impossible error happened in object setter (final node is not object or array)';
       }
     }
   };
 
   // can't directly modify prev state, so just grab all of the props
   const newObj = { ...obj };
-  _set(newObj);
+  setNode(newObj);
 
   return newObj;
 };
@@ -148,6 +156,8 @@ export type inputOption = {
     value: settableValuesType;
   }[];
 };
+
+type valueConversionTypes = 'unchanged' | 'number' | false | true;
 
 // type for custom inputHandlerFunc
 export type inputHandlerFunc = (
