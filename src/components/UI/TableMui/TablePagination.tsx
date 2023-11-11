@@ -52,7 +52,7 @@ const TablePagination: FC<propTypes> = (props) => {
     if (!pageIsValid) {
       searchParams.delete('page');
       searchParams.delete('perpage');
-      setSearchParams();
+      setSearchParams(searchParams);
     }
   }, [pageIsValid, searchParams, setSearchParams]);
 
