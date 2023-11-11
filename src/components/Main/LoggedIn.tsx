@@ -81,17 +81,6 @@ const LoggedIn: FC = () => {
   //   <Route path={`/providers/${newId}`} element={<AddOneProvider />} />
   //   <Route path={'/providers/:id'} element={<EditOneProvider />} />
 
-  //   {/* ACME Servers */}
-  //   <Route path='/acmeservers' element={<AllACMEServers />} />
-  //   <Route
-  //     path={`/acmeservers/${newId}`}
-  //     element={<AddOneACMEServer />}
-  //   />
-  //   <Route path='/acmeservers/:id' element={<EditOneACMEServer />} />
-
-  //   {/* Settings */}
-  //   <Route path={'/settings'} element={<Settings />} />
-
   return (
     <NewVersionProvider>
       <Navbar />
@@ -106,6 +95,14 @@ const LoggedIn: FC = () => {
         <Routes>
           {/* Dashboard */}
           <Route path='/' element={<Dashboard />} />
+
+          {/* ACME Servers */}
+          <Route path='/acmeservers' element={<AllACMEServers />} />
+          {/* <Route
+            path={`/acmeservers/${newId}`}
+            element={<AddOneACMEServer />}
+          />
+          <Route path='/acmeservers/:id' element={<EditOneACMEServer />} /> */}
 
           {/* Settings */}
           <Route path={'/settings'} element={<Settings />} />

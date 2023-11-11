@@ -7,12 +7,14 @@ import { TableRow } from '@mui/material';
 import TableHeaderSortable from './TableHeaderSortable';
 import TableHeader from './TableHeader';
 
+export type headerType = {
+  id: string;
+  label: string;
+  sortable: boolean;
+};
+
 type propTypes = {
-  headers: {
-    id: string;
-    label: string;
-    sortable: boolean;
-  }[];
+  headers: headerType[];
 };
 
 const TableHeaderRow: FC<propTypes> = (props) => {

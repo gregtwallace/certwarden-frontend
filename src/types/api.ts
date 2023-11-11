@@ -207,3 +207,28 @@ export const isCurrentValidOrdersResponseType = (
   const { success } = currentValidOrdersResponse.safeParse(unk);
   return success;
 };
+
+//
+// ACME Servers
+//
+
+const acmeServersResponse = basicGoodResponse.extend({
+  total_records: z.number(),
+  acme_servers: z.array(
+    z.object({
+      id: z.number(),
+      name: z.string(),
+      description: z.string(),
+      is_staging: z.boolean(),
+      external_account_required: z.boolean(),
+    })
+  ),
+});
+
+export type acmeServersResponseType = z.infer<typeof acmeServersResponse>;
+export const isAcmeServersResponseType = (
+  unk: unknown
+): unk is acmeServersResponseType => {
+  const { success } = acmeServersResponse.safeParse(unk);
+  return success;
+};

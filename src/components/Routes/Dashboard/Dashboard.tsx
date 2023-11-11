@@ -1,5 +1,9 @@
 import { type FC } from 'react';
-import { isCurrentValidOrdersResponseType } from '../../../types/api';
+import {
+  type currentValidOrdersResponseType,
+  isCurrentValidOrdersResponseType,
+} from '../../../types/api';
+import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 import { Link } from '@mui/material';
@@ -22,8 +26,10 @@ import TableHeaderRow from '../../UI/TableMui/TableHeaderRow';
 import TablePagination from '../../UI/TableMui/TablePagination';
 import TitleBar from '../../UI/TitleBar/TitleBar';
 
+const DASHBOARD_URL = '/v1/orders/currentvalid';
+
 // table headers and sortable param
-const tableHeaders = [
+const tableHeaders: headerType[] = [
   {
     id: 'name',
     label: 'Name',
@@ -54,8 +60,8 @@ const Dashboard: FC = () => {
     'valid_to'
   );
 
-  const { getState } = useAxiosGet(
-    `/v1/orders/currentvalid?${queryParams}`,
+  const { getState } = useAxiosGet<currentValidOrdersResponseType>(
+    `${DASHBOARD_URL}?${queryParams}`,
     isCurrentValidOrdersResponseType
   );
 

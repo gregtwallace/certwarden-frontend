@@ -1,27 +1,36 @@
+import { type FC } from 'react';
+import {
+  type acmeServersResponseType,
+  isAcmeServersResponseType,
+} from '../../../types/api';
+import { type headerType } from '../../UI/TableMui/TableHeaderRow';
+
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 import { Link } from '@mui/material';
 
+import useAxiosGet from '../../../hooks/useAxiosGet';
+import { queryParser } from '../../UI/TableMui/query';
+import { newId } from '../../../helpers/constants';
+
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import { TableCell } from '@mui/material';
+import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
-
-import useAxiosGet from '../../../hooks/useAxiosGet';
-import { getRowsPerPage, getPage, getSort } from '../../UI/TableMui/query';
-import { newId } from '../../../helpers/constants';
 
 import ApiLoading from '../../UI/Api/ApiLoading';
 import ApiError from '../../UI/Api/ApiError';
-import Button from '../../UI/Button/Button';
+import ButtonAsLink from '../../UI/Button/ButtonAsLink';
 import TableContainer from '../../UI/TableMui/TableContainer';
 import TableHeaderRow from '../../UI/TableMui/TableHeaderRow';
 import TitleBar from '../../UI/TitleBar/TitleBar';
 import TablePagination from '../../UI/TableMui/TablePagination';
+import TableText from '../../UI/TableMui/TableText';
+
+const ACME_SERVERS_URL = '/v1/acmeservers';
 
 // table headers and sortable param
-const tableHeaders = [
+const tableHeaders: headerType[] = [
   {
     id: 'name',
     label: 'Name',
@@ -40,70 +49,65 @@ const tableHeaders = [
   {
     id: 'external_account_required',
     label: 'Requires EAB',
-    sortable: true,
+    sortable: false,
   },
 ];
 
-const AllACMEServers = () => {
+const AllACMEServers: FC = () => {
+  // parse query
   const [searchParams] = useSearchParams();
+  const { page, rowsPerPage, queryParams } = queryParser(
+    searchParams,
+    'valid_to'
+  );
 
-  // get calculated query params
-  const rowsPerPage = getRowsPerPage(searchParams);
-  const page = getPage(searchParams);
-  const sort = getSort(searchParams, 'name', 'asc');
-
-  // calculate offset from current page and rows per page
-  const offset = page * rowsPerPage;
-
-  const [apiGetState] = useAxiosGet(
-    `/v1/acmeservers?limit=${rowsPerPage}&offset=${offset}&sort=${sort}`,
-    'all_acme_servers',
-    true
+  const { getState } = useAxiosGet<acmeServersResponseType>(
+    `${ACME_SERVERS_URL}?${queryParams}`,
+    isAcmeServersResponseType
   );
 
   return (
     <TableContainer>
       <TitleBar title='ACME Servers'>
-        <Button
-          variant='contained'
-          type='submit'
-          href={`/acmeservers/${newId}`}
-        >
-          New Server
-        </Button>
+        <ButtonAsLink to={`/acmeservers/${newId}`}>New Server</ButtonAsLink>
       </TitleBar>
 
-      <Typography variant='p' sx={{ m: 3 }} display='block'>
+      <TableText>
         Support is primarily provided for Let&apos;s Encrypt compatibility, but
         if you have issues with other ACME Servers feel free to open an issue.
-      </Typography>
+      </TableText>
 
-      {!apiGetState.isLoaded && <ApiLoading />}
-      {apiGetState.errorMessage && (
+      {!getState.responseData && !getState.error && <ApiLoading />}
+
+      {getState.error && (
         <ApiError
-          code={apiGetState.errorCode}
-          message={apiGetState.errorMessage}
+          statusCode={getState.error.statusCode}
+          message={getState.error.message}
         />
       )}
-      {apiGetState.isLoaded && !apiGetState.errorMessage && (
+
+      {getState.responseData && (
         <>
           <Table size='small'>
             <TableHead>
               <TableHeaderRow headers={tableHeaders} />
             </TableHead>
             <TableBody>
-              {apiGetState?.all_acme_servers.acme_servers.length > 0 &&
-                apiGetState.all_acme_servers.acme_servers.map((s) => (
-                  <TableRow key={s.id}>
+              {getState.responseData.acme_servers.length > 0 &&
+                getState.responseData.acme_servers.map((serv) => (
+                  <TableRow key={serv.id}>
                     <TableCell>
-                      <Link component={RouterLink} to={'/acmeservers/' + s.id}>
-                        {s.name}
+                      <Link
+                        component={RouterLink}
+                        to={'/acmeservers/' + serv.id}
+                      >
+                        {serv.name}
                       </Link>
                     </TableCell>
-                    <TableCell>{s.description}</TableCell>
-                    <TableCell>{s.is_staging ? 'Yes' : 'No'}</TableCell>
+                    <TableCell>{serv.description}</TableCell>
+                    <TableCell>{serv.is_staging ? 'Yes' : 'No'}</TableCell>
                     <TableCell>
-                      {s.external_account_required ? 'Yes' : 'No'}
+                      {serv.external_account_required ? 'Yes' : 'No'}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -112,7 +116,7 @@ const AllACMEServers = () => {
           <TablePagination
             page={page}
             rowsPerPage={rowsPerPage}
-            count={apiGetState?.all_acme_servers.total_records}
+            count={getState.responseData.total_records}
           />
         </>
       )}
