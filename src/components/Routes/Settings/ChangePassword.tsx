@@ -48,7 +48,7 @@ const ChangePassword: FC = () => {
     },
     sendSuccess: undefined,
     sendError: undefined,
-    validationErrors: new Map<string, boolean>(),
+    validationErrors: {},
   };
   const [formState, setFormState] = useState(blankFormState);
 
@@ -60,16 +60,16 @@ const ChangePassword: FC = () => {
     event.preventDefault();
 
     // form validation
-    const validationErrors = new Map<string, boolean>();
+    const validationErrors: validationErrorsType = {};
 
     // current password (not blank)
     if (formState.dataToSubmit.current_password.length <= 0) {
-      validationErrors.set('dataToSubmit.current_password', true);
+      validationErrors['dataToSubmit.current_password'] = true;
     }
 
     // new password (not blank)
     if (formState.dataToSubmit.new_password.length <= 0) {
-      validationErrors.set('dataToSubmit.new_password', true);
+      validationErrors['dataToSubmit.new_password'] = true;
     }
 
     // confirm password matches new password
@@ -77,14 +77,14 @@ const ChangePassword: FC = () => {
       formState.dataToSubmit.new_password !==
       formState.dataToSubmit.confirm_new_password
     ) {
-      validationErrors.set('dataToSubmit.confirm_new_password', true);
+      validationErrors['dataToSubmit.confirm_new_password'] = true;
     }
 
     setFormState((prevState) => ({
       ...prevState,
       validationErrors: validationErrors,
     }));
-    if (validationErrors.size > 0) {
+    if (Object.keys(validationErrors).length > 0) {
       return;
     }
     // form validation - end
@@ -114,9 +114,7 @@ const ChangePassword: FC = () => {
           label='Current Password'
           value={formState.dataToSubmit.current_password}
           onChange={inputChangeHandler}
-          error={formState.validationErrors.get(
-            'dataToSubmit.current_password'
-          )}
+          error={formState.validationErrors['dataToSubmit.current_password']}
         />
 
         <InputTextField
@@ -124,7 +122,7 @@ const ChangePassword: FC = () => {
           label='New Password'
           value={formState.dataToSubmit.new_password}
           onChange={inputChangeHandler}
-          error={formState.validationErrors.get('dataToSubmit.new_password')}
+          error={formState.validationErrors['dataToSubmit.new_password']}
         />
 
         <InputTextField
@@ -132,9 +130,9 @@ const ChangePassword: FC = () => {
           label='Confirm New Password'
           value={formState.dataToSubmit.confirm_new_password}
           onChange={inputChangeHandler}
-          error={formState.validationErrors.get(
-            'dataToSubmit.confirm_new_password'
-          )}
+          error={
+            formState.validationErrors['dataToSubmit.confirm_new_password']
+          }
         />
 
         {formState.sendError && (
