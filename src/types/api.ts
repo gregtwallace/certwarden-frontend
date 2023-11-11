@@ -238,8 +238,11 @@ const oneAcmeServerResponse = basicGoodResponse.extend({
     id: z.number(),
     name: z.string(),
     description: z.string(),
+    directory_url: z.string(),
     is_staging: z.boolean(),
     external_account_required: z.boolean(),
+    created_at: z.number(),
+    updated_at: z.number(),
   }),
 });
 export type oneAcmeServerResponseType = z.infer<typeof oneAcmeServerResponse>;
@@ -247,5 +250,18 @@ export const isOneAcmeServerResponseType = (
   unk: unknown
 ): unk is oneAcmeServerResponseType => {
   const { success } = oneAcmeServerResponse.safeParse(unk);
+  return success;
+};
+
+const oneAcmeServerDeleteResponse = basicGoodResponse.extend({
+  status_code: z.literal(200),
+});
+export type oneAcmeServerDeleteResponseType = z.infer<
+  typeof oneAcmeServerDeleteResponse
+>;
+export const isOneAcmeServerDeleteResponse = (
+  unk: unknown
+): unk is oneAcmeServerDeleteResponseType => {
+  const { success } = oneAcmeServerDeleteResponse.safeParse(unk);
   return success;
 };

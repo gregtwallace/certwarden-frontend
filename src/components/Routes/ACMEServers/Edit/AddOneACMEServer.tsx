@@ -91,7 +91,6 @@ const AddOneACMEServer: FC = () => {
       formState.dataToSubmit,
       isOneAcmeServerResponseType
     ).then(({ responseData, error }) => {
-      // set auth if success
       if (responseData) {
         navigate(`/acmeservers/${responseData.acme_server.id}`);
       } else {

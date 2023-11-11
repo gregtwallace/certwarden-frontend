@@ -102,7 +102,7 @@ const LoggedIn: FC = () => {
             path={`/acmeservers/${newId}`}
             element={<AddOneACMEServer />}
           />
-          {/* <Route path='/acmeservers/:id' element={<EditOneACMEServer />} /> */}
+          <Route path='/acmeservers/:id' element={<EditOneACMEServer />} />
 
           {/* Settings */}
           <Route path={'/settings'} element={<Settings />} />

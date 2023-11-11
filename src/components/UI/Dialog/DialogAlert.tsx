@@ -1,12 +1,12 @@
 import { type FC, type ReactNode } from 'react';
 import { type ButtonProps as MuiButtonProps } from '@mui/material';
 
+import Button from '../Button/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Button from '../Button/Button';
 
 // prop types
 type propTypes = {
@@ -35,11 +35,15 @@ const DialogAlert: FC<propTypes> = (props) => {
           {children}
         </DialogContentText>
       </DialogContent>
-      <DialogActions>
+      <DialogActions
+        sx={{
+          p: 2,
+        }}
+      >
         <Button color='info' onClick={onCancel}>
           Cancel
         </Button>
-        <Button color='warning' onClick={onConfirm}>
+        <Button color='error' onClick={onConfirm}>
           Confirm
         </Button>
       </DialogActions>
