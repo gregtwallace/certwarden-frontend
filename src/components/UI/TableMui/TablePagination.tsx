@@ -1,5 +1,6 @@
 import { type ChangeEvent, type FC, type MouseEvent } from 'react';
 
+import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { perPageOptions } from './query';
@@ -15,13 +16,16 @@ type propTypes = {
 const TablePagination: FC<propTypes> = (props) => {
   const { count, page, rowsPerPage } = props;
 
+  // page is valid if page 0 (1st page) -or-
+  // valid if page beginning is within the result set (that is,
+  // if page < count / rowsPerPage)
+  const pageIsValid =
+    page === 0 || page < count / parseFloat(rowsPerPage.toString());
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   // page change handler
-  const pageChangeHandler = (
-    _event: MouseEvent | null,
-    page: number
-  ): void => {
+  const pageChangeHandler = (_event: MouseEvent | null, page: number): void => {
     searchParams.set('page', page.toString());
     setSearchParams(searchParams);
   };
@@ -42,16 +46,30 @@ const TablePagination: FC<propTypes> = (props) => {
     setSearchParams(searchParams);
   };
 
+  // if page is invalid, delete page and per page then reload
+  // AKA load default page and per page
+  useEffect(() => {
+    if (!pageIsValid) {
+      searchParams.delete('page');
+      searchParams.delete('perpage');
+      setSearchParams();
+    }
+  }, [pageIsValid, searchParams, setSearchParams]);
+
   return (
-    <MuiTablePagination
-      rowsPerPageOptions={perPageOptions}
-      component='div'
-      count={count}
-      rowsPerPage={rowsPerPage}
-      page={page}
-      onPageChange={pageChangeHandler}
-      onRowsPerPageChange={rowPerPageChangeHandler}
-    ></MuiTablePagination>
+    <>
+      {pageIsValid && (
+        <MuiTablePagination
+          rowsPerPageOptions={perPageOptions}
+          component='div'
+          count={count}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={pageChangeHandler}
+          onRowsPerPageChange={rowPerPageChangeHandler}
+        ></MuiTablePagination>
+      )}
+    </>
   );
 };
 
