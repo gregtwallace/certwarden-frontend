@@ -33,7 +33,8 @@ const InputCheckbox: FC<propTypes> = (props) => {
           <Checkbox
             id={id}
             name={name || id}
-            onChange={(event) => onChange(event, 'checkbox')}
+            onChange={(event, checked) => onChange(event, checked)}
+            value={checked ? 'on' : 'off'}
             checked={!!checked}
             disabled={!!disabled}
           />

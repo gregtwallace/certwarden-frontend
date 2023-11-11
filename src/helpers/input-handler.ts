@@ -1,26 +1,38 @@
 import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { type SelectChangeEvent } from '@mui/material';
 
 // import { redactJSONObject } from "./logging";
 
-// modifyValueObject takes the original object and modifies the
-// property with name and sets it to value
-const modifyValueObject = <T extends object>(
-  originalObject: T,
+type stateValueTypes =
+  | string
+  | number
+  | Record<string, unknown>
+  | boolean
+  | undefined;
+type stateObject = Record<string, unknown>;
+type valueConversionTypes = 'unchanged' | 'number' | false | true;
+
+// modifyValueInObject takes the object and modifies the property with name
+// and sets it to value
+const modifyValueInObject = <objType extends stateObject>(
+  obj: objType,
   dottedPropertyName: string,
-  newValue: string | number | boolean | object
-): T => {
+  newValue: stateValueTypes
+): objType => {
+  // return (previousState[dottedPropertyName] = newValue);
+
   const path = dottedPropertyName.split('.');
   let newObject = newValue;
 
-  // deeper layers not supported, return original
+  // deeper layers not supported, return unmodified
   if (path.length >= 5) {
-    return originalObject;
+    return obj;
   }
 
   // 3rd nested layer
   if (path.length >= 4) {
     newObject = {
-      ...originalObject[path[0]][path[1]][path[2]],
+      ...obj[path[0]][path[1]][path[2]],
       [path[3]]: newObject,
     };
   }
@@ -28,7 +40,7 @@ const modifyValueObject = <T extends object>(
   // 2nd nested layer
   if (path.length >= 3) {
     newObject = {
-      ...originalObject[path[0]][path[1]],
+      ...obj[path[0]][path[1]],
       [path[2]]: newObject,
     };
   }
@@ -36,14 +48,14 @@ const modifyValueObject = <T extends object>(
   // 1st nested layer
   if (path.length >= 2) {
     newObject = {
-      ...originalObject[path[0]],
+      ...obj[path[0]],
       [path[1]]: newObject,
     };
   }
 
   // top level
   newObject = {
-    ...originalObject,
+    ...obj,
     [path[0]]: newObject,
   };
 
@@ -70,58 +82,66 @@ const modifyValueObject = <T extends object>(
 
 // object for other values to set
 export type inputOption = {
-  value: number | string;
+  value: string;
   name: string;
   alsoSet?: {
     name: string;
-    value: number | string | object;
+    value: stateValueTypes;
   }[];
 };
 
 // type for custom inputHandlerFunc
 export type inputHandlerFunc = (
-  event: ChangeEvent<HTMLInputElement>,
-  type?: string | undefined,
+  // event is the standard input change event
+  event:
+    | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    | SelectChangeEvent<inputOption>,
+  // convertValueTo is the value type that the event.target.value should be
+  // forced to when saved in state
+  convertValueTo: valueConversionTypes,
+  // inputOptions is used for select input elements to enable changing of
+  // multiple other values on select change. For instance, to add or remove
+  // fields that are only relevant to a particular item in the Select element.
   inputOptions?: inputOption[]
 ) => void;
 
 // formChangeHandlerFunc returns the input change handler specific
 // to the setFormState func that is passed in
-export const inputHandlerFuncMaker = <T extends object>(
-  setFormState: Dispatch<SetStateAction<T>>
+export const inputHandlerFuncMaker = <StateObject extends stateObject>(
+  setFormState: Dispatch<SetStateAction<StateObject>>
 ): inputHandlerFunc => {
-  // event is the standard event object
-  // type allows specifying how to parse the new target value
-  // options is used by InputSelect to potentially set additional field values
-  //   if changing the select alters other parts of the form
   return (
-    event: ChangeEvent<HTMLInputElement>,
-    type?: string | undefined,
+    event:
+      | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      | SelectChangeEvent<inputOption>,
+    convertValueTo: valueConversionTypes,
     inputOptions?: inputOption[]
   ) => {
-    // new val based on the input type, default is to just
-    // use event.target.value as-is
-    let eventVal: string | number | boolean = event.target.value;
-    if (type === 'number') {
-      eventVal = parseInt(eventVal);
-    } else if (type === 'checkbox') {
-      eventVal = event.target.checked;
-    }
+    // set newVal to the real value to store in state
+    const inputValue = event.target.value;
+    let value: stateValueTypes = inputValue;
 
-    // parse options to check for alsoSet values
-    const alsoSet = inputOptions?.find((o) => o.value === eventVal)?.alsoSet;
+    // attempt to convert value if needed
+    if (convertValueTo === 'number') {
+      value = Number(inputValue);
+    } else if (convertValueTo === true || convertValueTo === false) {
+      value = convertValueTo;
+    }
 
     setFormState((prevState) => {
       // initial newState modifying just the main field and its value
-      let newState = modifyValueObject(prevState, event.target.name, eventVal);
+      let newState = modifyValueInObject(prevState, event.target.name, value);
 
-      // further modification if there are alsoSet values
-      if (alsoSet != undefined) {
-        newState = alsoSet.reduce(
-          (accumulator, field) =>
-            modifyValueObject(accumulator, field.name, field.value),
-          newState
-        );
+      // further modification if there are alsoSet values on inputOptions
+      if (inputOptions) {
+        const alsoSet = inputOptions?.find((o) => o.value === value)?.alsoSet;
+        if (alsoSet != undefined) {
+          newState = alsoSet.reduce(
+            (accumulator, field) =>
+              modifyValueInObject(accumulator, field.name, field.value),
+            newState
+          );
+        }
       }
 
       // console.log(redactJSONObject(newState))

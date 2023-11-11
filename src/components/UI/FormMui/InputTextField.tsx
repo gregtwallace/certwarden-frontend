@@ -1,4 +1,4 @@
-import { type ChangeEvent, type FC } from 'react';
+import { type FC } from 'react';
 import { type inputHandlerFunc } from '../../../helpers/input-handler';
 
 import fieldInformation from './fields-info';
@@ -23,21 +23,16 @@ const InputTextField: FC<propTypes> = (props) => {
     props;
 
   // get field info
-  const { errorMessage, type } = fieldInformation(name || id);
+  const { errorMessage, htmlType } = fieldInformation(name || id);
 
   return (
     <MuiTextField
       id={id}
       name={name || id}
-      type={type || 'text'}
+      type={htmlType}
       label={label}
       value={value}
-      onChange={
-        onChange
-          ? (event: ChangeEvent<HTMLInputElement>) =>
-              onChange(event, type || 'text')
-          : undefined
-      }
+      onChange={onChange ? (event) => onChange(event, 'unchanged') : undefined}
       disabled={!!disabled}
       error={!!error}
       helperText={!!error && errorMessage}

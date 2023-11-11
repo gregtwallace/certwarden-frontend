@@ -61,7 +61,7 @@ const Login: FC = () => {
     event.preventDefault();
 
     // form validation
-    const validationErrors= new Map<string, boolean>();
+    const validationErrors = new Map<string, boolean>();
 
     // username (not blank)
     if (formState.dataToSubmit.username.length <= 0) {

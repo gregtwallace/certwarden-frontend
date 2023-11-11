@@ -40,7 +40,7 @@ const InputSelect: FC<propTypes> = (props) => {
   } = props;
 
   // get field info
-  const { errorMessage, type } = fieldInformation(name || id);
+  const { errorMessage } = fieldInformation(name || id);
 
   return (
     <FormControl fullWidth sx={{ my: 1 }}>
@@ -54,7 +54,7 @@ const InputSelect: FC<propTypes> = (props) => {
         name={name || id}
         label={label}
         value={value}
-        onChange={(event) => onChange(event, type || 'text', options)}
+        onChange={(event) => onChange(event, 'unchanged', options)}
         readOnly={!!readOnly}
         disabled={!!disabled}
       >
