@@ -52,7 +52,7 @@ const AddOneACMEServer: FC = () => {
       is_staging: false,
     },
     sendError: undefined,
-    validationErrors: new Map<string, boolean>(),
+    validationErrors: {},
   };
   const [formState, setFormState] = useState(blankForm);
 
@@ -64,23 +64,23 @@ const AddOneACMEServer: FC = () => {
     event.preventDefault();
 
     // form validation
-    const validationErrors = new Map<string, boolean>();
+    const validationErrors: validationErrorsType = {};
 
     // name
     if (!isNameValid(formState.dataToSubmit.name)) {
-      validationErrors.set('dataToSubmit.name', true);
+      validationErrors['dataToSubmit.name'] = true;
     }
 
     // directory url
     if (!isDirectoryUrlValid(formState.dataToSubmit.directory_url)) {
-      validationErrors.set('dataToSubmit.directory_url', true);
+      validationErrors['dataToSubmit.directory_url'] = true;
     }
 
     setFormState((prevState) => ({
       ...prevState,
       validationErrors: validationErrors,
     }));
-    if (validationErrors.size > 0) {
+    if (Object.keys(validationErrors).length > 0) {
       return;
     }
     // form validation - end
@@ -112,7 +112,7 @@ const AddOneACMEServer: FC = () => {
           label='Name'
           value={formState.dataToSubmit.name}
           onChange={inputChangeHandler}
-          error={formState.validationErrors.get('dataToSubmit.name')}
+          error={formState.validationErrors['dataToSubmit.name']}
         />
 
         <InputTextField
@@ -127,7 +127,7 @@ const AddOneACMEServer: FC = () => {
           label='Directory URL'
           value={formState.dataToSubmit.directory_url}
           onChange={inputChangeHandler}
-          error={formState.validationErrors.get('dataToSubmit.directory_url')}
+          error={formState.validationErrors['dataToSubmit.directory_url']}
         />
 
         <InputCheckbox

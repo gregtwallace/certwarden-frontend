@@ -16,6 +16,6 @@ export type frontendErrorType = z.infer<typeof frontendError>;
 //
 // Validation Errors Shape
 //
-const validationErrors = z.map(z.string(), z.boolean());
+const validationErrors = z.record(z.string(), z.boolean());
 
 export type validationErrorsType = z.infer<typeof validationErrors>;
