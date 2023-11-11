@@ -89,7 +89,7 @@ const fieldsInfo: fieldInfoType[] = [
   {
     name: 'dataToSubmit.directory_url',
     htmlType: 'url',
-    errorMessage: 'Directory URL must be https.',
+    errorMessage: 'Directory URL must be https and only contain valid URI characters.',
   },
   {
     name: 'dataToSubmit.domains',

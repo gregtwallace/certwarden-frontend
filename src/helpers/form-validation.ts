@@ -42,9 +42,15 @@ export const isDomainValid = (domain: string): boolean => {
   return false;
 };
 
-// isDirectoryUrlValid validates an acme server url. It only verifies
-// the the url is https and relies on the backend for the rest.
+// isDirectoryUrlValid validates an acme server url. It verifies the url
+// contains only valid chars and starts with https.
 export const isDirectoryUrlValid = (url: string): boolean => {
+  // https://en.wikipedia.org/wiki/Percent-encoding#Types_of_URI_characters
+  const regex = /^[A-Za-z0-9-_.~!#$&'()*+,/:;=?@%[\]]*$/;
+  if (!url.match(regex)) {
+    return false;
+  }
+
   return url.startsWith('https://');
 };
 
