@@ -89,7 +89,7 @@ const Login: FC = () => {
       isAuthorizationResponseType
     ).then(({ responseData, error }) => {
       // set auth if success
-      if (responseData && responseData.status_code === 200) {
+      if (responseData) {
         setAuth(responseData.authorization);
       } else {
         // failed, clear form and set error

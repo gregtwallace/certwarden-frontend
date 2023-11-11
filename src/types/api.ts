@@ -232,3 +232,20 @@ export const isAcmeServersResponseType = (
   const { success } = acmeServersResponse.safeParse(unk);
   return success;
 };
+
+const oneAcmeServerResponse = basicGoodResponse.extend({
+  acme_server: z.object({
+    id: z.number(),
+    name: z.string(),
+    description: z.string(),
+    is_staging: z.boolean(),
+    external_account_required: z.boolean(),
+  }),
+});
+export type oneAcmeServerResponseType = z.infer<typeof oneAcmeServerResponse>;
+export const isOneAcmeServerResponseType = (
+  unk: unknown
+): unk is oneAcmeServerResponseType => {
+  const { success } = oneAcmeServerResponse.safeParse(unk);
+  return success;
+};
