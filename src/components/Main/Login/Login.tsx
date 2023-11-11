@@ -49,7 +49,7 @@ const Login: FC = () => {
       password: '',
     },
     sendError: undefined,
-    validationErrors: new Map<string, boolean>(),
+    validationErrors: {},
   };
   const [formState, setFormState] = useState(blankForm);
 
@@ -61,23 +61,23 @@ const Login: FC = () => {
     event.preventDefault();
 
     // form validation
-    const validationErrors = new Map<string, boolean>();
+    const validationErrors: validationErrorsType = {};
 
     // username (not blank)
     if (formState.dataToSubmit.username.length <= 0) {
-      validationErrors.set('dataToSubmit.username', true);
+      validationErrors['dataToSubmit.username'] = true;
     }
 
     // password (not blank)
     if (formState.dataToSubmit.password.length <= 0) {
-      validationErrors.set('dataToSubmit.password', true);
+      validationErrors['dataToSubmit.password'];
     }
 
     setFormState((prevState) => ({
       ...prevState,
       validationErrors: validationErrors,
     }));
-    if (validationErrors.size > 0) {
+    if (Object.keys(validationErrors).length > 0) {
       return;
     }
     // form validation - end
@@ -125,7 +125,7 @@ const Login: FC = () => {
             label='Username'
             value={formState.dataToSubmit.username}
             onChange={inputChangeHandler}
-            error={formState.validationErrors.get('dataToSubmit.username')}
+            error={formState.validationErrors['dataToSubmit.username']}
           />
 
           <InputTextField
@@ -133,7 +133,7 @@ const Login: FC = () => {
             label='Password'
             value={formState.dataToSubmit.password}
             onChange={inputChangeHandler}
-            error={formState.validationErrors.get('dataToSubmit.password')}
+            error={formState.validationErrors['dataToSubmit.password']}
           />
 
           {formState.sendError &&
