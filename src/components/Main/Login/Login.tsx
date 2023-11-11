@@ -74,7 +74,7 @@ const Login: FC = () => {
 
     // password (not blank)
     if (formState.dataToSubmit.password.length <= 0) {
-      validationErrors['dataToSubmit.password'];
+      validationErrors['dataToSubmit.password'] = true;
     }
 
     setFormState((prevState) => ({
