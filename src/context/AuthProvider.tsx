@@ -1,6 +1,7 @@
 import { type FC, type ReactNode } from 'react';
 import { type authorizationType } from '../types/api';
 
+import { useNavigate } from 'react-router';
 import { createContext, useCallback, useEffect, useState } from 'react';
 import { isAuthorizationType } from '../types/api';
 
@@ -91,6 +92,8 @@ type AuthProviderProps = {
 const AuthProvider: FC<AuthProviderProps> = (props) => {
   const { children } = props;
 
+  const navigate = useNavigate();
+
   // logged in state for rendering
   const [isLoggedIn, setIsLoggedIn] = useState(!!getAuth());
 
@@ -116,7 +119,9 @@ const AuthProvider: FC<AuthProviderProps> = (props) => {
 
       // start timer on mount
       logoutTimer = setTimeout(() => {
+        // on expire clear auth and navigate to root
         setAuth(undefined);
+        navigate('/');
       }, sessionExpires * 1000 - Date.now());
     }
 
@@ -124,7 +129,7 @@ const AuthProvider: FC<AuthProviderProps> = (props) => {
     return () => {
       clearTimeout(logoutTimer);
     };
-  }, [isLoggedIn, setAuth]);
+  }, [isLoggedIn, navigate, setAuth]);
 
   return (
     <AuthContext.Provider value={{ isLoggedIn, getAccessToken, setAuth }}>

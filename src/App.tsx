@@ -2,6 +2,7 @@ import { type FC } from 'react';
 
 import { BrowserRouter as Router } from 'react-router-dom';
 
+import { AuthProvider } from './context/AuthProvider';
 import { ThemeProvider } from './context/ThemeProvider';
 
 import CssBaseline from '@mui/material/CssBaseline';
@@ -30,8 +31,10 @@ const App: FC = () => {
         }}
       >
         <Router basename={import.meta.env.BASE_URL}>
-          <Header />
-          <Main />
+          <AuthProvider>
+            <Header />
+            <Main />
+          </AuthProvider>
         </Router>
         <Footer />
       </Box>
