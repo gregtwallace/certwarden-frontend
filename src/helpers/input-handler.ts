@@ -3,82 +3,55 @@ import { type SelectChangeEvent } from '@mui/material';
 
 // import { redactJSONObject } from "./logging";
 
-type stateValueTypes =
-  | string
-  | number
-  | Record<string, unknown>
-  | boolean
-  | undefined;
-type stateObject = Record<string, unknown>;
+type stateValueTypes = string | number | object | boolean | undefined;
 type valueConversionTypes = 'unchanged' | 'number' | false | true;
 
-// modifyValueInObject takes the object and modifies the property with name
-// and sets it to value
-const modifyValueInObject = <objType extends stateObject>(
-  obj: objType,
-  dottedPropertyName: string,
-  newValue: stateValueTypes
-): objType => {
-  // return (previousState[dottedPropertyName] = newValue);
+const setObjPathVal = <T extends object, K>(
+  obj: T,
+  path: string,
+  value: K
+): T => {
+  // missing args
+  if (!obj) return {} as T;
+  if (!path || value === undefined) return obj;
 
-  const path = dottedPropertyName.split('.');
-  let newObject = newValue;
+  // split path
+  const segments = path.split(/[.[\]]/g).filter((x) => !!x.trim());
 
-  // deeper layers not supported, return unmodified
-  if (path.length >= 5) {
-    return obj;
-  }
+  // setter
+  const _set = (node: any): void => {
+    if (segments.length > 1) {
+      const key = segments.shift() as keyof typeof node;
 
-  // 3rd nested layer
-  if (path.length >= 4) {
-    newObject = {
-      ...obj[path[0]][path[1]][path[2]],
-      [path[3]]: newObject,
-    };
-  }
+      const nextIsNum = !isNaN(parseInt(segments[0] || 'not int'))
+        ? false
+        : true;
 
-  // 2nd nested layer
-  if (path.length >= 3) {
-    newObject = {
-      ...obj[path[0]][path[1]],
-      [path[2]]: newObject,
-    };
-  }
+      if (node[key] !== undefined) {
+        // no-op
+      } else if (nextIsNum) {
+        node[key] = [];
+      } else {
+        node[key] = {};
+      }
 
-  // 1st nested layer
-  if (path.length >= 2) {
-    newObject = {
-      ...obj[path[0]],
-      [path[1]]: newObject,
-    };
-  }
-
-  // top level
-  newObject = {
-    ...obj,
-    [path[0]]: newObject,
+      _set(node[key]);
+    } else {
+      const finalKey = segments[0] as keyof typeof node;
+      if (!finalKey) {
+        throw '(should be) impossible error happened in object setter';
+      }
+      node[finalKey] = value;
+    }
   };
 
-  // if undefined value, delete the property
-  if (newValue == undefined) {
-    switch (path.length) {
-      case 4:
-        delete newObject[path[0]][path[1]][path[2]][path[3]];
-        break;
-      case 3:
-        delete newObject[path[0]][path[1]][path[2]];
-        break;
-      case 2:
-        delete newObject[path[0]][path[1]];
-        break;
-      case 1:
-        delete newObject[path[0]];
-        break;
-    }
-  }
+  const newObj = {...obj}
+  _set(newObj);
 
-  return newObject;
+  return newObj;
 };
+
+// input handler maker function stuff
 
 // object for other values to set
 export type inputOption = {
@@ -107,7 +80,9 @@ export type inputHandlerFunc = (
 
 // formChangeHandlerFunc returns the input change handler specific
 // to the setFormState func that is passed in
-export const inputHandlerFuncMaker = <StateObject extends stateObject>(
+export const inputHandlerFuncMaker = <
+  StateObject extends Record<string, unknown>
+>(
   setFormState: Dispatch<SetStateAction<StateObject>>
 ): inputHandlerFunc => {
   return (
@@ -129,8 +104,8 @@ export const inputHandlerFuncMaker = <StateObject extends stateObject>(
     }
 
     setFormState((prevState) => {
-      // initial newState modifying just the main field and its value
-      let newState = modifyValueInObject(prevState, event.target.name, value);
+      // set new value
+      let newState = setObjPathVal(prevState, event.target.name, value);
 
       // further modification if there are alsoSet values on inputOptions
       if (inputOptions) {
@@ -138,7 +113,7 @@ export const inputHandlerFuncMaker = <StateObject extends stateObject>(
         if (alsoSet != undefined) {
           newState = alsoSet.reduce(
             (accumulator, field) =>
-              modifyValueInObject(accumulator, field.name, field.value),
+              setObjPathVal(accumulator, field.name, field.value),
             newState
           );
         }
