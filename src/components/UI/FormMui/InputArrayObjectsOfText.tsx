@@ -1,39 +1,35 @@
-import { type FC, type MouseEvent } from 'react';
-import { type inputHandlerFunc } from '../../../helpers/input-handler';
+import { type ReactNode } from 'react';
+import { type inputHandlerFuncType } from '../../../helpers/input-handler';
+import { type validationErrorsType } from '../../../types/frontend';
 
-import fieldInformation from './fields-info';
+import { Box, FormControl, Toolbar } from '@mui/material';
 
-import {
-  Box,
-  FormControl,
-  FormHelperText,
-  Toolbar,
-  Typography,
-} from '@mui/material';
 import Button from '../Button/Button';
+import FormInfo from './FormInfo';
+import FormLabel from './FormLabel';
 import InputTextField from './InputTextField';
 
 // doesnt currently support numbers or other input types that need
 // manipulation of the target.value (e.g. ParseInt) !
 
-type propTypes<valueObject extends object> = {
+type propTypes<valueObject extends Record<string, string>> = {
   id: string;
   name?: string;
   label: string;
   subLabel: string;
-  minElements?: number;
   newObject: valueObject;
   value: valueObject[];
-  onChange: inputHandlerFunc;
-  error: number[];
+  onChange: inputHandlerFuncType;
+
+  minElements?: number;
+  validationErrors?: validationErrorsType;
 };
 
-const InputArrayObjectsOfText = <valueObject extends object>(
+const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
   props: propTypes<valueObject>
-): FC => {
+): ReactNode => {
   // destructure props
   const {
-    error,
     id,
     label,
     minElements,
@@ -41,115 +37,82 @@ const InputArrayObjectsOfText = <valueObject extends object>(
     newObject,
     onChange,
     subLabel,
+    validationErrors,
     value,
   } = props;
 
-  // get field info
-  const { errorMessage } = fieldInformation(name || id);
-
   // add an additional field to the array
-  const addElementHandler = (
-    event: MouseEvent<HTMLButtonElement, MouseEvent>
-  ): void => {
-    event.preventDefault();
-
-    const newArray = [...value];
-    newArray.push(newObject);
+  const addElementHandler = (): void => {
+    const newArrayVal = [...value];
+    newArrayVal.push(newObject);
 
     const syntheticEvent = {
       target: {
         name: name || id,
-        value: newArray,
+        value: newArrayVal,
       },
     };
 
-    onChange(syntheticEvent);
+    onChange(syntheticEvent, 'unchanged');
   };
 
   // remove the field with specified index from the array
-  const removeElementHandler = (event: MouseEvent, index: number): void => {
-    event.preventDefault();
-
-    const newArray = [...value];
-    newArray.splice(index, 1);
+  const removeElementHandler = (index: number): void => {
+    const newArrayVal = [...value];
+    newArrayVal.splice(index, 1);
 
     const syntheticEvent = {
       target: {
         name: name || id,
-        value: newArray,
+        value: newArrayVal,
       },
     };
 
-    onChange(syntheticEvent);
-  };
-
-  // handle field value updates
-  const fieldChangeHandler = (event): void => {
-    const newArray = [...value];
-
-    // get element index (id is in format ID-Index-MemberField)
-    const splitTargetId = event.target.id.split('-');
-    const elementIndex = splitTargetId[1];
-    const elementKeyName = splitTargetId[2];
-
-    // update element's key
-    newArray[elementIndex] = {
-      ...value[elementIndex],
-      [elementKeyName]: event.target.value,
-    };
-
-    const syntheticEvent = {
-      target: {
-        name: name || id,
-        value: newArray,
-      },
-    };
-
-    onChange(syntheticEvent);
+    onChange(syntheticEvent, 'unchanged');
   };
 
   return (
     <FormControl id={id} fullWidth sx={{ my: 1 }}>
-      <Typography id={`${id}-label`} component='label' sx={{ mx: 1, mt: 1 }}>
-        {label}
-      </Typography>
+      <FormLabel id={`${id}-label`}>{label}</FormLabel>
 
       {value.length <= 0 ? (
-        <Typography sx={{ m: 1 }}>None</Typography>
+        <FormInfo sx={{ m: 1 }}>None</FormInfo>
       ) : (
-        value.map((subValue, i) => (
+        /* Output each member of the object array */
+        value.map((subValue, objIndex) => (
           <Box
-            key={`${id}.${i}`}
+            key={`${id}.${objIndex}`}
             sx={{
               mt: 1,
               p: 1,
               border: 1,
               borderRadius: '4px',
               /* Note: action.disabled isn't the exact default field border color, but it is close */
-              borderColor: error?.includes(i)
-                ? 'error.main'
-                : 'action.disabled',
+              borderColor:
+                validationErrors && `${id}.${objIndex}` in validationErrors
+                  ? 'error.main'
+                  : 'action.disabled',
             }}
           >
-            <Toolbar
-              variant='dense'
-              disableGutters
-              sx={{
-                mb: 1,
-                color: error?.includes(i) ? 'error.main' : undefined,
-              }}
-            >
-              <Typography id={id + '-' + i} sx={{ mb: 1 }}>
-                {subLabel + ' ' + (i + 1).toString()}
-              </Typography>
+            <Toolbar variant='dense' disableGutters sx={{ mb: 1 }}>
+              <FormInfo
+                color={
+                  validationErrors && `${id}.${objIndex}` in validationErrors
+                    ? 'error.main'
+                    : undefined
+                }
+                sx={{ m: 1 }}
+              >
+                {subLabel + ' ' + (objIndex + 1)}
+              </FormInfo>
 
-              <Box sx={{ flexGrow: 1 }}></Box>
+              <Box sx={{ flexGrow: 1 }} />
 
               {value.length > (minElements || 0) && (
                 <Button
-                  color='error'
                   size='small'
-                  onClick={(event) => removeElementHandler(event, i)}
+                  color='error'
+                  onClick={(_event) => removeElementHandler(objIndex)}
                 >
                   Remove
                 </Button>
@@ -159,29 +122,34 @@ const InputArrayObjectsOfText = <valueObject extends object>(
             <Box>
               {/* Output a field for each member of object */}
               {Object.entries(subValue).map((member) => {
-                const [key, value] = member;
+                const [fieldKey, fieldValue] = member;
 
                 // make key pretty
-                const keyPretty = key
+                const keyPretty = fieldKey
                   .split('_')
                   .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                   .join(' ');
 
                 return (
                   <InputTextField
-                    key={`${id}.${i}.${key}`}
-                    id={id + '-' + i + '-' + key}
+                    key={`${id}.${objIndex}.${fieldKey}`}
+                    id={id + '.' + objIndex + '.' + fieldKey}
+                    name={
+                      name
+                        ? name + '.' + objIndex + '.' + fieldKey
+                        : id + '.' + objIndex + '.' + fieldKey
+                    }
                     label={keyPretty}
-                    value={value}
-                    onChange={fieldChangeHandler}
+                    value={fieldValue}
+                    onChange={onChange}
+                    error={
+                      !!validationErrors &&
+                      validationErrors[id + '.' + objIndex + '.' + fieldKey]
+                    }
                   />
                 );
               })}
             </Box>
-
-            {!!error?.includes(i) && (
-              <FormHelperText error>{errorMessage}</FormHelperText>
-            )}
           </Box>
         ))
       )}

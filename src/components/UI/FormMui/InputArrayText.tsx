@@ -1,5 +1,5 @@
 import { type FC } from 'react';
-import { type inputHandlerFunc } from '../../../helpers/input-handler';
+import { type inputHandlerFuncType } from '../../../helpers/input-handler';
 import { type validationErrorsType } from '../../../types/frontend';
 
 import { FormControl, Toolbar } from '@mui/material';
@@ -18,7 +18,7 @@ type propsType = {
   label: string;
   subLabel: string;
   value: string[];
-  onChange: inputHandlerFunc;
+  onChange: inputHandlerFuncType;
 
   minElements?: number;
   validationErrors?: validationErrorsType;

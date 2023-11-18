@@ -1,6 +1,6 @@
 import { type ReactElement } from 'react';
 import {
-  type inputHandlerFunc,
+  type inputHandlerFuncType,
   type selectInputOptionValuesType,
   type selectInputOption,
 } from '../../../helpers/input-handler';
@@ -19,7 +19,7 @@ type propTypes<ValType extends selectInputOptionValuesType> = {
   name?: string;
   label: string;
   value: ValType;
-  onChange: inputHandlerFunc;
+  onChange: inputHandlerFuncType;
   options: selectInputOption<ValType>[];
   error?: boolean | undefined;
   readOnly?: boolean;
@@ -43,7 +43,7 @@ const InputSelect = <ValType extends selectInputOptionValuesType>(
   } = props;
 
   // get field info
-  const { errorMessage } = fieldInformation(name || id);
+  const { errorMessage, htmlType } = fieldInformation(name || id);
 
   return (
     <FormControl fullWidth sx={{ my: 1 }}>
@@ -57,7 +57,16 @@ const InputSelect = <ValType extends selectInputOptionValuesType>(
         name={name || id}
         label={label}
         value={value}
-        onChange={(event) => onChange(event, 'unchanged', options)}
+        onChange={
+          onChange
+            ? (event) =>
+                onChange(
+                  event,
+                  htmlType === 'number' ? 'number' : 'unchanged',
+                  options
+                )
+            : undefined
+        }
         readOnly={!!readOnly}
         disabled={!!disabled}
       >

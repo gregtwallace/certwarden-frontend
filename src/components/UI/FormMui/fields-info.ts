@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 // field names with w/ some info about them
-const htmlType = z.enum([
+const htmlTypeVal = z.enum([
   'checkbox',
   'email',
   'number',
@@ -9,169 +9,210 @@ const htmlType = z.enum([
   'text',
   'url',
 ]);
-type htmlTypeType = z.infer<typeof htmlType>;
+type htmlTypeValType = z.infer<typeof htmlTypeVal>;
 
-const fieldInfo = z.object({
-  name: z.string(),
-  htmlType: htmlType,
-  errorMessage: z.string(),
-});
-
-type fieldInfoType = z.infer<typeof fieldInfo>;
-
+type fieldInfoType = {
+  nameRegex: RegExp;
+  htmlType: htmlTypeValType;
+  errorMessage: string;
+};
 // fieldsInfo contains information about field names
 const fieldsInfo: fieldInfoType[] = [
   {
-    name: 'dataToSubmit.accepted_tos',
+    nameRegex: /^dataToSubmit.accepted_tos$/,
     htmlType: 'checkbox',
     errorMessage: 'You must accept the Terms of Service.',
   },
   {
-    name: 'dataToSubmit.account.email',
+    nameRegex: /^dataToSubmit.account.email$/,
     htmlType: 'email',
     errorMessage: 'Account email must be specified and in a valid format.',
   },
   {
-    name: 'dataToSubmit.account.global_api_key',
+    nameRegex: /^dataToSubmit.account.global_api_key$/,
     htmlType: 'text',
     errorMessage: 'Global API key must be specified.',
   },
   {
-    name: 'dataToSubmit.acme_account_id',
+    nameRegex: /^dataToSubmit.acme_account_id$/,
     htmlType: 'number',
     errorMessage: 'An account must be selected.',
   },
   {
-    name: 'dataToSubmit.acme_dns_address',
+    nameRegex: /^dataToSubmit.acme_dns_address$/,
     htmlType: 'url',
     errorMessage: 'An acme-dns address must be specified.',
   },
   {
-    name: 'dataToSubmit.acme_server_id',
+    nameRegex: /^dataToSubmit.acme_server_id$/,
     htmlType: 'number',
     errorMessage: 'An ACME server must be selected.',
   },
   {
-    name: 'dataToSubmit.algorithm_value',
+    nameRegex: /^dataToSubmit.algorithm_value$/,
     htmlType: 'text',
     errorMessage: 'Algorithm must be selected to generate a key.',
   },
   {
-    name: 'dataToSubmit.api_key',
+    nameRegex: /^dataToSubmit.api_key$/,
     htmlType: 'text',
     errorMessage: 'API keys must be at least 10 characters long.',
   },
   {
-    name: 'dataToSubmit.api_key_new',
+    nameRegex: /^dataToSubmit.api_key_new$/,
     htmlType: 'text',
     errorMessage: 'API keys must be at least 10 characters long.',
   },
   {
-    name: 'dataToSubmit.api_token',
+    nameRegex: /^dataToSubmit.api_token$/,
     htmlType: 'text',
     errorMessage: 'API token must be specified.',
   },
   {
-    name: 'dataToSubmit.current_password',
+    nameRegex: /^dataToSubmit.current_password$/,
     htmlType: 'password',
     errorMessage: 'Current password must not be blank.',
   },
   {
-    name: 'dataToSubmit.new_password',
+    nameRegex: /^dataToSubmit.new_password$/,
     htmlType: 'password',
     errorMessage: 'New password must not be blank.',
   },
   {
-    name: 'dataToSubmit.confirm_new_password',
+    nameRegex: /^dataToSubmit.confirm_new_password$/,
     htmlType: 'password',
     errorMessage: 'Password confirmation must match new password.',
   },
   {
-    name: 'dataToSubmit.directory_url',
+    nameRegex: /^dataToSubmit.directory_url$/,
     htmlType: 'url',
-    errorMessage: 'Directory URL must be https and only contain valid URI characters.',
+    errorMessage:
+      'Directory URL must be https and only contain valid URI characters.',
   },
   {
-    name: 'dataToSubmit.domains',
+    nameRegex: /dataToSubmit.domains.[1-9]*/,
     htmlType: 'text',
     errorMessage:
       'Domain must be valid. Or for a wildcard provider use one domain set to * .',
   },
   {
-    name: 'dataToSubmit.eab_hmac_key',
+    nameRegex: /^dataToSubmit.eab_hmac_key$/,
     htmlType: 'text',
     errorMessage: 'External Account Binding requires a Key.',
   },
   {
-    name: 'dataToSubmit.eab_kid',
+    nameRegex: /^dataToSubmit.eab_kid$/,
     htmlType: 'text',
     errorMessage: 'External Account Binding requires a Key ID.',
   },
   {
-    name: 'dataToSubmit.email',
+    nameRegex: /^dataToSubmit.email$/,
     htmlType: 'email',
     errorMessage: 'Email address must be in a valid format.',
   },
   {
-    name: 'key_source',
-    htmlType: 'number',
-    errorMessage: 'Key source must be selected.',
-  },
-  {
-    name: 'dataToSubmit.name',
+    nameRegex: /^dataToSubmit.name$/,
     htmlType: 'text',
     errorMessage:
       'The name cannot be blank and must only contain these symbols - _ . ~ letters and numbers.',
   },
   {
-    name: 'dataToSubmit.password',
+    nameRegex: /^dataToSubmit.password$/,
     htmlType: 'password',
     errorMessage: 'Password cannot be blank.',
   },
   {
-    name: 'dataToSubmit.pem',
+    nameRegex: /^dataToSubmit.pem$/,
     htmlType: 'text',
     errorMessage: 'PEM formatted key must be pasted in.',
   },
   {
-    name: 'dataToSubmit.port',
+    nameRegex: /^dataToSubmit.port$/,
     htmlType: 'number',
     errorMessage: 'Port number must be between 1 and 65535.',
   },
   {
-    name: 'dataToSubmit.private_key_id',
+    nameRegex: /^dataToSubmit.private_key_id$/,
     htmlType: 'number',
     errorMessage: 'A private key must be selected.',
   },
   {
-    name: 'dataToSubmit.resources',
-    htmlType: 'number',
-    errorMessage: 'All fields of a resource must be populated.',
+    nameRegex: /^dataToSubmit.resources.[0-9]+.real_domain$/,
+    htmlType: 'text',
+    errorMessage: 'Real domain must be populated.',
   },
   {
-    name: 'dataToSubmit.subject',
+    nameRegex: /^dataToSubmit.resources.[0-9]+.full_domain$/,
+    htmlType: 'text',
+    errorMessage: 'Full domain must be populated.',
+  },
+  {
+    nameRegex: /^dataToSubmit.resources.[0-9]+.username$/,
+    htmlType: 'text',
+    errorMessage: 'Username must be populated.',
+  },
+  {
+    nameRegex: /^dataToSubmit.resources.[0-9]+.password$/,
+    htmlType: 'text', // deliberately not hidden with 'password'
+    errorMessage: 'Password must be populated.',
+  },
+  {
+    nameRegex: /^dataToSubmit.subject$/,
     htmlType: 'url',
     errorMessage:
       'Subject name must be a valid (sub)domain and may start with a wildcard (*.).',
   },
   {
-    name: 'dataToSubmit.subject_alts',
+    nameRegex: /^dataToSubmit.subject_alts.[0-9]+$/,
     htmlType: 'url',
     errorMessage:
       'Subject name must be a valid (sub)domain and may start with a wildcard (*.).',
   },
   {
-    name: 'dataToSubmit.username',
+    nameRegex: /^dataToSubmit.username$/,
     htmlType: 'text',
     errorMessage: 'Username cannot be blank.',
   },
   {
-    name: 'provider_options.api_access_method',
+    nameRegex: /^dataToSubmit.acme_sh_path$/,
+    htmlType: 'text',
+    errorMessage: 'acme.sh install path must be specified.',
+  },
+  {
+    nameRegex: /^dataToSubmit.dns_hook$/,
+    htmlType: 'text',
+    errorMessage: 'DNS hook name must be specified.',
+  },
+  {
+    nameRegex: /^dataToSubmit.create_script$/,
+    htmlType: 'text',
+    errorMessage: 'Script path must be specified.',
+  },
+  {
+    nameRegex: /^dataToSubmit.delete_script$/,
+    htmlType: 'text',
+    errorMessage: 'Script path must be specified.',
+  },
+
+  /* Other fields */
+
+  {
+    nameRegex: /^key_source$/,
+    htmlType: 'number',
+    errorMessage: 'Key source must be selected.',
+  },
+  {
+    nameRegex: /^provider_type_value$/,
+    htmlType: 'text',
+    errorMessage: 'Provider type must be selected.',
+  },
+  {
+    nameRegex: /^provider_options.api_access_method$/,
     htmlType: 'text',
     errorMessage: 'API Access Method must be selected.',
   },
   // {
-  //   name: 'dataToSubmit.',
+  //   nameRegex: 'dataToSubmit.',
   //   htmlType: 'text'
   //   errorMessage: '',
   // },
@@ -180,14 +221,10 @@ const fieldsInfo: fieldInfoType[] = [
 // fieldInformation returns information for the named field
 const fieldInformation = (
   fieldName: string
-): { htmlType: htmlTypeType; errorMessage: string } => {
-  // check if ends in .number, indicating an array member
-  // if part of array, strip the index portion of name to get field's real name
-  fieldName = fieldName.replace(/.[0-9]+$/, '');
-
-  // find desired field's info
+): { htmlType: htmlTypeValType; errorMessage: string } => {
+  // find regex match
   const thisFieldInfo = fieldsInfo.find((field) => {
-    return fieldName === field.name;
+    return !!fieldName.match(field.nameRegex);
   });
 
   // if found
@@ -199,6 +236,7 @@ const fieldInformation = (
   }
 
   // return default if field not found
+  console.error(`field ${fieldName} not defined, report bug`);
   return {
     htmlType: 'text',
     errorMessage: 'This field has an error.',

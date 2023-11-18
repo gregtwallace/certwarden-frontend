@@ -1,5 +1,5 @@
 import { type FC } from 'react';
-import { type inputHandlerFunc } from '../../../helpers/input-handler';
+import { type inputHandlerFuncType } from '../../../helpers/input-handler';
 
 import fieldInformation from './fields-info';
 
@@ -11,7 +11,7 @@ type propTypes = {
   name?: string;
   label: string;
   value: string | number;
-  onChange?: inputHandlerFunc;
+  onChange?: inputHandlerFuncType;
   multiline?: boolean | undefined;
   disabled?: boolean | undefined;
   error?: boolean | undefined;
@@ -32,7 +32,12 @@ const InputTextField: FC<propTypes> = (props) => {
       type={htmlType}
       label={label}
       value={value}
-      onChange={onChange ? (event) => onChange(event, 'unchanged') : undefined}
+      onChange={
+        onChange
+          ? (event) =>
+              onChange(event, htmlType === 'number' ? 'number' : 'unchanged')
+          : undefined
+      }
       disabled={!!disabled}
       error={!!error}
       helperText={!!error && errorMessage}

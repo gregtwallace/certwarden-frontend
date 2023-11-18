@@ -1,5 +1,5 @@
 import { type FC, type ReactNode } from 'react';
-import { type inputHandlerFunc } from '../../../helpers/input-handler';
+import { type inputHandlerFuncType } from '../../../helpers/input-handler';
 
 import {
   Checkbox,
@@ -14,7 +14,7 @@ type propTypes = {
   id: string;
   name?: string;
   checked: boolean;
-  onChange: inputHandlerFunc;
+  onChange: inputHandlerFuncType;
   error?: boolean;
   disabled?: boolean;
 };

@@ -1,12 +1,18 @@
+import { type FC, type FormEventHandler } from 'react';
+import {
+  type providerResponseType,
+  parseProviderResponseType,
+} from '../../../../types/api';
+import { type providerFormStateType } from '../../../../types/frontend';
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
-import { getProvider, providerTypes } from './provider-types';
-import { formChangeHandlerFunc } from '../../../../helpers/input-handler';
+import { getProvider, providersList } from './providers';
+import { inputHandlerFuncMaker } from '../../../../helpers/input-handler';
 import { isDomainValid } from '../../../../helpers/form-validation';
 
 import ApiError from '../../../UI/Api/ApiError';
-import Button from '../../../UI/Button/Button';
 import Form from '../../../UI/FormMui/Form';
 import FormFooter from '../../../UI/FormMui/FormFooter';
 import FormInfo from '../../../UI/FormMui/FormInfo';
@@ -15,15 +21,19 @@ import InputArrayText from '../../../UI/FormMui/InputArrayText';
 import FormContainer from '../../../UI/FormMui/FormContainer';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
 
-const AddOneProvider = () => {
-  const [apiSendState, sendData] = useAxiosSend();
+const NEW_PROVIDER_URL = '/v1/app/challenges/providers/services';
+
+const AddOneProvider: FC = () => {
+  const { axiosSendState, apiCall } = useAxiosSend();
   const navigate = useNavigate();
 
-  const blankForm = {
+  const blankForm: providerFormStateType = {
     provider_type_value: '',
-    form: {
+    provider_options: undefined,
+    dataToSubmit: {
       domains: [''],
     },
+    sendError: undefined,
     validationErrors: {},
   };
   const [formState, setFormState] = useState(blankForm);
@@ -32,28 +42,30 @@ const AddOneProvider = () => {
   const provider = getProvider(formState.provider_type_value);
 
   // data change handler
-  const inputChangeHandler = formChangeHandlerFunc(setFormState);
+  const inputChangeHandler = inputHandlerFuncMaker(setFormState);
 
   // form submission handler
-  const submitFormHandler = (event) => {
+  const submitFormHandler: FormEventHandler = (event) => {
     event.preventDefault();
 
     // form provider type specific validation
-    let validationErrors = provider.validationFunc(formState);
+    const validationErrors = provider.validationFunc(formState);
+
+    // must select provider type
+    if (formState.provider_type_value === '') {
+      validationErrors['provider_type_value'] = true;
+    }
 
     // common domain validation
-    let domains = [];
     // if singular wildcard domain, allow as this is wildcard provider
-    if (JSON.stringify(formState.form.domains) != JSON.stringify(['*'])) {
-      formState.form.domains.forEach((domain, i) => {
-        if (!isDomainValid(domain, false)) {
-          domains.push(i);
+    if (
+      JSON.stringify(formState.dataToSubmit['domains']) != JSON.stringify(['*'])
+    ) {
+      formState.dataToSubmit['domains'].forEach((domain, i) => {
+        if (!isDomainValid(domain)) {
+          validationErrors['dataToSubmit.domains.' + i] = true;
         }
       });
-      // if any domain invalid, create the error array
-      if (domains.length !== 0) {
-        validationErrors.domains = domains;
-      }
     }
 
     // update state with validation result
@@ -62,25 +74,29 @@ const AddOneProvider = () => {
       validationErrors: validationErrors,
     }));
     if (Object.keys(validationErrors).length > 0) {
-      return false;
+      return;
     }
     // form validation -- end
 
-    sendData(
-      `/v1/app/challenges/providers/services`,
+    apiCall<providerResponseType>(
       'POST',
-      { [provider.configName]: formState.form },
-      true
-    ).then((response) => {
-      if (response.status >= 200 && response.status <= 299) {
-        // back to the providers page
+      NEW_PROVIDER_URL,
+      {
+        [provider.configName]: formState.dataToSubmit,
+      },
+      parseProviderResponseType
+    ).then(({ responseData, error }) => {
+      if (responseData) {
         navigate(`/providers`);
+      } else {
+        // failed, set error
+        setFormState((prevState) => ({
+          ...prevState,
+          sendError: error,
+        }));
       }
     });
   };
-
-  // for disable reset/submit buttons
-  const formUnchanged = formState.provider_type_value === '';
 
   return (
     <FormContainer>
@@ -90,15 +106,16 @@ const AddOneProvider = () => {
         <InputSelect
           id='provider_type_value'
           label='Provider Type'
-          options={providerTypes}
+          options={providersList}
           value={formState.provider_type_value}
           onChange={inputChangeHandler}
+          error={formState.validationErrors['provider_type_value']}
         />
 
         {formState.provider_type_value !== '' && (
           <>
-            {!!provider.noWindows && (
-              <FormInfo sxColor='error.main'>
+            {!provider.supportsWindows && (
+              <FormInfo color='error'>
                 Warning: This provider does not work if the backend is running
                 on Windows OS.
               </FormInfo>
@@ -113,13 +130,13 @@ const AddOneProvider = () => {
             </FormInfo>
 
             <InputArrayText
-              id='form.domains'
+              id='dataToSubmit.domains'
               label='Domains'
               subLabel='Domain'
               minElements={1}
-              value={formState.form.domains}
+              value={formState.dataToSubmit.domains}
               onChange={inputChangeHandler}
-              error={formState.validationErrors.domains}
+              validationErrors={formState.validationErrors}
             />
 
             <provider.FormComponent
@@ -129,38 +146,25 @@ const AddOneProvider = () => {
           </>
         )}
 
-        {apiSendState.errorMessage &&
+        {formState.sendError &&
           Object.keys(formState.validationErrors).length <= 0 && (
             <ApiError
-              code={apiSendState.errorCode}
-              message={apiSendState.errorMessage}
+              statusCode={formState.sendError.statusCode}
+              message={formState.sendError.message}
             />
           )}
 
-        <FormFooter>
-          <Button
-            type='cancel'
-            href='/providers'
-            disabled={apiSendState.isSending}
-          >
-            Cancel
-          </Button>
-
-          <Button
-            type='reset'
-            onClick={() => setFormState(blankForm)}
-            disabled={apiSendState.isSending || formUnchanged}
-          >
-            Reset
-          </Button>
-
-          <Button
-            type='submit'
-            disabled={apiSendState.isSending || formUnchanged}
-          >
-            Submit
-          </Button>
-        </FormFooter>
+        <FormFooter
+          cancelHref='/providers'
+          resetOnClick={() => {
+            setFormState(blankForm);
+          }}
+          disabledAllButtons={axiosSendState.isSending}
+          disabledResetButton={
+            JSON.stringify(formState.dataToSubmit) ===
+            JSON.stringify(blankForm.dataToSubmit)
+          }
+        />
       </Form>
     </FormContainer>
   );
