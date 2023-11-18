@@ -1,7 +1,7 @@
 import { type FC } from 'react';
 import {
   type privateKeysResponseType,
-  isPrivateKeysResponseType,
+  parsePrivateKeysResponseType,
 } from '../../../types/api';
 import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 
@@ -60,7 +60,7 @@ const AllPrivateKeys: FC = () => {
 
   const { getState } = useAxiosGet<privateKeysResponseType>(
     `${PRIVATE_KEYS_URL}?${queryParams}`,
-    isPrivateKeysResponseType
+    parsePrivateKeysResponseType
   );
 
   return (

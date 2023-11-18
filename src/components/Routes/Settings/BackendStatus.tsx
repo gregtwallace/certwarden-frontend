@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 import {
-  isBackendStatusResponse,
+  parseBackendStatusResponse,
   type backendStatusResponseType,
 } from '../../../types/api';
 
@@ -19,7 +19,7 @@ const BackendStatus: FC = () => {
   //backendStatusResponseType
   const { getState } = useAxiosGet<backendStatusResponseType>(
     STATUS_URL,
-    isBackendStatusResponse
+    parseBackendStatusResponse
   );
 
   return (

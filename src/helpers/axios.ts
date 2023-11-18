@@ -1,4 +1,6 @@
 import { type AxiosRequestConfig, isAxiosError } from 'axios';
+import { z } from 'zod';
+
 import { isErrorResponseType } from '../types/api';
 import { type frontendErrorType } from '../types/frontend';
 
@@ -25,10 +27,12 @@ export const parseAxiosError = (err: unknown): frontendErrorType => {
     'data' in err &&
     isErrorResponseType(err.data)
   ) {
-    return {
+    const retErr = {
       statusCode: err.data.status_code,
       message: err.data.message,
     };
+
+    return retErr;
   }
 
   // second possible spot for backend response
@@ -41,18 +45,43 @@ export const parseAxiosError = (err: unknown): frontendErrorType => {
     'data' in err.response &&
     isErrorResponseType(err.response.data)
   ) {
-    return {
+    const retErr = {
       statusCode: err.response.data.status_code,
       message: err.response.data.message,
     };
+
+    return retErr;
+  }
+
+  // if zod error
+  if (err instanceof z.ZodError) {
+    // log all of the zod issues, only 1 can be returned nicely in GUI
+    console.error(err.issues);
+
+    if (err.issues[0]) {
+      return {
+        statusCode: 'first zod err: ' + err.issues[0].code,
+        message: '[' + err.issues[0].path + ']: ' + err.issues[0].message,
+      };
+    } else {
+      // should never happen
+      return {
+        statusCode: 'zod err: unknown',
+        message: 'unknown (zod issue 0 missing)',
+      };
+    }
   }
 
   // if axios error, return axios code and message
   if (isAxiosError(err)) {
-    const errorCode = err.code;
-    const errorMessage = err.message;
-    return { statusCode: errorCode || 'unknown', message: errorMessage };
+    const retErr = {
+      statusCode: err.code || 'unknown',
+      message: err.message,
+    };
+
+    return retErr;
   }
 
+  console.error('unknown error');
   return { statusCode: 'unknown', message: 'unknown' };
 };

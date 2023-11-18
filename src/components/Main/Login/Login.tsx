@@ -1,7 +1,7 @@
 import { type FC, type FormEventHandler } from 'react';
 import {
   type authorizationResponseType,
-  isAuthorizationResponseType,
+  parseAuthorizationResponseType,
 } from '../../../types/api';
 import {
   type frontendErrorType,
@@ -90,7 +90,7 @@ const Login: FC = () => {
       'POST',
       LOGIN_URL,
       formState.dataToSubmit,
-      isAuthorizationResponseType
+      parseAuthorizationResponseType
     ).then(({ responseData, error }) => {
       // set auth if success
       if (responseData) {

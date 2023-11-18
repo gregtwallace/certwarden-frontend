@@ -1,7 +1,7 @@
 import { type FC, type FormEventHandler } from 'react';
 import {
   type oneAcmeServerResponseType,
-  isOneAcmeServerResponseType,
+  parseOneAcmeServerResponseType,
 } from '../../../../types/api';
 import {
   type frontendErrorType,
@@ -89,7 +89,7 @@ const AddOneACMEServer: FC = () => {
       'POST',
       NEW_ACME_SERVER_URL,
       formState.dataToSubmit,
-      isOneAcmeServerResponseType
+      parseOneAcmeServerResponseType
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate(`/acmeservers/${responseData.acme_server.id}`);

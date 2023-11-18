@@ -1,7 +1,7 @@
 import { type FC } from 'react';
 import {
   type certificatesResponseType,
-  isCertificatesResponseType,
+  parseCertificatesResponseType,
 } from '../../../types/api';
 import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 
@@ -61,14 +61,11 @@ const tableHeaders: headerType[] = [
 const AllCertificates: FC = () => {
   // parse query
   const [searchParams] = useSearchParams();
-  const { page, rowsPerPage, queryParams } = queryParser(
-    searchParams,
-    'name'
-  );
+  const { page, rowsPerPage, queryParams } = queryParser(searchParams, 'name');
 
   const { getState } = useAxiosGet<certificatesResponseType>(
     `${CERTIFICATES_URL}?${queryParams}`,
-    isCertificatesResponseType
+    parseCertificatesResponseType
   );
 
   return (

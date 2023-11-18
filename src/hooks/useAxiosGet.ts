@@ -1,3 +1,4 @@
+import { isAxiosError } from 'axios';
 import { type frontendErrorType } from '../types/frontend';
 
 import { useEffect, useState, useCallback, useMemo } from 'react';
@@ -19,9 +20,7 @@ type axiosDoUpdateGetType = () => Promise<void>;
 // Hook to query the API and return a state based on the query
 const useAxiosGet = <ExpectedResponseType>(
   apiNode: string,
-  isResponseDataValidFunc: (
-    response: unknown
-  ) => response is ExpectedResponseType
+  parseResponseDataFunc: (response: unknown) => ExpectedResponseType
 ): {
   getState: axiosGetStateType<ExpectedResponseType>;
   updateGet: axiosDoUpdateGetType;
@@ -59,10 +58,13 @@ const useAxiosGet = <ExpectedResponseType>(
         console.log('GET:', apiNode, 'reply:', redactJSONObject(response));
       }
 
-      // validate response
-      if (!isResponseDataValidFunc(response.data)) {
+      // if AxiosError, don't try to parse
+      if (isAxiosError(response)) {
         throw response;
       }
+
+      // parse (narrows and throws err if not valid)
+      response.data = parseResponseDataFunc(response.data);
 
       setGetState({
         responseData: response.data,
@@ -75,7 +77,7 @@ const useAxiosGet = <ExpectedResponseType>(
         error: parseAxiosError(err),
       });
     }
-  }, [apiNode, axiosInstance, emptyUnloadedState, isResponseDataValidFunc]);
+  }, [apiNode, axiosInstance, emptyUnloadedState, parseResponseDataFunc]);
 
   // do initial load immediately
   useEffect(() => {

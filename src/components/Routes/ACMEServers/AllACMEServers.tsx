@@ -1,7 +1,7 @@
 import { type FC } from 'react';
 import {
   type acmeServersResponseType,
-  isAcmeServersResponseType,
+  parseAcmeServersResponseType,
 } from '../../../types/api';
 import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 
@@ -60,7 +60,7 @@ const AllACMEServers: FC = () => {
 
   const { getState } = useAxiosGet<acmeServersResponseType>(
     `${ACME_SERVERS_URL}?${queryParams}`,
-    isAcmeServersResponseType
+    parseAcmeServersResponseType
   );
 
   return (

@@ -1,3 +1,4 @@
+import { isAxiosError } from 'axios';
 import { type frontendErrorType } from '../types/frontend';
 
 import { useCallback, useState } from 'react';
@@ -17,9 +18,7 @@ type axiosDoSendDataType = <ExpectedResponseType>(
   method: 'POST' | 'PUT' | 'DELETE', // 'GET' |
   apiNode: string,
   payloadObj: object,
-  isResponseDataValidFunc: (
-    response: unknown
-  ) => response is ExpectedResponseType
+  isResponseDataValidFunc: (response: unknown) => ExpectedResponseType
 ) => Promise<{
   responseData: ExpectedResponseType | undefined;
   error: frontendErrorType | undefined;
@@ -80,7 +79,12 @@ const useAxiosSend = (): {
           );
         }
 
-        // validate response
+        // if AxiosError, don't try to parse
+        if (isAxiosError(response)) {
+          throw response;
+        }
+
+        // parse (narrows and throws err if not valid)
         if (!isResponseDataValidFunc(response.data)) {
           throw response;
         }

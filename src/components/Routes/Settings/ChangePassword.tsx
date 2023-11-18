@@ -4,7 +4,7 @@ import {
   type validationErrorsType,
 } from '../../../types/frontend';
 import {
-  isChangePasswordResponse,
+  parseChangePasswordResponse,
   type changePasswordResponseType,
 } from '../../../types/api';
 
@@ -93,7 +93,7 @@ const ChangePassword: FC = () => {
       'PUT',
       CHANGE_PASSWORD_URL,
       formState.dataToSubmit,
-      isChangePasswordResponse
+      parseChangePasswordResponse
     ).then(({ responseData, error }) => {
       // clear form and set success or error
       setFormState({

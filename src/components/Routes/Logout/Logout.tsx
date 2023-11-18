@@ -1,7 +1,7 @@
 import { type FC } from 'react';
 import {
   type logoutResponseType,
-  isLogoutResponseType,
+  parseLogoutResponseType,
 } from '../../../types/api';
 
 import { useEffect } from 'react';
@@ -29,7 +29,7 @@ const Logout: FC = () => {
       'POST',
       LOGOUT_URL,
       {},
-      isLogoutResponseType
+      parseLogoutResponseType
     ).then(({ responseData: _r, error: _e }) => {
       // regardless of result, clear auth state and redirect
       setAuth(undefined);

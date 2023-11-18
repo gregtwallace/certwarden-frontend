@@ -14,14 +14,6 @@ const basicGoodResponse = z.object({
   message: z.string(),
 });
 
-// type basicGoodResponseType = z.infer<typeof basicGoodResponse>;
-// const isBasicGoodResponseType = (
-//   unk: unknown
-// ): unk is basicGoodResponseType => {
-//   const { success } = basicGoodResponse.safeParse(unk);
-//   return success;
-// };
-
 // Error Response
 const errorResponse = z.object({
   status_code: z.number().gte(400).lte(599),
@@ -44,15 +36,14 @@ const authorizationTokenClaims = z.object({
 });
 
 const authorization = z.object({
-  access_token: z.string(),
+  access_token: z.string().min(1),
   access_token_claims: authorizationTokenClaims,
   session_token_claims: authorizationTokenClaims,
 });
 
 export type authorizationType = z.infer<typeof authorization>;
-export const isAuthorizationType = (unk: unknown): unk is authorizationType => {
-  const { success } = authorization.safeParse(unk);
-  return success;
+export const parseAuthorizationType = (unk: unknown): authorizationType => {
+  return authorization.parse(unk);
 };
 
 const authorizationResponse = basicGoodResponse.extend({
@@ -60,11 +51,10 @@ const authorizationResponse = basicGoodResponse.extend({
 });
 
 export type authorizationResponseType = z.infer<typeof authorizationResponse>;
-export const isAuthorizationResponseType = (
+export const parseAuthorizationResponseType = (
   unk: unknown
-): unk is authorizationResponseType => {
-  const { success } = authorizationResponse.safeParse(unk);
-  return success;
+): authorizationResponseType => {
+  return authorizationResponse.parse(unk);
 };
 
 // logout
@@ -73,11 +63,8 @@ const logoutResponse = basicGoodResponse.extend({
 });
 
 export type logoutResponseType = z.infer<typeof logoutResponse>;
-export const isLogoutResponseType = (
-  unk: unknown
-): unk is logoutResponseType => {
-  const { success } = logoutResponse.safeParse(unk);
-  return success;
+export const parseLogoutResponseType = (unk: unknown): logoutResponseType => {
+  return logoutResponse.parse(unk);
 };
 
 //
@@ -107,11 +94,10 @@ const newVersionResponse = basicGoodResponse.extend({
 });
 
 export type newVersionResponseType = z.infer<typeof newVersionResponse>;
-export const isNewVersionResponseType = (
+export const parseNewVersionResponseType = (
   unk: unknown
-): unk is newVersionResponseType => {
-  const { success } = newVersionResponse.safeParse(unk);
-  return success;
+): newVersionResponseType => {
+  return newVersionResponse.parse(unk);
 };
 
 //
@@ -130,11 +116,10 @@ const backendStatusResponse = basicGoodResponse.extend({
 });
 
 export type backendStatusResponseType = z.infer<typeof backendStatusResponse>;
-export const isBackendStatusResponse = (
+export const parseBackendStatusResponse = (
   unk: unknown
-): unk is backendStatusResponseType => {
-  const { success } = backendStatusResponse.safeParse(unk);
-  return success;
+): backendStatusResponseType => {
+  return backendStatusResponse.parse(unk);
 };
 
 // change password
@@ -143,11 +128,10 @@ const changePasswordResponse = basicGoodResponse.extend({
 });
 
 export type changePasswordResponseType = z.infer<typeof changePasswordResponse>;
-export const isChangePasswordResponse = (
+export const parseChangePasswordResponse = (
   unk: unknown
-): unk is changePasswordResponseType => {
-  const { success } = changePasswordResponse.safeParse(unk);
-  return success;
+): changePasswordResponseType => {
+  return changePasswordResponse.parse(unk);
 };
 
 // shutdown & restart
@@ -156,11 +140,8 @@ const shutdownResponse = basicGoodResponse.extend({
 });
 
 export type shutdownResponseType = z.infer<typeof shutdownResponse>;
-export const isShutdownResponse = (
-  unk: unknown
-): unk is shutdownResponseType => {
-  const { success } = shutdownResponse.safeParse(unk);
-  return success;
+export const parseShutdownResponse = (unk: unknown): shutdownResponseType => {
+  return shutdownResponse.parse(unk);
 };
 
 const restartResponse = basicGoodResponse.extend({
@@ -168,9 +149,8 @@ const restartResponse = basicGoodResponse.extend({
 });
 
 export type restartResponseType = z.infer<typeof restartResponse>;
-export const isRestartResponse = (unk: unknown): unk is restartResponseType => {
-  const { success } = restartResponse.safeParse(unk);
-  return success;
+export const parseRestartResponse = (unk: unknown): restartResponseType => {
+  return restartResponse.parse(unk);
 };
 
 //
@@ -201,11 +181,10 @@ const currentValidOrdersResponse = basicGoodResponse.extend({
 export type currentValidOrdersResponseType = z.infer<
   typeof currentValidOrdersResponse
 >;
-export const isCurrentValidOrdersResponseType = (
+export const parseCurrentValidOrdersResponseType = (
   unk: unknown
-): unk is currentValidOrdersResponseType => {
-  const { success } = currentValidOrdersResponse.safeParse(unk);
-  return success;
+): currentValidOrdersResponseType => {
+  return currentValidOrdersResponse.parse(unk);
 };
 
 //
@@ -226,11 +205,10 @@ const acmeServersResponse = basicGoodResponse.extend({
 });
 
 export type acmeServersResponseType = z.infer<typeof acmeServersResponse>;
-export const isAcmeServersResponseType = (
+export const parseAcmeServersResponseType = (
   unk: unknown
-): unk is acmeServersResponseType => {
-  const { success } = acmeServersResponse.safeParse(unk);
-  return success;
+): acmeServersResponseType => {
+  return acmeServersResponse.parse(unk);
 };
 
 const oneAcmeServerResponse = basicGoodResponse.extend({
@@ -246,11 +224,10 @@ const oneAcmeServerResponse = basicGoodResponse.extend({
   }),
 });
 export type oneAcmeServerResponseType = z.infer<typeof oneAcmeServerResponse>;
-export const isOneAcmeServerResponseType = (
+export const parseOneAcmeServerResponseType = (
   unk: unknown
-): unk is oneAcmeServerResponseType => {
-  const { success } = oneAcmeServerResponse.safeParse(unk);
-  return success;
+): oneAcmeServerResponseType => {
+  return oneAcmeServerResponse.parse(unk);
 };
 
 const oneAcmeServerDeleteResponse = basicGoodResponse.extend({
@@ -259,11 +236,10 @@ const oneAcmeServerDeleteResponse = basicGoodResponse.extend({
 export type oneAcmeServerDeleteResponseType = z.infer<
   typeof oneAcmeServerDeleteResponse
 >;
-export const isOneAcmeServerDeleteResponse = (
+export const parseOneAcmeServerDeleteResponse = (
   unk: unknown
-): unk is oneAcmeServerDeleteResponseType => {
-  const { success } = oneAcmeServerDeleteResponse.safeParse(unk);
-  return success;
+): oneAcmeServerDeleteResponseType => {
+  return oneAcmeServerDeleteResponse.parse(unk);
 };
 
 //
@@ -288,11 +264,10 @@ const privateKeysResponse = basicGoodResponse.extend({
 });
 
 export type privateKeysResponseType = z.infer<typeof privateKeysResponse>;
-export const isPrivateKeysResponseType = (
+export const parsePrivateKeysResponseType = (
   unk: unknown
-): unk is privateKeysResponseType => {
-  const { success } = privateKeysResponse.safeParse(unk);
-  return success;
+): privateKeysResponseType => {
+  return privateKeysResponse.parse(unk);
 };
 
 //
@@ -320,11 +295,10 @@ const acmeAccountsResponse = basicGoodResponse.extend({
 });
 
 export type acmeAccountsResponseType = z.infer<typeof acmeAccountsResponse>;
-export const isAcmeAccountsResponseType = (
+export const parseAcmeAccountsResponseType = (
   unk: unknown
-): unk is acmeAccountsResponseType => {
-  const { success } = acmeAccountsResponse.safeParse(unk);
-  return success;
+): acmeAccountsResponseType => {
+  return acmeAccountsResponse.parse(unk);
 };
 
 //
@@ -359,11 +333,10 @@ const certificatesResponse = basicGoodResponse.extend({
 });
 
 export type certificatesResponseType = z.infer<typeof certificatesResponse>;
-export const isCertificatesResponseType = (
+export const parseCertificatesResponseType = (
   unk: unknown
-): unk is certificatesResponseType => {
-  const { success } = certificatesResponse.safeParse(unk);
-  return success;
+): certificatesResponseType => {
+  return certificatesResponse.parse(unk);
 };
 
 // one cert
@@ -391,11 +364,10 @@ const oneCertificateResponse = basicGoodResponse.extend({
 });
 
 export type oneCertificateResponseType = z.infer<typeof oneCertificateResponse>;
-export const isOneCertificateResponseType = (
+export const parseOneCertificateResponseType = (
   unk: unknown
-): unk is oneCertificateResponseType => {
-  const { success } = oneCertificateResponse.safeParse(unk);
-  return success;
+): oneCertificateResponseType => {
+  return oneCertificateResponse.parse(unk);
 };
 
 // response to get options for new/edit cert
@@ -431,9 +403,37 @@ const certificateOptionsResponse = basicGoodResponse.extend({
 export type certificateOptionsResponseType = z.infer<
   typeof certificateOptionsResponse
 >;
-export const isCertificateOptionsResponse = (
+export const parseCertificateOptionsResponse = (
   unk: unknown
-): unk is certificateOptionsResponseType => {
-  const { success } = certificateOptionsResponse.safeParse(unk);
-  return success;
+): certificateOptionsResponseType => {
+  return certificateOptionsResponse.parse(unk);
+};
+
+//
+// Order Queue
+//
+
+const orderFulfillerJob = z.object({
+  added_to_queue: z.number(),
+  high_priority: z.boolean(),
+  order: z.object({
+    id: z.number(),
+    certificate: z.object({
+      id: z.number(),
+      name: z.string(),
+      subject: z.string(),
+    }),
+  }),
+});
+
+const orderQueueResponse = basicGoodResponse.extend({
+  worker_jobs: z.record(z.string(), z.union([orderFulfillerJob, z.null()])),
+  jobs_waiting: z.array(orderFulfillerJob),
+});
+
+export type orderQueueResponseType = z.infer<typeof orderQueueResponse>;
+export const parseOrderQueueResponseType = (
+  unk: unknown
+): orderQueueResponseType => {
+  return orderQueueResponse.parse(unk);
 };

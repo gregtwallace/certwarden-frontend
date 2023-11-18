@@ -2,7 +2,7 @@ import { type FC, type MouseEvent, type ReactNode } from 'react';
 import {
   type newVersionType,
   type newVersionResponseType,
-  isNewVersionResponseType,
+  parseNewVersionResponseType,
 } from '../types/api';
 import { type frontendErrorType } from '../types/frontend';
 
@@ -44,7 +44,7 @@ const NewVersionProvider: FC<propTypes> = (props) => {
   // get new-version information
   const { getState } = useAxiosGet<newVersionResponseType>(
     `/v1/app/updater/new-version`,
-    isNewVersionResponseType
+    parseNewVersionResponseType
   );
 
   // new version has its own state that can be updated when command to have
@@ -68,7 +68,7 @@ const NewVersionProvider: FC<propTypes> = (props) => {
       'POST',
       NEW_VERSION_URL,
       {},
-      isNewVersionResponseType
+      parseNewVersionResponseType
     ).then(({ responseData, error }) => {
       // set state on success
       if (responseData) {

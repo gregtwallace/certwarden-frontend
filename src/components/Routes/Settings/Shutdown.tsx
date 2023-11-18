@@ -3,8 +3,8 @@ import { type frontendErrorType } from '../../../types/frontend';
 import {
   type shutdownResponseType,
   type restartResponseType,
-  isShutdownResponse,
-  isRestartResponse,
+  parseShutdownResponse,
+  parseRestartResponse,
 } from '../../../types/api';
 
 import { useState } from 'react';
@@ -51,7 +51,7 @@ const Shutdown: FC = () => {
       'POST',
       SHUTDOWN_URL,
       {},
-      isShutdownResponse
+      parseShutdownResponse
     ).then(({ responseData, error }) => {
       if (responseData) {
         // if success, logout frontend
@@ -71,7 +71,7 @@ const Shutdown: FC = () => {
       'POST',
       RESTART_URL,
       {},
-      isRestartResponse
+      parseRestartResponse
     ).then(({ responseData, error }) => {
       if (responseData) {
         // if success, logout frontend

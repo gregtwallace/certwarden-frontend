@@ -1,9 +1,9 @@
 import { type FC, type FormEventHandler } from 'react';
 import {
   type certificateOptionsResponseType,
-  isCertificateOptionsResponse,
+  parseCertificateOptionsResponse,
   type oneCertificateResponseType,
-  isOneCertificateResponseType,
+  parseOneCertificateResponseType,
 } from '../../../../types/api';
 import {
   type frontendErrorType,
@@ -67,7 +67,7 @@ const AddOneCert: FC = () => {
   // fetch new cert options
   const { getState } = useAxiosGet<certificateOptionsResponseType>(
     `${NEW_CERTIFICATE_URL}/${newId}`,
-    isCertificateOptionsResponse
+    parseCertificateOptionsResponse
   );
 
   const { sendState, doSendData } = useAxiosSend();
@@ -161,7 +161,7 @@ const AddOneCert: FC = () => {
       'POST',
       NEW_CERTIFICATE_URL,
       formState.dataToSubmit,
-      isOneCertificateResponseType
+      parseOneCertificateResponseType
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate(`/certificates/${responseData.certificate.id}`);

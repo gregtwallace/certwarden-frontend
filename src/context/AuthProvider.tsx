@@ -3,12 +3,12 @@ import { type authorizationType } from '../types/api';
 
 import { useNavigate } from 'react-router';
 import { createContext, useCallback, useEffect, useState } from 'react';
-import { isAuthorizationType } from '../types/api';
+import { parseAuthorizationType } from '../types/api';
 
 // getAuth fetches the current auth from session storage
 const getAuth = (): authorizationType | undefined => {
-  const auth = {
-    access_token: sessionStorage.getItem('auth_access_token'),
+  let auth: authorizationType = {
+    access_token: sessionStorage.getItem('auth_access_token') || '',
     access_token_claims: JSON.parse(
       sessionStorage.getItem('auth_access_token_claims') || '{}'
     ),
@@ -17,11 +17,16 @@ const getAuth = (): authorizationType | undefined => {
     ),
   };
 
-  // not proper type or expired, delete storage
-  if (
-    !isAuthorizationType(auth) ||
-    auth.session_token_claims.exp < Date.now() / 1000
-  ) {
+  try {
+    // parse auth for validity
+    auth = parseAuthorizationType(auth);
+
+    // check expiration
+    if (auth.session_token_claims.exp < Date.now() / 1000) {
+      throw 'session expired';
+    }
+  } catch (_err) {
+    // not proper type or expired, delete storage & return undefined
     sessionStorage.removeItem('auth_access_token');
     sessionStorage.removeItem('auth_access_token_claims');
     sessionStorage.removeItem('auth_session_token_claims');

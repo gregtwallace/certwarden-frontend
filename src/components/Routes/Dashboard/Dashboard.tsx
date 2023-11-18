@@ -1,7 +1,7 @@
 import { type FC } from 'react';
 import {
   type currentValidOrdersResponseType,
-  isCurrentValidOrdersResponseType,
+  parseCurrentValidOrdersResponseType,
 } from '../../../types/api';
 import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 
@@ -62,7 +62,7 @@ const Dashboard: FC = () => {
 
   const { getState } = useAxiosGet<currentValidOrdersResponseType>(
     `${DASHBOARD_URL}?${queryParams}`,
-    isCurrentValidOrdersResponseType
+    parseCurrentValidOrdersResponseType
   );
 
   return (

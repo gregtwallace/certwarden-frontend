@@ -1,9 +1,9 @@
 import { type FC, type FormEventHandler, type MouseEventHandler } from 'react';
 import {
   type oneAcmeServerResponseType,
-  isOneAcmeServerResponseType,
+  parseOneAcmeServerResponseType,
   type oneAcmeServerDeleteResponseType,
-  isOneAcmeServerDeleteResponse,
+  parseOneAcmeServerDeleteResponse,
 } from '../../../../types/api';
 import {
   type frontendErrorType,
@@ -55,7 +55,7 @@ const EditOneACMEServer: FC = () => {
 
   const { getState } = useAxiosGet<oneAcmeServerResponseType>(
     thisAcmeServerUrl,
-    isOneAcmeServerResponseType
+    parseOneAcmeServerResponseType
   );
 
   const { sendState, doSendData } = useAxiosSend();
@@ -94,7 +94,7 @@ const EditOneACMEServer: FC = () => {
       'DELETE',
       thisAcmeServerUrl,
       {},
-      isOneAcmeServerDeleteResponse
+      parseOneAcmeServerDeleteResponse
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate('/acmeservers');
@@ -138,7 +138,7 @@ const EditOneACMEServer: FC = () => {
       'PUT',
       thisAcmeServerUrl,
       formState.dataToSubmit,
-      isOneAcmeServerResponseType
+      parseOneAcmeServerResponseType
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate('/acmeservers');

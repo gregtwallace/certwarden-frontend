@@ -8,10 +8,6 @@ const frontendError = z.object({
 });
 
 export type frontendErrorType = z.infer<typeof frontendError>;
-// export const isFrontendErrorType = (unk: unknown): unk is frontendErrorType => {
-//   const { success } = frontendError.safeParse(unk);
-//   return success;
-// };
 
 //
 // Validation Errors Shape

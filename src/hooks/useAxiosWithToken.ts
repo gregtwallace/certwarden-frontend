@@ -4,7 +4,7 @@ import { useCallback, useEffect } from 'react';
 import axios, { AxiosError } from 'axios';
 import { axiosConfig, axiosInstance } from '../helpers/axios';
 
-import { isAuthorizationResponseType } from '../types/api';
+import { parseAuthorizationResponseType } from '../types/api';
 import { showDebugInfo } from '../helpers/environment';
 import useAuth from './useAuth';
 
@@ -33,10 +33,8 @@ const useAxiosWithToken = (): { axiosInstance: AxiosInstance } => {
         url: REFRESH_NODE,
       });
 
-      // if not valid auth response, error
-      if (!isAuthorizationResponseType(response.data)) {
-        throw response;
-      }
+      // parse (narrows and throws err if not valid)
+      response.data = parseAuthorizationResponseType(response.data);
 
       // good, set auth
       setAuth(response.data.authorization);
