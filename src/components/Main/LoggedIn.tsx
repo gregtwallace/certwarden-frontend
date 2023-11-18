@@ -92,8 +92,8 @@ const LoggedIn: FC = () => {
           <Route path={'/logs'} element={<LogViewer />} />
 
           {/* Providers */}
-          {/* <Route path={'/providers'} element={<AllProviders />} />
-          <Route path={`/providers/${newId}`} element={<AddOneProvider />} />
+          <Route path={'/providers'} element={<AllProviders />} />
+          {/* <Route path={`/providers/${newId}`} element={<AddOneProvider />} />
           <Route path={'/providers/:id'} element={<EditOneProvider />} /> */}
 
           {/* ACME Servers */}

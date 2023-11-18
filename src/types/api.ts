@@ -457,3 +457,95 @@ export const parseOrderQueueResponseType = (
 ): orderQueueResponseType => {
   return orderQueueResponse.parse(unk);
 };
+
+//
+// Providers
+//
+
+const providerBase = z.object({
+  id: z.number(),
+  tag: z.string(),
+  type: z.string(),
+  // provider is this + config: {}
+});
+
+// http 01: internal
+const providerHttp01Internal = providerBase.extend({
+  config: z.object({
+    domains: z.array(z.string()),
+    port: z.number(),
+  }),
+});
+
+// dns 01: manual
+const providerDns01Manual = providerBase.extend({
+  config: z.object({
+    domains: z.array(z.string()),
+    environment: z.array(z.string()),
+    create_script: z.string(),
+    delete_script: z.string(),
+  }),
+});
+
+// dns 01: acme dns
+const providerDns01AcmeDns = providerBase.extend({
+  config: z.object({
+    domains: z.array(z.string()),
+    acme_dns_address: z.string(),
+    resources: z.object({
+      real_domain: z.string(),
+      full_domain: z.string(),
+      username: z.string(),
+      password: z.string(),
+    }),
+  }),
+});
+
+// dns 01: acme sh
+const providerDns01AcmeSh = providerBase.extend({
+  config: z.object({
+    domains: z.array(z.string()),
+    acme_sh_path: z.string(),
+    environment: z.array(z.string()),
+    dns_hook: z.string(),
+  }),
+});
+
+// dns 01: cloudflare
+const providerDns01Cloudflare = providerBase.extend({
+  config: z.union([
+    // global account
+    z.object({
+      domains: z.array(z.string()),
+      account: z.object({
+        email: z.string(),
+        global_api_key: z.string(),
+      }),
+    }),
+    // scoped api token
+    z.object({
+      domains: z.array(z.string()),
+      api_token: z.string(),
+    }),
+  ]),
+});
+
+const provider = z.union([
+  providerHttp01Internal,
+  providerDns01Manual,
+  providerDns01AcmeDns,
+  providerDns01AcmeSh,
+  providerDns01Cloudflare,
+]);
+export type providerType = z.infer<typeof provider>;
+
+const providersResponse = basicGoodResponse.extend({
+  providers: z.array(provider),
+});
+
+export type providersResponseType = z.infer<typeof providersResponse>;
+export const parseProvidersResponseType = (
+  unk: unknown
+): providersResponseType => {
+  return providersResponse.parse(unk);
+};
