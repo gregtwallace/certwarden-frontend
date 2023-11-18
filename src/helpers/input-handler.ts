@@ -70,7 +70,7 @@ const setObjPathVal = <T extends nodeType>(
 ): T => {
   // missing args
   if (!obj) return <T>{};
-  if (!path || value === undefined) return obj;
+  if (!path) return obj;
 
   // split path
   const segments = path.split(/[.[\]]/g).filter((x) => !!x.trim());
@@ -104,13 +104,22 @@ const setObjPathVal = <T extends nodeType>(
         );
       }
 
-      // obj or array?
+      // if undefined delete final key; if defined, assign value
+      // finalKey depends on final node type
       if (isObjectNodeType(node)) {
-        node[finalKey] = value;
+        if (value === undefined) {
+          delete node[finalKey];
+        } else {
+          node[finalKey] = value;
+        }
       } else {
         // must be array
         const finalKeyInt = parseInt(finalKey);
-        node[finalKeyInt] = value;
+        if (value === undefined) {
+          delete node[finalKeyInt];
+        } else {
+          node[finalKeyInt] = value;
+        }
       }
     }
   };
