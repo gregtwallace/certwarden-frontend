@@ -1,27 +1,36 @@
-import { Link as RouterLink, useSearchParams } from 'react-router-dom';
-import { Link } from '@mui/material';
+import { type FC } from 'react';
+import {
+  type certificatesResponseType,
+  isCertificatesResponseType,
+} from '../../../types/api';
+import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 
+import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+
+import useAxiosGet from '../../../hooks/useAxiosGet';
+import { queryParser } from '../../UI/TableMui/query';
+import { newId } from '../../../helpers/constants';
+
+import Link from '@mui/material/Link';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import { TableCell } from '@mui/material';
+import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
-import useAxiosGet from '../../../hooks/useAxiosGet';
-import { getRowsPerPage, getPage, getSort } from '../../UI/TableMui/query';
-import { newId } from '../../../helpers/constants';
-
 import ApiLoading from '../../UI/Api/ApiLoading';
 import ApiError from '../../UI/Api/ApiError';
-import Button from '../../UI/Button/Button';
+import ButtonAsLink from '../../UI/Button/ButtonAsLink';
 import Flag from '../../UI/Flag/Flag';
 import TableContainer from '../../UI/TableMui/TableContainer';
 import TableHeaderRow from '../../UI/TableMui/TableHeaderRow';
 import TitleBar from '../../UI/TitleBar/TitleBar';
 import TablePagination from '../../UI/TableMui/TablePagination';
 
+const CERTIFICATES_URL = '/v1/certificates';
+
 // table headers and sortable param
-const tableHeaders = [
+const tableHeaders: headerType[] = [
   {
     id: 'name',
     label: 'Name',
@@ -49,77 +58,79 @@ const tableHeaders = [
   },
 ];
 
-const AllCertificates = () => {
+const AllCertificates: FC = () => {
+  // parse query
   const [searchParams] = useSearchParams();
+  const { page, rowsPerPage, queryParams } = queryParser(
+    searchParams,
+    'valid_to'
+  );
 
-  // get calculated query params
-  const rowsPerPage = getRowsPerPage(searchParams);
-  const page = getPage(searchParams);
-  const sort = getSort(searchParams, 'name', 'asc');
-
-  // calculate offset from current page and rows per page
-  const offset = page * rowsPerPage;
-
-  const [apiGetState] = useAxiosGet(
-    `/v1/certificates?limit=${rowsPerPage}&offset=${offset}&sort=${sort}`,
-    'all_certificates',
-    true
+  const { getState } = useAxiosGet<certificatesResponseType>(
+    `${CERTIFICATES_URL}?${queryParams}`,
+    isCertificatesResponseType
   );
 
   return (
     <TableContainer>
       <TitleBar title='Certificates'>
-        <Button
-          variant='contained'
-          type='submit'
-          href={`/certificates/${newId}`}
-        >
+        <ButtonAsLink to={`/certificates/${newId}`}>
           New Certificate
-        </Button>
+        </ButtonAsLink>
       </TitleBar>
-      {!apiGetState.isLoaded && <ApiLoading />}
-      {apiGetState.errorMessage && (
+
+      {!getState.responseData && !getState.error && <ApiLoading />}
+
+      {getState.error && (
         <ApiError
-          code={apiGetState.errorCode}
-          message={apiGetState.errorMessage}
+          statusCode={getState.error.statusCode}
+          message={getState.error.message}
         />
       )}
-      {apiGetState.isLoaded && !apiGetState.errorMessage && (
+
+      {getState.responseData && (
         <>
           <Table size='small'>
             <TableHead>
               <TableHeaderRow headers={tableHeaders} />
             </TableHead>
             <TableBody>
-              {apiGetState?.all_certificates?.certificates?.length > 0 &&
-                apiGetState.all_certificates.certificates.map((c) => (
-                  <TableRow key={c.id}>
+              {getState.responseData.certificates.length > 0 &&
+                getState.responseData.certificates.map((cert) => (
+                  <TableRow key={cert.id}>
                     <TableCell>
-                      <Link component={RouterLink} to={'/certificates/' + c.id}>
-                        {c.name}
+                      <Link
+                        component={RouterLink}
+                        to={'/certificates/' + cert.id}
+                      >
+                        {cert.name}
                       </Link>
                     </TableCell>
-                    <TableCell>{c.subject}</TableCell>
+
+                    <TableCell>{cert.subject}</TableCell>
+
                     <TableCell>
-                      {c.acme_account.acme_server.is_staging && (
+                      {cert.acme_account.acme_server.is_staging && (
                         <Flag type='staging' />
                       )}
-                      {c.api_key_via_url && <Flag type='legacy_api' />}
+                      {cert.api_key_via_url && <Flag type='legacy_api' />}
                     </TableCell>
+
                     <TableCell>
                       <Link
                         component={RouterLink}
-                        to={'/privatekeys/' + c.private_key.id}
+                        to={'/privatekeys/' + cert.private_key.id}
                       >
-                        {c.private_key.name}
+                        {cert.private_key.name}
                       </Link>
                     </TableCell>
+
                     <TableCell>
                       <Link
                         component={RouterLink}
-                        to={'/acmeaccounts/' + c.acme_account.id}
+                        to={'/acmeaccounts/' + cert.acme_account.id}
                       >
-                        {c.acme_account.name}
+                        {cert.acme_account.name}
                       </Link>
                     </TableCell>
                   </TableRow>
@@ -129,7 +140,7 @@ const AllCertificates = () => {
           <TablePagination
             page={page}
             rowsPerPage={rowsPerPage}
-            count={apiGetState?.all_certificates?.total_records}
+            count={getState.responseData.total_records}
           />
         </>
       )}

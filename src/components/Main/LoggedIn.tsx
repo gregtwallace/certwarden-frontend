@@ -61,15 +61,6 @@ const LoggedIn: FC = () => {
   //   />
   //   <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
 
-  //   {/* Certificates */}
-  //   <Route path='/certificates' element={<AllCertificates />} />
-  //   <Route path='/certificates/:id' element={<EditOneCert />} />
-  //   <Route
-  //     path='/certificates/:id/apikeys'
-  //     element={<EditCertApiKeys />}
-  //   />
-  //   <Route path={`/certificates/${newId}`} element={<AddOneCert />} />
-
   //   {/* Order Queue */}
   //   <Route path={'/orderqueue'} element={<OrderQueue />} />
 
@@ -95,6 +86,15 @@ const LoggedIn: FC = () => {
         <Routes>
           {/* Dashboard */}
           <Route path='/' element={<Dashboard />} />
+
+          {/* Certificates */}
+          <Route path='/certificates' element={<AllCertificates />} />
+          {/* <Route path='/certificates/:id' element={<EditOneCert />} />
+          <Route
+            path='/certificates/:id/apikeys'
+            element={<EditCertApiKeys />}
+          />
+          <Route path={`/certificates/${newId}`} element={<AddOneCert />} /> */}
 
           {/* ACME Servers */}
           <Route path='/acmeservers' element={<AllACMEServers />} />

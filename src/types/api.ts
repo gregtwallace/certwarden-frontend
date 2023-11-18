@@ -265,3 +265,41 @@ export const isOneAcmeServerDeleteResponse = (
   const { success } = oneAcmeServerDeleteResponse.safeParse(unk);
   return success;
 };
+
+//
+// Certificates
+//
+
+const certificatesResponse = basicGoodResponse.extend({
+  total_records: z.number(),
+  certificates: z.array(
+    z.object({
+      id: z.number(),
+      name: z.string(),
+      // description: z.string(),
+      private_key: z.object({
+        id: z.number(),
+        name: z.string(),
+      }),
+      acme_account: z.object({
+        id: z.number(),
+        name: z.string(),
+        acme_server: z.object({
+          // id: z.number(),
+          // name: z.string(),
+          is_staging: z.boolean(),
+        }),
+      }),
+      subject: z.string(),
+      api_key_via_url: z.boolean(),
+    })
+  ),
+});
+
+export type certificatesResponseType = z.infer<typeof certificatesResponse>;
+export const isCertificatesResponseType = (
+  unk: unknown
+): unk is certificatesResponseType => {
+  const { success } = certificatesResponse.safeParse(unk);
+  return success;
+};

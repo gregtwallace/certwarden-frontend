@@ -6,12 +6,12 @@ import {
 import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
-import { Link } from '@mui/material';
 
 import useAxiosGet from '../../../hooks/useAxiosGet';
 import { queryParser } from '../../UI/TableMui/query';
 import { newId } from '../../../helpers/constants';
 
+import Link from '@mui/material/Link';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -104,8 +104,11 @@ const AllACMEServers: FC = () => {
                         {serv.name}
                       </Link>
                     </TableCell>
+
                     <TableCell>{serv.description}</TableCell>
+
                     <TableCell>{serv.is_staging ? 'Yes' : 'No'}</TableCell>
+
                     <TableCell>
                       {serv.external_account_required ? 'Yes' : 'No'}
                     </TableCell>
