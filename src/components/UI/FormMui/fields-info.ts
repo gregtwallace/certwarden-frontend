@@ -26,6 +26,11 @@ const fieldsInfo: fieldInfoType[] = [
       'The name cannot be blank and must only contain these symbols - _ . ~ letters and numbers.',
   },
   {
+    nameRegex: /^(.+\.)?description$/,
+    htmlType: 'text',
+    errorMessage: 'N/A',
+  },
+  {
     nameRegex: /^(.+\.)?email$/,
     htmlType: 'email',
     errorMessage: 'Email must be specified and in a valid format.',
@@ -34,6 +39,11 @@ const fieldsInfo: fieldInfoType[] = [
     nameRegex: /^(.+\.)?api_key(_new)?$/,
     htmlType: 'text',
     errorMessage: 'API keys must be at least 10 characters long.',
+  },
+  {
+    nameRegex: /^(.+\.)?api_key_disabled$/,
+    htmlType: 'checkbox',
+    errorMessage: 'N/A',
   },
   {
     nameRegex: /^(.+\.)?username$/,

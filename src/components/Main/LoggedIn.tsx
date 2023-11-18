@@ -52,11 +52,11 @@ const LoggedIn: FC = () => {
           <Route path='/' element={<Dashboard />} />
 
           {/* Private Keys */}
-          {/* <Route
+          <Route
             path={`/privatekeys/${newId}`}
             element={<AddOnePrivateKey />}
           />
-          <Route path='/privatekeys/:id' element={<EditOnePrivateKey />} />
+          {/* <Route path='/privatekeys/:id' element={<EditOnePrivateKey />} />
           <Route path='/privatekeys/:id/apikeys' element={<EditKeyApiKeys />} /> */}
           <Route path='/privatekeys' element={<AllPrivateKeys />} />
 

@@ -290,6 +290,47 @@ export const parsePrivateKeysResponseType = (
   return privateKeysResponse.parse(unk);
 };
 
+const privateKeyResponse = basicGoodResponse.extend({
+  private_key: z.object({
+    id: z.number(),
+    // name: z.string(),
+    // description: z.string(),
+    // algorithm: z.object({
+    //   value: z.string(),
+    //   name: z.string(),
+    // }),
+    // api_key_disabled: z.boolean(),
+    // api_key_via_url: z.boolean(),
+  }),
+});
+
+export type privateKeyResponseType = z.infer<typeof privateKeyResponse>;
+export const parsePrivateKeyResponseType = (
+  unk: unknown
+): privateKeyResponseType => {
+  return privateKeyResponse.parse(unk);
+};
+
+const privateKeyOptionsResponse = basicGoodResponse.extend({
+  private_key_options: z.object({
+    key_algorithms: z.array(
+      z.object({
+        value: z.string(),
+        name: z.string(),
+      })
+    ),
+  }),
+});
+
+export type privateKeyOptionsResponseType = z.infer<
+  typeof privateKeyOptionsResponse
+>;
+export const parsePrivateKeyOptionsResponseType = (
+  unk: unknown
+): privateKeyOptionsResponseType => {
+  return privateKeyOptionsResponse.parse(unk);
+};
+
 //
 // ACME Accounts
 //
