@@ -23,7 +23,7 @@ const getAuth = (): authorizationType | undefined => {
 
     // check expiration
     if (auth.session_token_claims.exp < Date.now() / 1000) {
-      throw 'session expired';
+      throw new Error('session expired');
     }
   } catch (_err) {
     // not proper type or expired, delete storage & return undefined

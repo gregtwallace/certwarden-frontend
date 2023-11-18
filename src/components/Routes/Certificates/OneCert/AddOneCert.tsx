@@ -70,7 +70,7 @@ const AddOneCert: FC = () => {
     parseCertificateOptionsResponse
   );
 
-  const { sendState, doSendData } = useAxiosSend();
+  const { axiosSendState, apiCall } = useAxiosSend();
   const navigate = useNavigate();
 
   const makeBlankForm: () => formObj = useCallback(
@@ -157,7 +157,7 @@ const AddOneCert: FC = () => {
     }
     //
 
-    doSendData<oneCertificateResponseType>(
+    apiCall<oneCertificateResponseType>(
       'POST',
       NEW_CERTIFICATE_URL,
       formState.dataToSubmit,
@@ -353,7 +353,7 @@ const AddOneCert: FC = () => {
           <FormFooter
             cancelHref='/certificates'
             resetOnClick={() => setFormState(makeBlankForm())}
-            disabledAllButtons={sendState.isSending}
+            disabledAllButtons={axiosSendState.isSending}
             disabledResetButton={
               JSON.stringify(formState.dataToSubmit) ===
               JSON.stringify(makeBlankForm().dataToSubmit)

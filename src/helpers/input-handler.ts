@@ -109,12 +109,16 @@ const setObjPathVal = <T extends settableObjectType | settableArrayType>(
     if (segments.length > 1) {
       const key = segments.shift();
       if (!key) {
-        throw '(should be) impossible error happened in object setter (key undefined)';
+        throw new Error(
+          '(should be) impossible error happened in object setter (key undefined)'
+        );
       }
 
       const nextSegment = segments[0];
       if (!nextSegment) {
-        throw '(should be) impossible error happened in object setter (next segment undefined)';
+        throw new Error(
+          '(should be) impossible error happened in object setter (next segment undefined)'
+        );
       }
 
       // do next node
@@ -123,7 +127,9 @@ const setObjPathVal = <T extends settableObjectType | settableArrayType>(
       // case 2: final node
       const finalKey = segments[0];
       if (!finalKey) {
-        throw '(should be) impossible error happened in object setter (final key undefined)';
+        throw new Error(
+          '(should be) impossible error happened in object setter (final key undefined)'
+        );
       }
 
       // obj or array?

@@ -20,12 +20,12 @@ const LOGOUT_URL = '/v1/app/auth/logout';
 
 const Logout: FC = () => {
   const { setAuth } = useAuth();
-  const { sendState, doSendData } = useAxiosSend();
+  const { axiosSendState, apiCall } = useAxiosSend();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    doSendData<logoutResponseType>(
+    apiCall<logoutResponseType>(
       'POST',
       LOGOUT_URL,
       {},
@@ -35,7 +35,7 @@ const Logout: FC = () => {
       setAuth(undefined);
       navigate('/');
     });
-  }, [doSendData, navigate, setAuth]);
+  }, [apiCall, navigate, setAuth]);
 
   return (
     <Paper
@@ -46,7 +46,7 @@ const Logout: FC = () => {
     >
       <TitleBar title='Logging Out...' />
 
-      {sendState.isSending && <ApiLoading />}
+      {axiosSendState.isSending && <ApiLoading />}
     </Paper>
   );
 };

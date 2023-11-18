@@ -37,7 +37,7 @@ type formObj = {
 };
 
 const ChangePassword: FC = () => {
-  const { sendState, doSendData } = useAxiosSend();
+  const { axiosSendState, apiCall } = useAxiosSend();
 
   const blankFormState: formObj = {
     dataToSubmit: {
@@ -89,7 +89,7 @@ const ChangePassword: FC = () => {
     }
     // form validation - end
 
-    doSendData<changePasswordResponseType>(
+    apiCall<changePasswordResponseType>(
       'PUT',
       CHANGE_PASSWORD_URL,
       formState.dataToSubmit,
@@ -146,7 +146,7 @@ const ChangePassword: FC = () => {
 
         <FormFooter
           resetOnClick={() => setFormState(blankFormState)}
-          disabledAllButtons={sendState.isSending}
+          disabledAllButtons={axiosSendState.isSending}
         />
       </Form>
     </GridItemContainer>

@@ -13,9 +13,9 @@ type axiosSendStateType = {
   isSending: boolean;
 };
 
-// func to actually send data
-type axiosDoSendDataType = <ExpectedResponseType>(
-  method: 'POST' | 'PUT' | 'DELETE', // 'GET' |
+// func to do a json api call
+type axiosApiCallType = <ExpectedResponseType>(
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE',
   apiNode: string,
   payloadObj: object,
   isResponseDataValidFunc: (response: unknown) => ExpectedResponseType
@@ -24,26 +24,116 @@ type axiosDoSendDataType = <ExpectedResponseType>(
   error: frontendErrorType | undefined;
 }>;
 
+// func to do a file download
+type axiosDownloadFileType = (
+  apiNode: string
+  // payloadObj: object
+) => Promise<{
+  error: frontendErrorType | undefined;
+}>;
+
 // hook
 const useAxiosSend = (): {
-  sendState: axiosSendStateType;
-  doSendData: axiosDoSendDataType;
+  axiosSendState: axiosSendStateType;
+  apiCall: axiosApiCallType;
+  downloadFile: axiosDownloadFileType;
 } => {
-  // send state
-  const [sendState, setSendState] = useState(<axiosSendStateType>{
+  // state
+  const [axiosSendState, setAxiosSendState] = useState(<axiosSendStateType>{
     isSending: false,
-    error: undefined,
   });
 
   // axios instance
   const { axiosInstance } = useAxiosWithToken();
 
+  // download file fetches a blob and then does some wizardy to make the client download it
+  const downloadFile: axiosDownloadFileType = useCallback(
+    async (apiNode) => {
+      //payloadObj
+      // set state to sending
+      setAxiosSendState({
+        isSending: true,
+      });
+
+      // debugging
+      if (showDebugInfo) {
+        console.log('Download:', apiNode); //redactJSONObject(payloadObj)
+      }
+
+      try {
+        const response = await axiosInstance({
+          method: 'GET',
+          url: apiNode,
+          // data: JSON.stringify(payloadObj),
+          responseType: 'blob',
+        });
+
+        // if AxiosError, don't try to parse
+        if (isAxiosError(response)) {
+          throw response;
+        }
+
+        // error if data is not a blob
+        if (!(response.data instanceof Blob)) {
+          throw new Error('download is not a blob');
+        }
+
+        // do download --
+        // create file link in browser's memory
+        const href = window.URL.createObjectURL(response.data);
+
+        // create "a" HTML element with href to file & click
+        const link = document.createElement('a');
+        link.href = href;
+
+        // capture the filename from content-disposition
+        const filenameRegex = /filename="(.*)"/;
+        const filenameMatches = filenameRegex.exec(
+          response.headers['content-disposition']
+        );
+
+        if (filenameMatches !== null && filenameMatches.length >= 2) {
+          const filename = filenameMatches[1];
+          if (filename) {
+            link.setAttribute('download', filename);
+          }
+        }
+
+        document.body.appendChild(link);
+        link.click();
+
+        // clean up "a" element & remove ObjectURL
+        // use setTimeout due to potential issue with Firefox
+        setTimeout(function () {
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(href);
+        }, 100);
+        // do download -- END
+
+        // success, return
+        setAxiosSendState({
+          isSending: false,
+        });
+
+        return { error: undefined };
+      } catch (err: unknown) {
+        // done & return error
+        setAxiosSendState({
+          isSending: false,
+        });
+
+        return { error: parseAxiosError(err) };
+      }
+    },
+    [axiosInstance]
+  );
+
   // Send data to the node using the specified method and a payload from the specified event
   // return true if success and no error, return false if something goes wrong
-  const doSendData: axiosDoSendDataType = useCallback(
+  const apiCall: axiosApiCallType = useCallback(
     async (method, apiNode, payloadObj, isResponseDataValidFunc) => {
       // set state to sending
-      setSendState({
+      setAxiosSendState({
         isSending: true,
       });
 
@@ -90,14 +180,14 @@ const useAxiosSend = (): {
         }
 
         // success, return
-        setSendState({
+        setAxiosSendState({
           isSending: false,
         });
 
         return { responseData: response.data, error: undefined };
       } catch (err: unknown) {
         // done & return error
-        setSendState({
+        setAxiosSendState({
           isSending: false,
         });
 
@@ -107,7 +197,7 @@ const useAxiosSend = (): {
     [axiosInstance]
   );
 
-  return { sendState, doSendData };
+  return { axiosSendState, apiCall, downloadFile };
 };
 
 export default useAxiosSend;

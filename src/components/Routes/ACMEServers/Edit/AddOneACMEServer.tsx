@@ -41,7 +41,7 @@ type formObj = {
 };
 
 const AddOneACMEServer: FC = () => {
-  const { sendState, doSendData } = useAxiosSend();
+  const { axiosSendState, apiCall } = useAxiosSend();
   const navigate = useNavigate();
 
   const blankForm: formObj = {
@@ -85,7 +85,7 @@ const AddOneACMEServer: FC = () => {
     }
     // form validation - end
 
-    doSendData<oneAcmeServerResponseType>(
+    apiCall<oneAcmeServerResponseType>(
       'POST',
       NEW_ACME_SERVER_URL,
       formState.dataToSubmit,
@@ -149,7 +149,7 @@ const AddOneACMEServer: FC = () => {
         <FormFooter
           cancelHref='/acmeservers'
           resetOnClick={() => setFormState(blankForm)}
-          disabledAllButtons={sendState.isSending}
+          disabledAllButtons={axiosSendState.isSending}
           disabledResetButton={
             JSON.stringify(formState.dataToSubmit) ===
             JSON.stringify(blankForm.dataToSubmit)

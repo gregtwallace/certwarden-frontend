@@ -89,7 +89,7 @@ const LoggedIn: FC = () => {
           <Route path={'/orderqueue'} element={<OrderQueue />} />
 
           {/* Logs */}
-          {/* <Route path={'/logs'} element={<LogViewer />} /> */}
+          <Route path={'/logs'} element={<LogViewer />} />
 
           {/* Providers */}
           {/* <Route path={'/providers'} element={<AllProviders />} />

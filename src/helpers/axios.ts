@@ -82,6 +82,15 @@ export const parseAxiosError = (err: unknown): frontendErrorType => {
     return retErr;
   }
 
-  console.error('unknown error');
-  return { statusCode: 'unknown', message: 'unknown' };
+  console.error(err);
+
+  // try some other stuff to get any error details
+  let errMessage = 'unknown';
+  if (typeof err === 'string') {
+    errMessage = 'err: ' + err;
+  } else if (err instanceof Error) {
+    errMessage = err.message;
+  }
+
+  return { statusCode: 'unknown', message: errMessage };
 };

@@ -39,7 +39,7 @@ type propTypes = {
 // new version
 const NewVersionProvider: FC<propTypes> = (props) => {
   // sender for new version check
-  const { doSendData } = useAxiosSend();
+  const { apiCall } = useAxiosSend();
 
   // get new-version information
   const { getState } = useAxiosGet<newVersionResponseType>(
@@ -64,7 +64,7 @@ const NewVersionProvider: FC<propTypes> = (props) => {
       error: undefined,
     });
 
-    doSendData<newVersionResponseType>(
+    apiCall<newVersionResponseType>(
       'POST',
       NEW_VERSION_URL,
       {},

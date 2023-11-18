@@ -101,6 +101,26 @@ export const parseNewVersionResponseType = (
 };
 
 //
+// Logs
+//
+
+const logEntry = z.object({
+  level: z.string(),
+  ts: z.string(),
+  caller: z.string(),
+  msg: z.string(),
+});
+
+const logResponse = basicGoodResponse.extend({
+  log_entries: z.array(logEntry),
+});
+
+export type logResponseType = z.infer<typeof logResponse>;
+export const parseLogResponseType = (unk: unknown): logResponseType => {
+  return logResponse.parse(unk);
+};
+
+//
 // Settings
 //
 

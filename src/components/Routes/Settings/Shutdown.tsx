@@ -30,7 +30,7 @@ const Shutdown: FC = () => {
   const { setAuth } = useAuth();
 
   // for sending shutdown / restart commands
-  const { sendState, doSendData } = useAxiosSend();
+  const { axiosSendState, apiCall } = useAxiosSend();
 
   // state to hold errors
   const [sendError, setSendError] = useState<frontendErrorType | undefined>(
@@ -47,7 +47,7 @@ const Shutdown: FC = () => {
   const shutdownClickHandler: MouseEventHandler = (event): void => {
     event.preventDefault();
 
-    doSendData<shutdownResponseType>(
+    apiCall<shutdownResponseType>(
       'POST',
       SHUTDOWN_URL,
       {},
@@ -67,7 +67,7 @@ const Shutdown: FC = () => {
   const restartClickHandler: MouseEventHandler = (event): void => {
     event.preventDefault();
 
-    doSendData<restartResponseType>(
+    apiCall<restartResponseType>(
       'POST',
       RESTART_URL,
       {},
@@ -92,7 +92,7 @@ const Shutdown: FC = () => {
       <Button
         color='warning'
         onClick={restartClickHandler}
-        disabled={sendState.isSending}
+        disabled={axiosSendState.isSending}
         sx={{ mt: 1, mb: 2 }}
       >
         Restart
@@ -106,7 +106,7 @@ const Shutdown: FC = () => {
       <Button
         color='error'
         onClick={shutdownClickHandler}
-        disabled={sendState.isSending}
+        disabled={axiosSendState.isSending}
         sx={{ mt: 1, mb: 2 }}
       >
         Shutdown

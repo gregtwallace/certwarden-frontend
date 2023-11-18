@@ -58,7 +58,7 @@ const EditOneACMEServer: FC = () => {
     parseOneAcmeServerResponseType
   );
 
-  const { sendState, doSendData } = useAxiosSend();
+  const { axiosSendState, apiCall } = useAxiosSend();
   const navigate = useNavigate();
 
   const makeStartingForm: () => formObj = useCallback(
@@ -90,7 +90,7 @@ const EditOneACMEServer: FC = () => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const deleteConfirmHandler: MouseEventHandler = () => {
     setDeleteOpen(false);
-    doSendData<oneAcmeServerDeleteResponseType>(
+    apiCall<oneAcmeServerDeleteResponseType>(
       'DELETE',
       thisAcmeServerUrl,
       {},
@@ -134,7 +134,7 @@ const EditOneACMEServer: FC = () => {
     }
     // form validation - end
 
-    doSendData<oneAcmeServerResponseType>(
+    apiCall<oneAcmeServerResponseType>(
       'PUT',
       thisAcmeServerUrl,
       formState.dataToSubmit,
@@ -162,7 +162,7 @@ const EditOneACMEServer: FC = () => {
               onClick={() => {
                 setDeleteOpen(true);
               }}
-              disabled={sendState.isSending}
+              disabled={axiosSendState.isSending}
             >
               Delete
             </Button>
@@ -241,7 +241,7 @@ const EditOneACMEServer: FC = () => {
             <FormFooter
               cancelHref='/acmeservers'
               resetOnClick={() => setFormState(makeStartingForm())}
-              disabledAllButtons={sendState.isSending}
+              disabledAllButtons={axiosSendState.isSending}
               disabledResetButton={
                 JSON.stringify(formState.dataToSubmit) ===
                 JSON.stringify(makeStartingForm().dataToSubmit)

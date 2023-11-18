@@ -40,7 +40,7 @@ type formObj = {
 
 // component
 const Login: FC = () => {
-  const { sendState, doSendData } = useAxiosSend();
+  const { axiosSendState, apiCall } = useAxiosSend();
   const { setAuth } = useAuth();
 
   const navigate = useNavigate();
@@ -86,7 +86,7 @@ const Login: FC = () => {
     }
     // form validation - end
 
-    doSendData<authorizationResponseType>(
+    apiCall<authorizationResponseType>(
       'POST',
       LOGIN_URL,
       formState.dataToSubmit,
@@ -155,7 +155,7 @@ const Login: FC = () => {
 
           <FormFooter
             resetOnClick={() => setFormState(blankForm)}
-            disabledAllButtons={sendState.isSending}
+            disabledAllButtons={axiosSendState.isSending}
             disabledResetButton={
               JSON.stringify(formState.dataToSubmit) ===
               JSON.stringify(blankForm.dataToSubmit)

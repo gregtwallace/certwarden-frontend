@@ -35,11 +35,13 @@ export const daysUntil = (unixTime: number): number => {
   return Math.floor((unixTime - Date.now() / 1000) / (3600 * 24));
 };
 
-// // dateToPretty provides a pretty output for the client from a date
-// export const dateToPretty = (date: Date) => {
-//   if (Number.isNaN(date.valueOf())) {
-//     return 'failed-to-parse-date';
-//   }
+// dateToPretty provides a pretty output for the client from a date
+export const iso8601StringToPretty = (iso8601Time: string): string => {
+  const date = new Date(iso8601Time);
 
-//   return date.toLocaleString('en-US');
-// };
+  if (Number.isNaN(date.valueOf())) {
+    return 'failed-to-parse-date';
+  }
+
+  return date.toLocaleString('en-US');
+};
