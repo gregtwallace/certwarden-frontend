@@ -92,46 +92,45 @@ const AllCertificates: FC = () => {
               <TableHeaderRow headers={tableHeaders} />
             </TableHead>
             <TableBody>
-              {getState.responseData.certificates.length > 0 &&
-                getState.responseData.certificates.map((cert) => (
-                  <TableRow key={cert.id}>
-                    <TableCell>
-                      <Link
-                        component={RouterLink}
-                        to={'/certificates/' + cert.id}
-                      >
-                        {cert.name}
-                      </Link>
-                    </TableCell>
+              {getState.responseData.certificates.map((cert) => (
+                <TableRow key={cert.id}>
+                  <TableCell>
+                    <Link
+                      component={RouterLink}
+                      to={'/certificates/' + cert.id}
+                    >
+                      {cert.name}
+                    </Link>
+                  </TableCell>
 
-                    <TableCell>{cert.subject}</TableCell>
+                  <TableCell>{cert.subject}</TableCell>
 
-                    <TableCell>
-                      {cert.acme_account.acme_server.is_staging && (
-                        <Flag type='staging' />
-                      )}
-                      {cert.api_key_via_url && <Flag type='legacy_api' />}
-                    </TableCell>
+                  <TableCell>
+                    {cert.acme_account.acme_server.is_staging && (
+                      <Flag type='staging' />
+                    )}
+                    {cert.api_key_via_url && <Flag type='legacy_api' />}
+                  </TableCell>
 
-                    <TableCell>
-                      <Link
-                        component={RouterLink}
-                        to={'/privatekeys/' + cert.private_key.id}
-                      >
-                        {cert.private_key.name}
-                      </Link>
-                    </TableCell>
+                  <TableCell>
+                    <Link
+                      component={RouterLink}
+                      to={'/privatekeys/' + cert.private_key.id}
+                    >
+                      {cert.private_key.name}
+                    </Link>
+                  </TableCell>
 
-                    <TableCell>
-                      <Link
-                        component={RouterLink}
-                        to={'/acmeaccounts/' + cert.acme_account.id}
-                      >
-                        {cert.acme_account.name}
-                      </Link>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                  <TableCell>
+                    <Link
+                      component={RouterLink}
+                      to={'/acmeaccounts/' + cert.acme_account.id}
+                    >
+                      {cert.acme_account.name}
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
           <TablePagination

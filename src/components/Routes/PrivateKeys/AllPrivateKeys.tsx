@@ -85,25 +85,21 @@ const AllPrivateKeys: FC = () => {
               <TableHeaderRow headers={tableHeaders} />
             </TableHead>
             <TableBody>
-              {getState.responseData.private_keys.length > 0 &&
-                getState.responseData.private_keys.map((key) => (
-                  <TableRow key={key.id}>
-                    <TableCell>
-                      <Link
-                        component={RouterLink}
-                        to={'/privatekeys/' + key.id}
-                      >
-                        {key.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell>{key.description}</TableCell>
-                    <TableCell>
-                      {key.api_key_via_url && <Flag type='legacy_api' />}
-                      {key.api_key_disabled && <Flag type='api_key_disabled' />}
-                    </TableCell>
-                    <TableCell>{key.algorithm.name}</TableCell>
-                  </TableRow>
-                ))}
+              {getState.responseData.private_keys.map((key) => (
+                <TableRow key={key.id}>
+                  <TableCell>
+                    <Link component={RouterLink} to={'/privatekeys/' + key.id}>
+                      {key.name}
+                    </Link>
+                  </TableCell>
+                  <TableCell>{key.description}</TableCell>
+                  <TableCell>
+                    {key.api_key_via_url && <Flag type='legacy_api' />}
+                    {key.api_key_disabled && <Flag type='api_key_disabled' />}
+                  </TableCell>
+                  <TableCell>{key.algorithm.name}</TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
           <TablePagination

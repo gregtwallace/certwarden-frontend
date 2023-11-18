@@ -94,36 +94,34 @@ const AllACMEAccounts: FC = () => {
               <TableHeaderRow headers={tableHeaders} />
             </TableHead>
             <TableBody>
-              {getState.responseData.acme_accounts.length > 0 &&
-                getState.responseData.acme_accounts.map((acct) => (
-                  <TableRow key={acct.id}>
-                    <TableCell>
-                      <Link
-                        component={RouterLink}
-                        to={'/acmeaccounts/' + acct.id}
-                      >
-                        {acct.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell>{acct.description}</TableCell>
-                    <TableCell>
-                      <Link
-                        component={RouterLink}
-                        to={'/privatekeys/' + acct.private_key.id}
-                      >
-                        {acct.private_key.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell>
-                      {acct.status.charAt(0).toUpperCase() +
-                        acct.status.slice(1)}
-                    </TableCell>
-                    <TableCell>{acct.email}</TableCell>
-                    <TableCell>
-                      {acct.acme_server.is_staging ? 'Staging' : 'Production'}
-                    </TableCell>
-                  </TableRow>
-                ))}
+              {getState.responseData.acme_accounts.map((acct) => (
+                <TableRow key={acct.id}>
+                  <TableCell>
+                    <Link
+                      component={RouterLink}
+                      to={'/acmeaccounts/' + acct.id}
+                    >
+                      {acct.name}
+                    </Link>
+                  </TableCell>
+                  <TableCell>{acct.description}</TableCell>
+                  <TableCell>
+                    <Link
+                      component={RouterLink}
+                      to={'/privatekeys/' + acct.private_key.id}
+                    >
+                      {acct.private_key.name}
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    {acct.status.charAt(0).toUpperCase() + acct.status.slice(1)}
+                  </TableCell>
+                  <TableCell>{acct.email}</TableCell>
+                  <TableCell>
+                    {acct.acme_server.is_staging ? 'Staging' : 'Production'}
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
           <TablePagination

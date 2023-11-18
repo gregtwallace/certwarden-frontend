@@ -90,27 +90,23 @@ const AllACMEServers: FC = () => {
               <TableHeaderRow headers={tableHeaders} />
             </TableHead>
             <TableBody>
-              {getState.responseData.acme_servers.length > 0 &&
-                getState.responseData.acme_servers.map((serv) => (
-                  <TableRow key={serv.id}>
-                    <TableCell>
-                      <Link
-                        component={RouterLink}
-                        to={'/acmeservers/' + serv.id}
-                      >
-                        {serv.name}
-                      </Link>
-                    </TableCell>
+              {getState.responseData.acme_servers.map((serv) => (
+                <TableRow key={serv.id}>
+                  <TableCell>
+                    <Link component={RouterLink} to={'/acmeservers/' + serv.id}>
+                      {serv.name}
+                    </Link>
+                  </TableCell>
 
-                    <TableCell>{serv.description}</TableCell>
+                  <TableCell>{serv.description}</TableCell>
 
-                    <TableCell>{serv.is_staging ? 'Yes' : 'No'}</TableCell>
+                  <TableCell>{serv.is_staging ? 'Yes' : 'No'}</TableCell>
 
-                    <TableCell>
-                      {serv.external_account_required ? 'Yes' : 'No'}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                  <TableCell>
+                    {serv.external_account_required ? 'Yes' : 'No'}
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
           <TablePagination

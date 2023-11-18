@@ -85,34 +85,31 @@ const Dashboard: FC = () => {
               <TableHeaderRow headers={tableHeaders} />
             </TableHead>
             <TableBody>
-              {getState.responseData.orders.length > 0 &&
-                getState.responseData.orders.map((order) => (
-                  <TableRow key={order.id}>
-                    <TableCell>
-                      <Link
-                        component={RouterLink}
-                        to={'/certificates/' + order.certificate.id}
-                      >
-                        {order.certificate.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell>{order.certificate.subject}</TableCell>
-                    <TableCell>
-                      {order.certificate.acme_account.acme_server
-                        .is_staging && <Flag type='staging' />}
-                      {order.certificate.api_key_via_url && (
-                        <Flag type='legacy_api' />
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {convertUnixTime(order.valid_to)}{' '}
-                      <Flag
-                        type='expire-days'
-                        days={daysUntil(order.valid_to)}
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
+              {getState.responseData.orders.map((order) => (
+                <TableRow key={order.id}>
+                  <TableCell>
+                    <Link
+                      component={RouterLink}
+                      to={'/certificates/' + order.certificate.id}
+                    >
+                      {order.certificate.name}
+                    </Link>
+                  </TableCell>
+                  <TableCell>{order.certificate.subject}</TableCell>
+                  <TableCell>
+                    {order.certificate.acme_account.acme_server.is_staging && (
+                      <Flag type='staging' />
+                    )}
+                    {order.certificate.api_key_via_url && (
+                      <Flag type='legacy_api' />
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {convertUnixTime(order.valid_to)}{' '}
+                    <Flag type='expire-days' days={daysUntil(order.valid_to)} />
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
           <TablePagination
