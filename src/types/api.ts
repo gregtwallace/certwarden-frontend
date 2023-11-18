@@ -296,6 +296,38 @@ export const isPrivateKeysResponseType = (
 };
 
 //
+// ACME Accounts
+//
+
+const acmeAccountsResponse = basicGoodResponse.extend({
+  total_records: z.number(),
+  acme_accounts: z.array(
+    z.object({
+      id: z.number(),
+      name: z.string(),
+      description: z.string(),
+      acme_server: z.object({
+        is_staging: z.boolean(),
+      }),
+      private_key: z.object({
+        id: z.number(),
+        name: z.string(),
+      }),
+      status: z.string(),
+      email: z.string(),
+    })
+  ),
+});
+
+export type acmeAccountsResponseType = z.infer<typeof acmeAccountsResponse>;
+export const isAcmeAccountsResponseType = (
+  unk: unknown
+): unk is acmeAccountsResponseType => {
+  const { success } = acmeAccountsResponse.safeParse(unk);
+  return success;
+};
+
+//
 // Certificates
 //
 

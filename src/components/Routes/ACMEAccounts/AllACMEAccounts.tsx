@@ -1,3 +1,10 @@
+import { type FC } from 'react';
+import {
+  type acmeAccountsResponseType,
+  isAcmeAccountsResponseType,
+} from '../../../types/api';
+import { type headerType } from '../../UI/TableMui/TableHeaderRow';
+
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 import { Link } from '@mui/material';
 
@@ -8,19 +15,21 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
 import useAxiosGet from '../../../hooks/useAxiosGet';
-import { getRowsPerPage, getPage, getSort } from '../../UI/TableMui/query';
+import { queryParser } from '../../UI/TableMui/query';
 import { newId } from '../../../helpers/constants';
 
 import ApiLoading from '../../UI/Api/ApiLoading';
 import ApiError from '../../UI/Api/ApiError';
-import Button from '../../UI/Button/Button';
+import ButtonAsLink from '../../UI/Button/ButtonAsLink';
 import TableContainer from '../../UI/TableMui/TableContainer';
 import TableHeaderRow from '../../UI/TableMui/TableHeaderRow';
 import TitleBar from '../../UI/TitleBar/TitleBar';
 import TablePagination from '../../UI/TableMui/TablePagination';
 
+const ACME_ACCOUNTS_URL = '/v1/acmeaccounts';
+
 // table headers and sortable param
-const tableHeaders = [
+const tableHeaders: headerType[] = [
   {
     id: 'name',
     label: 'Name',
@@ -53,71 +62,65 @@ const tableHeaders = [
   },
 ];
 
-const AllACMEAccounts = () => {
+const AllACMEAccounts: FC = () => {
+  // parse query
   const [searchParams] = useSearchParams();
+  const { page, rowsPerPage, queryParams } = queryParser(searchParams, 'name');
 
-  // get calculated query params
-  const rowsPerPage = getRowsPerPage(searchParams);
-  const page = getPage(searchParams);
-  const sort = getSort(searchParams, 'name', 'asc');
-
-  // calculate offset from current page and rows per page
-  const offset = page * rowsPerPage;
-
-  const [apiGetState] = useAxiosGet(
-    `/v1/acmeaccounts?limit=${rowsPerPage}&offset=${offset}&sort=${sort}`,
-    'all_acme_accounts',
-    true
+  const { getState } = useAxiosGet<acmeAccountsResponseType>(
+    `${ACME_ACCOUNTS_URL}?${queryParams}`,
+    isAcmeAccountsResponseType
   );
 
   return (
     <TableContainer>
       <TitleBar title='ACME Accounts'>
-        <Button
-          variant='contained'
-          type='submit'
-          href={`/acmeaccounts/${newId}`}
-        >
-          New Account
-        </Button>
+        <ButtonAsLink to={`/acmeaccounts/${newId}`}>New Account</ButtonAsLink>
       </TitleBar>
-      {!apiGetState.isLoaded && <ApiLoading />}
-      {apiGetState.errorMessage && (
+
+      {!getState.responseData && !getState.error && <ApiLoading />}
+
+      {getState.error && (
         <ApiError
-          code={apiGetState.errorCode}
-          message={apiGetState.errorMessage}
+          statusCode={getState.error.statusCode}
+          message={getState.error.message}
         />
       )}
-      {apiGetState.isLoaded && !apiGetState.errorMessage && (
+
+      {getState.responseData && (
         <>
           <Table size='small'>
             <TableHead>
               <TableHeaderRow headers={tableHeaders} />
             </TableHead>
             <TableBody>
-              {apiGetState?.all_acme_accounts?.acme_accounts?.length > 0 &&
-                apiGetState.all_acme_accounts.acme_accounts.map((a) => (
-                  <TableRow key={a.id}>
-                    <TableCell>
-                      <Link component={RouterLink} to={'/acmeaccounts/' + a.id}>
-                        {a.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell>{a.description}</TableCell>
+              {getState.responseData.acme_accounts.length > 0 &&
+                getState.responseData.acme_accounts.map((acct) => (
+                  <TableRow key={acct.id}>
                     <TableCell>
                       <Link
                         component={RouterLink}
-                        to={'/privatekeys/' + a.private_key.id}
+                        to={'/acmeaccounts/' + acct.id}
                       >
-                        {a.private_key.name}
+                        {acct.name}
+                      </Link>
+                    </TableCell>
+                    <TableCell>{acct.description}</TableCell>
+                    <TableCell>
+                      <Link
+                        component={RouterLink}
+                        to={'/privatekeys/' + acct.private_key.id}
+                      >
+                        {acct.private_key.name}
                       </Link>
                     </TableCell>
                     <TableCell>
-                      {a.status.charAt(0).toUpperCase() + a.status.slice(1)}
+                      {acct.status.charAt(0).toUpperCase() +
+                        acct.status.slice(1)}
                     </TableCell>
-                    <TableCell>{a.email}</TableCell>
+                    <TableCell>{acct.email}</TableCell>
                     <TableCell>
-                      {a.acme_server.is_staging ? 'Staging' : 'Production'}
+                      {acct.acme_server.is_staging ? 'Staging' : 'Production'}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -126,7 +129,7 @@ const AllACMEAccounts = () => {
           <TablePagination
             page={page}
             rowsPerPage={rowsPerPage}
-            count={apiGetState?.all_acme_accounts?.total_records}
+            count={getState.responseData.total_records}
           />
         </>
       )}

@@ -73,8 +73,8 @@ const LoggedIn: FC = () => {
           <Route
             path='/acmeaccounts/:id/key-change'
             element={<RolloverAccountKey />}
-          />
-          <Route path='/acmeaccounts' element={<AllACMEAccounts />} /> */}
+          /> */}
+          <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
 
           {/* Certificates */}
           <Route path='/certificates' element={<AllCertificates />} />
