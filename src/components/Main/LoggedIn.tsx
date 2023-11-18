@@ -86,7 +86,7 @@ const LoggedIn: FC = () => {
           <Route path={`/certificates/${newId}`} element={<AddOneCert />} />
 
           {/* Order Queue */}
-          {/* <Route path={'/orderqueue'} element={<OrderQueue />} /> */}
+          <Route path={'/orderqueue'} element={<OrderQueue />} />
 
           {/* Logs */}
           {/* <Route path={'/logs'} element={<LogViewer />} /> */}
