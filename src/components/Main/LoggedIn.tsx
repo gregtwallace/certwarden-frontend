@@ -93,8 +93,8 @@ const LoggedIn: FC = () => {
           <Route
             path='/certificates/:id/apikeys'
             element={<EditCertApiKeys />}
-          />
-          <Route path={`/certificates/${newId}`} element={<AddOneCert />} /> */}
+          /> */}
+          <Route path={`/certificates/${newId}`} element={<AddOneCert />} />
 
           {/* ACME Servers */}
           <Route path='/acmeservers' element={<AllACMEServers />} />

@@ -181,9 +181,9 @@ const fieldsInfo: fieldInfoType[] = [
 const fieldInformation = (
   fieldName: string
 ): { htmlType: htmlTypeType; errorMessage: string } => {
-  // check if ends in -number, indicating an array member
+  // check if ends in .number, indicating an array member
   // if part of array, strip the index portion of name to get field's real name
-  fieldName = fieldName.replace(/-[0-9]+$/, '');
+  fieldName = fieldName.replace(/.[0-9]+$/, '');
 
   // find desired field's info
   const thisFieldInfo = fieldsInfo.find((field) => {

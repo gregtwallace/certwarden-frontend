@@ -270,6 +270,7 @@ export const isOneAcmeServerDeleteResponse = (
 // Certificates
 //
 
+// many certs
 const certificatesResponse = basicGoodResponse.extend({
   total_records: z.number(),
   certificates: z.array(
@@ -301,5 +302,77 @@ export const isCertificatesResponseType = (
   unk: unknown
 ): unk is certificatesResponseType => {
   const { success } = certificatesResponse.safeParse(unk);
+  return success;
+};
+
+// one cert
+const oneCertificateResponse = basicGoodResponse.extend({
+  certificate: z.object({
+    id: z.number(),
+    // name: z.string(),
+    // description: z.string(),
+    // private_key: z.object({
+    //   id: z.number(),
+    //   name: z.string(),
+    // }),
+    // acme_account: z.object({
+    //   id: z.number(),
+    //   name: z.string(),
+    //   acme_server: z.object({
+    //     // id: z.number(),
+    //     // name: z.string(),
+    //     is_staging: z.boolean(),
+    //   }),
+    // }),
+    // subject: z.string(),
+    // api_key_via_url: z.boolean(),
+  }),
+});
+
+export type oneCertificateResponseType = z.infer<typeof oneCertificateResponse>;
+export const isOneCertificateResponseType = (
+  unk: unknown
+): unk is oneCertificateResponseType => {
+  const { success } = oneCertificateResponse.safeParse(unk);
+  return success;
+};
+
+// response to get options for new/edit cert
+const certificateOptionsResponse = basicGoodResponse.extend({
+  certificate_options: z.object({
+    private_keys: z.array(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+        algorithm: z.object({
+          name: z.string(),
+        }),
+      })
+    ),
+    key_algorithms: z.array(
+      z.object({
+        value: z.string(),
+        name: z.string(),
+      })
+    ),
+    acme_accounts: z.array(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+        acme_server: z.object({
+          is_staging: z.boolean(),
+        }),
+      })
+    ),
+  }),
+});
+
+export type certificateOptionsResponseType = z.infer<
+  typeof certificateOptionsResponse
+>;
+export const isCertificateOptionsResponse = (
+  unk: unknown
+): unk is certificateOptionsResponseType => {
+  const { success } = certificateOptionsResponse.safeParse(unk);
   return success;
 };

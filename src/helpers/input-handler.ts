@@ -1,5 +1,4 @@
-import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
-import { type SelectChangeEvent } from '@mui/material';
+import type { Dispatch, SetStateAction } from 'react';
 
 import { z } from 'zod';
 
@@ -148,8 +147,10 @@ const setObjPathVal = <T extends settableObjectType | settableArrayType>(
 // input handler maker function stuff
 
 // object for other values to set
-export type inputOption = {
-  value: string;
+export type selectInputOptionValuesType = string | number;
+
+export type selectInputOption = {
+  value: selectInputOptionValuesType;
   name: string;
   alsoSet?: {
     name: string;
@@ -157,21 +158,25 @@ export type inputOption = {
   }[];
 };
 
+type eventType = {
+  target: {
+    name: string;
+    value: settableValuesType;
+  };
+};
 type valueConversionTypes = 'unchanged' | 'number' | false | true;
 
 // type for custom inputHandlerFunc
 export type inputHandlerFunc = (
-  // event is the standard input change event
-  event:
-    | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    | SelectChangeEvent<inputOption>,
+  // event is just the properties needed from a standard input change event
+  event: eventType,
   // convertValueTo is the value type that the event.target.value should be
   // forced to when saved in state
   convertValueTo: valueConversionTypes,
   // inputOptions is used for select input elements to enable changing of
   // multiple other values on select change. For instance, to add or remove
   // fields that are only relevant to a particular item in the Select element.
-  inputOptions?: inputOption[]
+  inputOptions?: selectInputOption[]
 ) => void;
 
 // formChangeHandlerFunc returns the input change handler specific
@@ -180,11 +185,9 @@ export const inputHandlerFuncMaker = <StateObject extends settableObjectType>(
   setFormState: Dispatch<SetStateAction<StateObject>>
 ): inputHandlerFunc => {
   return (
-    event:
-      | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-      | SelectChangeEvent<inputOption>,
+    event: eventType,
     convertValueTo: valueConversionTypes,
-    inputOptions?: inputOption[]
+    inputOptions?: selectInputOption[]
   ) => {
     // set newVal to the real value to store in state
     const inputValue = event.target.value;

@@ -1,7 +1,8 @@
 import { type FC } from 'react';
 import {
   type inputHandlerFunc,
-  type inputOption,
+  type selectInputOptionValuesType,
+  type selectInputOption,
 } from '../../../helpers/input-handler';
 
 import {
@@ -17,10 +18,10 @@ type propTypes = {
   id: string;
   name?: string;
   label: string;
-  value: inputOption;
+  value: selectInputOptionValuesType;
   onChange: inputHandlerFunc;
-  options: inputOption[];
-  error?: boolean;
+  options: selectInputOption[];
+  error?: boolean | undefined;
   readOnly?: boolean;
   disabled?: boolean;
 };
