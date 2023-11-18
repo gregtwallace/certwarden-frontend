@@ -156,6 +156,10 @@ const Login: FC = () => {
           <FormFooter
             resetOnClick={() => setFormState(blankForm)}
             disabledAllButtons={sendState.isSending}
+            disabledResetButton={
+              JSON.stringify(formState.dataToSubmit) ===
+              JSON.stringify(blankForm.dataToSubmit)
+            }
           />
         </Form>
       </Paper>

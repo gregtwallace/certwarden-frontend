@@ -30,7 +30,7 @@ type propTypesFooter = {
   cancelHref?: string;
   resetOnClick?: MouseEventHandler<HTMLButtonElement>;
   disabledAllButtons?: boolean;
-  disabledSubmitResetButtons?: boolean;
+  disabledResetButton?: boolean;
 };
 
 // component
@@ -39,7 +39,7 @@ const FormFooter: FC<propTypesFooter> = (props) => {
     cancelHref,
     createdAt,
     disabledAllButtons,
-    disabledSubmitResetButtons,
+    disabledResetButton,
     resetOnClick,
     updatedAt,
   } = props;
@@ -70,17 +70,13 @@ const FormFooter: FC<propTypesFooter> = (props) => {
         <Button
           color='info'
           onClick={resetOnClick}
-          disabled={disabledAllButtons || disabledSubmitResetButtons}
+          disabled={disabledAllButtons || disabledResetButton}
         >
           Reset
         </Button>
       )}
 
-      <Button
-        color='primary'
-        type='submit'
-        disabled={disabledAllButtons || disabledSubmitResetButtons}
-      >
+      <Button color='primary' type='submit' disabled={disabledAllButtons}>
         Submit
       </Button>
     </Toolbar>

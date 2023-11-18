@@ -150,8 +150,9 @@ const AddOneACMEServer: FC = () => {
           cancelHref='/acmeservers'
           resetOnClick={() => setFormState(blankForm)}
           disabledAllButtons={sendState.isSending}
-          disabledSubmitResetButtons={
-            JSON.stringify(formState) === JSON.stringify(blankForm)
+          disabledResetButton={
+            JSON.stringify(formState.dataToSubmit) ===
+            JSON.stringify(blankForm.dataToSubmit)
           }
         />
       </Form>

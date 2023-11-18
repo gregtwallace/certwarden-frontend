@@ -242,7 +242,7 @@ const EditOneACMEServer: FC = () => {
               cancelHref='/acmeservers'
               resetOnClick={() => setFormState(makeStartingForm())}
               disabledAllButtons={sendState.isSending}
-              disabledSubmitResetButtons={
+              disabledResetButton={
                 JSON.stringify(formState.dataToSubmit) ===
                 JSON.stringify(makeStartingForm().dataToSubmit)
               }
