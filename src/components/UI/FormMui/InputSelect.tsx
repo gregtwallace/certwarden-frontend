@@ -19,7 +19,7 @@ type propTypes<ValType extends selectInputOptionValuesType> = {
   name?: string;
   label: string;
   value: ValType;
-  onChange: inputHandlerFuncType;
+  onChange?: inputHandlerFuncType;
   options: selectInputOption<ValType>[];
   error?: boolean | undefined;
   readOnly?: boolean;

@@ -492,12 +492,14 @@ const providerDns01AcmeDns = providerBase.extend({
   config: z.object({
     domains: z.array(z.string()),
     acme_dns_address: z.string(),
-    resources: z.object({
-      real_domain: z.string(),
-      full_domain: z.string(),
-      username: z.string(),
-      password: z.string(),
-    }),
+    resources: z.array(
+      z.object({
+        real_domain: z.string(),
+        full_domain: z.string(),
+        username: z.string(),
+        password: z.string(),
+      })
+    ),
   }),
 });
 
@@ -559,4 +561,16 @@ export const parseProviderResponseType = (
   unk: unknown
 ): providerResponseType => {
   return providerResponse.parse(unk);
+};
+
+const oneProviderDeleteResponse = basicGoodResponse.extend({
+  status_code: z.literal(200),
+});
+export type oneProviderDeleteResponseType = z.infer<
+  typeof oneProviderDeleteResponse
+>;
+export const parseOneProviderDeleteResponse = (
+  unk: unknown
+): oneProviderDeleteResponseType => {
+  return oneProviderDeleteResponse.parse(unk);
 };

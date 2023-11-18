@@ -82,6 +82,17 @@ export type providerConfigType = z.infer<typeof providerConfig>;
 
 // form state
 const providerFormState = z.object({
+  getResponseData: z
+    .object({
+      provider: z.object({
+        id: z.number(),
+        tag: z.string(),
+        type: z.string(),
+        config: providerConfig,
+      }),
+    })
+    .optional(),
+  getError: z.union([frontendError, z.undefined()]),
   provider_type_value: z.string(),
   provider_options: z.union([z.record(z.string(), z.unknown()), z.undefined()]),
   dataToSubmit: z.union([

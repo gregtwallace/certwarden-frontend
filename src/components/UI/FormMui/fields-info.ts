@@ -203,6 +203,11 @@ const fieldsInfo: fieldInfoType[] = [
     htmlType: 'text',
     errorMessage: 'Script path must be specified.',
   },
+  {
+    nameRegex: /^(.+\.)?environment.[0-9]+$/,
+    htmlType: 'text',
+    errorMessage: 'Environment variables should be specified.',
+  },
 ];
 
 // fieldInformation returns information for the named field

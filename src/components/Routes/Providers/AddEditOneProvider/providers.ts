@@ -27,8 +27,10 @@ type provider = {
   FormComponent: FC<providerSubFormPropsType>;
   configName: string;
   alsoSet: alsoSetType[] | undefined;
-  setProviderOptionsForEdit:
-    | ((providerConfig: providerConfigType) => object)
+  providerOptionsForEdit:
+    | ((
+        providerConfig: providerConfigType | undefined
+      ) => Record<string, unknown> | undefined)
     | undefined;
   validationFunc: (formState: providerFormStateType) => validationErrorsType;
 };
@@ -56,7 +58,7 @@ const dummyProvider: provider = {
 
   // [OPTIONAL] function to set provider_options when editing the provider
   // setProviderOptionsForEdit: () => {},
-  setProviderOptionsForEdit: undefined,
+  providerOptionsForEdit: undefined,
 
   // function to return validation object prior to POST
   validationFunc: () => {
@@ -98,7 +100,7 @@ export const providersList: provider[] = [
         value: undefined,
       },
     ],
-    setProviderOptionsForEdit: undefined,
+    providerOptionsForEdit: undefined,
     validationFunc: (formState) => {
       const validationErrors: validationErrorsType = {};
 
@@ -176,7 +178,7 @@ export const providersList: provider[] = [
         value: undefined,
       },
     ],
-    setProviderOptionsForEdit: undefined,
+    providerOptionsForEdit: undefined,
     validationFunc: (formState) => {
       const validationErrors: validationErrorsType = {};
 
@@ -224,7 +226,12 @@ export const providersList: provider[] = [
         },
       },
     ],
-    setProviderOptionsForEdit: (providerConfig) => {
+    providerOptionsForEdit: (providerConfig) => {
+      // in undefined, return undefined
+      if (!providerConfig) {
+        return undefined;
+      }
+
       let api_access_method = 0;
       if ('account' in providerConfig) {
         api_access_method = 1;
@@ -299,7 +306,7 @@ export const providersList: provider[] = [
         value: undefined,
       },
     ],
-    setProviderOptionsForEdit: undefined,
+    providerOptionsForEdit: undefined,
     validationFunc: (formState) => {
       const validationErrors: validationErrorsType = {};
 
@@ -344,7 +351,7 @@ export const providersList: provider[] = [
         value: undefined,
       },
     ],
-    setProviderOptionsForEdit: undefined,
+    providerOptionsForEdit: undefined,
     validationFunc: (formState) => {
       const validationErrors: validationErrorsType = {};
 
