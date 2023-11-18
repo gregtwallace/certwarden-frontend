@@ -56,10 +56,7 @@ const tableHeaders: headerType[] = [
 const AllACMEServers: FC = () => {
   // parse query
   const [searchParams] = useSearchParams();
-  const { page, rowsPerPage, queryParams } = queryParser(
-    searchParams,
-    'valid_to'
-  );
+  const { page, rowsPerPage, queryParams } = queryParser(searchParams, 'name');
 
   const { getState } = useAxiosGet<acmeServersResponseType>(
     `${ACME_SERVERS_URL}?${queryParams}`,

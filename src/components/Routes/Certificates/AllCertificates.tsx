@@ -63,7 +63,7 @@ const AllCertificates: FC = () => {
   const [searchParams] = useSearchParams();
   const { page, rowsPerPage, queryParams } = queryParser(
     searchParams,
-    'valid_to'
+    'name'
   );
 
   const { getState } = useAxiosGet<certificatesResponseType>(
