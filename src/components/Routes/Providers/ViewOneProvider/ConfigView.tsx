@@ -29,6 +29,25 @@ const isRecord = (obj: unknown): obj is Record<string, unknown> => {
   return true;
 };
 
+const parseValue = (value: unknown): unknown => {
+  // handle different value types different ways
+  if (isRecord(value) || Array.isArray(value)) {
+    value = "'Edit' to View";
+  } else if (typeof value === 'string') {
+    // no-op
+  } else if (typeof value === 'number') {
+    value = value.toString();
+  } else {
+    console.error(
+      new Error(
+        'provider config rendering failed (this should never happen, report bug)'
+      )
+    );
+  }
+
+  return value;
+};
+
 // makeListObjects unnests an object and returns all key:value pairs
 // regardless of nesting depth. It also discards any key named 'domains'
 // since domains are handled elsewhere
@@ -38,16 +57,8 @@ const makeListObjects = (
   const arr = [];
 
   for (const [key, value] of Object.entries(obj)) {
-    if (key === 'domains') {
-      // if key is 'domains'
-      // no-op
-    } else if (isRecord(value)) {
-      // if object record, deconstruct further
-      const keyValues = makeListObjects(value);
-      arr.push(...keyValues);
-    } else {
-      // not object, append
-      arr.push({ key: keyPretty(key), value: value });
+    if (key !== 'domains') {
+      arr.push({ key: keyPretty(key), value: parseValue(value) });
     }
   }
 
