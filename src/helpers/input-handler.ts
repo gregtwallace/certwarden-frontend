@@ -149,8 +149,8 @@ const setObjPathVal = <T extends settableObjectType | settableArrayType>(
 // object for other values to set
 export type selectInputOptionValuesType = string | number;
 
-export type selectInputOption = {
-  value: selectInputOptionValuesType;
+export type selectInputOption<ValType extends selectInputOptionValuesType> = {
+  value: ValType;
   name: string;
   alsoSet?: {
     name: string;
@@ -176,7 +176,7 @@ export type inputHandlerFunc = (
   // inputOptions is used for select input elements to enable changing of
   // multiple other values on select change. For instance, to add or remove
   // fields that are only relevant to a particular item in the Select element.
-  inputOptions?: selectInputOption[]
+  inputOptions?: selectInputOption<selectInputOptionValuesType>[]
 ) => void;
 
 // formChangeHandlerFunc returns the input change handler specific
@@ -187,7 +187,7 @@ export const inputHandlerFuncMaker = <StateObject extends settableObjectType>(
   return (
     event: eventType,
     convertValueTo: valueConversionTypes,
-    inputOptions?: selectInputOption[]
+    inputOptions?: selectInputOption<selectInputOptionValuesType>[]
   ) => {
     // set newVal to the real value to store in state
     const inputValue = event.target.value;

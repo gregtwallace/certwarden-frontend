@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { type ReactElement } from 'react';
 import {
   type inputHandlerFunc,
   type selectInputOptionValuesType,
@@ -14,19 +14,21 @@ import {
 } from '@mui/material';
 import fieldInformation from './fields-info';
 
-type propTypes = {
+type propTypes<ValType extends selectInputOptionValuesType> = {
   id: string;
   name?: string;
   label: string;
-  value: selectInputOptionValuesType;
+  value: ValType;
   onChange: inputHandlerFunc;
-  options: selectInputOption[];
+  options: selectInputOption<ValType>[];
   error?: boolean | undefined;
   readOnly?: boolean;
   disabled?: boolean;
 };
 
-const InputSelect: FC<propTypes> = (props) => {
+const InputSelect = <ValType extends selectInputOptionValuesType>(
+  props: propTypes<ValType>
+): ReactElement<propTypes<ValType>> => {
   // destructure props
   const {
     disabled,

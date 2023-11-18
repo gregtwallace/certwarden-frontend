@@ -176,20 +176,18 @@ const AddOneCert: FC = () => {
   };
 
   // vars for select options
-  let availableAccounts: selectInputOption[] = [];
-  let availableKeys: selectInputOption[] = [];
+  let availableAccounts: selectInputOption<number>[] = [];
+  let availableKeys: selectInputOption<number>[] = [];
 
   if (formState.getResponseData) {
     // build options for available accounts
-    if (formState.getResponseData.certificate_options.acme_accounts) {
-      availableAccounts =
-        formState.getResponseData.certificate_options.acme_accounts.map(
-          (acct) => ({
-            value: acct.id,
-            name: acct.name + (acct.acme_server.is_staging ? ' (Staging)' : ''),
-          })
-        );
-    }
+    availableAccounts =
+      formState.getResponseData.certificate_options.acme_accounts.map(
+        (acct) => ({
+          value: acct.id,
+          name: acct.name + (acct.acme_server.is_staging ? ' (Staging)' : ''),
+        })
+      );
 
     // build options for available keys
     // add option to generate new
@@ -206,24 +204,21 @@ const AddOneCert: FC = () => {
       },
     ];
     // add list of available existing keys
-    if (formState.getResponseData.certificate_options.private_keys) {
-      availableKeys.push(
-        ...formState.getResponseData.certificate_options.private_keys.map(
-          (key) => ({
-            value: key.id,
-            name: key.name + ' (' + key.algorithm.name + ')',
-            alsoSet: [
-              {
-                name: 'dataToSubmit.algorithm_value',
-                value: undefined,
-              },
-            ],
-          })
-        )
-      );
-    }
+    availableKeys.push(
+      ...formState.getResponseData.certificate_options.private_keys.map(
+        (key) => ({
+          value: key.id,
+          name: key.name + ' (' + key.algorithm.name + ')',
+          alsoSet: [
+            {
+              name: 'dataToSubmit.algorithm_value',
+              value: undefined,
+            },
+          ],
+        })
+      )
+    );
   }
-
   // vars related to api -- end
 
   return (
