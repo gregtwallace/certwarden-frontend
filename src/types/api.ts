@@ -106,7 +106,7 @@ export const parseNewVersionResponseType = (
 
 const logEntry = z.object({
   level: z.string(),
-  ts: z.string(),
+  ts: z.string().datetime({ offset: true }),
   caller: z.string(),
   msg: z.string(),
 });
@@ -539,6 +539,7 @@ const provider = z.union([
 ]);
 export type providerType = z.infer<typeof provider>;
 
+// responses
 const providersResponse = basicGoodResponse.extend({
   providers: z.array(provider),
 });
@@ -548,4 +549,14 @@ export const parseProvidersResponseType = (
   unk: unknown
 ): providersResponseType => {
   return providersResponse.parse(unk);
+};
+
+const providerResponse = basicGoodResponse.extend({
+  provider: provider,
+});
+export type providerResponseType = z.infer<typeof providerResponse>;
+export const parseProviderResponseType = (
+  unk: unknown
+): providerResponseType => {
+  return providerResponse.parse(unk);
 };
