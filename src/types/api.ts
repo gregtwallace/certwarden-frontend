@@ -267,6 +267,35 @@ export const isOneAcmeServerDeleteResponse = (
 };
 
 //
+// Private Keys
+//
+
+const privateKeysResponse = basicGoodResponse.extend({
+  total_records: z.number(),
+  private_keys: z.array(
+    z.object({
+      id: z.number(),
+      name: z.string(),
+      description: z.string(),
+      algorithm: z.object({
+        value: z.string(),
+        name: z.string(),
+      }),
+      api_key_disabled: z.boolean(),
+      api_key_via_url: z.boolean(),
+    })
+  ),
+});
+
+export type privateKeysResponseType = z.infer<typeof privateKeysResponse>;
+export const isPrivateKeysResponseType = (
+  unk: unknown
+): unk is privateKeysResponseType => {
+  const { success } = privateKeysResponse.safeParse(unk);
+  return success;
+};
+
+//
 // Certificates
 //
 

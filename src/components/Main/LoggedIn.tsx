@@ -36,42 +36,6 @@ import Settings from '../Routes/Settings/Settings';
 
 // component
 const LoggedIn: FC = () => {
-  //   {/* Private Keys */}
-  //   <Route
-  //     path={`/privatekeys/${newId}`}
-  //     element={<AddOnePrivateKey />}
-  //   />
-  //   <Route path='/privatekeys/:id' element={<EditOnePrivateKey />} />
-  //   <Route path='/privatekeys/:id/apikeys' element={<EditKeyApiKeys />} />
-  //   <Route path='/privatekeys' element={<AllPrivateKeys />} />
-
-  //   {/* ACME Accounts */}
-  //   <Route
-  //     path={`/acmeaccounts/${newId}`}
-  //     element={<AddOneACMEAccount />}
-  //   />
-  //   <Route path='/acmeaccounts/:id' element={<EditOneACMEAccount />} />
-  //   <Route
-  //     path='/acmeaccounts/:id/email'
-  //     element={<ChangeAccountEmail />}
-  //   />
-  //   <Route
-  //     path='/acmeaccounts/:id/key-change'
-  //     element={<RolloverAccountKey />}
-  //   />
-  //   <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
-
-  //   {/* Order Queue */}
-  //   <Route path={'/orderqueue'} element={<OrderQueue />} />
-
-  //   {/* Logs */}
-  //   <Route path={'/logs'} element={<LogViewer />} />
-
-  //   {/* Providers */}
-  //   <Route path={'/providers'} element={<AllProviders />} />
-  //   <Route path={`/providers/${newId}`} element={<AddOneProvider />} />
-  //   <Route path={'/providers/:id'} element={<EditOneProvider />} />
-
   return (
     <NewVersionProvider>
       <Navbar />
@@ -87,6 +51,31 @@ const LoggedIn: FC = () => {
           {/* Dashboard */}
           <Route path='/' element={<Dashboard />} />
 
+          {/* Private Keys */}
+          {/* <Route
+            path={`/privatekeys/${newId}`}
+            element={<AddOnePrivateKey />}
+          />
+          <Route path='/privatekeys/:id' element={<EditOnePrivateKey />} />
+          <Route path='/privatekeys/:id/apikeys' element={<EditKeyApiKeys />} /> */}
+          <Route path='/privatekeys' element={<AllPrivateKeys />} />
+
+          {/* ACME Accounts */}
+          {/* <Route
+            path={`/acmeaccounts/${newId}`}
+            element={<AddOneACMEAccount />}
+          />
+          <Route path='/acmeaccounts/:id' element={<EditOneACMEAccount />} />
+          <Route
+            path='/acmeaccounts/:id/email'
+            element={<ChangeAccountEmail />}
+          />
+          <Route
+            path='/acmeaccounts/:id/key-change'
+            element={<RolloverAccountKey />}
+          />
+          <Route path='/acmeaccounts' element={<AllACMEAccounts />} /> */}
+
           {/* Certificates */}
           <Route path='/certificates' element={<AllCertificates />} />
           {/* <Route path='/certificates/:id' element={<EditOneCert />} />
@@ -95,6 +84,17 @@ const LoggedIn: FC = () => {
             element={<EditCertApiKeys />}
           /> */}
           <Route path={`/certificates/${newId}`} element={<AddOneCert />} />
+
+          {/* Order Queue */}
+          {/* <Route path={'/orderqueue'} element={<OrderQueue />} /> */}
+
+          {/* Logs */}
+          {/* <Route path={'/logs'} element={<LogViewer />} /> */}
+
+          {/* Providers */}
+          {/* <Route path={'/providers'} element={<AllProviders />} />
+          <Route path={`/providers/${newId}`} element={<AddOneProvider />} />
+          <Route path={'/providers/:id'} element={<EditOneProvider />} /> */}
 
           {/* ACME Servers */}
           <Route path='/acmeservers' element={<AllACMEServers />} />

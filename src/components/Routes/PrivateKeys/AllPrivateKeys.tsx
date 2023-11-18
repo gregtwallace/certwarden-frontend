@@ -1,3 +1,10 @@
+import { type FC } from 'react';
+import {
+  type privateKeysResponseType,
+  isPrivateKeysResponseType,
+} from '../../../types/api';
+import { type headerType } from '../../UI/TableMui/TableHeaderRow';
+
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 import { Link } from '@mui/material';
 
@@ -8,20 +15,22 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
 import useAxiosGet from '../../../hooks/useAxiosGet';
-import { getRowsPerPage, getPage, getSort } from '../../UI/TableMui/query';
+import { queryParser } from '../../UI/TableMui/query';
 import { newId } from '../../../helpers/constants';
 
 import ApiLoading from '../../UI/Api/ApiLoading';
 import ApiError from '../../UI/Api/ApiError';
-import Button from '../../UI/Button/Button';
+import ButtonAsLink from '../../UI/Button/ButtonAsLink';
 import Flag from '../../UI/Flag/Flag';
 import TableContainer from '../../UI/TableMui/TableContainer';
 import TableHeaderRow from '../../UI/TableMui/TableHeaderRow';
 import TitleBar from '../../UI/TitleBar/TitleBar';
 import TablePagination from '../../UI/TableMui/TablePagination';
 
+const PRIVATE_KEYS_URL = '/v1/privatekeys';
+
 // table headers and sortable param
-const tableHeaders = [
+const tableHeaders: headerType[] = [
   {
     id: 'name',
     label: 'Name',
@@ -44,62 +53,55 @@ const tableHeaders = [
   },
 ];
 
-const AllPrivateKeys = () => {
+const AllPrivateKeys: FC = () => {
+  // parse query
   const [searchParams] = useSearchParams();
+  const { page, rowsPerPage, queryParams } = queryParser(searchParams, 'name');
 
-  // get calculated query params
-  const rowsPerPage = getRowsPerPage(searchParams);
-  const page = getPage(searchParams);
-  const sort = getSort(searchParams, 'name', 'asc');
-
-  // calculate offset from current page and rows per page
-  const offset = page * rowsPerPage;
-
-  const [apiGetState] = useAxiosGet(
-    `/v1/privatekeys?limit=${rowsPerPage}&offset=${offset}&sort=${sort}`,
-    'all_private_keys',
-    true
+  const { getState } = useAxiosGet<privateKeysResponseType>(
+    `${PRIVATE_KEYS_URL}?${queryParams}`,
+    isPrivateKeysResponseType
   );
 
   return (
     <TableContainer>
       <TitleBar title='Private Keys'>
-        <Button
-          variant='contained'
-          type='submit'
-          href={`/privatekeys/${newId}`}
-        >
-          New Key
-        </Button>
+        <ButtonAsLink to={`/privatekeys/${newId}`}>New Key</ButtonAsLink>
       </TitleBar>
-      {!apiGetState.isLoaded && <ApiLoading />}
-      {apiGetState.errorMessage && (
+
+      {!getState.responseData && !getState.error && <ApiLoading />}
+
+      {getState.error && (
         <ApiError
-          code={apiGetState.errorCode}
-          message={apiGetState.errorMessage}
+          statusCode={getState.error.statusCode}
+          message={getState.error.message}
         />
       )}
-      {apiGetState.isLoaded && !apiGetState.errorMessage && (
+
+      {getState.responseData && (
         <>
           <Table size='small'>
             <TableHead>
               <TableHeaderRow headers={tableHeaders} />
             </TableHead>
             <TableBody>
-              {apiGetState?.all_private_keys?.private_keys?.length > 0 &&
-                apiGetState.all_private_keys.private_keys.map((k) => (
-                  <TableRow key={k.id}>
+              {getState.responseData.private_keys.length > 0 &&
+                getState.responseData.private_keys.map((key) => (
+                  <TableRow key={key.id}>
                     <TableCell>
-                      <Link component={RouterLink} to={'/privatekeys/' + k.id}>
-                        {k.name}
+                      <Link
+                        component={RouterLink}
+                        to={'/privatekeys/' + key.id}
+                      >
+                        {key.name}
                       </Link>
                     </TableCell>
-                    <TableCell>{k.description}</TableCell>
+                    <TableCell>{key.description}</TableCell>
                     <TableCell>
-                      {k.api_key_via_url && <Flag type='legacy_api' />}
-                      {k.api_key_disabled && <Flag type='api_key_disabled' />}
+                      {key.api_key_via_url && <Flag type='legacy_api' />}
+                      {key.api_key_disabled && <Flag type='api_key_disabled' />}
                     </TableCell>
-                    <TableCell>{k.algorithm.name}</TableCell>
+                    <TableCell>{key.algorithm.name}</TableCell>
                   </TableRow>
                 ))}
             </TableBody>
@@ -107,7 +109,7 @@ const AllPrivateKeys = () => {
           <TablePagination
             page={page}
             rowsPerPage={rowsPerPage}
-            count={apiGetState?.all_private_keys?.total_records}
+            count={getState.responseData.total_records}
           />
         </>
       )}
