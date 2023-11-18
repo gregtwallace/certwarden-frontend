@@ -4,68 +4,40 @@ import { z } from 'zod';
 
 // import { redactJSONObject } from "./logging";
 
-// base without circular
-const baseSettableValuesSchema = z.union([
-  z.string(),
-  z.number(),
-  z.boolean(),
-  z.undefined(),
-]);
+// input nodes
+const objectNode = z.record(z.string(), z.unknown());
+const arrayNode = z.array(z.unknown());
+const node = z.union([objectNode, arrayNode]);
 
-// main type
-type settableValuesType =
-  | z.infer<typeof baseSettableValuesSchema>
-  | settableObjectType
-  | settableArrayType;
-
-// two circular types + node
-type settableObjectType = { [key: string]: settableValuesType };
-type settableArrayType = Array<settableValuesType>;
-type settableNodeType = settableObjectType | settableArrayType;
-
-// lazy load for zod circular (temporary values to avoid lint prefer-const error)
-let settableObjectSchema: z.ZodType<settableObjectType> = z.object({});
-let settableArraySchema: z.ZodType<settableArrayType> = z.array(z.string());
-
-const settableValuesSchema: z.ZodType<settableValuesType> = z.union([
-  baseSettableValuesSchema,
-  z.lazy(() => settableObjectSchema),
-  z.lazy(() => settableArraySchema),
-]);
-
-settableObjectSchema = z.record(
-  z.string(),
-  z.lazy(() => settableValuesSchema)
-);
-settableArraySchema = z.array(z.lazy(() => settableValuesSchema));
+type objectNodeType = z.infer<typeof objectNode>;
+type arrayNodeType = z.infer<typeof arrayNode>;
+type nodeType = z.infer<typeof node>;
 
 // type guards for circulars (nodes)
-const isSettableObjectType = (unk: unknown): unk is settableObjectType => {
-  const { success } = settableObjectSchema.safeParse(unk);
+const isObjectNodeType = (unk: unknown): unk is objectNodeType => {
+  const { success } = objectNode.safeParse(unk);
   return success;
 };
-const isSettableArrayType = (unk: unknown): unk is settableArrayType => {
-  const { success } = settableArraySchema.safeParse(unk);
+const isArrayNodeType = (unk: unknown): unk is arrayNodeType => {
+  const { success } = arrayNode.safeParse(unk);
   return success;
 };
 
 // next node calculator (creates empty node if next doesn't exist or
 // it isn't a node or it isn't the right node type)
 const nextNodeToSet = (
-  currentNode: settableNodeType,
+  currentNode: nodeType,
   // current key is always initially string (it is part of the string path)
   currentKey: string,
   nextKey: string
-): settableNodeType => {
+): nodeType => {
   // for use if next node needs to be created (depending on next node type (string or number))
   const nextIsNum = !isNaN(parseInt(nextKey)) ? true : false;
-  const nextEmptyNode = nextIsNum
-    ? <settableArrayType>[]
-    : <settableObjectType>{};
+  const nextEmptyNode = nextIsNum ? <arrayNodeType>[] : <objectNodeType>{};
 
   // nextNode is narrowed to node later
-  let nextNode: settableValuesType;
-  if (isSettableObjectType(currentNode)) {
+  let nextNode: unknown;
+  if (isObjectNodeType(currentNode)) {
     nextNode = currentNode[currentKey];
   } else {
     const currentKeyInt = parseInt(currentKey);
@@ -75,13 +47,13 @@ const nextNodeToSet = (
   // invalid next node type, set empty
   if (
     !nextNode ||
-    (!isSettableArrayType(nextNode) && !isSettableObjectType(nextNode))
+    (!isArrayNodeType(nextNode) && !isObjectNodeType(nextNode))
   ) {
     return nextEmptyNode;
   } else if (
     // next node is wrong type for next val, set empty
-    (nextIsNum && !isSettableArrayType(nextNode)) ||
-    (!nextIsNum && !isSettableObjectType(nextNode))
+    (nextIsNum && !isArrayNodeType(nextNode)) ||
+    (!nextIsNum && !isObjectNodeType(nextNode))
   ) {
     return nextEmptyNode;
   } else {
@@ -91,10 +63,10 @@ const nextNodeToSet = (
 };
 
 // actual object modifier function
-const setObjPathVal = <T extends settableObjectType | settableArrayType>(
+const setObjPathVal = <T extends nodeType>(
   obj: T,
   path: string,
-  value: settableValuesType
+  value: unknown
 ): T => {
   // missing args
   if (!obj) return <T>{};
@@ -104,7 +76,7 @@ const setObjPathVal = <T extends settableObjectType | settableArrayType>(
   const segments = path.split(/[.[\]]/g).filter((x) => !!x.trim());
 
   // setter
-  const setNode = (node: settableNodeType): void => {
+  const setNode = (node: nodeType): void => {
     // case 1: more nesting to handle
     if (segments.length > 1) {
       const key = segments.shift();
@@ -133,7 +105,7 @@ const setObjPathVal = <T extends settableObjectType | settableArrayType>(
       }
 
       // obj or array?
-      if (isSettableObjectType(node)) {
+      if (isObjectNodeType(node)) {
         node[finalKey] = value;
       } else {
         // must be array
@@ -155,25 +127,27 @@ const setObjPathVal = <T extends settableObjectType | settableArrayType>(
 // object for other values to set
 export type selectInputOptionValuesType = string | number;
 
+export type alsoSetType = {
+  name: string;
+  value: unknown;
+};
+
 export type selectInputOption<ValType extends selectInputOptionValuesType> = {
   value: ValType;
   name: string;
-  alsoSet?: {
-    name: string;
-    value: settableValuesType;
-  }[];
+  alsoSet?: alsoSetType[] | undefined;
 };
 
 type eventType = {
   target: {
     name: string;
-    value: settableValuesType;
+    value: unknown;
   };
 };
 type valueConversionTypes = 'unchanged' | 'number' | false | true;
 
 // type for custom inputHandlerFunc
-export type inputHandlerFunc = (
+export type inputHandlerFuncType = (
   // event is just the properties needed from a standard input change event
   event: eventType,
   // convertValueTo is the value type that the event.target.value should be
@@ -187,9 +161,9 @@ export type inputHandlerFunc = (
 
 // formChangeHandlerFunc returns the input change handler specific
 // to the setFormState func that is passed in
-export const inputHandlerFuncMaker = <StateObject extends settableObjectType>(
+export const inputHandlerFuncMaker = <StateObject extends objectNodeType>(
   setFormState: Dispatch<SetStateAction<StateObject>>
-): inputHandlerFunc => {
+): inputHandlerFuncType => {
   return (
     event: eventType,
     convertValueTo: valueConversionTypes,
@@ -197,7 +171,7 @@ export const inputHandlerFuncMaker = <StateObject extends settableObjectType>(
   ) => {
     // set newVal to the real value to store in state
     const inputValue = event.target.value;
-    let value: settableValuesType = inputValue;
+    let value: unknown = inputValue;
 
     // attempt to convert value if needed
     if (convertValueTo === 'number') {
