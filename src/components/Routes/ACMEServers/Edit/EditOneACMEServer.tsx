@@ -10,7 +10,7 @@ import {
   type validationErrorsType,
 } from '../../../../types/frontend';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import useAxiosGet from '../../../../hooks/useAxiosGet';
@@ -61,7 +61,7 @@ const EditOneACMEServer: FC = () => {
   const { sendState, doSendData } = useAxiosSend();
   const navigate = useNavigate();
 
-  const startingForm: formObj = useMemo(
+  const makeStartingForm: () => formObj = useCallback(
     () => ({
       getResponseData: getState.responseData,
       getError: getState.error,
@@ -76,12 +76,12 @@ const EditOneACMEServer: FC = () => {
     }),
     [getState]
   );
-  const [formState, setFormState] = useState<formObj>(startingForm);
+  const [formState, setFormState] = useState<formObj>(makeStartingForm());
 
   // reload starting form after GET loads
   useEffect(() => {
-    setFormState(startingForm);
-  }, [getState, setFormState, startingForm]);
+    setFormState(makeStartingForm());
+  }, [setFormState, makeStartingForm]);
 
   // data change handler
   const inputChangeHandler = inputHandlerFuncMaker(setFormState);
@@ -240,10 +240,11 @@ const EditOneACMEServer: FC = () => {
 
             <FormFooter
               cancelHref='/acmeservers'
-              resetOnClick={() => setFormState(startingForm)}
+              resetOnClick={() => setFormState(makeStartingForm())}
               disabledAllButtons={sendState.isSending}
               disabledSubmitResetButtons={
-                JSON.stringify(formState) === JSON.stringify(startingForm)
+                JSON.stringify(formState.dataToSubmit) ===
+                JSON.stringify(makeStartingForm().dataToSubmit)
               }
               createdAt={formState.getResponseData.acme_server.created_at}
               updatedAt={formState.getResponseData.acme_server.updated_at}
