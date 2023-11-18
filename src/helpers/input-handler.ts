@@ -2,7 +2,7 @@ import type { Dispatch, SetStateAction } from 'react';
 
 import { z } from 'zod';
 
-// import { redactJSONObject } from "./logging";
+// import { redactJSONObject } from './logging';
 
 // input nodes
 const objectNode = z.record(z.string(), z.unknown());
@@ -124,8 +124,10 @@ const setObjPathVal = <T extends nodeType>(
     }
   };
 
-  // can't directly modify prev state, so just grab all of the props
-  const newObj = { ...obj };
+  // avoid deep copy issues - use json stringify and then parse back to a new object
+  const json = JSON.stringify(obj);
+  const newObj = JSON.parse(json);
+
   setNode(newObj);
 
   return newObj;
@@ -191,23 +193,23 @@ export const inputHandlerFuncMaker = <StateObject extends objectNodeType>(
 
     setFormState((prevState) => {
       // set new value
-      let newState = setObjPathVal(prevState, event.target.name, value);
+      prevState = setObjPathVal(prevState, event.target.name, value);
 
       // further modification if there are alsoSet values on inputOptions
       if (inputOptions) {
         const alsoSet = inputOptions?.find((o) => o.value === value)?.alsoSet;
         if (alsoSet != undefined) {
-          newState = alsoSet.reduce(
-            (accumulator, field) =>
-              setObjPathVal(accumulator, field.name, field.value),
-            newState
-          );
+          alsoSet.forEach((fieldValObj) => {
+            prevState = setObjPathVal(
+              prevState,
+              fieldValObj.name,
+              fieldValObj.value
+            );
+          });
         }
       }
 
-      // console.log(redactJSONObject(newState))
-
-      return newState;
+      return prevState;
     });
   };
 };
