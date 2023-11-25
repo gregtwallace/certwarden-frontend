@@ -48,13 +48,16 @@ export const buildAcmeServerOptions = (
 type privateKeyType = {
   id: number;
   name: string;
+};
+
+type privateKeyWithAlgType = privateKeyType & {
   algorithm: {
     name: string;
   };
 };
 
 export const buildPrivateKeyOptions = (
-  allKeys: privateKeyType[],
+  allKeys: privateKeyWithAlgType[],
   currentKey?: privateKeyType | undefined
 ): selectInputOption<number>[] => {
   const privateKeys: selectInputOption<number>[] = [];
@@ -70,7 +73,7 @@ export const buildPrivateKeyOptions = (
   return privateKeys.concat(
     allKeys.map((key) => ({
       value: key.id,
-      name: key.name,
+      name: key.name + ' (' + key.algorithm.name + ')',
     }))
   );
 };

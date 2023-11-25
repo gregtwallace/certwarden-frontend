@@ -14,7 +14,7 @@ type propTypes = {
   id: string;
   name?: string;
   checked: boolean;
-  onChange: inputHandlerFuncType;
+  onChange?: inputHandlerFuncType;
   error?: boolean | undefined;
   disabled?: boolean;
 };
@@ -33,7 +33,11 @@ const InputCheckbox: FC<propTypes> = (props) => {
           <Checkbox
             id={id}
             name={name || id}
-            onChange={(event, checked) => onChange(event, checked)}
+            onChange={
+              onChange
+                ? (event, checked) => onChange(event, checked)
+                : undefined
+            }
             value={checked ? 'on' : 'off'}
             checked={!!checked}
             disabled={!!disabled}

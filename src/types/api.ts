@@ -386,7 +386,9 @@ const oneAcmeAccountResponse = basicGoodResponse.extend({
     name: z.string(),
     description: z.string(),
     acme_server: z.object({
+      name: z.string(),
       is_staging: z.boolean(),
+      external_account_required: z.boolean(),
     }),
     private_key: z.object({
       id: z.number(),
@@ -397,6 +399,7 @@ const oneAcmeAccountResponse = basicGoodResponse.extend({
     }),
     status: z.string(),
     email: z.string(),
+    accepted_tos: z.boolean(),
     kid: z.string(),
     created_at: z.number(),
     updated_at: z.number(),
@@ -408,6 +411,48 @@ export const parseOneAcmeAccountResponseType = (
   unk: unknown
 ): oneAcmeAccountResponseType => {
   return oneAcmeAccountResponse.parse(unk);
+};
+
+// delete response
+const acmeAccountDeleteResponse = basicGoodResponse.extend({
+  status_code: z.literal(200),
+});
+
+export type acmeAccountDeleteResponseType = z.infer<
+  typeof acmeAccountDeleteResponse
+>;
+export const parseAcmeAccountDeleteResponseType = (
+  unk: unknown
+): acmeAccountDeleteResponseType => {
+  return acmeAccountDeleteResponse.parse(unk);
+};
+
+// register response
+const acmeAccountRegisterResponse = basicGoodResponse.extend({
+  status_code: z.literal(200),
+});
+
+export type acmeAccountRegisterResponseType = z.infer<
+  typeof acmeAccountRegisterResponse
+>;
+export const parseAcmeAccountRegisterResponseType = (
+  unk: unknown
+): acmeAccountRegisterResponseType => {
+  return acmeAccountRegisterResponse.parse(unk);
+};
+
+// deactivate response
+const acmeAccountDeactivateResponse = basicGoodResponse.extend({
+  status_code: z.literal(200),
+});
+
+export type acmeAccountDeactivateResponseType = z.infer<
+  typeof acmeAccountDeactivateResponse
+>;
+export const parseAcmeAccountDeactivateResponseType = (
+  unk: unknown
+): acmeAccountDeactivateResponseType => {
+  return acmeAccountDeactivateResponse.parse(unk);
 };
 
 // response to get options for new/edit account

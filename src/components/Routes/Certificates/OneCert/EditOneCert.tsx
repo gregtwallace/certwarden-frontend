@@ -11,7 +11,6 @@ import {
   type frontendErrorType,
   type validationErrorsType,
 } from '../../../../types/frontend';
-import { type selectInputOption } from '../../../../helpers/input-handler';
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -24,6 +23,7 @@ import {
   isNameValid,
 } from '../../../../helpers/form-validation';
 import { newId } from '../../../../helpers/constants';
+import { buildPrivateKeyOptions } from '../../../../helpers/options_builders';
 
 import {
   Accordion,
@@ -52,31 +52,6 @@ import TitleBar from '../../../UI/TitleBar/TitleBar';
 
 const ONE_CERTIFICATE_SERVER_URL = '/v1/certificates';
 const CERTIFICATE_OPTIONS_URL = `/v1/certificates/${newId}`;
-
-// func to build key select options list
-type privateKeyType = {
-  id: number;
-  name: string;
-};
-
-const buildPrivateKeyOptions = (
-  currentKey: privateKeyType,
-  allKeys: privateKeyType[]
-): selectInputOption<number>[] => {
-  // build options for available keys
-  // default (current) option
-  return [
-    {
-      value: currentKey.id,
-      name: currentKey.name + ' - Current',
-    },
-  ].concat(
-    allKeys.map((key) => ({
-      value: key.id,
-      name: key.name,
-    }))
-  );
-};
 
 // form shape
 type formObj = {
@@ -384,9 +359,9 @@ const EditOneCert: FC = () => {
                 value={formState.dataToSubmit.private_key_id}
                 onChange={inputChangeHandler}
                 options={buildPrivateKeyOptions(
-                  formState.getCertResponseData.certificate.private_key,
                   formState.getOptionsResponseData.certificate_options
-                    .private_keys
+                    .private_keys,
+                  formState.getCertResponseData.certificate.private_key
                 )}
               />
 

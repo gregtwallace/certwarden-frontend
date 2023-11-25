@@ -140,6 +140,7 @@ const EditOnePrivateKey: FC = () => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const deleteConfirmHandler: MouseEventHandler = () => {
     setDeleteOpen(false);
+
     apiCall<privateKeyDeleteResponseType>(
       'DELETE',
       thisPrivateKeyUrl,
