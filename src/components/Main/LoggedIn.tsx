@@ -19,8 +19,7 @@ import AllProviders from '../Routes/Providers/AllProviders';
 import AddOneProvider from '../Routes/Providers/AddEditOneProvider/AddOneProvider';
 import ChangeAccountEmail from '../Routes/ACMEAccounts/OneACMEAccount/Edit/ChangeAccountEmail';
 import Dashboard from '../Routes/Dashboard/Dashboard';
-import EditCertApiKeys from '../Routes/Certificates/OneCert/Edit/EditCertApiKeys';
-import EditKeyApiKeys from '../Routes/PrivateKeys/OnePrivateKey/Edit/EditKeyApiKeys';
+import EditAPIKeysPage from '../Pages/EditAPIKeysPage/EditAPIKeysPage';
 import EditOneACMEAccount from '../Routes/ACMEAccounts/OneACMEAccount/EditOneACMEAccount';
 import EditOneACMEServer from '../Routes/ACMEServers/Edit/EditOneACMEServer';
 import EditOneCert from '../Routes/Certificates/OneCert/EditOneCert';
@@ -56,8 +55,11 @@ const LoggedIn: FC = () => {
             path={`/privatekeys/${newId}`}
             element={<AddOnePrivateKey />}
           />
-          {/* <Route path='/privatekeys/:id' element={<EditOnePrivateKey />} />
-          <Route path='/privatekeys/:id/apikeys' element={<EditKeyApiKeys />} /> */}
+          <Route path='/privatekeys/:id' element={<EditOnePrivateKey />} />
+          <Route
+            path='/privatekeys/:id/apikeys'
+            element={<EditAPIKeysPage objectType='privatekeys' />}
+          />
           <Route path='/privatekeys' element={<AllPrivateKeys />} />
 
           {/* ACME Accounts */}
@@ -78,11 +80,11 @@ const LoggedIn: FC = () => {
 
           {/* Certificates */}
           <Route path='/certificates' element={<AllCertificates />} />
-          {/* <Route path='/certificates/:id' element={<EditOneCert />} />
+          {/* <Route path='/certificates/:id' element={<EditOneCert />} /> */}
           <Route
             path='/certificates/:id/apikeys'
-            element={<EditCertApiKeys />}
-          /> */}
+            element={<EditAPIKeysPage objectType='certificates' />}
+          />
           <Route path={`/certificates/${newId}`} element={<AddOneCert />} />
 
           {/* Order Queue */}

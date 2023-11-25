@@ -290,25 +290,42 @@ export const parsePrivateKeysResponseType = (
   return privateKeysResponse.parse(unk);
 };
 
-const privateKeyResponse = basicGoodResponse.extend({
+const onePrivateKeyResponse = basicGoodResponse.extend({
   private_key: z.object({
     id: z.number(),
-    // name: z.string(),
-    // description: z.string(),
-    // algorithm: z.object({
-    //   value: z.string(),
-    //   name: z.string(),
-    // }),
-    // api_key_disabled: z.boolean(),
-    // api_key_via_url: z.boolean(),
+    name: z.string(),
+    description: z.string(),
+    algorithm: z.object({
+      value: z.string(),
+      name: z.string(),
+    }),
+    api_key_disabled: z.boolean(),
+    api_key_via_url: z.boolean(),
+    api_key: z.string(),
+    api_key_new: z.string().optional(),
+    created_at: z.number(),
+    updated_at: z.number(),
   }),
 });
 
-export type privateKeyResponseType = z.infer<typeof privateKeyResponse>;
-export const parsePrivateKeyResponseType = (
+export type onePrivateKeyResponseType = z.infer<typeof onePrivateKeyResponse>;
+export const parseOnePrivateKeyResponseType = (
   unk: unknown
-): privateKeyResponseType => {
-  return privateKeyResponse.parse(unk);
+): onePrivateKeyResponseType => {
+  return onePrivateKeyResponse.parse(unk);
+};
+
+const privateKeyDeleteResponse = basicGoodResponse.extend({
+  status_code: z.literal(200),
+});
+
+export type privateKeyDeleteResponseType = z.infer<
+  typeof privateKeyDeleteResponse
+>;
+export const parsePrivateKeyDeleteResponseType = (
+  unk: unknown
+): privateKeyDeleteResponseType => {
+  return privateKeyDeleteResponse.parse(unk);
 };
 
 const privateKeyOptionsResponse = basicGoodResponse.extend({
@@ -404,8 +421,8 @@ export const parseCertificatesResponseType = (
 const oneCertificateResponse = basicGoodResponse.extend({
   certificate: z.object({
     id: z.number(),
-    // name: z.string(),
-    // description: z.string(),
+    name: z.string(),
+    description: z.string(),
     // private_key: z.object({
     //   id: z.number(),
     //   name: z.string(),
@@ -421,6 +438,10 @@ const oneCertificateResponse = basicGoodResponse.extend({
     // }),
     // subject: z.string(),
     // api_key_via_url: z.boolean(),
+    api_key: z.string(),
+    api_key_new: z.string().optional(),
+    created_at: z.number(),
+    updated_at: z.number(),
   }),
 });
 
@@ -614,4 +635,45 @@ export const parseOneProviderDeleteResponse = (
   unk: unknown
 ): oneProviderDeleteResponseType => {
   return oneProviderDeleteResponse.parse(unk);
+};
+
+//
+// API Key Editing
+//
+
+// for parsing api responses to return an api_key edit object
+const objectWithApiKeys = z.object({
+  name: z.string(),
+  description: z.string(),
+  api_key: z.string(),
+  api_key_new: z.string().optional(),
+});
+
+export type objectWithApiKeysType = z.infer<typeof objectWithApiKeys>;
+const parseObjectWithApiKeys = (unk: unknown): objectWithApiKeysType => {
+  return objectWithApiKeys.parse(unk);
+};
+
+// this parser allows multiple object types to be addressed by the one api key
+// edit page
+export const parseObjectWithApiKeysResponse = (
+  unk: unknown
+): objectWithApiKeysType => {
+  // private key response
+  try {
+    const keyResponse = onePrivateKeyResponse.parse(unk);
+    return parseObjectWithApiKeys(keyResponse.private_key);
+  } catch (_) {
+    // no-op
+  }
+
+  // certificate response
+  try {
+    const certResponse = oneCertificateResponse.parse(unk);
+    return parseObjectWithApiKeys(certResponse.certificate);
+  } catch (_) {
+    // no-op
+  }
+
+  return objectWithApiKeys.parse(unk);
 };

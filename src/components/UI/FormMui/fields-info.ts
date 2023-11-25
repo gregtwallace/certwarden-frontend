@@ -46,6 +46,11 @@ const fieldsInfo: fieldInfoType[] = [
     errorMessage: 'N/A',
   },
   {
+    nameRegex: /^(.+\.)?api_key_via_url$/,
+    htmlType: 'checkbox',
+    errorMessage: 'N/A',
+  },
+  {
     nameRegex: /^(.+\.)?username$/,
     htmlType: 'text',
     errorMessage: 'Username cannot be blank.',

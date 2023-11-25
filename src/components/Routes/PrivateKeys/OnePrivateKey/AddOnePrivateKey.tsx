@@ -2,8 +2,8 @@ import { type FC, type FormEventHandler } from 'react';
 import {
   type privateKeyOptionsResponseType,
   parsePrivateKeyOptionsResponseType,
-  type privateKeyResponseType,
-  parsePrivateKeyResponseType,
+  type onePrivateKeyResponseType,
+  parseOnePrivateKeyResponseType,
 } from '../../../../types/api';
 import {
   type frontendErrorType,
@@ -146,11 +146,11 @@ const AddOnePrivateKey: FC = () => {
     }
     // form validation - END
 
-    apiCall<privateKeyResponseType>(
+    apiCall<onePrivateKeyResponseType>(
       'POST',
       NEW_PRIVATE_KEY_URL,
       formState.dataToSubmit,
-      parsePrivateKeyResponseType
+      parseOnePrivateKeyResponseType
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate(`/privatekeys/${responseData.private_key.id}`);

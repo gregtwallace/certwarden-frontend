@@ -156,17 +156,15 @@ const EditOneACMEServer: FC = () => {
     <FormContainer>
       <TitleBar title='Edit ACME Server'>
         {formState.getResponseData && (
-          <>
-            <Button
-              color='error'
-              onClick={() => {
-                setDeleteOpen(true);
-              }}
-              disabled={axiosSendState.isSending}
-            >
-              Delete
-            </Button>
-          </>
+          <Button
+            color='error'
+            onClick={() => {
+              setDeleteOpen(true);
+            }}
+            disabled={axiosSendState.isSending}
+          >
+            Delete
+          </Button>
         )}
       </TitleBar>
 
