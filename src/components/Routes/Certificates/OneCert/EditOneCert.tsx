@@ -440,7 +440,6 @@ const EditOneCert: FC = () => {
                     : '') + 'API Key'
                 }
                 value={formState.getCertResponseData.certificate.api_key}
-                disabled
               />
 
               <FormRowRight>
@@ -474,7 +473,6 @@ const EditOneCert: FC = () => {
                   id='disabled.api_key_new'
                   label='New API Key'
                   value={formState.getCertResponseData.certificate.api_key_new}
-                  disabled
                 />
               )}
 

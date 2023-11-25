@@ -199,7 +199,7 @@ const RolloverAccountKey: FC = () => {
           />
 
           <InputSelect
-            id='disabled.current_private_key_id'
+            id='disabled.private_key_id'
             label='Current Private Key'
             options={[
               {
