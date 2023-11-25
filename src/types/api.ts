@@ -391,6 +391,9 @@ const oneAcmeAccountResponse = basicGoodResponse.extend({
     private_key: z.object({
       id: z.number(),
       name: z.string(),
+      algorithm: z.object({
+        name: z.string(),
+      }),
     }),
     status: z.string(),
     email: z.string(),
@@ -405,6 +408,37 @@ export const parseOneAcmeAccountResponseType = (
   unk: unknown
 ): oneAcmeAccountResponseType => {
   return oneAcmeAccountResponse.parse(unk);
+};
+
+// response to get options for new/edit account
+const acmeAccountOptionsResponse = basicGoodResponse.extend({
+  acme_account_options: z.object({
+    acme_servers: z.array(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+        is_staging: z.boolean(),
+      })
+    ),
+    private_keys: z.array(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+        algorithm: z.object({
+          name: z.string(),
+        }),
+      })
+    ),
+  }),
+});
+
+export type acmeAccountOptionsResponseType = z.infer<
+  typeof acmeAccountOptionsResponse
+>;
+export const parseAcmeAccountOptionsResponse = (
+  unk: unknown
+): acmeAccountOptionsResponseType => {
+  return acmeAccountOptionsResponse.parse(unk);
 };
 
 //

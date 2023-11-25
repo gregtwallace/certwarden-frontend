@@ -311,10 +311,9 @@ const EditOneCert: FC = () => {
             )}
         </TitleBar>
 
-        {(!formState.getCertResponseData && !formState.getCertError) ||
-          (!formState.getOptionsResponseData && !formState.getOptionsError && (
-            <ApiLoading />
-          ))}
+        {((!formState.getCertResponseData && !formState.getCertError) ||
+          (!formState.getOptionsResponseData &&
+            !formState.getOptionsError)) && <ApiLoading />}
 
         {formState.getCertError && (
           <ApiError
