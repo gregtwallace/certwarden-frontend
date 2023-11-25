@@ -15,7 +15,7 @@ type propTypes = {
   name?: string;
   checked: boolean;
   onChange: inputHandlerFuncType;
-  error?: boolean;
+  error?: boolean | undefined;
   disabled?: boolean;
 };
 

@@ -418,6 +418,7 @@ const acmeAccountOptionsResponse = basicGoodResponse.extend({
         id: z.number(),
         name: z.string(),
         is_staging: z.boolean(),
+        terms_of_service: z.string(),
       })
     ),
     private_keys: z.array(

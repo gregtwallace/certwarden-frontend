@@ -63,11 +63,11 @@ const LoggedIn: FC = () => {
           <Route path='/privatekeys' element={<AllPrivateKeys />} />
 
           {/* ACME Accounts */}
-          {/* <Route
+          <Route
             path={`/acmeaccounts/${newId}`}
             element={<AddOneACMEAccount />}
           />
-          <Route path='/acmeaccounts/:id' element={<EditOneACMEAccount />} />  */}
+          {/* <Route path='/acmeaccounts/:id' element={<EditOneACMEAccount />} />  */}
           <Route
             path='/acmeaccounts/:id/email'
             element={<ChangeAccountEmail />}
