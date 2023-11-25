@@ -111,6 +111,11 @@ const fieldsInfo: fieldInfoType[] = [
     errorMessage:
       'Directory URL must be https and only contain valid URI characters.',
   },
+  {
+    nameRegex: /^(.+\.)?is_staging$/,
+    htmlType: 'checkbox',
+    errorMessage: 'N/A',
+  },
 
   // account
   {
