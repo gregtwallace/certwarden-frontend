@@ -25,15 +25,14 @@ export default defineConfig({
       enforce: 'post',
       transformIndexHtml(html) {
         const regex = /<(style|script|link) (.*)>/gi;
-        const replacer = (_, p1, p2) => {
+        const replacer = (_: string, p1: string, p2: string): string => {
           // add nonce?
           if (
             p1 === 'style' ||
             // p1 === 'script' ||
             // if link, only nonce for stylesheet and modulepreload
-            (p1 === 'link' &&
-              p2.includes('rel="stylesheet"'))
-              //  || p2.includes('rel="modulepreload"')
+            (p1 === 'link' && p2.includes('rel="stylesheet"'))
+            //  || p2.includes('rel="modulepreload"')
           ) {
             p2 = `nonce="{SERVER-CSP-NONCE}" ${p2}`;
           }
