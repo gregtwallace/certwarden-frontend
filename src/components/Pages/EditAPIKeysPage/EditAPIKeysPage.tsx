@@ -156,14 +156,14 @@ const EditAPIKeysPage: FC<propTypes> = (props) => {
           </FormInfo>
 
           <InputTextField
-            id='getResponseData.name'
+            id='disabled.name'
             label='Name'
             value={formState.getResponseData.name}
             disabled
           />
 
           <InputTextField
-            id='getResponseData.description'
+            id='disabled.description'
             label='Description'
             value={
               formState.getResponseData.description !== ''

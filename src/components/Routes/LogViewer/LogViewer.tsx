@@ -73,8 +73,7 @@ const LogViewer: FC = () => {
 
         {getState.responseData && (
           <TextField
-            id='logs'
-            name='logs'
+            id='disabled.logs'
             fullWidth
             variant='standard'
             value={getState.responseData.log_entries

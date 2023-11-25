@@ -147,13 +147,6 @@ const EditOneProvider: FC = () => {
     });
   };
 
-  // let formUnchanged = true;
-  // if (renderApiItems) {
-  //   formUnchanged =
-  //     JSON.stringify(apiGetState.provider.config) ===
-  //     JSON.stringify(formState.form);
-  // }
-
   return (
     <FormContainer>
       <TitleBar title='Edit Challenge Provider'>
