@@ -25,6 +25,10 @@ import {
   newId,
   defaultKeyGenAlgorithmValue,
 } from '../../../../helpers/constants';
+import {
+  buildAcmeAccountOptions,
+  buildPrivateKeyOptions,
+} from '../../../../helpers/options_builders';
 
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -42,6 +46,46 @@ import TitleBar from '../../../UI/TitleBar/TitleBar';
 
 const NEW_CERTIFICATE_URL = '/v1/certificates';
 const CERTIFICATE_OPTIONS_URL = `/v1/certificates/${newId}`;
+
+// customize key builder to deal with option to generate new key
+type privateKeyType = {
+  id: number;
+  name: string;
+  algorithm: {
+    name: string;
+  };
+};
+
+const buildCustomPrivateKeyOptions = (
+  availableKeys: privateKeyType[]
+): selectInputOption<number>[] => {
+  // make generate option
+  const keyOptions: selectInputOption<number>[] = [
+    {
+      value: newId,
+      name: 'Generate New Key',
+      alsoSet: [
+        {
+          name: 'dataToSubmit.algorithm_value',
+          value: defaultKeyGenAlgorithmValue,
+        },
+      ],
+    },
+  ];
+
+  // concat base key list, modifying each option to include undefining algorithm
+  return keyOptions.concat(
+    buildPrivateKeyOptions(availableKeys).map((key) => ({
+      ...key,
+      alsoSet: [
+        {
+          name: 'dataToSubmit.algorithm_value',
+          value: undefined,
+        },
+      ],
+    }))
+  );
+};
 
 // form shape
 type formObj = {
@@ -178,52 +222,6 @@ const AddOneCert: FC = () => {
     });
   };
 
-  // vars for select options
-  let availableAccounts: selectInputOption<number>[] = [];
-  let availableKeys: selectInputOption<number>[] = [];
-
-  if (formState.getResponseData) {
-    // build options for available accounts
-    availableAccounts =
-      formState.getResponseData.certificate_options.acme_accounts.map(
-        (acct) => ({
-          value: acct.id,
-          name: acct.name + (acct.acme_server.is_staging ? ' (Staging)' : ''),
-        })
-      );
-
-    // build options for available keys
-    // add option to generate new
-    availableKeys = [
-      {
-        value: newId,
-        name: 'Generate New Key',
-        alsoSet: [
-          {
-            name: 'dataToSubmit.algorithm_value',
-            value: defaultKeyGenAlgorithmValue,
-          },
-        ],
-      },
-    ];
-    // add list of available existing keys
-    availableKeys.push(
-      ...formState.getResponseData.certificate_options.private_keys.map(
-        (key) => ({
-          value: key.id,
-          name: key.name + ' (' + key.algorithm.name + ')',
-          alsoSet: [
-            {
-              name: 'dataToSubmit.algorithm_value',
-              value: undefined,
-            },
-          ],
-        })
-      )
-    );
-  }
-  // vars related to api -- end
-
   return (
     <FormContainer>
       <TitleBar title='New Certificate' />
@@ -259,7 +257,9 @@ const AddOneCert: FC = () => {
             label='ACME Account'
             value={formState.dataToSubmit.acme_account_id}
             onChange={inputChangeHandler}
-            options={availableAccounts}
+            options={buildAcmeAccountOptions(
+              formState.getResponseData.certificate_options.acme_accounts
+            )}
             error={formState.validationErrors['dataToSubmit.acme_account_id']}
           />
 
@@ -268,7 +268,9 @@ const AddOneCert: FC = () => {
             label='Private Key'
             value={formState.dataToSubmit.private_key_id}
             onChange={inputChangeHandler}
-            options={availableKeys}
+            options={buildCustomPrivateKeyOptions(
+              formState.getResponseData.certificate_options.private_keys
+            )}
             error={formState.validationErrors['dataToSubmit.private_key_id']}
           />
 

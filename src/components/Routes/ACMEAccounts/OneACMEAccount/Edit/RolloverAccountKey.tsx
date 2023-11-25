@@ -9,7 +9,6 @@ import {
   type frontendErrorType,
   type validationErrorsType,
 } from '../../../../../types/frontend';
-import { type selectInputOption } from '../../../../../helpers/input-handler';
 
 import { useCallback, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -18,6 +17,7 @@ import useAxiosGet from '../../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../../hooks/useAxiosSend';
 import { inputHandlerFuncMaker } from '../../../../../helpers/input-handler';
 import { newId } from '../../../../../helpers/constants';
+import { buildPrivateKeyOptions } from '../../../../../helpers/options_builders';
 
 import ApiError from '../../../../UI/Api/ApiError';
 import ApiLoading from '../../../../UI/Api/ApiLoading';
@@ -30,26 +30,6 @@ import TitleBar from '../../../../UI/TitleBar/TitleBar';
 
 const ONE_ACCOUNT_URL = '/v1/acmeaccounts';
 const ACCOUNT_OPTIONS_URL = `/v1/acmeaccounts/${newId}`;
-
-// func to build key select options list
-type privateKeyType = {
-  id: number;
-  name: string;
-  algorithm: {
-    name: string;
-  };
-};
-
-const buildPrivateKeyOptions = (
-  availableKeys: privateKeyType[]
-): selectInputOption<number>[] => {
-  // build options for available keys
-
-  return availableKeys.map((key) => ({
-    value: key.id,
-    name: key.name + ' (' + key.algorithm.name + ')',
-  }));
-};
 
 // form shape
 type formObj = {
