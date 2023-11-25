@@ -379,6 +379,34 @@ export const parseAcmeAccountsResponseType = (
   return acmeAccountsResponse.parse(unk);
 };
 
+// one account
+const oneAcmeAccountResponse = basicGoodResponse.extend({
+  acme_account: z.object({
+    id: z.number(),
+    name: z.string(),
+    description: z.string(),
+    acme_server: z.object({
+      is_staging: z.boolean(),
+    }),
+    private_key: z.object({
+      id: z.number(),
+      name: z.string(),
+    }),
+    status: z.string(),
+    email: z.string(),
+    kid: z.string(),
+    created_at: z.number(),
+    updated_at: z.number(),
+  }),
+});
+
+export type oneAcmeAccountResponseType = z.infer<typeof oneAcmeAccountResponse>;
+export const parseOneAcmeAccountResponseType = (
+  unk: unknown
+): oneAcmeAccountResponseType => {
+  return oneAcmeAccountResponse.parse(unk);
+};
+
 //
 // Certificates
 //

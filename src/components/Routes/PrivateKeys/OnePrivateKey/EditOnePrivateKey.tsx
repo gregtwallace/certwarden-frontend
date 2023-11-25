@@ -62,7 +62,7 @@ const EditOnePrivateKey: FC = () => {
   const { axiosSendState, apiCall, downloadFile } = useAxiosSend();
   const navigate = useNavigate();
 
-  // initialForm uses the key response to create a starting form object
+  // initialForm uses the response to create a starting form object
   const initialForm = useCallback(
     (
       responseData: onePrivateKeyResponseType | undefined,

@@ -165,11 +165,7 @@ const EditAPIKeysPage: FC<propTypes> = (props) => {
           <InputTextField
             id='disabled.description'
             label='Description'
-            value={
-              formState.getResponseData.description !== ''
-                ? formState.getResponseData.description
-                : 'None'
-            }
+            value={formState.getResponseData.description}
             disabled
           />
 
