@@ -257,7 +257,7 @@ const EditOnePrivateKey: FC = () => {
             />
 
             <InputSelect
-              id='disabled.key_algorithm'
+              id='disabled.algorithm_value'
               label='Key Algorithm'
               options={[
                 {

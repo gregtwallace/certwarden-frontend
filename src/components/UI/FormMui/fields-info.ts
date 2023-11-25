@@ -56,7 +56,8 @@ const fieldsInfo: fieldInfoType[] = [
     errorMessage: 'Username cannot be blank.',
   },
   {
-    nameRegex: /^(.+\.)?password$/,
+    // note: exlude numbers so arrays of (e.g. acme-dns) password aren't matched
+    nameRegex: /^([^0-9]+\.)?password$/,
     htmlType: 'password',
     errorMessage: 'Password cannot be blank.',
   },
@@ -139,6 +140,31 @@ const fieldsInfo: fieldInfoType[] = [
     htmlType: 'url',
     errorMessage:
       'Subject name must be a valid (sub)domain and may start with a wildcard (*.).',
+  },
+  {
+    nameRegex: /^(.+\.)?country$/,
+    htmlType: 'url',
+    errorMessage: 'N/A / TODO: If ever validate CSR',
+  },
+  {
+    nameRegex: /^(.+\.)?state$/,
+    htmlType: 'url',
+    errorMessage: 'N/A / TODO: If ever validate CSR',
+  },
+  {
+    nameRegex: /^(.+\.)?city$/,
+    htmlType: 'url',
+    errorMessage: 'N/A / TODO: If ever validate CSR',
+  },
+  {
+    nameRegex: /^(.+\.)?organization$/,
+    htmlType: 'url',
+    errorMessage: 'N/A / TODO: If ever validate CSR',
+  },
+  {
+    nameRegex: /^(.+\.)?organizational_unit$/,
+    htmlType: 'url',
+    errorMessage: 'N/A / TODO: If ever validate CSR',
   },
 
   // providers
