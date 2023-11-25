@@ -112,7 +112,7 @@ const EditOnePrivateKey: FC = () => {
       parseOnePrivateKeyResponseType
     ).then(({ responseData, error }) => {
       if (responseData) {
-        // update get response with update key info
+        // update get response with update info
         setFormState((prevState) => ({
           ...prevState,
           getResponseData: responseData,
@@ -210,9 +210,7 @@ const EditOnePrivateKey: FC = () => {
             </Button>
             <Button
               color='error'
-              onClick={() => {
-                setDeleteOpen(true);
-              }}
+              onClick={() => setDeleteOpen(true)}
               disabled={axiosSendState.isSending}
             >
               Delete
@@ -235,9 +233,7 @@ const EditOnePrivateKey: FC = () => {
           <DialogAlert
             title={`Are you sure you want to delete ${formState.dataToSubmit.name}?`}
             open={deleteOpen}
-            onCancel={() => {
-              setDeleteOpen(false);
-            }}
+            onCancel={() => setDeleteOpen(false)}
             onConfirm={deleteConfirmHandler}
           >
             This action cannot be undone and the key will NOT be recoverable!{' '}
@@ -260,7 +256,7 @@ const EditOnePrivateKey: FC = () => {
             />
 
             <InputSelect
-              id='dataToSubmit.algorithm_value'
+              id='disabled.key_algorithm'
               label='Key Algorithm'
               options={[
                 {
@@ -273,7 +269,7 @@ const EditOnePrivateKey: FC = () => {
             />
 
             <InputTextField
-              id='getResponseData.private_key.api_key'
+              id='disabled.api_key'
               label={
                 (formState.getResponseData.private_key.api_key_new !== ''
                   ? 'Old '
@@ -310,7 +306,7 @@ const EditOnePrivateKey: FC = () => {
 
             {formState.getResponseData.private_key.api_key_new && (
               <InputTextField
-                id='getResponseData.private_key.api_key_new'
+                id='disabled.api_key_new'
                 label='New API Key'
                 value={formState.getResponseData.private_key.api_key_new}
               />

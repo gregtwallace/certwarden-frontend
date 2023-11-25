@@ -32,12 +32,14 @@ type axiosDownloadFileType = (
   error: frontendErrorType | undefined;
 }>;
 
-// hook
-const useAxiosSend = (): {
+export type useAxiosSendReturnType = {
   axiosSendState: axiosSendStateType;
   apiCall: axiosApiCallType;
   downloadFile: axiosDownloadFileType;
-} => {
+}
+
+// hook
+const useAxiosSend = (): useAxiosSendReturnType => {
   // state
   const [axiosSendState, setAxiosSendState] = useState(<axiosSendStateType>{
     isSending: false,

@@ -41,6 +41,7 @@ import InputTextField from '../../../UI/FormMui/InputTextField';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
 
 const NEW_CERTIFICATE_URL = '/v1/certificates';
+const CERTIFICATE_OPTIONS_URL = `/v1/certificates/${newId}`;
 
 // form shape
 type formObj = {
@@ -57,6 +58,7 @@ type formObj = {
     organization: string;
     organizational_unit: string;
     country: string;
+    state: string;
     city: string;
   };
   sendError: frontendErrorType | undefined;
@@ -66,7 +68,7 @@ type formObj = {
 const AddOneCert: FC = () => {
   // fetch new cert options
   const { getState } = useAxiosGet<certificateOptionsResponseType>(
-    `${NEW_CERTIFICATE_URL}/${newId}`,
+    CERTIFICATE_OPTIONS_URL,
     parseCertificateOptionsResponse
   );
 
@@ -88,6 +90,7 @@ const AddOneCert: FC = () => {
         organization: '',
         organizational_unit: '',
         country: '',
+        state: '',
         city: '',
       },
       sendError: undefined,
@@ -316,6 +319,13 @@ const AddOneCert: FC = () => {
                 id='dataToSubmit.country'
                 label='Country (2 Letter Code)'
                 value={formState.dataToSubmit.country}
+                onChange={inputChangeHandler}
+              />
+
+              <InputTextField
+                id='dataToSubmit.state'
+                label='State (2 Letter Code)'
+                value={formState.dataToSubmit.state}
                 onChange={inputChangeHandler}
               />
 

@@ -423,21 +423,27 @@ const oneCertificateResponse = basicGoodResponse.extend({
     id: z.number(),
     name: z.string(),
     description: z.string(),
-    // private_key: z.object({
-    //   id: z.number(),
-    //   name: z.string(),
-    // }),
-    // acme_account: z.object({
-    //   id: z.number(),
-    //   name: z.string(),
-    //   acme_server: z.object({
-    //     // id: z.number(),
-    //     // name: z.string(),
-    //     is_staging: z.boolean(),
-    //   }),
-    // }),
-    // subject: z.string(),
-    // api_key_via_url: z.boolean(),
+    private_key: z.object({
+      id: z.number(),
+      name: z.string(),
+    }),
+    acme_account: z.object({
+      id: z.number(),
+      name: z.string(),
+      acme_server: z.object({
+        // id: z.number(),
+        // name: z.string(),
+        is_staging: z.boolean(),
+      }),
+    }),
+    subject: z.string(),
+    subject_alts: z.array(z.string()),
+    api_key_via_url: z.boolean(),
+    organization: z.string(),
+    organizational_unit: z.string(),
+    country: z.string(),
+    state: z.string(),
+    city: z.string(),
     api_key: z.string(),
     api_key_new: z.string().optional(),
     created_at: z.number(),
@@ -450,6 +456,20 @@ export const parseOneCertificateResponseType = (
   unk: unknown
 ): oneCertificateResponseType => {
   return oneCertificateResponse.parse(unk);
+};
+
+// delete response
+const certificateDeleteResponse = basicGoodResponse.extend({
+  status_code: z.literal(200),
+});
+
+export type certificateDeleteResponseType = z.infer<
+  typeof certificateDeleteResponse
+>;
+export const parseCertificateDeleteResponseType = (
+  unk: unknown
+): certificateDeleteResponseType => {
+  return certificateDeleteResponse.parse(unk);
 };
 
 // response to get options for new/edit cert
@@ -489,6 +509,60 @@ export const parseCertificateOptionsResponse = (
   unk: unknown
 ): certificateOptionsResponseType => {
   return certificateOptionsResponse.parse(unk);
+};
+
+//
+// Orders
+//
+
+const ordersResponse = basicGoodResponse.extend({
+  total_records: z.number(),
+  orders: z.array(
+    z.object({
+      fulfillment_worker: z.number().optional(),
+      id: z.number(),
+      certificate: z.object({
+        id: z.number(),
+        name: z.string(),
+      }),
+      status: z.string(),
+      known_revoked: z.boolean(),
+      finalized_key: z.union([
+        z.object({
+          id: z.number(),
+          name: z.string(),
+        }),
+        z.null(),
+      ]),
+      valid_to: z.union([z.number(), z.null()]),
+      created_at: z.number(),
+    })
+  ),
+});
+
+export type ordersResponseType = z.infer<typeof ordersResponse>;
+export const parseOrdersResponseType = (unk: unknown): ordersResponseType => {
+  return ordersResponse.parse(unk);
+};
+
+// one order
+const orderResponse = basicGoodResponse.extend({
+  order: z.object({
+    fulfillment_worker: z.number().optional(),
+    id: z.number(),
+    certificate: z.object({
+      id: z.number(),
+      name: z.string(),
+    }),
+    status: z.string(),
+    known_revoked: z.boolean(),
+    valid_to: z.union([z.number(), z.null()]),
+  }),
+});
+
+export type orderResponseType = z.infer<typeof orderResponse>;
+export const parseOrderResponseType = (unk: unknown): orderResponseType => {
+  return orderResponse.parse(unk);
 };
 
 //

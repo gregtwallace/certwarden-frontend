@@ -1,6 +1,9 @@
 // function to convert unix time to something friendlier
-export const convertUnixTime = (unixTime: number, withTime = false): string => {
-  if (!unixTime) {
+export const convertUnixTime = (
+  unixTime: number | null,
+  withTime = false
+): string => {
+  if (unixTime === null) {
     return '';
   }
 

@@ -80,7 +80,7 @@ const LoggedIn: FC = () => {
 
           {/* Certificates */}
           <Route path='/certificates' element={<AllCertificates />} />
-          {/* <Route path='/certificates/:id' element={<EditOneCert />} /> */}
+          <Route path='/certificates/:id' element={<EditOneCert />} />
           <Route
             path='/certificates/:id/apikeys'
             element={<EditAPIKeysPage objectType='certificates' />}
