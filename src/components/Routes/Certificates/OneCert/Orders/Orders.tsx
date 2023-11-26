@@ -290,6 +290,7 @@ const Orders: FC<propTypes> = (props) => {
 
                           <Button
                             size='small'
+                            color='error'
                             disabled={axiosSendState.isSending}
                             onClick={(_event) => revokeCertHandler(ord.id)}
                           >
