@@ -8,8 +8,7 @@ import {
   type validationErrorsType,
 } from '../../../types/frontend';
 
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { useState } from 'react';
 
 import useAuth from '../../../hooks/useAuth';
 import useAxiosSend from '../../../hooks/useAxiosSend';
@@ -42,9 +41,6 @@ type formObj = {
 const Login: FC = () => {
   const { axiosSendState, apiCall } = useAxiosSend();
   const { setAuth } = useAuth();
-
-  const navigate = useNavigate();
-  const location = useLocation();
 
   // set blank form state
   const blankForm: formObj = {
@@ -104,11 +100,6 @@ const Login: FC = () => {
       }
     });
   };
-
-  // if path is non-root, set to root when logged out
-  useEffect(() => {
-    if (location.pathname !== '/') navigate('/');
-  }, [location.pathname, navigate]);
 
   return (
     /* do not use standard form container since this form is special size*/
