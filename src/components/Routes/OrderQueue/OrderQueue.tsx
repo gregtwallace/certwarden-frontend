@@ -121,7 +121,7 @@ const OrderQueue: FC = () => {
                     </TableCell>
 
                     <TableCell>
-                      {wJob && wJob.high_priority ? 'High' : 'Low'}
+                      {wJob ? wJob.high_priority ? 'High' : 'Low' : ''}
                     </TableCell>
 
                     <TableCell>
