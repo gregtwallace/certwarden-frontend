@@ -262,6 +262,17 @@ const EditOneCert: FC = () => {
     });
   };
 
+  const formUnchanged =
+    JSON.stringify(formState.dataToSubmit) ===
+    JSON.stringify(
+      initialForm(
+        formState.getCertResponseData,
+        formState.getCertError,
+        formState.getOptionsResponseData,
+        formState.getOptionsError
+      ).dataToSubmit
+    );
+
   return (
     <>
       <FormContainer>
@@ -505,17 +516,7 @@ const EditOneCert: FC = () => {
                   )
                 }
                 disabledAllButtons={axiosSendState.isSending}
-                disabledResetButton={
-                  JSON.stringify(formState.dataToSubmit) ===
-                  JSON.stringify(
-                    initialForm(
-                      formState.getCertResponseData,
-                      formState.getCertError,
-                      formState.getOptionsResponseData,
-                      formState.getOptionsError
-                    ).dataToSubmit
-                  )
-                }
+                disabledResetButton={formUnchanged}
                 createdAt={formState.getCertResponseData.certificate.created_at}
                 updatedAt={formState.getCertResponseData.certificate.updated_at}
               />
@@ -529,6 +530,7 @@ const EditOneCert: FC = () => {
           setHasValidOrders={setHasValidOrders}
           certId={parseInt(id)}
           useAxiosSend={useAxiosSendHook}
+          disableButtons={!formUnchanged}
         />
       )}
     </>

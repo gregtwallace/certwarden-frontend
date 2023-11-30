@@ -101,10 +101,11 @@ type propTypes = {
   certId: number;
   setHasValidOrders: Dispatch<SetStateAction<boolean>>;
   useAxiosSend: useAxiosSendReturnType;
+  disableButtons: boolean;
 };
 
 const Orders: FC<propTypes> = (props) => {
-  const { certId, setHasValidOrders, useAxiosSend } = props;
+  const { certId, setHasValidOrders, useAxiosSend, disableButtons } = props;
 
   // parse query
   const [searchParams] = useSearchParams();
@@ -206,11 +207,17 @@ const Orders: FC<propTypes> = (props) => {
   };
   // action handlers -- end
 
+  const disableAllButtons = axiosSendState.isSending || disableButtons;
+
   return (
     <TableContainer>
       <TitleBar title='ACME Orders' headerComponent='h3'>
         {getState.responseData && (
-          <Button size='small' onClick={newOrderHandler}>
+          <Button
+            size='small'
+            disabled={disableAllButtons}
+            onClick={newOrderHandler}
+          >
             Place New Order
           </Button>
         )}
@@ -266,7 +273,7 @@ const Orders: FC<propTypes> = (props) => {
                         <Button
                           size='small'
                           color='info'
-                          disabled={axiosSendState.isSending}
+                          disabled={disableAllButtons}
                           onClick={(_event) => retryOrderHandler(ord.id)}
                         >
                           Retry
@@ -283,7 +290,7 @@ const Orders: FC<propTypes> = (props) => {
                             color='primary'
                             sx={{ mr: 1 }}
                             onClick={() => downloadClickHandler(ord.id)}
-                            disabled={axiosSendState.isSending}
+                            disabled={disableAllButtons}
                           >
                             Download
                           </Button>
@@ -291,7 +298,7 @@ const Orders: FC<propTypes> = (props) => {
                           <Button
                             size='small'
                             color='error'
-                            disabled={axiosSendState.isSending}
+                            disabled={disableAllButtons}
                             onClick={(_event) => revokeCertHandler(ord.id)}
                           >
                             Revoke
