@@ -1,6 +1,7 @@
 import { type FC } from 'react';
 import { type inputHandlerFuncType } from '../../../helpers/input-handler';
 import { type validationErrorsType } from '../../../types/frontend';
+import { escapeStringForRegExp } from '../../../helpers/regex';
 
 import { FormControl, Toolbar } from '@mui/material';
 import Button from '../Button/Button';
@@ -53,18 +54,68 @@ const InputArrayText: FC<propsType> = (props) => {
   };
 
   // remove the field with specified index from the array
-  const removeElementHandler = (index: number): void => {
+  const removeElementHandler = (
+    index: number,
+    currentValidationErrors: validationErrorsType | undefined
+  ): void => {
+    // update validation object if defined
+    if (currentValidationErrors !== undefined) {
+      const regexString = `^${escapeStringForRegExp(id)}.[0-9]+$`;
+      const regex = new RegExp(regexString);
+
+      const newValidationErrors: validationErrorsType = {};
+
+      for (const fieldName of Object.keys(currentValidationErrors)) {
+        // only modify errors related to this input
+        if (fieldName.match(regex)) {
+          const lastPeriodIndex = fieldName.lastIndexOf('.');
+          const errIndexStr = fieldName.substring(lastPeriodIndex + 1);
+          const errIndex = Number(errIndexStr);
+
+          // if errIndex < delete index, just copy
+          if (errIndex < index) {
+            newValidationErrors[fieldName] =
+              currentValidationErrors[fieldName] || false;
+          }
+
+          // if errIndex is greater than delete index, shift error -1
+          if (errIndex > index) {
+            newValidationErrors[`${id}.${errIndex - 1}`] =
+              currentValidationErrors[fieldName] || false;
+          }
+
+          // if errIndex is delete index, discard error
+          // no-op
+        } else {
+          // if not related to this input, just copy
+          newValidationErrors[fieldName] =
+            currentValidationErrors[fieldName] || false;
+        }
+      }
+
+      console.log(newValidationErrors);
+      const syntheticEvent1 = {
+        target: {
+          name: 'validationErrors',
+          value: newValidationErrors,
+        },
+      };
+
+      onChange(syntheticEvent1, 'unchanged');
+    }
+
+    // remove data array member
     const newArrayVal = [...value];
     newArrayVal.splice(index, 1);
 
-    const syntheticEvent = {
+    const syntheticEvent2 = {
       target: {
         name: name || id,
         value: newArrayVal,
       },
     };
 
-    onChange(syntheticEvent, 'unchanged');
+    onChange(syntheticEvent2, 'unchanged');
   };
 
   return (
@@ -89,7 +140,9 @@ const InputArrayText: FC<propsType> = (props) => {
               <Button
                 size='small'
                 color='error'
-                onClick={(_event) => removeElementHandler(index)}
+                onClick={(_event) =>
+                  removeElementHandler(index, validationErrors)
+                }
               >
                 Remove
               </Button>

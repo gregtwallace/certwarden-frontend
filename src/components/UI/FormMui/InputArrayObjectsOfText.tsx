@@ -1,6 +1,7 @@
 import { type ReactNode } from 'react';
 import { type inputHandlerFuncType } from '../../../helpers/input-handler';
 import { type validationErrorsType } from '../../../types/frontend';
+import { escapeStringForRegExp } from '../../../helpers/regex';
 
 import { Box, FormControl, Toolbar } from '@mui/material';
 
@@ -57,7 +58,82 @@ const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
   };
 
   // remove the field with specified index from the array
-  const removeElementHandler = (index: number): void => {
+  const removeElementHandler = (
+    index: number,
+    currentValidationErrors: validationErrorsType | undefined
+  ): void => {
+    // update validation object if defined
+    if (currentValidationErrors !== undefined) {
+      const regexString = `^${escapeStringForRegExp(id)}.[0-9]+$`;
+      const regex = new RegExp(regexString);
+
+      const regexSubfieldString = `^${escapeStringForRegExp(
+        id
+      )}.[0-9]+.[A-Za-z_-]+$`;
+      const regexSubfield = new RegExp(regexSubfieldString);
+
+      const newValidationErrors: validationErrorsType = {};
+
+      for (const fieldName of Object.keys(currentValidationErrors)) {
+        // modify main field
+        if (fieldName.match(regex)) {
+          const lastPeriodIndex = fieldName.lastIndexOf('.');
+          const errIndexStr = fieldName.substring(lastPeriodIndex + 1);
+          const errIndex = Number(errIndexStr);
+
+          // if errIndex < delete index, just copy
+          if (errIndex < index) {
+            newValidationErrors[fieldName] =
+              currentValidationErrors[fieldName] || false;
+          }
+
+          // if errIndex is greater than delete index, shift error -1
+          if (errIndex > index) {
+            newValidationErrors[`${id}.${errIndex - 1}`] =
+              currentValidationErrors[fieldName] || false;
+          }
+
+          // if errIndex is delete index, discard error
+          // no-op
+        } else if (fieldName.match(regexSubfield)) {
+          // modify subfields
+          const fieldPath = fieldName.split('.');
+          const subFieldName = fieldPath[fieldPath.length - 1];
+          const errIndexStr = fieldPath[fieldPath.length - 2];
+          const errIndex = Number(errIndexStr);
+
+          // if errIndex < delete index, just copy
+          if (errIndex < index) {
+            newValidationErrors[fieldName] =
+              currentValidationErrors[fieldName] || false;
+          }
+
+          // if errIndex is greater than delete index, shift error -1
+          if (errIndex > index) {
+            newValidationErrors[`${id}.${errIndex - 1}.${subFieldName}`] =
+              currentValidationErrors[fieldName] || false;
+          }
+
+          // if errIndex is delete index, discard error
+          // no-op
+        } else {
+          // if not related to this input, just copy
+          newValidationErrors[fieldName] =
+            currentValidationErrors[fieldName] || false;
+        }
+      }
+
+      const syntheticEvent1 = {
+        target: {
+          name: 'validationErrors',
+          value: newValidationErrors,
+        },
+      };
+
+      onChange(syntheticEvent1, 'unchanged');
+    }
+
+    // remove data array member
     const newArrayVal = [...value];
     newArrayVal.splice(index, 1);
 
@@ -112,7 +188,9 @@ const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
                 <Button
                   size='small'
                   color='error'
-                  onClick={(_event) => removeElementHandler(objIndex)}
+                  onClick={(_event) =>
+                    removeElementHandler(objIndex, validationErrors)
+                  }
                 >
                   Remove
                 </Button>

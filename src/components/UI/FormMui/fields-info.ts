@@ -141,7 +141,7 @@ const fieldsInfo: fieldInfoType[] = [
 
   // certificate
   {
-    nameRegex: /^(.+\.)?subject(_alts.[0-9]+)?$/,
+    nameRegex: /^(.+\.)?subject(_alts\.[0-9]+)?$/,
     htmlType: 'url',
     errorMessage:
       'Subject name must be a valid (sub)domain and may start with a wildcard (*.).',
@@ -174,7 +174,7 @@ const fieldsInfo: fieldInfoType[] = [
 
   // providers
   {
-    nameRegex: /^(.+\.)?domains.[0-9]+$/,
+    nameRegex: /^(.+\.)?domains\.[0-9]+$/,
     htmlType: 'text',
     errorMessage:
       'Domain must be valid. Or for a wildcard provider use one domain set to * .',
@@ -210,22 +210,22 @@ const fieldsInfo: fieldInfoType[] = [
     errorMessage: 'An acme-dns server address must be specified.',
   },
   {
-    nameRegex: /^(.+\.)?resources.[0-9]+.real_domain$/,
+    nameRegex: /^(.+\.)?resources\.[0-9]+.real_domain$/,
     htmlType: 'text',
     errorMessage: 'Real domain must be populated.',
   },
   {
-    nameRegex: /^(.+\.)?resources.[0-9]+.full_domain$/,
+    nameRegex: /^(.+\.)?resources\.[0-9]+.full_domain$/,
     htmlType: 'text',
     errorMessage: 'Full domain must be populated.',
   },
   {
-    nameRegex: /^(.+\.)?resources.[0-9]+.username$/,
+    nameRegex: /^(.+\.)?resources\.[0-9]+.username$/,
     htmlType: 'text',
     errorMessage: 'Username must be populated.',
   },
   {
-    nameRegex: /^(.+\.)?resources.[0-9]+.password$/,
+    nameRegex: /^(.+\.)?resources\.[0-9]+.password$/,
     htmlType: 'text', // deliberately not hidden with 'password'
     errorMessage: 'Password must be populated.',
   },
@@ -250,7 +250,7 @@ const fieldsInfo: fieldInfoType[] = [
     errorMessage: 'Script path must be specified.',
   },
   {
-    nameRegex: /^(.+\.)?environment.[0-9]+$/,
+    nameRegex: /^(.+\.)?environment\.[0-9]+$/,
     htmlType: 'text',
     errorMessage: 'Environment variables should be specified.',
   },
