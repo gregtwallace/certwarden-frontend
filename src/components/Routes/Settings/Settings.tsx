@@ -4,6 +4,7 @@ import GridContainer from '../../UI/Grid/GridContainer';
 import GridItemThird from '../../UI/Grid/GridItemThird';
 
 import TitleBar from '../../UI/TitleBar/TitleBar';
+import BackupRestoreSettings from './BackupRestoreSettings';
 import ChangePassword from './ChangePassword';
 import BackendStatus from './BackendStatus';
 import FrontendStatus from './FrontendStatus';
@@ -30,6 +31,10 @@ const Settings: FC = () => {
 
         <GridItemThird>
           <NewVersionInfo />
+        </GridItemThird>
+
+        <GridItemThird>
+          <BackupRestoreSettings />
         </GridItemThird>
 
         <GridItemThird>

@@ -74,7 +74,7 @@ const useAxiosGet = <ExpectedResponseType>(
       // done, set error
       setGetState({
         responseData: undefined,
-        error: parseAxiosError(err),
+        error: await parseAxiosError(err),
       });
     }
   }, [apiNode, axiosInstance, emptyUnloadedState, parseResponseDataFunc]);

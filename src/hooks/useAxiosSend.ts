@@ -36,7 +36,7 @@ export type useAxiosSendReturnType = {
   axiosSendState: axiosSendStateType;
   apiCall: axiosApiCallType;
   downloadFile: axiosDownloadFileType;
-}
+};
 
 // hook
 const useAxiosSend = (): useAxiosSendReturnType => {
@@ -69,6 +69,8 @@ const useAxiosSend = (): useAxiosSendReturnType => {
           // data: JSON.stringify(payloadObj),
           responseType: 'blob',
         });
+
+        console.log(response);
 
         // if AxiosError, don't try to parse
         if (isAxiosError(response)) {
@@ -124,7 +126,7 @@ const useAxiosSend = (): useAxiosSendReturnType => {
           isSending: false,
         });
 
-        return { error: parseAxiosError(err) };
+        return { error: await parseAxiosError(err) };
       }
     },
     [axiosInstance]
@@ -193,7 +195,7 @@ const useAxiosSend = (): useAxiosSendReturnType => {
           isSending: false,
         });
 
-        return { responseData: undefined, error: parseAxiosError(err) };
+        return { responseData: undefined, error: await parseAxiosError(err) };
       }
     },
     [axiosInstance]

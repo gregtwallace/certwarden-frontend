@@ -17,6 +17,7 @@ import AllCertificates from '../Routes/Certificates/AllCertificates';
 import AllPrivateKeys from '../Routes/PrivateKeys/AllPrivateKeys';
 import AllProviders from '../Routes/Providers/AllProviders';
 import AddOneProvider from '../Routes/Providers/AddEditOneProvider/AddOneProvider';
+import BackupRestore from '../Routes/BackupRestore/BackupRestore';
 import ChangeAccountEmail from '../Routes/ACMEAccounts/OneACMEAccount/Edit/ChangeAccountEmail';
 import Dashboard from '../Routes/Dashboard/Dashboard';
 import EditAPIKeysPage from '../Pages/EditAPIKeysPage/EditAPIKeysPage';
@@ -108,6 +109,7 @@ const LoggedIn: FC = () => {
 
           {/* Settings */}
           <Route path={'/settings'} element={<Settings />} />
+          <Route path='/backuprestore' element={<BackupRestore />} />
 
           {/* Misc. */}
           <Route path={'/logout'} element={<Logout />} />

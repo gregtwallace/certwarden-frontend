@@ -12,7 +12,14 @@ const redactObjectKeysContaining = [
 // redactJSONObject redacts any keys in the object containing strings
 // in the list of keys to redact. this is intended to stop console log
 // of things like passwords
-export const redactJSONObject = <Type extends object>(object: Type): Type => {
+export const redactJSONObject = <Type extends object>(
+  object: Type | undefined
+): Type | '' => {
+  // if undefined, just return blank
+  if (!object) {
+    return '';
+  }
+
   // redact any keys containing words in the redaction array
   // easiest way is to stringify and then parse
   const redactedJSONString = JSON.stringify(object, (key, val) => {

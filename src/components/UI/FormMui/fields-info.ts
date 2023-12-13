@@ -254,6 +254,18 @@ const fieldsInfo: fieldInfoType[] = [
     htmlType: 'text',
     errorMessage: 'Environment variables should be specified.',
   },
+
+  // backup and restore
+  {
+    nameRegex: /^(.+\.)?with_log_files$/,
+    htmlType: 'checkbox',
+    errorMessage: 'N/A',
+  },
+  {
+    nameRegex: /^(.+\.)?with_on_disk_backups$/,
+    htmlType: 'checkbox',
+    errorMessage: 'N/A',
+  },
 ];
 
 // fieldInformation returns information for the named field

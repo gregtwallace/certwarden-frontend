@@ -173,6 +173,50 @@ export const parseRestartResponse = (unk: unknown): restartResponseType => {
   return restartResponse.parse(unk);
 };
 
+// backup & restore
+const backupFileDetails = z.object({
+  name: z.string(),
+  size: z.number(),
+  modtime: z.number(),
+  created_at: z.number().optional(),
+});
+
+const backupAllOnDiskResponse = basicGoodResponse.extend({
+  backup_files: z.array(backupFileDetails),
+});
+
+export type backupAllOnDiskResponseType = z.infer<
+  typeof backupAllOnDiskResponse
+>;
+export const parseBackupAllOnDiskResponseType = (
+  unk: unknown
+): backupAllOnDiskResponseType => {
+  return backupAllOnDiskResponse.parse(unk);
+};
+
+const backupMakeResponse = basicGoodResponse.extend({
+  status_code: z.literal(201),
+  backup_file: backupFileDetails,
+});
+
+export type backupMakeResponseType = z.infer<typeof backupMakeResponse>;
+export const parseBackupMakeResponseType = (
+  unk: unknown
+): backupMakeResponseType => {
+  return backupMakeResponse.parse(unk);
+};
+
+const backupDeleteResponse = basicGoodResponse.extend({
+  status_code: z.literal(200),
+});
+
+export type backupDeleteResponseType = z.infer<typeof backupDeleteResponse>;
+export const parseBackupDeleteResponseType = (
+  unk: unknown
+): backupDeleteResponseType => {
+  return backupDeleteResponse.parse(unk);
+};
+
 //
 // Dashboard
 //

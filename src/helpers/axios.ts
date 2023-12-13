@@ -18,21 +18,39 @@ export const axiosConfig: AxiosRequestConfig = {
 export const axiosInstance = axios.create(axiosConfig);
 
 // error parser
-export const parseAxiosError = (err: unknown): frontendErrorType => {
+export const parseAxiosError = async (
+  err: unknown
+): Promise<frontendErrorType> => {
   // if err is an error response from backend api, use its code and message
   // first possible spot for backend response
-  if (
-    err &&
-    typeof err === 'object' &&
-    'data' in err &&
-    isErrorResponseType(err.data)
-  ) {
-    const retErr = {
-      statusCode: err.data.status_code,
-      message: err.data.message,
-    };
+  if (err && typeof err === 'object' && 'data' in err) {
+    // check if data is blob and try to convert it to text
+    if (err.data instanceof Blob) {
+      try {
+        const blobText = await err.data.text();
+        const blobJson = JSON.parse(blobText);
 
-    return retErr;
+        if (isErrorResponseType(blobJson)) {
+          const retErr = {
+            statusCode: blobJson.status_code,
+            message: blobJson.message,
+          };
+
+          return retErr;
+        }
+      } catch (_e) {
+        // no-op
+      }
+    }
+
+    if (isErrorResponseType(err.data)) {
+      const retErr = {
+        statusCode: err.data.status_code,
+        message: err.data.message,
+      };
+
+      return retErr;
+    }
   }
 
   // second possible spot for backend response
@@ -42,15 +60,35 @@ export const parseAxiosError = (err: unknown): frontendErrorType => {
     'response' in err &&
     err.response &&
     typeof err.response === 'object' &&
-    'data' in err.response &&
-    isErrorResponseType(err.response.data)
+    'data' in err.response
   ) {
-    const retErr = {
-      statusCode: err.response.data.status_code,
-      message: err.response.data.message,
-    };
+    // check if data is blob and try to convert it to text
+    if (err.response.data instanceof Blob) {
+      try {
+        const blobText = await err.response.data.text();
+        const blobJson = JSON.parse(blobText);
 
-    return retErr;
+        if (isErrorResponseType(blobJson)) {
+          const retErr = {
+            statusCode: blobJson.status_code,
+            message: blobJson.message,
+          };
+
+          return retErr;
+        }
+      } catch (_e) {
+        // no-op
+      }
+    }
+
+    if (isErrorResponseType(err.response.data)) {
+      const retErr = {
+        statusCode: err.response.data.status_code,
+        message: err.response.data.message,
+      };
+
+      return retErr;
+    }
   }
 
   // if zod error

@@ -14,6 +14,7 @@ const TableContainer: FC<propTypes> = (props) => {
       sx={{
         display: 'table',
         width: 1,
+        mb: 3,
         p: 1,
       }}
     >
