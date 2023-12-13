@@ -11,6 +11,8 @@ import ApiLoading from '../../UI/Api/ApiLoading';
 import ApiError from '../../UI/Api/ApiError';
 import ButtonAsLink from '../../UI/Button/ButtonAsLink';
 import GridContainer from '../../UI/Grid/GridContainer';
+import GridChildrenContainer from '../../UI/Grid/GridChildrenContainer';
+import GridItemFull from '../../UI/Grid/GridItemFull';
 import GridItemThird from '../../UI/Grid/GridItemThird';
 import TitleBar from '../../UI/TitleBar/TitleBar';
 import ViewOneProvider from './ViewOneProvider/ViewOneProvider';
@@ -40,19 +42,25 @@ const AllProviders: FC = () => {
   }
 
   return (
-    <>
+    <GridContainer>
       <TitleBar title='Challenge Providers'>
         <ButtonAsLink to={`/providers/${newId}`}>New Provider</ButtonAsLink>
       </TitleBar>
 
-      <GridContainer>
-        {!getState.responseData && !getState.error && <ApiLoading />}
+      <GridChildrenContainer>
+        {!getState.responseData && !getState.error && (
+          <GridItemFull>
+            <ApiLoading />
+          </GridItemFull>
+        )}
 
         {getState.error && (
-          <ApiError
-            statusCode={getState.error.statusCode}
-            message={getState.error.message}
-          />
+          <GridItemFull>
+            <ApiError
+              statusCode={getState.error.statusCode}
+              message={getState.error.message}
+            />
+          </GridItemFull>
         )}
 
         {getState.responseData &&
@@ -61,8 +69,8 @@ const AllProviders: FC = () => {
               <ViewOneProvider provider={prov} />
             </GridItemThird>
           ))}
-      </GridContainer>
-    </>
+      </GridChildrenContainer>
+    </GridContainer>
   );
 };
 
