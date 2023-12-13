@@ -25,7 +25,6 @@ import TableContainer from '../../UI/TableMui/TableContainer';
 import TableHeaderRow from '../../UI/TableMui/TableHeaderRow';
 import TitleBar from '../../UI/TitleBar/TitleBar';
 import TablePagination from '../../UI/TableMui/TablePagination';
-import TableText from '../../UI/TableMui/TableText';
 
 const ACME_SERVERS_URL = '/v1/acmeservers';
 
@@ -68,11 +67,6 @@ const AllACMEServers: FC = () => {
       <TitleBar title='ACME Servers'>
         <ButtonAsLink to={`/acmeservers/${newId}`}>New Server</ButtonAsLink>
       </TitleBar>
-
-      <TableText>
-        Support is primarily provided for Let&apos;s Encrypt compatibility, but
-        if you have issues with other ACME Servers feel free to open an issue.
-      </TableText>
 
       {!getState.responseData && !getState.error && <ApiLoading />}
 
