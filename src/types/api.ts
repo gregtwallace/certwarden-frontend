@@ -598,6 +598,8 @@ const oneCertificateResponse = basicGoodResponse.extend({
     city: z.string(),
     api_key: z.string(),
     api_key_new: z.string().optional(),
+    post_processing_command: z.string(),
+    post_processing_environment: z.array(z.string()),
     created_at: z.number(),
     updated_at: z.number(),
   }),

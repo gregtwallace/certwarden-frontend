@@ -25,12 +25,7 @@ import {
 import { newId } from '../../../../helpers/constants';
 import { buildPrivateKeyOptions } from '../../../../helpers/options_builders';
 
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Typography,
-} from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import ApiError from '../../../UI/Api/ApiError';
@@ -65,6 +60,8 @@ type formObj = {
     private_key_id: number;
     subject_alts: string[];
     api_key_via_url: boolean;
+    post_processing_command: string;
+    post_processing_environment: string[];
     organization: string;
     organizational_unit: string;
     country: string;
@@ -118,6 +115,10 @@ const EditOneCert: FC = () => {
         private_key_id: certResponseData?.certificate.private_key.id || -1,
         subject_alts: certResponseData?.certificate.subject_alts || [],
         api_key_via_url: certResponseData?.certificate.api_key_via_url || false,
+        post_processing_command:
+          certResponseData?.certificate.post_processing_command || '',
+        post_processing_environment:
+          certResponseData?.certificate.post_processing_environment || [],
         organization: certResponseData?.certificate.organization || '',
         organizational_unit:
           certResponseData?.certificate.organizational_unit || '',
@@ -395,10 +396,69 @@ const EditOneCert: FC = () => {
               <Accordion sx={{ mb: 2 }}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
+                  aria-controls='post-processing-fields-content'
+                  id='post-processing-fields-header'
+                >
+                  <FormInfo sx={{ p: 1 }}>Post Processing</FormInfo>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <FormInfo>
+                    Post processing script runs when an order enters the `Valid`
+                    status. Leave blank for no post processing action.
+                    <br />
+                    <br />
+                    e.g. ./data/myscripts/post.sh
+                  </FormInfo>
+
+                  <InputTextField
+                    id='dataToSubmit.post_processing_command'
+                    label='Path And Script'
+                    value={formState.dataToSubmit.post_processing_command}
+                    onChange={inputChangeHandler}
+                  />
+
+                  <FormInfo>
+                    Format must be:
+                    <br />
+                    variable_name=variable_value
+                    <br />
+                    <br />
+                    For example: <br />
+                    my_api_key=abcdef12345
+                    <br />
+                    <br />
+                    The following environment variables are always available:
+                    <br />
+                    LEGO_PRIVATE_KEY_NAME = the name of the private key used to
+                    finalize the order
+                    <br />
+                    LEGO_PRIVATE_KEY_PEM = the pem of the private key <br />
+                    LEGO_CERTIFICATE_NAME = the name of the certificate
+                    <br />
+                    LEGO_CERTIFICATE_PEM = the pem of the complete certificate
+                    chain for the order
+                    <br />
+                    LEGO_CERTIFICATE_COMMON_NAME = the common name of the
+                    certificate
+                  </FormInfo>
+
+                  <InputArrayText
+                    id='dataToSubmit.post_processing_environment'
+                    label='Post Processing Environment Variables'
+                    subLabel='Variable'
+                    value={formState.dataToSubmit.post_processing_environment}
+                    onChange={inputChangeHandler}
+                  />
+                </AccordionDetails>
+              </Accordion>
+
+              <Accordion sx={{ mb: 2 }}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
                   aria-controls='csr-fields-content'
                   id='csr-fields-header'
                 >
-                  <Typography>CSR Fields</Typography>
+                  <FormInfo sx={{ p: 1 }}>CSR Fields</FormInfo>
                 </AccordionSummary>
                 <AccordionDetails>
                   <FormInfo>

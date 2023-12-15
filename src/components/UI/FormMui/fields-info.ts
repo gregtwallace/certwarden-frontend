@@ -146,6 +146,18 @@ const fieldsInfo: fieldInfoType[] = [
     errorMessage:
       'Subject name must be a valid (sub)domain and may start with a wildcard (*.).',
   },
+
+  {
+    nameRegex: /^(.+\.)?post_processing_command$/,
+    htmlType: 'text',
+    errorMessage: 'N/A',
+  },
+  {
+    nameRegex: /^(.+\.)?post_processing_environment\.[0-9]+$/,
+    htmlType: 'text',
+    errorMessage: 'N/A',
+  },
+
   {
     nameRegex: /^(.+\.)?country$/,
     htmlType: 'url',
