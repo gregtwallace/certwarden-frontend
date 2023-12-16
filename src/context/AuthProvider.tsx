@@ -1,8 +1,26 @@
 import { type FC, type ReactNode } from 'react';
-import { type authorizationType } from '../types/api';
+import { type authorizationType, parseAuthorizationType } from '../types/api';
 
 import { createContext, useCallback, useEffect, useState } from 'react';
-import { parseAuthorizationType } from '../types/api';
+
+// global idle logout timer
+let logoutTimer: number;
+
+const resetIdleLogoutTimer = (
+  auth: authorizationType | undefined,
+  setAuth: (auth: authorizationType | undefined) => void
+): void => {
+  // always clear any previous timer
+  clearTimeout(logoutTimer);
+
+  // if auth, set new logout timer using its session expiration
+  if (auth) {
+    logoutTimer = setTimeout(() => {
+      // on expire clear auth
+      setAuth(undefined);
+    }, auth.session_token_claims.exp * 1000 - Date.now());
+  }
+};
 
 // getAuth fetches the current auth from session storage
 const getAuth = (): authorizationType | undefined => {
@@ -100,35 +118,28 @@ const AuthProvider: FC<AuthProviderProps> = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(!!getAuth());
 
   // any time setAuth is called, it should save storage and update isLoggedIn
+  // and reset the idle logout timer
   const setAuth = useCallback(
     (auth: authorizationType | undefined) => {
+      // reset timer using new auth
+      resetIdleLogoutTimer(auth, setAuth);
+
+      // save auth to storage and logged in state
       setAuthStorage(auth);
-      setIsLoggedIn(!!getAuth());
+      setIsLoggedIn(!!auth);
     },
     [setIsLoggedIn]
   );
 
-  // set a logout timer based on session expiration. if the timer executes, it will
-  // logout the frontend.  this is not a substitute for proper backend idle out
+  // Initial app load idle logout timer (this is not a substitute for proper backend idle out)
   useEffect(() => {
-    let logoutTimer: number;
+    // on mount, set idle logout timer using current auth
     const auth = getAuth();
+    resetIdleLogoutTimer(auth, setAuth);
 
-    // if valid session
-    if (auth) {
-      // get session expires time
-      const sessionExpires = auth.session_token_claims.exp;
-
-      // start timer on mount
-      logoutTimer = setTimeout(() => {
-        // on expire clear auth
-        setAuth(undefined);
-      }, sessionExpires * 1000 - Date.now());
-    }
-
-    // on dismount, clear timer
+    // on dismount, clear idle logout timer (auth undefined)
     return () => {
-      clearTimeout(logoutTimer);
+      resetIdleLogoutTimer(undefined, setAuth);
     };
   }, [isLoggedIn, setAuth]);
 
