@@ -678,14 +678,17 @@ const ordersResponse = basicGoodResponse.extend({
       certificate: z.object({
         id: z.number(),
         name: z.string(),
+        post_processing_command: z.string(),
       }),
       status: z.string(),
       known_revoked: z.boolean(),
       finalized_key: z.union([
-        z.object({
-          id: z.number(),
-          name: z.string(),
-        }),
+        z
+          .object({
+            id: z.number(),
+            name: z.string(),
+          })
+          .optional(),
         z.null(),
       ]),
       valid_to: z.union([z.number(), z.null()]),
@@ -707,6 +710,7 @@ const orderResponse = basicGoodResponse.extend({
     certificate: z.object({
       id: z.number(),
       name: z.string(),
+      post_processing_command: z.string(),
     }),
     status: z.string(),
     known_revoked: z.boolean(),
@@ -717,6 +721,18 @@ const orderResponse = basicGoodResponse.extend({
 export type orderResponseType = z.infer<typeof orderResponse>;
 export const parseOrderResponseType = (unk: unknown): orderResponseType => {
   return orderResponse.parse(unk);
+};
+
+// order post process response
+const orderPostProcessResponse = basicGoodResponse;
+
+export type orderPostProcessResponseType = z.infer<
+  typeof orderPostProcessResponse
+>;
+export const parseOrderPostProcessResponseType = (
+  unk: unknown
+): orderPostProcessResponseType => {
+  return orderPostProcessResponse.parse(unk);
 };
 
 //

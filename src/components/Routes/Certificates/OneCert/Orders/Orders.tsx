@@ -4,6 +4,8 @@ import {
   parseOrdersResponseType,
   type orderResponseType,
   parseOrderResponseType,
+  type orderPostProcessResponseType,
+  parseOrderPostProcessResponseType,
 } from '../../../../../types/api';
 import { type frontendErrorType } from '../../../../../types/frontend';
 import { type useAxiosSendReturnType } from '../../../../../hooks/useAxiosSend';
@@ -154,6 +156,19 @@ const Orders: FC<propTypes> = (props) => {
     undefined
   );
 
+  // trigger post processing
+  // download order pem
+  const postProcessClickHandler = (orderId: number): void => {
+    apiCall<orderPostProcessResponseType>(
+      'POST',
+      `/v1/certificates/${certId}/orders/${orderId}/postprocess`,
+      {},
+      parseOrderPostProcessResponseType
+    ).then(({ error }) => {
+      setSendError(error);
+    });
+  };
+
   // download order pem
   const downloadClickHandler = (orderId: number): void => {
     downloadFile(`/v1/certificates/${certId}/orders/${orderId}/download`).then(
@@ -256,7 +271,7 @@ const Orders: FC<propTypes> = (props) => {
                   <TableCell>{orderStatus(ord)}</TableCell>
 
                   <TableCell>
-                    {ord.finalized_key !== null && (
+                    {ord.finalized_key && (
                       <Link
                         component={RouterLink}
                         to={`/privatekeys/${ord.finalized_key.id}`}
@@ -303,6 +318,19 @@ const Orders: FC<propTypes> = (props) => {
                           >
                             Revoke
                           </Button>
+
+                          {ord.certificate.post_processing_command !== '' &&
+                            ord.finalized_key && (
+                              <Button
+                                size='small'
+                                color='info'
+                                sx={{ mr: 1 }}
+                                onClick={() => postProcessClickHandler(ord.id)}
+                                disabled={disableAllButtons}
+                              >
+                                Post Process
+                              </Button>
+                            )}
                         </>
                       )}
                   </TableCell>
