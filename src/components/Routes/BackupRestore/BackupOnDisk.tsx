@@ -157,7 +157,7 @@ const BackupOnDisk: FC = () => {
 
       <TableText>
         On disk backups are not cumulative and do not include previous on disk
-        backups. Logs may or may not be included.
+        backups.
       </TableText>
 
       {!getState.responseData && !getState.error && <ApiLoading />}

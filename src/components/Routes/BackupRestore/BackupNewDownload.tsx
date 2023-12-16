@@ -24,7 +24,6 @@ const BACKUP_NEW_DOWNLOAD_URL = '/v1/app/backup';
 // form shape
 type formObj = {
   query: {
-    with_log_files: boolean;
     with_on_disk_backups: boolean;
   };
   sendSuccess: boolean | undefined;
@@ -37,7 +36,6 @@ const BackupNewDownload: FC = () => {
 
   const blankFormState: formObj = {
     query: {
-      with_log_files: true,
       with_on_disk_backups: false,
     },
     sendSuccess: undefined,
@@ -57,9 +55,7 @@ const BackupNewDownload: FC = () => {
 
     downloadFile(
       BACKUP_NEW_DOWNLOAD_URL +
-        `?withlogs=${
-          formState.query.with_log_files ? 'true' : 'false'
-        }&withondiskbackups=${
+        `?withondiskbackups=${
           formState.query.with_on_disk_backups ? 'true' : 'false'
         }`
     ).then(({ error }) => {
@@ -83,14 +79,6 @@ const BackupNewDownload: FC = () => {
           Backups are not password protected or encrypted. You must keep them
           secure to avoid compromise of your PKI.
         </FormInfo>
-
-        <InputCheckbox
-          id='query.with_log_files'
-          checked={formState.query.with_log_files}
-          onChange={inputChangeHandler}
-        >
-          With Log Files
-        </InputCheckbox>
 
         <InputCheckbox
           id='query.with_on_disk_backups'
