@@ -28,6 +28,7 @@ import TableRow from '@mui/material/TableRow';
 
 import ApiLoading from '../../../../UI/Api/ApiLoading';
 import ApiError from '../../../../UI/Api/ApiError';
+import ApiSuccess from '../../../../UI/Api/ApiSuccess';
 import Button from '../../../../UI/Button/Button';
 import TableContainer from '../../../../UI/TableMui/TableContainer';
 import TableHeaderRow from '../../../../UI/TableMui/TableHeaderRow';
@@ -151,7 +152,8 @@ const Orders: FC<propTypes> = (props) => {
   // This allows disabling the parent's buttons also
   const { axiosSendState, apiCall, downloadFile } = useAxiosSend;
 
-  // state for download error display
+  // states for send success / error
+  const [sendResult, setSendResultState] = useState<string | undefined>();
   const [sendError, setSendError] = useState<frontendErrorType | undefined>(
     undefined
   );
@@ -164,7 +166,10 @@ const Orders: FC<propTypes> = (props) => {
       `/v1/certificates/${certId}/orders/${orderId}/postprocess`,
       {},
       parseOrderPostProcessResponseType
-    ).then(({ error }) => {
+    ).then(({ responseData, error }): void => {
+      setSendResultState(
+        responseData && 'Post processing triggered. Check the logs for results.'
+      );
       setSendError(error);
     });
   };
@@ -173,6 +178,7 @@ const Orders: FC<propTypes> = (props) => {
   const downloadClickHandler = (orderId: number): void => {
     downloadFile(`/v1/certificates/${certId}/orders/${orderId}/download`).then(
       ({ error }) => {
+        setSendResultState(undefined);
         setSendError(error);
       }
     );
@@ -186,7 +192,7 @@ const Orders: FC<propTypes> = (props) => {
       {},
       parseOrderResponseType
     ).then(({ error }) => {
-      // set error result and update get (regardless of success/fail)
+      setSendResultState(undefined);
       setSendError(error);
       updateGet();
     });
@@ -200,7 +206,7 @@ const Orders: FC<propTypes> = (props) => {
       {},
       parseOrderResponseType
     ).then(({ error }) => {
-      // set error result and update get (regardless of success/fail)
+      setSendResultState(undefined);
       setSendError(error);
       updateGet();
     });
@@ -215,7 +221,7 @@ const Orders: FC<propTypes> = (props) => {
       {},
       parseOrderResponseType
     ).then(({ error }) => {
-      // set error result and update get (regardless of success/fail)
+      setSendResultState(undefined);
       setSendError(error);
       updateGet();
     });
@@ -253,6 +259,8 @@ const Orders: FC<propTypes> = (props) => {
           message={sendError.message}
         />
       )}
+
+      {sendResult && <ApiSuccess>{sendResult}</ApiSuccess>}
 
       {getState.responseData && (
         <>
