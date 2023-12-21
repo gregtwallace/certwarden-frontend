@@ -182,6 +182,14 @@ const backupFileDetails = z.object({
 });
 
 const backupAllOnDiskResponse = basicGoodResponse.extend({
+  config: z.object({
+    enabled: z.boolean(),
+    interval_days: z.number(),
+    retention: z.object({
+      max_days: z.number(),
+      max_count: z.number(),
+    }),
+  }),
   backup_files: z.array(backupFileDetails),
 });
 

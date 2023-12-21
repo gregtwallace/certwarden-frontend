@@ -155,11 +155,6 @@ const BackupOnDisk: FC = () => {
         This backup file will not be recoverable.
       </DialogAlert>
 
-      <TableText>
-        On disk backups are not cumulative and do not include previous on disk
-        backups.
-      </TableText>
-
       {!getState.responseData && !getState.error && <ApiLoading />}
 
       {getState.error && (
@@ -178,47 +173,65 @@ const BackupOnDisk: FC = () => {
         )}
 
       {getState.responseData && (
-        <Table size='small'>
-          <TableHead>
-            <TableHeaderRow headers={tableHeaders} />
-          </TableHead>
-          <TableBody>
-            {getState.responseData?.backup_files
-              .sort((a, b) => {
-                // sort newest to be first TODO: Allow sorting changes
-                const aTime = a.created_at ? a.created_at : a.modtime;
-                const bTime = b.created_at ? b.created_at : b.modtime;
-                return bTime - aTime;
-              })
-              .map((file) => (
-                <TableRow key={file.name}>
-                  <TableCell>
-                    <Link
-                      component='button'
-                      onClick={() => downloadDiskBackupHandler(file.name)}
-                    >
-                      {file.name}
-                    </Link>
-                  </TableCell>
-                  <TableCell>{(file.size / 1000000).toFixed(2)} MB</TableCell>
-                  <TableCell>
-                    {file.created_at
-                      ? convertUnixTime(file.created_at, true)
-                      : convertUnixTime(file.modtime, true)}
-                  </TableCell>
-                  <TableCell>
-                    <IconButton
-                      onClick={() => setDeleteOpenedFor(file.name)}
-                      tooltip='Delete'
-                      color='error'
-                    >
-                      <CloseIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
+        <>
+          <TableText>
+            {getState.responseData.config.enabled
+              ? `Automatic backup will occur every ${
+                  getState.responseData.config.interval_days
+                } days. ${
+                  getState.responseData.config.retention.max_count >= 0
+                    ? `Only the last ${getState.responseData.config.retention.max_count} backups will be retained.`
+                    : ''
+                } ${
+                  getState.responseData.config.retention.max_days >= 0
+                    ? `Only backups younger than ${getState.responseData.config.retention.max_days} days will be retained.`
+                    : ''
+                }`
+              : 'Automatic backup is disabled.'}
+          </TableText>
+
+          <Table size='small'>
+            <TableHead>
+              <TableHeaderRow headers={tableHeaders} />
+            </TableHead>
+            <TableBody>
+              {getState.responseData?.backup_files
+                .sort((a, b) => {
+                  // sort newest to be first TODO: Allow sorting changes
+                  const aTime = a.created_at ? a.created_at : a.modtime;
+                  const bTime = b.created_at ? b.created_at : b.modtime;
+                  return bTime - aTime;
+                })
+                .map((file) => (
+                  <TableRow key={file.name}>
+                    <TableCell>
+                      <Link
+                        component='button'
+                        onClick={() => downloadDiskBackupHandler(file.name)}
+                      >
+                        {file.name}
+                      </Link>
+                    </TableCell>
+                    <TableCell>{(file.size / 1000000).toFixed(2)} MB</TableCell>
+                    <TableCell>
+                      {file.created_at
+                        ? convertUnixTime(file.created_at, true)
+                        : convertUnixTime(file.modtime, true)}
+                    </TableCell>
+                    <TableCell>
+                      <IconButton
+                        onClick={() => setDeleteOpenedFor(file.name)}
+                        tooltip='Delete'
+                        color='error'
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </>
       )}
     </TableContainer>
   );
