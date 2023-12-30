@@ -272,7 +272,7 @@ const EditOnePrivateKey: FC = () => {
             <InputTextField
               id='disabled.api_key'
               label={
-                (formState.getResponseData.private_key.api_key_new !== ''
+                (formState.getResponseData.private_key.api_key_new
                   ? 'Old '
                   : '') + 'API Key'
               }
