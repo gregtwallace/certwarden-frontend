@@ -105,10 +105,17 @@ type propTypes = {
   setHasValidOrders: Dispatch<SetStateAction<boolean>>;
   useAxiosSend: useAxiosSendReturnType;
   disableButtons: boolean;
+  certHasPostProcessing: boolean;
 };
 
 const Orders: FC<propTypes> = (props) => {
-  const { certId, setHasValidOrders, useAxiosSend, disableButtons } = props;
+  const {
+    certId,
+    certHasPostProcessing,
+    setHasValidOrders,
+    useAxiosSend,
+    disableButtons,
+  } = props;
 
   // parse query
   const [searchParams] = useSearchParams();
@@ -327,18 +334,17 @@ const Orders: FC<propTypes> = (props) => {
                             Revoke
                           </Button>
 
-                          {ord.certificate.post_processing_command !== '' &&
-                            ord.finalized_key && (
-                              <Button
-                                size='small'
-                                color='info'
-                                sx={{ mr: 1 }}
-                                onClick={() => postProcessClickHandler(ord.id)}
-                                disabled={disableAllButtons}
-                              >
-                                Post Process
-                              </Button>
-                            )}
+                          {certHasPostProcessing && ord.finalized_key && (
+                            <Button
+                              size='small'
+                              color='info'
+                              sx={{ mr: 1 }}
+                              onClick={() => postProcessClickHandler(ord.id)}
+                              disabled={disableAllButtons}
+                            >
+                              Post Process
+                            </Button>
+                          )}
                         </>
                       )}
                   </TableCell>

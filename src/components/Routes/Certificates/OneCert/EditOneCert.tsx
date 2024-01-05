@@ -77,6 +77,7 @@ const EditOneCert: FC = () => {
   const thisCertUrl = `${ONE_CERTIFICATE_SERVER_URL}/${id}`;
   const thisCertDownloadUrl = `${thisCertUrl}/download`;
   const thisCertApiKeyUrl = `${thisCertUrl}/apikey`;
+  const thisCertClientKeyUrl = `${thisCertUrl}/clientkey`;
 
   const [hasValidOrders, setHasValidOrders] = useState(false);
 
@@ -182,11 +183,17 @@ const EditOneCert: FC = () => {
     });
   };
 
-  // common api call for key roation
-  const apiKeyRotation = (method: 'POST' | 'DELETE'): void => {
+  // common key call for key rotation (both api and client key)
+  const keyRotation = (
+    method: 'POST' | 'DELETE',
+    keyType: 'api' | 'client'
+  ): void => {
+    const callPath =
+      keyType === 'api' ? thisCertApiKeyUrl : thisCertClientKeyUrl;
+
     apiCall<oneCertificateResponseType>(
       method,
-      thisCertApiKeyUrl,
+      callPath,
       {},
       parseOneCertificateResponseType
     ).then(({ responseData, error }) => {
@@ -208,11 +215,19 @@ const EditOneCert: FC = () => {
   };
 
   const newApiKeyClickHandler: MouseEventHandler = () => {
-    apiKeyRotation('POST');
+    keyRotation('POST', 'api');
   };
 
   const retireApiKeyClickHandler: MouseEventHandler = () => {
-    apiKeyRotation('DELETE');
+    keyRotation('DELETE', 'api');
+  };
+
+  const newClientKeyClickHandler: MouseEventHandler = () => {
+    keyRotation('POST', 'client');
+  };
+
+  const disableClientKeyClickHandler: MouseEventHandler = () => {
+    keyRotation('DELETE', 'client');
   };
 
   // form submission handler
@@ -402,14 +417,47 @@ const EditOneCert: FC = () => {
                   <FormInfo sx={{ p: 1 }}>Post Processing</FormInfo>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <FormInfo>
-                    Post processing script runs when an order enters the `Valid`
-                    status. Leave blank for no post processing action.
-                    <br />
-                    <br />
-                    e.g. ./data/myscripts/post.sh
-                  </FormInfo>
+                  <FormInfo>LeGo Client</FormInfo>
+                  <FormRowRight>
+                    <InputTextField
+                      id='disabled.post_processing_client_key'
+                      label='Client AES Key'
+                      value={
+                        formState.getCertResponseData.certificate
+                          .post_processing_client_key
+                          ? formState.getCertResponseData.certificate
+                              .post_processing_client_key
+                          : '[Disabled]'
+                      }
+                      disabled={
+                        formState.getCertResponseData.certificate
+                          .post_processing_client_key === ''
+                      }
+                    />
 
+                    {formState.getCertResponseData.certificate
+                      .post_processing_client_key !== '' && (
+                      <Button
+                        size='small'
+                        color='error'
+                        onClick={disableClientKeyClickHandler}
+                      >
+                        Disable
+                      </Button>
+                    )}
+                    <Button
+                      size='small'
+                      color='success'
+                      onClick={newClientKeyClickHandler}
+                    >
+                      {formState.getCertResponseData.certificate
+                        .post_processing_client_key === ''
+                        ? 'Enable'
+                        : 'Regen'}
+                    </Button>
+                  </FormRowRight>
+
+                  <FormInfo>Script</FormInfo>
                   <InputTextField
                     id='dataToSubmit.post_processing_command'
                     label='Path And Script'
@@ -417,34 +465,9 @@ const EditOneCert: FC = () => {
                     onChange={inputChangeHandler}
                   />
 
-                  <FormInfo>
-                    Format must be:
-                    <br />
-                    variable_name=variable_value
-                    <br />
-                    <br />
-                    For example: <br />
-                    my_api_key=abcdef12345
-                    <br />
-                    <br />
-                    The following environment variables are always available:
-                    <br />
-                    LEGO_PRIVATE_KEY_NAME = the name of the private key used to
-                    finalize the order
-                    <br />
-                    LEGO_PRIVATE_KEY_PEM = the pem of the private key <br />
-                    LEGO_CERTIFICATE_NAME = the name of the certificate
-                    <br />
-                    LEGO_CERTIFICATE_PEM = the pem of the complete certificate
-                    chain for the order
-                    <br />
-                    LEGO_CERTIFICATE_COMMON_NAME = the common name of the
-                    certificate
-                  </FormInfo>
-
                   <InputArrayText
                     id='dataToSubmit.post_processing_environment'
-                    label='Post Processing Environment Variables'
+                    label='Script Environment Variables'
                     subLabel='Variable'
                     value={formState.dataToSubmit.post_processing_environment}
                     onChange={inputChangeHandler}
@@ -585,12 +608,18 @@ const EditOneCert: FC = () => {
         )}
       </FormContainer>
 
-      {id !== undefined && (
+      {id !== undefined && formState.getCertResponseData !== undefined && (
         <Orders
           setHasValidOrders={setHasValidOrders}
           certId={parseInt(id)}
           useAxiosSend={useAxiosSendHook}
           disableButtons={!formUnchanged}
+          certHasPostProcessing={
+            formState.getCertResponseData.certificate
+              .post_processing_command !== '' ||
+            formState.getCertResponseData.certificate
+              .post_processing_client_key !== ''
+          }
         />
       )}
     </>

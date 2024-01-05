@@ -41,6 +41,7 @@ import FormContainer from '../../../UI/FormMui/FormContainer';
 import FormFooter from '../../../UI/FormMui/FormFooter';
 import FormInfo from '../../../UI/FormMui/FormInfo';
 import InputArrayText from '../../../UI/FormMui/InputArrayText';
+import InputCheckbox from '../../../UI/FormMui/InputCheckbox';
 import InputTextField from '../../../UI/FormMui/InputTextField';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
 
@@ -101,6 +102,7 @@ type formObj = {
     subject_alts: string[];
     post_processing_command: string;
     post_processing_environment: string[];
+    post_processing_client_enable: boolean;
     organization: string;
     organizational_unit: string;
     country: string;
@@ -135,6 +137,7 @@ const AddOneCert: FC = () => {
         subject_alts: [],
         post_processing_command: '',
         post_processing_environment: [],
+        post_processing_client_enable: false,
         organization: '',
         organizational_unit: '',
         country: '',
@@ -318,8 +321,27 @@ const AddOneCert: FC = () => {
             </AccordionSummary>
             <AccordionDetails>
               <FormInfo>
-                Post processing script runs when an order enters the `Valid`
-                status. Leave blank for no post processing action.
+                Post processing runs when an order enters the `Valid` status.
+                Client and script post processing are independent of one
+                another.
+                <br />
+                <br />
+                Enabling client post processing will generate an AES key to
+                configure the client with for communication. LeGo will send the
+                client commands to the certificate&apos;s common name.
+              </FormInfo>
+
+              <InputCheckbox
+                id='dataToSubmit.post_processing_client_enable'
+                checked={formState.dataToSubmit.post_processing_client_enable}
+                onChange={inputChangeHandler}
+              >
+                Enable Client Post Processing
+              </InputCheckbox>
+
+              <FormInfo>
+                Path and script specifies a shell script to run in post
+                processing. Leave blank to disable.
                 <br />
                 <br />
                 e.g. ./data/myscripts/post.sh
@@ -359,7 +381,7 @@ const AddOneCert: FC = () => {
 
               <InputArrayText
                 id='dataToSubmit.post_processing_environment'
-                label='Post Processing Environment Variables'
+                label='Script Environment Variables'
                 subLabel='Variable'
                 value={formState.dataToSubmit.post_processing_environment}
                 onChange={inputChangeHandler}
