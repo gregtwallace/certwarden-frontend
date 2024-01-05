@@ -9,13 +9,13 @@ const Http01InternalFormFields: FC<providerSubFormPropsType> = (props) => {
 
   return (
     <>
-      {'port' in formState.dataToSubmit ? (
+      {'port' in formState.dataToSubmit.config ? (
         <InputTextField
-          id='dataToSubmit.port'
+          id='dataToSubmit.config.port'
           label='HTTP Server Port Number'
-          value={formState.dataToSubmit.port}
+          value={formState.dataToSubmit.config.port}
           onChange={onChange}
-          error={formState.validationErrors['dataToSubmit.port']}
+          error={formState.validationErrors['dataToSubmit.config.port']}
         />
       ) : (
         <SubFormError providerType='Http01Internal' />

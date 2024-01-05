@@ -32,6 +32,7 @@ const AddOneProvider: FC = () => {
     provider_options: undefined,
     dataToSubmit: {
       domains: [''],
+      config: {},
     },
     sendError: undefined,
     validationErrors: {},
@@ -82,7 +83,8 @@ const AddOneProvider: FC = () => {
       'POST',
       NEW_PROVIDER_URL,
       {
-        [provider.configName]: formState.dataToSubmit,
+        domains: formState.dataToSubmit.domains,
+        [provider.configName]: formState.dataToSubmit.config,
       },
       parseProviderResponseType
     ).then(({ responseData, error }) => {

@@ -11,9 +11,9 @@ const Dns01ManualFormFields: FC<providerSubFormPropsType> = (props) => {
 
   return (
     <>
-      {'environment' in formState.dataToSubmit &&
-      'create_script' in formState.dataToSubmit &&
-      'delete_script' in formState.dataToSubmit ? (
+      {'environment' in formState.dataToSubmit.config &&
+      'create_script' in formState.dataToSubmit.config &&
+      'delete_script' in formState.dataToSubmit.config ? (
         <>
           <FormInfo>
             Format must be:
@@ -26,10 +26,10 @@ const Dns01ManualFormFields: FC<providerSubFormPropsType> = (props) => {
           </FormInfo>
 
           <InputArrayText
-            id='dataToSubmit.environment'
+            id='dataToSubmit.config.environment'
             label='Environment Variables'
             subLabel='Variable'
-            value={formState.dataToSubmit.environment}
+            value={formState.dataToSubmit.config.environment}
             onChange={onChange}
           />
 
@@ -39,19 +39,23 @@ const Dns01ManualFormFields: FC<providerSubFormPropsType> = (props) => {
           </FormInfo>
 
           <InputTextField
-            id='dataToSubmit.create_script'
+            id='dataToSubmit.config.create_script'
             label='Path to DNS Record Create Script'
-            value={formState.dataToSubmit.create_script}
+            value={formState.dataToSubmit.config.create_script}
             onChange={onChange}
-            error={formState.validationErrors['dataToSubmit.create_script']}
+            error={
+              formState.validationErrors['dataToSubmit.config.create_script']
+            }
           />
 
           <InputTextField
-            id='dataToSubmit.delete_script'
+            id='dataToSubmit.config.delete_script'
             label='Path to DNS Record Delete Script'
-            value={formState.dataToSubmit.delete_script}
+            value={formState.dataToSubmit.config.delete_script}
             onChange={onChange}
-            error={formState.validationErrors['dataToSubmit.delete_script']}
+            error={
+              formState.validationErrors['dataToSubmit.config.delete_script']
+            }
           />
         </>
       ) : (

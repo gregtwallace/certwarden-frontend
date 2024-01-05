@@ -11,8 +11,8 @@ const Dns01AcmeDnsFormFields: FC<providerSubFormPropsType> = (props) => {
 
   return (
     <>
-      {'acme_dns_address' in formState.dataToSubmit &&
-      'resources' in formState.dataToSubmit ? (
+      {'acme_dns_address' in formState.dataToSubmit.config &&
+      'resources' in formState.dataToSubmit.config ? (
         <>
           <FormInfo>
             Server address including protocol and port (e.g.
@@ -20,11 +20,13 @@ const Dns01AcmeDnsFormFields: FC<providerSubFormPropsType> = (props) => {
           </FormInfo>
 
           <InputTextField
-            id='dataToSubmit.acme_dns_address'
+            id='dataToSubmit.config.acme_dns_address'
             label='ACME DNS Server Address'
-            value={formState.dataToSubmit.acme_dns_address}
+            value={formState.dataToSubmit.config.acme_dns_address}
             onChange={onChange}
-            error={formState.validationErrors['dataToSubmit.acme_dns_address']}
+            error={
+              formState.validationErrors['dataToSubmit.config.acme_dns_address']
+            }
           />
 
           <FormInfo>
@@ -33,7 +35,7 @@ const Dns01AcmeDnsFormFields: FC<providerSubFormPropsType> = (props) => {
           </FormInfo>
 
           <InputArrayObjectsOfText
-            id='dataToSubmit.resources'
+            id='dataToSubmit.config.resources'
             label='ACME DNS Resources'
             subLabel='ACME DNS Resource'
             minElements={1}
@@ -43,7 +45,7 @@ const Dns01AcmeDnsFormFields: FC<providerSubFormPropsType> = (props) => {
               username: '',
               password: '',
             }}
-            value={formState.dataToSubmit.resources}
+            value={formState.dataToSubmit.config.resources}
             onChange={onChange}
             validationErrors={formState.validationErrors}
           />

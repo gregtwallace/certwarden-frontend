@@ -13,9 +13,9 @@ const Dns01AcmeShFormFields: FC<providerSubFormPropsType> = (props) => {
 
   return (
     <>
-      {'acme_sh_path' in formState.dataToSubmit &&
-      'dns_hook' in formState.dataToSubmit &&
-      'environment' in formState.dataToSubmit ? (
+      {'acme_sh_path' in formState.dataToSubmit.config &&
+      'dns_hook' in formState.dataToSubmit.config &&
+      'environment' in formState.dataToSubmit.config ? (
         <>
           <FormInfo>
             Paths where acme.sh is unpacked (including dnsapi folder). May be
@@ -23,11 +23,13 @@ const Dns01AcmeShFormFields: FC<providerSubFormPropsType> = (props) => {
           </FormInfo>
 
           <InputTextField
-            id='dataToSubmit.acme_sh_path'
+            id='dataToSubmit.config.acme_sh_path'
             label='Path to acme.sh Install'
-            value={formState.dataToSubmit.acme_sh_path}
+            value={formState.dataToSubmit.config.acme_sh_path}
             onChange={onChange}
-            error={formState.validationErrors['dataToSubmit.acme_sh_path']}
+            error={
+              formState.validationErrors['dataToSubmit.config.acme_sh_path']
+            }
           />
 
           <FormInfo>
@@ -49,11 +51,11 @@ const Dns01AcmeShFormFields: FC<providerSubFormPropsType> = (props) => {
           </FormInfo>
 
           <InputTextField
-            id='dataToSubmit.dns_hook'
+            id='dataToSubmit.config.dns_hook'
             label='DNS Hook Name'
-            value={formState.dataToSubmit.dns_hook}
+            value={formState.dataToSubmit.config.dns_hook}
             onChange={onChange}
-            error={formState.validationErrors['dataToSubmit.dns_hook']}
+            error={formState.validationErrors['dataToSubmit.config.dns_hook']}
           />
 
           <FormInfo>
@@ -67,10 +69,10 @@ const Dns01AcmeShFormFields: FC<providerSubFormPropsType> = (props) => {
           </FormInfo>
 
           <InputArrayText
-            id='dataToSubmit.environment'
+            id='dataToSubmit.config.environment'
             label='Environment Variables'
             subLabel='Variable'
-            value={formState.dataToSubmit.environment}
+            value={formState.dataToSubmit.config.environment}
             onChange={onChange}
           />
         </>

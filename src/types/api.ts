@@ -782,13 +782,13 @@ const providerBase = z.object({
   id: z.number(),
   tag: z.string(),
   type: z.string(),
+  domains: z.array(z.string()),
   // provider is this + config: {}
 });
 
 // http 01: internal
 const providerHttp01Internal = providerBase.extend({
   config: z.object({
-    domains: z.array(z.string()),
     port: z.number(),
   }),
 });
@@ -796,7 +796,6 @@ const providerHttp01Internal = providerBase.extend({
 // dns 01: manual
 const providerDns01Manual = providerBase.extend({
   config: z.object({
-    domains: z.array(z.string()),
     environment: z.array(z.string()),
     create_script: z.string(),
     delete_script: z.string(),
@@ -806,7 +805,6 @@ const providerDns01Manual = providerBase.extend({
 // dns 01: acme dns
 const providerDns01AcmeDns = providerBase.extend({
   config: z.object({
-    domains: z.array(z.string()),
     acme_dns_address: z.string(),
     resources: z.array(
       z.object({
@@ -822,7 +820,6 @@ const providerDns01AcmeDns = providerBase.extend({
 // dns 01: acme sh
 const providerDns01AcmeSh = providerBase.extend({
   config: z.object({
-    domains: z.array(z.string()),
     acme_sh_path: z.string(),
     environment: z.array(z.string()),
     dns_hook: z.string(),
@@ -834,7 +831,6 @@ const providerDns01Cloudflare = providerBase.extend({
   config: z.union([
     // global account
     z.object({
-      domains: z.array(z.string()),
       account: z.object({
         email: z.string(),
         global_api_key: z.string(),
@@ -842,7 +838,6 @@ const providerDns01Cloudflare = providerBase.extend({
     }),
     // scoped api token
     z.object({
-      domains: z.array(z.string()),
       api_token: z.string(),
     }),
   ]),

@@ -28,7 +28,7 @@ const ViewOneProvider: FC<propTypes> = (props) => {
     >
       <ProviderTitle provider={provider} />
 
-      <ProviderDomainsView domains={provider.config.domains} />
+      <ProviderDomainsView domains={provider.domains} />
 
       <GridItemText>Config</GridItemText>
 

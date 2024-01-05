@@ -57,7 +57,10 @@ const EditOneProvider: FC = () => {
             getState.responseData?.provider.config
           )
         : undefined,
-      dataToSubmit: getState.responseData?.provider.config || { domains: [''] },
+      dataToSubmit: {
+        domains: getState.responseData?.provider.domains || [''],
+        config: getState.responseData?.provider.config || {},
+      },
       sendError: undefined,
       validationErrors: {},
     }),
@@ -131,7 +134,8 @@ const EditOneProvider: FC = () => {
       thisProviderUrl,
       {
         tag: formState.getResponseData?.provider.tag,
-        [provider.configName]: formState.dataToSubmit,
+        domains: formState.dataToSubmit.domains,
+        [provider.configName]: formState.dataToSubmit.config,
       },
       parseProviderResponseType
     ).then(({ responseData, error }) => {
@@ -189,7 +193,7 @@ const EditOneProvider: FC = () => {
             The following domain(s) will become unavilable for challenge solving
             unless there is a wilcard provider and it supports them.
             <br />
-            {formState.getResponseData.provider.config.domains.join(', ')}
+            {formState.getResponseData.provider.domains.join(', ')}
           </DialogAlert>
 
           <Form onSubmit={submitFormHandler}>
@@ -244,8 +248,10 @@ const EditOneProvider: FC = () => {
               }}
               disabledAllButtons={axiosSendState.isSending}
               disabledResetButton={
-                JSON.stringify(formState.dataToSubmit) ===
-                JSON.stringify(formState.getResponseData.provider.config)
+                JSON.stringify(formState.dataToSubmit.domains) ===
+                  JSON.stringify(formState.getResponseData.provider.domains) &&
+                JSON.stringify(formState.dataToSubmit.config) ===
+                  JSON.stringify(formState.getResponseData.provider.config)
               }
             />
           </Form>

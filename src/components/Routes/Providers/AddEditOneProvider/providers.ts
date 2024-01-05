@@ -77,9 +77,8 @@ export const providersList: provider[] = [
     configName: 'dns_01_acme_dns',
     alsoSet: [
       {
-        name: 'dataToSubmit',
+        name: 'dataToSubmit.config',
         value: {
-          domains: [''],
           acme_dns_address: '',
           resources: [
             {
@@ -106,48 +105,53 @@ export const providersList: provider[] = [
 
       // must specify server address
       if (
-        !('acme_dns_address' in formState.dataToSubmit) ||
-        formState.dataToSubmit.acme_dns_address === ''
+        !('acme_dns_address' in formState.dataToSubmit.config) ||
+        formState.dataToSubmit.config.acme_dns_address === ''
       ) {
-        validationErrors['dataToSubmit.acme_dns_address'] = true;
+        validationErrors['dataToSubmit.config.acme_dns_address'] = true;
       }
 
       // each resource must have all fields populated
-      if (!('resources' in formState.dataToSubmit)) {
+      if (!('resources' in formState.dataToSubmit.config)) {
         console.error(new Error('resources missing on dns01acmedns'));
-        validationErrors['dataToSubmit.resources'] = true;
+        validationErrors['dataToSubmit.config.resources'] = true;
       } else {
-        formState.dataToSubmit['resources'].forEach((resc, rescIndex) => {
-          // check each resource field
-          let rescError = false;
-          if (!isDomainValid(resc.real_domain)) {
-            validationErrors[
-              `dataToSubmit.resources.${rescIndex}.real_domain`
-            ] = true;
-            rescError = true;
-          }
-          if (!isDomainValid(resc.full_domain)) {
-            validationErrors[
-              `dataToSubmit.resources.${rescIndex}.full_domain`
-            ] = true;
-            rescError = true;
-          }
-          if (resc.username === '') {
-            validationErrors[`dataToSubmit.resources.${rescIndex}.username`] =
-              true;
-            rescError = true;
-          }
-          if (resc.password === '') {
-            validationErrors[`dataToSubmit.resources.${rescIndex}.password`] =
-              true;
-            rescError = true;
-          }
+        formState.dataToSubmit.config['resources'].forEach(
+          (resc, rescIndex) => {
+            // check each resource field
+            let rescError = false;
+            if (!isDomainValid(resc.real_domain)) {
+              validationErrors[
+                `dataToSubmit.config.resources.${rescIndex}.real_domain`
+              ] = true;
+              rescError = true;
+            }
+            if (!isDomainValid(resc.full_domain)) {
+              validationErrors[
+                `dataToSubmit.config.resources.${rescIndex}.full_domain`
+              ] = true;
+              rescError = true;
+            }
+            if (resc.username === '') {
+              validationErrors[
+                `dataToSubmit.config.resources.${rescIndex}.username`
+              ] = true;
+              rescError = true;
+            }
+            if (resc.password === '') {
+              validationErrors[
+                `dataToSubmit.config.resources.${rescIndex}.password`
+              ] = true;
+              rescError = true;
+            }
 
-          // set error on resource if any field failed
-          if (rescError) {
-            validationErrors[`dataToSubmit.resources.${rescIndex}`] = true;
+            // set error on resource if any field failed
+            if (rescError) {
+              validationErrors[`dataToSubmit.config.resources.${rescIndex}`] =
+                true;
+            }
           }
-        });
+        );
       }
       return validationErrors;
     },
@@ -161,9 +165,8 @@ export const providersList: provider[] = [
     configName: 'dns_01_acme_sh',
     alsoSet: [
       {
-        name: 'dataToSubmit',
+        name: 'dataToSubmit.config',
         value: {
-          domains: [''],
           acme_sh_path: '',
           dns_hook: '',
           environment: [],
@@ -184,18 +187,18 @@ export const providersList: provider[] = [
 
       // must specify path
       if (
-        !('acme_sh_path' in formState.dataToSubmit) ||
-        formState.dataToSubmit.acme_sh_path === ''
+        !('acme_sh_path' in formState.dataToSubmit.config) ||
+        formState.dataToSubmit.config.acme_sh_path === ''
       ) {
-        validationErrors['dataToSubmit.acme_sh_path'] = true;
+        validationErrors['dataToSubmit.config.acme_sh_path'] = true;
       }
 
       // must specify hook name
       if (
-        !('dns_hook' in formState.dataToSubmit) ||
-        formState.dataToSubmit.dns_hook === ''
+        !('dns_hook' in formState.dataToSubmit.config) ||
+        formState.dataToSubmit.config.dns_hook === ''
       ) {
-        validationErrors['dataToSubmit.dns_hook'] = true;
+        validationErrors['dataToSubmit.config.dns_hook'] = true;
       }
 
       return validationErrors;
@@ -210,10 +213,8 @@ export const providersList: provider[] = [
     configName: 'dns_01_cloudflare',
     alsoSet: [
       {
-        name: 'dataToSubmit',
-        value: {
-          domains: [''],
-        },
+        name: 'dataToSubmit.config',
+        value: {},
       },
       {
         name: 'validationErrors',
@@ -255,26 +256,26 @@ export const providersList: provider[] = [
 
       // if using api_token, make sure not blank
       if (
-        !('account' in formState.dataToSubmit) &&
-        (!('api_token' in formState.dataToSubmit) ||
-          formState.dataToSubmit.api_token === '')
+        !('account' in formState.dataToSubmit.config) &&
+        (!('api_token' in formState.dataToSubmit.config) ||
+          formState.dataToSubmit.config.api_token === '')
       ) {
-        validationErrors['dataToSubmit.api_token'] = true;
+        validationErrors['dataToSubmit.config.api_token'] = true;
       }
 
       // if using account, make sure email valid and global key not blank
       if (
-        'account' in formState.dataToSubmit &&
-        !isEmailValid(formState.dataToSubmit.account.email)
+        'account' in formState.dataToSubmit.config &&
+        !isEmailValid(formState.dataToSubmit.config.account.email)
       ) {
-        validationErrors['dataToSubmit.account.email'] = true;
+        validationErrors['dataToSubmit.config.account.email'] = true;
       }
 
       if (
-        'account' in formState.dataToSubmit &&
-        formState.dataToSubmit.account.global_api_key === ''
+        'account' in formState.dataToSubmit.config &&
+        formState.dataToSubmit.config.account.global_api_key === ''
       ) {
-        validationErrors['dataToSubmit.account.global_api_key'] = true;
+        validationErrors['dataToSubmit.config.account.global_api_key'] = true;
       }
 
       return validationErrors;
@@ -289,9 +290,8 @@ export const providersList: provider[] = [
     configName: 'dns_01_manual',
     alsoSet: [
       {
-        name: 'dataToSubmit',
+        name: 'dataToSubmit.config',
         value: {
-          domains: [''],
           environment: [],
           create_script: '',
           delete_script: '',
@@ -312,16 +312,16 @@ export const providersList: provider[] = [
 
       // must set path to create and delete
       if (
-        !('create_script' in formState.dataToSubmit) ||
-        formState.dataToSubmit.create_script === ''
+        !('create_script' in formState.dataToSubmit.config) ||
+        formState.dataToSubmit.config.create_script === ''
       ) {
-        validationErrors['dataToSubmit.create_script'] = true;
+        validationErrors['dataToSubmit.config.create_script'] = true;
       }
       if (
-        !('delete_script' in formState.dataToSubmit) ||
-        formState.dataToSubmit.delete_script === ''
+        !('delete_script' in formState.dataToSubmit.config) ||
+        formState.dataToSubmit.config.delete_script === ''
       ) {
-        validationErrors['dataToSubmit.delete_script'] = true;
+        validationErrors['dataToSubmit.config.delete_script'] = true;
       }
 
       return validationErrors;
@@ -336,9 +336,8 @@ export const providersList: provider[] = [
     configName: 'http_01_internal',
     alsoSet: [
       {
-        name: 'dataToSubmit',
+        name: 'dataToSubmit.config',
         value: {
-          domains: [''],
           port: '',
         },
       },
@@ -357,10 +356,10 @@ export const providersList: provider[] = [
 
       // must set a valid port number
       if (
-        !('port' in formState.dataToSubmit) ||
-        !isPortValid(formState.dataToSubmit.port)
+        !('port' in formState.dataToSubmit.config) ||
+        !isPortValid(formState.dataToSubmit.config.port)
       ) {
-        validationErrors['dataToSubmit.port'] = true;
+        validationErrors['dataToSubmit.config.port'] = true;
       }
 
       return validationErrors;

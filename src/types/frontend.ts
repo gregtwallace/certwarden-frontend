@@ -23,19 +23,16 @@ export type validationErrorsType = z.infer<typeof validationErrors>;
 
 // config types (for state / form)
 const providerHttp01InternalConfig = z.object({
-  domains: z.array(z.string()),
   port: z.number(),
 });
 
 const providerDns01ManualConfig = z.object({
-  domains: z.array(z.string()),
   environment: z.array(z.string()),
   create_script: z.string(),
   delete_script: z.string(),
 });
 
 const providerDns01AcmeDnsConfig = z.object({
-  domains: z.array(z.string()),
   acme_dns_address: z.string(),
   resources: z.array(
     z.object({
@@ -48,7 +45,6 @@ const providerDns01AcmeDnsConfig = z.object({
 });
 
 const providerDns01AcmeShConfig = z.object({
-  domains: z.array(z.string()),
   acme_sh_path: z.string(),
   environment: z.array(z.string()),
   dns_hook: z.string(),
@@ -57,7 +53,6 @@ const providerDns01AcmeShConfig = z.object({
 const providerDns01CloudflareConfig = z.union([
   // global account
   z.object({
-    domains: z.array(z.string()),
     account: z.object({
       email: z.string(),
       global_api_key: z.string(),
@@ -65,7 +60,6 @@ const providerDns01CloudflareConfig = z.union([
   }),
   // scoped api token
   z.object({
-    domains: z.array(z.string()),
     api_token: z.string(),
   }),
 ]);
@@ -88,6 +82,7 @@ const providerFormState = z.object({
         id: z.number(),
         tag: z.string(),
         type: z.string(),
+        domains: z.array(z.string()),
         config: providerConfig,
       }),
     })
@@ -95,10 +90,11 @@ const providerFormState = z.object({
   getError: z.union([frontendError, z.undefined()]),
   provider_type_value: z.string(),
   provider_options: z.union([z.record(z.string(), z.unknown()), z.undefined()]),
-  dataToSubmit: z.union([
-    providerConfig,
-    z.object({ domains: z.array(z.string()) }), // blank, just domain, akin to undefined
-  ]),
+  dataToSubmit: z.object({
+    tag: z.string().optional(),
+    domains: z.array(z.string()),
+    config: z.union([providerConfig, z.object({})]),
+  }),
   sendError: z.union([
     z.object({
       statusCode: z.union([z.number(), z.string()]),

@@ -12,11 +12,11 @@ const apiAccessTypes: selectInputOption<number>[] = [
     name: 'API Token',
     alsoSet: [
       {
-        name: 'dataToSubmit.api_token',
+        name: 'dataToSubmit.config.api_token',
         value: '',
       },
       {
-        name: 'dataToSubmit.account',
+        name: 'dataToSubmit.config.account',
         value: undefined,
       },
     ],
@@ -26,11 +26,11 @@ const apiAccessTypes: selectInputOption<number>[] = [
     name: 'Global API Key',
     alsoSet: [
       {
-        name: 'dataToSubmit.api_token',
+        name: 'dataToSubmit.config.api_token',
         value: undefined,
       },
       {
-        name: 'dataToSubmit.account',
+        name: 'dataToSubmit.config.account',
         value: {
           email: '',
           global_api_key: '',
@@ -63,37 +63,41 @@ const Dns01CloudflareFormFields: FC<providerSubFormPropsType> = (props) => {
           />
 
           {formState.provider_options['api_access_method'] === 0 &&
-            'api_token' in formState.dataToSubmit && (
+            'api_token' in formState.dataToSubmit.config && (
               <InputTextField
-                id='dataToSubmit.api_token'
+                id='dataToSubmit.config.api_token'
                 label='Cloudflare API Token'
-                value={formState.dataToSubmit.api_token}
+                value={formState.dataToSubmit.config.api_token}
                 onChange={onChange}
-                error={formState.validationErrors['dataToSubmit.api_token']}
+                error={
+                  formState.validationErrors['dataToSubmit.config.api_token']
+                }
               />
             )}
 
           {formState.provider_options['api_access_method'] === 1 &&
-            'account' in formState.dataToSubmit && (
+            'account' in formState.dataToSubmit.config && (
               <>
                 <InputTextField
-                  id='dataToSubmit.account.email'
+                  id='dataToSubmit.config.account.email'
                   label='Account Email'
-                  value={formState.dataToSubmit.account.email}
+                  value={formState.dataToSubmit.config.account.email}
                   onChange={onChange}
                   error={
-                    formState.validationErrors['dataToSubmit.account.email']
+                    formState.validationErrors[
+                      'dataToSubmit.config.account.email'
+                    ]
                   }
                 />
 
                 <InputTextField
-                  id='dataToSubmit.account.global_api_key'
+                  id='dataToSubmit.config.account.global_api_key'
                   label='Account Global API Key'
-                  value={formState.dataToSubmit.account.global_api_key}
+                  value={formState.dataToSubmit.config.account.global_api_key}
                   onChange={onChange}
                   error={
                     formState.validationErrors[
-                      'dataToSubmit.account.global_api_key'
+                      'dataToSubmit.config.account.global_api_key'
                     ]
                   }
                 />
