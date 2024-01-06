@@ -148,6 +148,11 @@ const fieldsInfo: fieldInfoType[] = [
   },
 
   {
+    nameRegex: /^(.+\.)?post_processing_client_key$/,
+    htmlType: 'text',
+    errorMessage: 'N/A',
+  },
+  {
     nameRegex: /^(.+\.)?post_processing_command$/,
     htmlType: 'text',
     errorMessage: 'N/A',
