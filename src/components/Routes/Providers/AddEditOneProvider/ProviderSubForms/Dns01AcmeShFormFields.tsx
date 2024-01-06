@@ -42,6 +42,7 @@ const Dns01AcmeShFormFields: FC<providerSubFormPropsType> = (props) => {
             >
               https://github.com/acmesh-official/acme.sh/wiki/dnsapi
             </Link>
+            .
           </FormInfo>
 
           <FormInfo>

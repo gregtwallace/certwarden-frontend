@@ -64,12 +64,19 @@ const providerDns01CloudflareConfig = z.union([
   }),
 ]);
 
+// dns 01: go acme
+const providerDns01GoAcme = z.object({
+  dns_provider_name: z.string(),
+  environment: z.array(z.string()),
+});
+
 const providerConfig = z.union([
   providerHttp01InternalConfig,
   providerDns01ManualConfig,
   providerDns01AcmeDnsConfig,
   providerDns01AcmeShConfig,
   providerDns01CloudflareConfig,
+  providerDns01GoAcme,
 ]);
 
 export type providerConfigType = z.infer<typeof providerConfig>;

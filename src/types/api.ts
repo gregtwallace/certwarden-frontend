@@ -843,12 +843,21 @@ const providerDns01Cloudflare = providerBase.extend({
   ]),
 });
 
+// dns 01: go acme
+const providerDns01GoAcme = providerBase.extend({
+  config: z.object({
+    dns_provider_name: z.string(),
+    environment: z.array(z.string()),
+  }),
+});
+
 const provider = z.union([
   providerHttp01Internal,
   providerDns01Manual,
   providerDns01AcmeDns,
   providerDns01AcmeSh,
   providerDns01Cloudflare,
+  providerDns01GoAcme,
 ]);
 export type providerType = z.infer<typeof provider>;
 

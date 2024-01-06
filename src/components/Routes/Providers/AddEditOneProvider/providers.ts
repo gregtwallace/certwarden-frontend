@@ -18,6 +18,7 @@ import Http01InternalFormFields from './ProviderSubForms/Http01InternalFormField
 import Dns01AcmeDnsFormFields from './ProviderSubForms/Dns01AcmeDnsFormFields';
 import Dns01AcmeShFormFields from './ProviderSubForms/Dns01AcmeShFormFields';
 import Dns01CloudflareFormFields from './ProviderSubForms/Dns01CloudflareFormFields';
+import Dns01GoAcmeFields from './ProviderSubForms/Dns01GoAcmeFields';
 import Dns01ManualFormFields from './ProviderSubForms/Dns01ManualFormFields';
 
 type provider = {
@@ -322,6 +323,45 @@ export const providersList: provider[] = [
         formState.dataToSubmit.config.delete_script === ''
       ) {
         validationErrors['dataToSubmit.config.delete_script'] = true;
+      }
+
+      return validationErrors;
+    },
+  },
+
+  {
+    value: 'dns01goacme',
+    name: 'DNS-01 go-acme le-go',
+    supportsWindows: true,
+    FormComponent: Dns01GoAcmeFields,
+    configName: 'dns_01_go_acme',
+    alsoSet: [
+      {
+        name: 'dataToSubmit.config',
+        value: {
+          dns_provider_name: '',
+          environment: [],
+        },
+      },
+      {
+        name: 'validationErrors',
+        value: {},
+      },
+      {
+        name: 'provider_options',
+        value: undefined,
+      },
+    ],
+    providerOptionsForEdit: undefined,
+    validationFunc: (formState) => {
+      const validationErrors: validationErrorsType = {};
+
+      // must specify provider name
+      if (
+        !('dns_provider_name' in formState.dataToSubmit.config) ||
+        formState.dataToSubmit.config.dns_provider_name === ''
+      ) {
+        validationErrors['dataToSubmit.config.dns_provider_name'] = true;
       }
 
       return validationErrors;
