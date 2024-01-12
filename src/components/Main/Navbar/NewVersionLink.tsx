@@ -5,9 +5,9 @@ import { useState } from 'react';
 import useNewVersion from '../../../hooks/useNewVersion';
 
 import { Close } from '@mui/icons-material';
-import { IconButton } from '@mui/material';
 import UpgradeIcon from '@mui/icons-material/Upgrade';
 
+import IconButton from '../../UI/Button/IconButton';
 import NavLink from './NavLink';
 
 // prop types
@@ -48,9 +48,9 @@ const NewVersionLink: FC<propTypes> = (props) => {
             secondaryAction={
               showSecondaryAction && (
                 <IconButton
-                  edge='end'
-                  aria-label='delete'
                   onClick={closeHandler}
+                  edge='end'
+                  tooltip='Ignore This Version'
                 >
                   <Close fontSize='small' color='error' />
                 </IconButton>

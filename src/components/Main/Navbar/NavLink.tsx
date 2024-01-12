@@ -38,8 +38,8 @@ const NavLink: FC<propTypes> = (props) => {
   const selected = typeof to === 'string' && matchPath(pathname, to) != null;
 
   return (
-    <Tooltip title={children} placement='right'>
-      <ListItem disablePadding secondaryAction={secondaryAction}>
+    <ListItem disablePadding secondaryAction={secondaryAction}>
+      <Tooltip title={children} placement='right'>
         <ListItemButton
           component={Link}
           selected={selected}
@@ -61,8 +61,8 @@ const NavLink: FC<propTypes> = (props) => {
             }}
           />
         </ListItemButton>
-      </ListItem>
-    </Tooltip>
+      </Tooltip>
+    </ListItem>
   );
 };
 
