@@ -34,6 +34,7 @@ import TableContainer from '../../../../UI/TableMui/TableContainer';
 import TableHeaderRow from '../../../../UI/TableMui/TableHeaderRow';
 import TitleBar from '../../../../UI/TitleBar/TitleBar';
 import TablePagination from '../../../../UI/TableMui/TablePagination';
+import DnsPopper from './DnsPopper';
 
 // table headers and sortable param
 const tableHeaders: headerType[] = [
@@ -51,6 +52,11 @@ const tableHeaders: headerType[] = [
     id: 'status',
     label: 'Status',
     sortable: true,
+  },
+  {
+    id: 'dns_identifiers',
+    label: 'DNS Names',
+    sortable: false,
   },
   {
     id: 'keyname',
@@ -284,6 +290,10 @@ const Orders: FC<propTypes> = (props) => {
                   <TableCell>{convertUnixTime(ord.valid_to)}</TableCell>
 
                   <TableCell>{orderStatus(ord)}</TableCell>
+
+                  <TableCell>
+                    <DnsPopper dnsNames={ord.dns_identifiers} />
+                  </TableCell>
 
                   <TableCell>
                     {ord.finalized_key && (

@@ -692,6 +692,7 @@ const ordersResponse = basicGoodResponse.extend({
       }),
       status: z.string(),
       known_revoked: z.boolean(),
+      dns_identifiers: z.array(z.string()),
       finalized_key: z.union([
         z
           .object({
