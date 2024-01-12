@@ -12,9 +12,7 @@ import { type useAxiosSendReturnType } from '../../../../../hooks/useAxiosSend';
 import { type headerType } from '../../../../UI/TableMui/TableHeaderRow';
 
 import { useEffect, useState } from 'react';
-import { Link as RouterLink, useSearchParams } from 'react-router-dom';
-
-import { Link } from '@mui/material';
+import { useSearchParams } from 'react-router-dom';
 
 import useAxiosGet from '../../../../../hooks/useAxiosGet';
 import { queryParser } from '../../../../UI/TableMui/query';
@@ -35,6 +33,7 @@ import TableHeaderRow from '../../../../UI/TableMui/TableHeaderRow';
 import TitleBar from '../../../../UI/TitleBar/TitleBar';
 import TablePagination from '../../../../UI/TableMui/TablePagination';
 import DnsPopper from './DnsPopper';
+import KeyItem from './KeyItem';
 
 // table headers and sortable param
 const tableHeaders: headerType[] = [
@@ -296,14 +295,10 @@ const Orders: FC<propTypes> = (props) => {
                   </TableCell>
 
                   <TableCell>
-                    {ord.finalized_key && (
-                      <Link
-                        component={RouterLink}
-                        to={`/privatekeys/${ord.finalized_key.id}`}
-                      >
-                        {ord.finalized_key.name}
-                      </Link>
-                    )}
+                    <KeyItem
+                      keyId={ord.finalized_key?.id}
+                      keyName={ord.finalized_key?.name}
+                    />
                   </TableCell>
 
                   <TableCell>
