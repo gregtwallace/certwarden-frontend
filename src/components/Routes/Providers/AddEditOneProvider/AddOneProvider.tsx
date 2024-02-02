@@ -63,7 +63,7 @@ const AddOneProvider: FC = () => {
       JSON.stringify(formState.dataToSubmit['domains']) != JSON.stringify(['*'])
     ) {
       formState.dataToSubmit['domains'].forEach((domain, i) => {
-        if (!isDomainValid(domain)) {
+        if (!isDomainValid(domain, false)) {
           validationErrors['dataToSubmit.domains.' + i] = true;
         }
       });
@@ -129,6 +129,12 @@ const AddOneProvider: FC = () => {
               provider as a catch-all (wildcard). Only one provider can be a
               wildcard provider and LeGo uses it for any domain not explicitly
               listed in another provider.
+            </FormInfo>
+
+            <FormInfo>
+              Do not use wildcards here. The provider will be selected for all
+              subdomains (including the wildcard subdomain) of the specified
+              domains.
             </FormInfo>
 
             <InputArrayText

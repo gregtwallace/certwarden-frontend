@@ -25,12 +25,19 @@ export const isEmailValid = (email: string): boolean => {
   return false;
 };
 
-// check if string is a valid domain format
-export const isDomainValid = (domain: string): boolean => {
-  // allow wildcard per RFC 8555 7.1.3
-  // if string prefix is wildcard ("*."), remove it and then validate the remainder
-  // if the prefix is not *. this call is a no-op
-  domain = domain.replace(/^\*\./, '');
+// check if string is a valid domain format (defaults to allowing a wildcard
+// subdomain as well)
+export const isDomainValid = (
+  domain: string,
+  allowWildSubdomain: boolean = true
+): boolean => {
+  // depending on what is being validated, wild subdomain prefix allowed is optional
+  // e.g. RFC 8555 7.1.3 allows wildcard
+  if (allowWildSubdomain) {
+    // if string prefix is wildcard ("*."), remove it and then validate the remainder
+    // if the prefix is not *. this call is a no-op
+    domain = domain.replace(/^\*\./, '');
+  }
 
   // valid domain regex
   const regex =
