@@ -340,7 +340,7 @@ const AddOneCert: FC = () => {
               </InputCheckbox>
 
               <FormInfo>
-                Path and script specifies a shell script to run in post
+                Path and script specifies a shell script or binary to run in post
                 processing. Leave blank to disable.
                 <br />
                 <br />
@@ -349,7 +349,7 @@ const AddOneCert: FC = () => {
 
               <InputTextField
                 id='dataToSubmit.post_processing_command'
-                label='Path And Script'
+                label='Path And Script or Binary'
                 value={formState.dataToSubmit.post_processing_command}
                 onChange={inputChangeHandler}
               />

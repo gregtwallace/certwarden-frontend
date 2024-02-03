@@ -457,10 +457,10 @@ const EditOneCert: FC = () => {
                     </Button>
                   </FormRowRight>
 
-                  <FormInfo>Script</FormInfo>
+                  <FormInfo>Script or Binary</FormInfo>
                   <InputTextField
                     id='dataToSubmit.post_processing_command'
-                    label='Path And Script'
+                    label='Path And Script or Binary'
                     value={formState.dataToSubmit.post_processing_command}
                     onChange={inputChangeHandler}
                   />
