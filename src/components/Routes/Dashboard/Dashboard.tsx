@@ -67,7 +67,7 @@ const Dashboard: FC = () => {
 
   return (
     <TableContainer>
-      <TitleBar title='Dashboard' />
+      <TitleBar title='Dashboard' helpURL="https://www.legocerthub.com/docs/user_interface/dashboard/" />
 
       {!getState.responseData && !getState.error && <ApiLoading />}
 

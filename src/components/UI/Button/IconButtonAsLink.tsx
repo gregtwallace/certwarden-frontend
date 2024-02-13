@@ -1,5 +1,6 @@
 import { type FC, type ReactNode } from 'react';
 import { type LinkProps as RouterLinkProps } from 'react-router-dom';
+import { type IconButtonProps } from '@mui/material';
 
 import { Link as RouterLink } from 'react-router-dom';
 import { IconButton as MuiIconButton, Tooltip } from '@mui/material';
@@ -11,12 +12,13 @@ type propTypes = {
   to: RouterLinkProps['to'];
   target?: RouterLinkProps['target'];
 
+  color?: IconButtonProps['color'];
   tooltip?: string;
 };
 
 // component
 const IconButtonAsLink: FC<propTypes> = (props) => {
-  const { children, target, to, tooltip } = props;
+  const { children, color, target, to, tooltip } = props;
 
   return (
     /* Note: Tooltip doesn't show anything if title is blank */
@@ -25,7 +27,7 @@ const IconButtonAsLink: FC<propTypes> = (props) => {
         component={RouterLink}
         to={to}
         target={target}
-        color='inherit'
+        color={color != undefined ? color : 'inherit'}
       >
         {children}
       </MuiIconButton>

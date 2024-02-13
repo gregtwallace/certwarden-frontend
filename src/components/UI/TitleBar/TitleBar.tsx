@@ -1,17 +1,22 @@
 import { type ElementType, type FC, type ReactNode } from 'react';
 
+import HelpIcon from '@mui/icons-material/Help';
 import { Toolbar } from '@mui/material';
 import Typography from '@mui/material/Typography';
+
+import IconButtonAsLink from '../../UI/Button/IconButtonAsLink';
 
 type propTypes = {
   children?: ReactNode;
 
   title: string;
   headerComponent?: ElementType;
+
+  helpURL?: string;
 };
 
 const TitleBar: FC<propTypes> = (props) => {
-  const { children, headerComponent, title } = props;
+  const { children, headerComponent, helpURL, title } = props;
 
   return (
     <Toolbar variant='dense' disableGutters sx={{ m: 0, px: 2 }}>
@@ -24,7 +29,19 @@ const TitleBar: FC<propTypes> = (props) => {
       >
         {title}
       </Typography>
+
       {children}
+
+      {helpURL != undefined && (
+        <IconButtonAsLink
+          color='primary'
+          tooltip='Help'
+          to={helpURL}
+          target='_blank'
+        >
+          <HelpIcon fontSize='small' />
+        </IconButtonAsLink>
+      )}
     </Toolbar>
   );
 };
