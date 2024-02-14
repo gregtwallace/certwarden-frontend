@@ -34,6 +34,7 @@ type provider = {
       ) => Record<string, unknown> | undefined)
     | undefined;
   validationFunc: (formState: providerFormStateType) => validationErrorsType;
+  helpUrl: string;
 };
 
 // dummy provider holds a dummy component to prevent errors if something goes wrong
@@ -65,6 +66,9 @@ const dummyProvider: provider = {
   validationFunc: () => {
     return {};
   },
+
+  // link to help page
+  helpUrl: 'https://www.legocerthub.com/docs/user_interface/providers/',
 };
 
 // providerTypes lists all of the provider type options and related details
@@ -156,6 +160,9 @@ export const providersList: provider[] = [
       }
       return validationErrors;
     },
+
+    helpUrl:
+      'https://www.legocerthub.com/docs/user_interface/providers/dns01_acme_dns/',
   },
 
   {
@@ -204,6 +211,9 @@ export const providersList: provider[] = [
 
       return validationErrors;
     },
+
+    helpUrl:
+      'https://www.legocerthub.com/docs/user_interface/providers/dns01_acme.sh/',
   },
 
   {
@@ -281,6 +291,9 @@ export const providersList: provider[] = [
 
       return validationErrors;
     },
+
+    helpUrl:
+      'https://www.legocerthub.com/docs/user_interface/providers/dns01_cloudflare/',
   },
 
   {
@@ -327,6 +340,9 @@ export const providersList: provider[] = [
 
       return validationErrors;
     },
+
+    helpUrl:
+      'https://www.legocerthub.com/docs/user_interface/providers/dns01_manual_script/',
   },
 
   {
@@ -366,6 +382,9 @@ export const providersList: provider[] = [
 
       return validationErrors;
     },
+
+    helpUrl:
+      'https://www.legocerthub.com/docs/user_interface/providers/dns01_go_acme_le_go/',
   },
 
   {
@@ -404,6 +423,9 @@ export const providersList: provider[] = [
 
       return validationErrors;
     },
+
+    helpUrl:
+      'https://www.legocerthub.com/docs/user_interface/providers/http01_internal/',
   },
 ];
 

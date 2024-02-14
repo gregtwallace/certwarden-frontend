@@ -26,7 +26,6 @@ import InputSelect from '../../../UI/FormMui/InputSelect';
 import InputArrayText from '../../../UI/FormMui/InputArrayText';
 import FormContainer from '../../../UI/FormMui/FormContainer';
 import FormFooter from '../../../UI/FormMui/FormFooter';
-import FormInfo from '../../../UI/FormMui/FormInfo';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
 
 const ONE_PROVIDER_URL = '/v1/app/challenges/providers/services';
@@ -153,7 +152,7 @@ const EditOneProvider: FC = () => {
 
   return (
     <FormContainer>
-      <TitleBar title='Edit Challenge Provider'>
+      <TitleBar title='Edit Challenge Provider' helpURL={provider.helpUrl}>
         {formState.getResponseData && (
           <Button
             color='error'
@@ -210,20 +209,6 @@ const EditOneProvider: FC = () => {
               disabled
             />
 
-            <FormInfo>
-              Either list the domains you want this provider to be used for or
-              list a single domain with the value of an asterisk (*) to use this
-              provider as a catch-all (wildcard). Only one provider can be a
-              wildcard provider and LeGo uses it for any domain not explicitly
-              listed in another provider.
-            </FormInfo>
-
-            <FormInfo>
-              Do not use wildcards here. The provider will be selected for all
-              subdomains (including the wildcard subdomain) of the specified
-              domains.
-            </FormInfo>
-
             <InputArrayText
               id='dataToSubmit.domains'
               label='Domains'
@@ -232,6 +217,7 @@ const EditOneProvider: FC = () => {
               value={formState.dataToSubmit.domains}
               onChange={inputChangeHandler}
               validationErrors={formState.validationErrors}
+              helpURL='https://www.legocerthub.com/docs/user_interface/providers/#domains'
             />
 
             <provider.FormComponent

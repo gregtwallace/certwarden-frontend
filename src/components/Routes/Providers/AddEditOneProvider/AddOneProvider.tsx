@@ -102,7 +102,7 @@ const AddOneProvider: FC = () => {
 
   return (
     <FormContainer>
-      <TitleBar title='New Challenge Provider' />
+      <TitleBar title='New Challenge Provider' helpURL={provider.helpUrl} />
 
       <Form onSubmit={submitFormHandler}>
         <InputSelect
@@ -123,20 +123,6 @@ const AddOneProvider: FC = () => {
               </FormInfo>
             )}
 
-            <FormInfo>
-              Either list the domains you want this provider to be used for or
-              list a single domain with the value of an asterisk (*) to use this
-              provider as a catch-all (wildcard). Only one provider can be a
-              wildcard provider and LeGo uses it for any domain not explicitly
-              listed in another provider.
-            </FormInfo>
-
-            <FormInfo>
-              Do not use wildcards here. The provider will be selected for all
-              subdomains (including the wildcard subdomain) of the specified
-              domains.
-            </FormInfo>
-
             <InputArrayText
               id='dataToSubmit.domains'
               label='Domains'
@@ -145,6 +131,7 @@ const AddOneProvider: FC = () => {
               value={formState.dataToSubmit.domains}
               onChange={inputChangeHandler}
               validationErrors={formState.validationErrors}
+              helpURL='https://www.legocerthub.com/docs/user_interface/providers/#domains'
             />
 
             <provider.FormComponent

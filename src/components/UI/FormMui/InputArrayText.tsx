@@ -4,10 +4,13 @@ import { type validationErrorsType } from '../../../types/frontend';
 import { escapeStringForRegExp } from '../../../helpers/regex';
 
 import { FormControl, Toolbar } from '@mui/material';
+import HelpIcon from '@mui/icons-material/Help';
+
 import Button from '../Button/Button';
 import FormInfo from './FormInfo';
 import FormLabel from './FormLabel';
 import FormRowRight from './FormRowRight';
+import IconButtonAsLink from '../../UI/Button/IconButtonAsLink';
 import InputTextField from './InputTextField';
 
 // doesnt currently support numbers or other input types that need
@@ -23,11 +26,14 @@ type propsType = {
 
   minElements?: number;
   validationErrors?: validationErrorsType;
+
+  helpURL?: string;
 };
 
 const InputArrayText: FC<propsType> = (props) => {
   // destructure props
   const {
+    helpURL,
     id,
     label,
     minElements,
@@ -120,7 +126,19 @@ const InputArrayText: FC<propsType> = (props) => {
 
   return (
     <FormControl id={id} fullWidth sx={{ my: 1 }}>
-      <FormLabel id={`${id}-label`}>{label}</FormLabel>
+      <FormLabel id={`${id}-label`}>
+        {label}
+
+        {helpURL != undefined && (
+          <IconButtonAsLink
+            tooltip='Help'
+            to={helpURL}
+            target='_blank'
+          >
+            <HelpIcon style={{ fontSize: '17px' }} />
+          </IconButtonAsLink>
+        )}
+      </FormLabel>
 
       {value.length <= 0 ? (
         <FormInfo sx={{ m: 1 }}>None</FormInfo>
