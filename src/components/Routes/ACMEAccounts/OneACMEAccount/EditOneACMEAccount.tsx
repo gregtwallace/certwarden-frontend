@@ -251,7 +251,10 @@ const EditOneACMEAccount: FC = () => {
 
   return (
     <FormContainer>
-      <TitleBar title='Edit ACME Account'>
+      <TitleBar
+        title='Edit ACME Account'
+        helpURL='https://www.legocerthub.com/docs/user_interface/acme_accounts/'
+      >
         {formState.getResponseData && (
           <>
             <Button
