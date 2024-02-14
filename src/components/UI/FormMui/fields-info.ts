@@ -271,6 +271,12 @@ const fieldsInfo: fieldInfoType[] = [
     htmlType: 'text',
     errorMessage: 'Environment variables should be specified.',
   },
+  {
+    nameRegex: /^(.+\.)?dns_provider_name$/,
+    htmlType: 'text',
+    errorMessage: 'CLI flag name (i.e. Code) must be specified.',
+  },
+
 
   // backup and restore
   {
