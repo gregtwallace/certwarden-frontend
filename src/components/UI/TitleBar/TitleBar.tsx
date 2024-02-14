@@ -25,23 +25,22 @@ const TitleBar: FC<propTypes> = (props) => {
         variant='h6'
         color='primary'
         sx={{ flexGrow: 1 }}
-        gutterBottom
       >
         {title}
+
+        {helpURL != undefined && (
+          <IconButtonAsLink
+            color='primary'
+            tooltip='Help'
+            to={helpURL}
+            target='_blank'
+          >
+            <HelpIcon style={{ fontSize: '17px' }} />
+          </IconButtonAsLink>
+        )}
       </Typography>
 
       {children}
-
-      {helpURL != undefined && (
-        <IconButtonAsLink
-          color='primary'
-          tooltip='Help'
-          to={helpURL}
-          target='_blank'
-        >
-          <HelpIcon fontSize='small' />
-        </IconButtonAsLink>
-      )}
     </Toolbar>
   );
 };
