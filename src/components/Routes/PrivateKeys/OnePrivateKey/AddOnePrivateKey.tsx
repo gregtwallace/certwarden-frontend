@@ -166,7 +166,10 @@ const AddOnePrivateKey: FC = () => {
 
   return (
     <FormContainer>
-      <TitleBar title='New Private Key' />
+      <TitleBar
+        title='New Private Key'
+        helpURL='http://localhost:3000/docs/user_interface/private_keys/'
+      />
 
       {!getState.responseData && !getState.error && <ApiLoading />}
 

@@ -200,7 +200,10 @@ const EditOnePrivateKey: FC = () => {
 
   return (
     <FormContainer>
-      <TitleBar title='Edit Private Key'>
+      <TitleBar
+        title='Edit Private Key'
+        helpURL='http://localhost:3000/docs/user_interface/private_keys/'
+      >
         {formState.getResponseData && (
           <>
             <Button

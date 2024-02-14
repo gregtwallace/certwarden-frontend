@@ -65,7 +65,10 @@ const AllPrivateKeys: FC = () => {
 
   return (
     <TableContainer>
-      <TitleBar title='Private Keys'>
+      <TitleBar
+        title='Private Keys'
+        helpURL='http://localhost:3000/docs/user_interface/private_keys/'
+      >
         <ButtonAsLink to={`/privatekeys/${newId}`}>New Key</ButtonAsLink>
       </TitleBar>
 
