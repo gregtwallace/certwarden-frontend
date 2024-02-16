@@ -292,7 +292,10 @@ const EditOneCert: FC = () => {
   return (
     <>
       <FormContainer>
-        <TitleBar title='Edit Certificate'>
+        <TitleBar
+          title='Edit Certificate'
+          helpURL='https://www.legocerthub.com/docs/user_interface/certificates/'
+        >
           {formState.getCertResponseData &&
             formState.getOptionsResponseData && (
               <>
@@ -417,7 +420,9 @@ const EditOneCert: FC = () => {
                   <FormInfo sx={{ p: 1 }}>Post Processing</FormInfo>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <FormInfo>LeGo Client</FormInfo>
+                  <FormInfo helpURL='https://www.legocerthub.com/docs/using_certificates/lego_client/'>
+                    LeGo Client
+                  </FormInfo>
                   <FormRowRight>
                     <InputTextField
                       id='disabled.post_processing_client_key'
@@ -457,10 +462,13 @@ const EditOneCert: FC = () => {
                     </Button>
                   </FormRowRight>
 
-                  <FormInfo>Script or Binary</FormInfo>
+                  <FormInfo helpURL='https://www.legocerthub.com/docs/using_certificates/post_process_bin/'>
+                    Script or Binary
+                  </FormInfo>
+
                   <InputTextField
                     id='dataToSubmit.post_processing_command'
-                    label='Path And Script or Binary'
+                    label='Path and Script or Binary'
                     value={formState.dataToSubmit.post_processing_command}
                     onChange={inputChangeHandler}
                   />

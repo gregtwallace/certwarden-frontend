@@ -231,7 +231,10 @@ const AddOneCert: FC = () => {
 
   return (
     <FormContainer>
-      <TitleBar title='New Certificate' />
+      <TitleBar
+        title='New Certificate'
+        helpURL='https://www.legocerthub.com/docs/user_interface/certificates/'
+      />
 
       {!formState.getResponseData && !formState.getError && <ApiLoading />}
 
@@ -320,64 +323,27 @@ const AddOneCert: FC = () => {
               <FormInfo sx={{ p: 1 }}>Post Processing</FormInfo>
             </AccordionSummary>
             <AccordionDetails>
-              <FormInfo>
-                Post processing runs when an order enters the `Valid` status.
-                Client and script post processing are independent of one
-                another.
-                <br />
-                <br />
-                Enabling client post processing will generate an AES key to
-                configure the client with for communication. LeGo will send the
-                client commands to the certificate&apos;s common name.
+              <FormInfo helpURL='https://www.legocerthub.com/docs/using_certificates/lego_client/'>
+                LeGo Client
               </FormInfo>
-
               <InputCheckbox
                 id='dataToSubmit.post_processing_client_enable'
                 checked={formState.dataToSubmit.post_processing_client_enable}
                 onChange={inputChangeHandler}
               >
-                Enable Client Post Processing
+                Enable LeGo Client Post Processing
               </InputCheckbox>
 
-              <FormInfo>
-                Path and script specifies a shell script or binary to run in post
-                processing. Leave blank to disable.
-                <br />
-                <br />
-                e.g. ./data/myscripts/post.sh
+              <FormInfo helpURL='https://www.legocerthub.com/docs/using_certificates/post_process_bin/'>
+                Script or Binary
               </FormInfo>
 
               <InputTextField
                 id='dataToSubmit.post_processing_command'
-                label='Path And Script or Binary'
+                label='Path and Script or Binary'
                 value={formState.dataToSubmit.post_processing_command}
                 onChange={inputChangeHandler}
               />
-
-              <FormInfo>
-                Format must be:
-                <br />
-                variable_name=variable_value
-                <br />
-                <br />
-                For example: <br />
-                my_api_key=abcdef12345
-                <br />
-                <br />
-                The following environment variables are always available:
-                <br />
-                LEGO_PRIVATE_KEY_NAME = the name of the private key used to
-                finalize the order
-                <br />
-                LEGO_PRIVATE_KEY_PEM = the pem of the private key <br />
-                LEGO_CERTIFICATE_NAME = the name of the certificate
-                <br />
-                LEGO_CERTIFICATE_PEM = the pem of the complete certificate chain
-                for the order
-                <br />
-                LEGO_CERTIFICATE_COMMON_NAME = the common name of the
-                certificate
-              </FormInfo>
 
               <InputArrayText
                 id='dataToSubmit.post_processing_environment'
@@ -398,10 +364,6 @@ const AddOneCert: FC = () => {
               <FormInfo sx={{ p: 1 }}>CSR Fields</FormInfo>
             </AccordionSummary>
             <AccordionDetails>
-              <FormInfo sx={{ mx: 2, mb: 1 }}>
-                These fields are optional and appear to be ignored by some CAs.
-              </FormInfo>
-
               <InputTextField
                 id='dataToSubmit.country'
                 label='Country (2 Letter Code)'

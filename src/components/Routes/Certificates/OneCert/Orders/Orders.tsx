@@ -244,7 +244,11 @@ const Orders: FC<propTypes> = (props) => {
 
   return (
     <TableContainer>
-      <TitleBar title='ACME Orders' headerComponent='h3'>
+      <TitleBar
+        title='ACME Orders'
+        headerComponent='h3'
+        helpURL='https://www.legocerthub.com/docs/user_interface/certificates/#acme-orders'
+      >
         {getState.responseData && (
           <Button
             size='small'
