@@ -67,7 +67,10 @@ const OrderQueue: FC = () => {
 
   return (
     <TableContainer>
-      <TitleBar title='Order Queue' />
+      <TitleBar
+        title='Order Queue'
+        helpURL='https://www.legocerthub.com/docs/user_interface/order_queue/'
+      />
 
       <TableText>
         The Order Queue shows all active orders that LeGo is working on. If an
@@ -121,7 +124,7 @@ const OrderQueue: FC = () => {
                     </TableCell>
 
                     <TableCell>
-                      {wJob ? wJob.high_priority ? 'High' : 'Low' : ''}
+                      {wJob ? (wJob.high_priority ? 'High' : 'Low') : ''}
                     </TableCell>
 
                     <TableCell>
