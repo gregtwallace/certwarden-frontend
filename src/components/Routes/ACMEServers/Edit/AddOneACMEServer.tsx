@@ -105,8 +105,11 @@ const AddOneACMEServer: FC = () => {
 
   return (
     <FormContainer>
-      <TitleBar title='New ACME Server' />
-      
+      <TitleBar
+        title='New ACME Server'
+        helpURL='https://www.legocerthub.com/docs/user_interface/acme_servers/'
+      />
+
       <Form onSubmit={submitFormHandler}>
         <InputTextField
           id='dataToSubmit.name'

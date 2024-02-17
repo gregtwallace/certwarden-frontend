@@ -154,7 +154,10 @@ const EditOneACMEServer: FC = () => {
 
   return (
     <FormContainer>
-      <TitleBar title='Edit ACME Server'>
+      <TitleBar
+        title='Edit ACME Server'
+        helpURL='https://www.legocerthub.com/docs/user_interface/acme_servers/'
+      >
         {formState.getResponseData && (
           <Button
             color='error'

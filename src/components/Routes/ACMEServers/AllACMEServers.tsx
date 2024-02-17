@@ -64,7 +64,11 @@ const AllACMEServers: FC = () => {
 
   return (
     <TableContainer>
-      <TitleBar title='ACME Servers'>
+      <TitleBar
+        title='ACME Servers'
+        helpURL='https://www.legocerthub.com/docs/user_interface/acme_servers/'
+
+      >
         <ButtonAsLink to={`/acmeservers/${newId}`}>New Server</ButtonAsLink>
       </TitleBar>
 
