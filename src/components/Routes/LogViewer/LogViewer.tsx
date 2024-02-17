@@ -46,7 +46,10 @@ const LogViewer: FC = () => {
           p: 1,
         }}
       >
-        <TitleBar title='Most Recent Log'>
+        <TitleBar
+          title='Most Recent Log'
+          helpURL='https://www.legocerthub.com/docs/user_interface/logs/'
+        >
           <Button
             onClick={downloadAllClickHandler}
             disabled={axiosSendState.isSending}
