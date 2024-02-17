@@ -15,7 +15,10 @@ import Shutdown from './Shutdown';
 const Settings: FC = () => {
   return (
     <GridContainer>
-      <TitleBar title='Settings' />
+      <TitleBar
+        title='Settings'
+        helpURL='https://www.legocerthub.com/docs/user_interface/settings/'
+      />
 
       <GridChildrenContainer>
         <GridItemThird>
