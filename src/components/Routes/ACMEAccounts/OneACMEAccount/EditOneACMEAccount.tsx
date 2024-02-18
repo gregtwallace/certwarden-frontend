@@ -220,7 +220,7 @@ const EditOneACMEAccount: FC = () => {
     // client side validation -- end
 
     apiCall<oneAcmeAccountResponseType>(
-      'POST',
+      'PUT',
       thisAcmeAccountUrl,
       formState.dataToSubmitEdit,
       parseOneAcmeAccountResponseType
