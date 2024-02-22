@@ -66,8 +66,12 @@ const Navbar: FC = () => {
 
         <Divider sx={{ my: 1 }} />
 
-        <NavLink to='/orderqueue' IconComponent={FormatListNumberedIcon}>
-          Order Queue
+        <NavLink to='/orderacmequeue' IconComponent={FormatListNumberedIcon}>
+          ACME Queue
+        </NavLink>
+
+        <NavLink to='/orderpostqueue' IconComponent={FormatListNumberedIcon}>
+          Post Queue
         </NavLink>
 
         <NavLink to='/logs' IconComponent={TextSnippetIcon}>

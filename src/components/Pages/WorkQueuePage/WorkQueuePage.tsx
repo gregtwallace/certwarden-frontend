@@ -1,7 +1,7 @@
 import { type FC } from 'react';
 import {
-  type orderQueueResponseType,
-  parseOrderQueueResponseType,
+  type queueResponseType,
+  parseQueueResponseType,
 } from '../../../types/api';
 import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 
@@ -23,7 +23,12 @@ import TableRow from '@mui/material/TableRow';
 import TitleBar from '../../UI/TitleBar/TitleBar';
 import TableText from '../../UI/TableMui/TableText';
 
-const ORDER_QUEUE_URL = '/v1/orders/fulfiller/status';
+type propTypes = {
+  apiUrl: string;
+  description: string;
+  helpUrl: string;
+  queueName: string;
+};
 
 // table headers
 const tableHeaders: headerType[] = [
@@ -59,25 +64,19 @@ const tableHeaders: headerType[] = [
   },
 ];
 
-const OrderQueue: FC = () => {
-  const { getState } = useAxiosGet<orderQueueResponseType>(
-    ORDER_QUEUE_URL,
-    parseOrderQueueResponseType
+const WorkQueuePage: FC<propTypes> = (props) => {
+  const { apiUrl, description, helpUrl, queueName } = props;
+
+  const { getState } = useAxiosGet<queueResponseType>(
+    apiUrl,
+    parseQueueResponseType
   );
 
   return (
     <TableContainer>
-      <TitleBar
-        title='Order Queue'
-        helpURL='https://www.legocerthub.com/docs/user_interface/order_queue/'
-      />
+      <TitleBar title={`${queueName} Queue`} helpURL={helpUrl} />
 
-      <TableText>
-        The Order Queue shows all active orders that LeGo is working on. If an
-        order is assigned to a Worker ID, that order is being actively worked
-        with the ACME server. If an order does not have a Worker ID, it is
-        queued up and waiting to be worked once a worker becomes available.
-      </TableText>
+      <TableText>{description}</TableText>
 
       {!getState.responseData && !getState.error && <ApiLoading />}
 
@@ -96,7 +95,7 @@ const OrderQueue: FC = () => {
 
           <TableBody>
             {/* Workers */}
-            {Object.entries(getState.responseData.worker_jobs).map(
+            {Object.entries(getState.responseData.jobs_working).map(
               (workers) => {
                 const [wId, wJob] = workers;
 
@@ -169,4 +168,4 @@ const OrderQueue: FC = () => {
   );
 };
 
-export default OrderQueue;
+export default WorkQueuePage;

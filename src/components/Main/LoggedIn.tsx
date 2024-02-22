@@ -28,7 +28,8 @@ import EditOnePrivateKey from '../Routes/PrivateKeys/OnePrivateKey/EditOnePrivat
 import EditOneProvider from '../Routes/Providers/AddEditOneProvider/EditOneProvider';
 import Logout from '../Routes/Logout/Logout';
 import LogViewer from '../Routes/LogViewer/LogViewer';
-import OrderQueue from '../Routes/OrderQueue/OrderQueue';
+import OrderFulfillQueue from '../Routes/OrderFulfillQueue/OrderFulfillQueue';
+import OrderPostProcessQueue from '../Routes/OrderPostProcessQueue/OrderPostProcessQueue';
 import RolloverAccountKey from '../Routes/ACMEAccounts/OneACMEAccount/Edit/RolloverAccountKey';
 import Settings from '../Routes/Settings/Settings';
 
@@ -88,8 +89,11 @@ const LoggedIn: FC = () => {
           />
           <Route path={`/certificates/${newId}`} element={<AddOneCert />} />
 
-          {/* Order Queue */}
-          <Route path={'/orderqueue'} element={<OrderQueue />} />
+          {/* Order Fulfill Queue */}
+          <Route path={'/orderacmequeue'} element={<OrderFulfillQueue />} />
+
+          {/* Order Post Process Queue */}
+          <Route path={'/orderpostqueue'} element={<OrderPostProcessQueue />} />
 
           {/* Logs */}
           <Route path={'/logs'} element={<LogViewer />} />

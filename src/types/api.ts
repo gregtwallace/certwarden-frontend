@@ -747,10 +747,10 @@ export const parseOrderPostProcessResponseType = (
 };
 
 //
-// Order Queue
+// Order Work Queues
 //
 
-const orderFulfillerJob = z.object({
+const orderJob = z.object({
   added_to_queue: z.number(),
   high_priority: z.boolean(),
   order: z.object({
@@ -763,16 +763,16 @@ const orderFulfillerJob = z.object({
   }),
 });
 
-const orderQueueResponse = basicGoodResponse.extend({
-  worker_jobs: z.record(z.string(), z.union([orderFulfillerJob, z.null()])),
-  jobs_waiting: z.array(orderFulfillerJob),
+const queueResponse = basicGoodResponse.extend({
+  jobs_working: z.record(z.string(), z.union([orderJob, z.null()])),
+  jobs_waiting: z.array(orderJob),
 });
 
-export type orderQueueResponseType = z.infer<typeof orderQueueResponse>;
-export const parseOrderQueueResponseType = (
+export type queueResponseType = z.infer<typeof queueResponse>;
+export const parseQueueResponseType = (
   unk: unknown
-): orderQueueResponseType => {
-  return orderQueueResponse.parse(unk);
+): queueResponseType => {
+  return queueResponse.parse(unk);
 };
 
 //
