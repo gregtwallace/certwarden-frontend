@@ -281,7 +281,7 @@ const InputExtraExtensions = (props: propTypes): ReactNode => {
             })
           }
         >
-          Must Staple
+          Add Must Staple
         </Button>
       </Toolbar>
     </FormControl>
