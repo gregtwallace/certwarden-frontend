@@ -604,6 +604,14 @@ const oneCertificateResponse = basicGoodResponse.extend({
     country: z.string(),
     state: z.string(),
     city: z.string(),
+    csr_extra_extensions: z.array(
+      z.object({
+        description: z.string(),
+        oid: z.string(),
+        critical: z.boolean(),
+        value_hex: z.string(),
+      })
+    ),
     api_key: z.string(),
     api_key_new: z.string().optional(),
     post_processing_command: z.string(),
@@ -769,9 +777,7 @@ const queueResponse = basicGoodResponse.extend({
 });
 
 export type queueResponseType = z.infer<typeof queueResponse>;
-export const parseQueueResponseType = (
-  unk: unknown
-): queueResponseType => {
+export const parseQueueResponseType = (unk: unknown): queueResponseType => {
   return queueResponse.parse(unk);
 };
 

@@ -11,6 +11,7 @@ import {
   type frontendErrorType,
   type validationErrorsType,
 } from '../../../../types/frontend';
+import { type certExtension } from './InputExtraExtensions/InputExtraExtensions';
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -20,7 +21,9 @@ import useAxiosSend from '../../../../hooks/useAxiosSend';
 import { inputHandlerFuncMaker } from '../../../../helpers/input-handler';
 import {
   isDomainValid,
+  isHexStringValid,
   isNameValid,
+  isOIDValid,
 } from '../../../../helpers/form-validation';
 import { newId } from '../../../../helpers/constants';
 import { buildPrivateKeyOptions } from '../../../../helpers/options_builders';
@@ -39,6 +42,7 @@ import FormFooter from '../../../UI/FormMui/FormFooter';
 import FormInfo from '../../../UI/FormMui/FormInfo';
 import FormRowRight from '../../../UI/FormMui/FormRowRight';
 import InputCheckbox from '../../../UI/FormMui/InputCheckbox';
+import InputExtraExtensions from './InputExtraExtensions/InputExtraExtensions';
 import InputSelect from '../../../UI/FormMui/InputSelect';
 import InputArrayText from '../../../UI/FormMui/InputArrayText';
 import InputTextField from '../../../UI/FormMui/InputTextField';
@@ -67,6 +71,7 @@ type formObj = {
     country: string;
     state: string;
     city: string;
+    csr_extra_extensions: certExtension[];
   };
   sendError: frontendErrorType | undefined;
   validationErrors: validationErrorsType;
@@ -126,6 +131,8 @@ const EditOneCert: FC = () => {
         country: certResponseData?.certificate.country || '',
         state: certResponseData?.certificate.state || '',
         city: certResponseData?.certificate.city || '',
+        csr_extra_extensions:
+          certResponseData?.certificate.csr_extra_extensions || [],
       },
       sendError: undefined,
       validationErrors: {},
@@ -250,6 +257,26 @@ const EditOneCert: FC = () => {
     });
 
     //TODO: CSR validation?
+
+    // CSR - Extra Extensions (check each)
+    formState.dataToSubmit.csr_extra_extensions.forEach((extension, index) => {
+      // Description can be any
+
+      // OID must exist and be in proper format
+      if (!isOIDValid(extension.oid)) {
+        validationErrors[`dataToSubmit.csr_extra_extensions.${index}.oid`] =
+          true;
+      }
+
+      // Hex Bytes Value must be in proper format, if exists
+      if (!isHexStringValid(extension.value_hex)) {
+        validationErrors[
+          `dataToSubmit.csr_extra_extensions.${index}.value_hex`
+        ] = true;
+      }
+
+      // Critical is ok as true or false
+    });
 
     setFormState((prevState) => ({
       ...prevState,
@@ -493,8 +520,8 @@ const EditOneCert: FC = () => {
                 </AccordionSummary>
                 <AccordionDetails>
                   <FormInfo>
-                    These fields are optional and appear to be ignored by some
-                    CAs.
+                    These fields are optional and some or all of them may be
+                    ignored by the CA, with or without error.
                   </FormInfo>
 
                   <InputTextField
@@ -530,6 +557,13 @@ const EditOneCert: FC = () => {
                     label='Organizational Unit'
                     value={formState.dataToSubmit.organizational_unit}
                     onChange={inputChangeHandler}
+                  />
+
+                  <InputExtraExtensions
+                    id='dataToSubmit.csr_extra_extensions'
+                    value={formState.dataToSubmit.csr_extra_extensions}
+                    onChange={inputChangeHandler}
+                    validationErrors={formState.validationErrors}
                   />
                 </AccordionDetails>
               </Accordion>

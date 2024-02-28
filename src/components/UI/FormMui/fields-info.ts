@@ -194,6 +194,27 @@ const fieldsInfo: fieldInfoType[] = [
     errorMessage: 'N/A / TODO: If ever validate CSR',
   },
 
+  // {
+  //   nameRegex: /^(.+\.)?csr_extra_extensions\.[0-9]+.description$/,
+  //   htmlType: 'text',
+  //   errorMessage: 'N/A',
+  // },
+  {
+    nameRegex: /^(.+\.)?csr_extra_extensions\.[0-9]+.oid$/,
+    htmlType: 'text',
+    errorMessage: 'OID must be in dot notation format.',
+  },
+  {
+    nameRegex: /^(.+\.)?csr_extra_extensions\.[0-9]+.value_hex$/,
+    htmlType: 'text',
+    errorMessage: 'Hex bytes value must be a valid sequence of concatenated hex bytes.',
+  },
+  {
+    nameRegex: /^(.+\.)?csr_extra_extensions\.[0-9]+.critical$/,
+    htmlType: 'checkbox',
+    errorMessage: 'N/A',
+  },
+
   // providers
   {
     nameRegex: /^(.+\.)?domains\.[0-9]+$/,

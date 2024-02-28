@@ -71,3 +71,68 @@ export const isPortValid = (port: number): boolean => {
 
   return true;
 };
+
+// isOIDValid returns true if the string is a valid dot notation OID
+export const isOIDValid = (oid: string): boolean => {
+  // split on dots
+  const oidParts = oid.split('.');
+
+  // each member should be a valid number
+  try {
+    oidParts.forEach((elem) => {
+      // on any not a number, abort and return invalid
+      if (isNaN(+elem) || isNaN(parseFloat(elem)) || elem.includes(' ')) {
+        throw 'not a number';
+      }
+    });
+  } catch (_err) {
+    return false;
+  }
+
+  // no elems invalid, so OID is valid
+  return true;
+};
+
+// isHexStringValid returns true the string is valid hex content either without
+// any separator or with space or colon separator (mix and match of these options
+// is not allow though -- e.g. `aabb:cc` or `aa bbcc` are both invalid)
+export const isHexStringValid = (hex: string): boolean => {
+  let hexParts: string[] = [];
+  if (hex.includes(':')) {
+    // using : separator
+    hexParts = hex.split(':');
+  } else if (hex.includes(' ')) {
+    // using [space] separator
+    hexParts = hex.split(' ');
+  }
+
+  // if we made parts, build hex without separator string from them, if we did
+  // not, use original hex value
+  let valueHexNoSep = '';
+  if (hexParts.length > 0) {
+    try {
+      // each byte must be 2 chars, if not, throw err to break early and return
+      // invalid (i.e. false)
+      hexParts.forEach((elem) => {
+        if (elem.length != 2) {
+          throw 'not a valid byte length';
+        }
+
+        valueHexNoSep += elem;
+      });
+    } catch (_err) {
+      return false;
+    }
+  } else {
+    valueHexNoSep = hex;
+  }
+
+  // verify only valid hex chars in hex string && must be length that is a multiple
+  // of 2 (since each byte is 2 hex chars)
+  const regex = /^[A-Fa-f0-9]*$/;
+  if (valueHexNoSep.length % 2 !== 0 || !valueHexNoSep.match(regex)) {
+    return false;
+  }
+
+  return true;
+};
