@@ -388,7 +388,12 @@ const AddOneCert: FC = () => {
               aria-controls='csr-fields-content'
               id='csr-fields-header'
             >
-              <FormInfo sx={{ p: 1 }}>CSR Fields</FormInfo>
+              <FormInfo
+                sx={{ p: 1 }}
+                helpURL='https://www.legocerthub.com/docs/user_interface/certificates/#csr-fields'
+              >
+                CSR Fields
+              </FormInfo>
             </AccordionSummary>
             <AccordionDetails>
               <FormInfo>
