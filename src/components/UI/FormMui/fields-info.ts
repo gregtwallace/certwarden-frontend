@@ -148,6 +148,11 @@ const fieldsInfo: fieldInfoType[] = [
   },
 
   {
+    nameRegex: /^(.+\.)?post_processing_client_enable$/,
+    htmlType: 'checkbox',
+    errorMessage: 'N/A',
+  },
+  {
     nameRegex: /^(.+\.)?post_processing_client_key$/,
     htmlType: 'text',
     errorMessage: 'N/A',
