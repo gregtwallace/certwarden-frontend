@@ -1,3 +1,10 @@
+// isInteger returns true if the provided string is an integer; it is
+// very strict and does not allow floats, whitespaces, etc.
+export const isInteger = (maybeNumber: string): boolean => {
+  const regex = /^[0-9]+$/;
+  return maybeNumber.match(regex) !== null;
+};
+
 // check if name is valid (only permitted to contain URL path chars)
 export const isNameValid = (name: string): boolean => {
   // don't allow blank name
@@ -81,7 +88,7 @@ export const isOIDValid = (oid: string): boolean => {
   try {
     oidParts.forEach((elem) => {
       // on any not a number, abort and return invalid
-      if (isNaN(+elem) || isNaN(parseFloat(elem)) || elem.includes(' ')) {
+      if (!isInteger(elem)) {
         throw 'not a number';
       }
     });

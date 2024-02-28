@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from 'react';
 
 import { z } from 'zod';
 
+import { isInteger } from './form-validation';
 // import { redactJSONObject } from './logging';
 
 // input nodes
@@ -32,7 +33,7 @@ const nextNodeToSet = (
   nextKey: string
 ): nodeType => {
   // for use if next node needs to be created (depending on next node type (string or number))
-  const nextIsNum = !isNaN(parseInt(nextKey)) ? true : false;
+  const nextIsNum = isInteger(nextKey) ? true : false;
   const nextEmptyNode = nextIsNum ? <arrayNodeType>[] : <objectNodeType>{};
 
   // nextNode is narrowed to node later

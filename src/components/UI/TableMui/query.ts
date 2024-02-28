@@ -1,3 +1,5 @@
+import { isInteger } from '../../../helpers/form-validation';
+
 export const perPageOptions = [5, 10, 20, 50];
 
 const defRowsPerPage = 20;
@@ -15,13 +17,13 @@ const getRowsPerPage = (
     return defaultRows;
   }
 
-  // if NaN, use default
-  const perPageVal = parseInt(perPageParam);
-  if (isNaN(perPageVal)) {
+  // if not an integer, use default
+  if (!isInteger(perPageParam)) {
     return defaultRows;
   }
 
   // if not included as an option in rows per page, use default
+  const perPageVal = parseInt(perPageParam);
   if (!perPageOptions.includes(perPageVal)) {
     return defaultRows;
   }
@@ -38,7 +40,12 @@ const getPage = (searchParams: URLSearchParams): number => {
     return defPage;
   }
 
-  // if NaN or < 0, use default
+  // if not an integer, use default
+  if (!isInteger(pageParam)) {
+    return defPage;
+  }
+
+  // if < 0, use default
   const pageVal = parseInt(pageParam);
   if (isNaN(pageVal) || pageVal < 0) {
     return defPage;
