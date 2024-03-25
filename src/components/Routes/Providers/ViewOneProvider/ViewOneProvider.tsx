@@ -4,13 +4,13 @@ import { type providerType } from '../../../../types/api';
 import { Box } from '@mui/material';
 
 import GridItemContainer from '../../../UI/Grid/GridItemContainer';
-import GridItemText from '../../../UI/Grid/GridItemText';
+// import GridItemText from '../../../UI/Grid/GridItemText';
 import FormRowRight from '../../../UI/FormMui/FormRowRight';
 import ButtonAsLink from '../../../UI/Button/ButtonAsLink';
 
 import ProviderTitle from './ProviderTitle';
 import ProviderDomainsView from './ProviderDomainsView';
-import ConfigView from './ConfigView';
+// import ConfigView from './ConfigView';
 
 type propTypes = {
   provider: providerType;
@@ -30,9 +30,8 @@ const ViewOneProvider: FC<propTypes> = (props) => {
 
       <ProviderDomainsView domains={provider.domains} />
 
-      <GridItemText>Config</GridItemText>
-
-      <ConfigView config={provider.config} />
+      {/* <GridItemText>Config</GridItemText> */}
+      {/* <ConfigView config={provider.config} /> */}
 
       <Box
         sx={{
