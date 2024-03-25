@@ -21,17 +21,6 @@ export const isNameValid = (name: string): boolean => {
   return true;
 };
 
-// check if an email address is in a valid email address format
-export const isEmailValid = (email: string): boolean => {
-  // valid email regex
-  const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/;
-  if (email.match(regex)) {
-    return true;
-  }
-
-  return false;
-};
-
 // check if string is a valid domain format (defaults to allowing a wildcard
 // subdomain as well)
 export const isDomainValid = (
@@ -54,6 +43,43 @@ export const isDomainValid = (
   }
 
   return false;
+};
+
+// isEmailValid returns true if the string is a validly formatted email address
+export const isEmailValid = (email: string): boolean => {
+  // split on the @ symbol
+  const emailPieces = email.split('@');
+
+  // invalid if not exactly 2 pieces
+  if (emailPieces.length != 2) {
+    return false;
+  }
+
+  // label each piece
+  const username = emailPieces[0] || '';
+  const domain = emailPieces[1] || '';
+
+  // username regex
+  const usernameRegex = /^[A-Za-z0-9][A-Za-z0-9-_.]{0,62}[A-Za-z0-9]$/;
+  if (!username.match(usernameRegex)) {
+    // no match = invalid username
+    return false;
+  }
+
+  // check for invalid consecutive special chars in username
+  const usernameConsecSpecialRegex = /[-_.]{2,}/;
+  if (username.match(usernameConsecSpecialRegex)) {
+    // match = invalid consecutive special chars
+    return false;
+  }
+
+  // validate domain
+  if (!isDomainValid(domain, false)) {
+    // if domain not valid, email is invalid
+    return false;
+  }
+
+  return true;
 };
 
 // isDirectoryUrlValid validates an acme server url. It verifies the url
