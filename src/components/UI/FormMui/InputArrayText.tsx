@@ -25,7 +25,7 @@ type propsType = {
   onChange: inputHandlerFuncType;
 
   minElements?: number;
-  validationErrors?: validationErrorsType;
+  validationErrors: validationErrorsType;
 
   helpURL?: string;
 };
