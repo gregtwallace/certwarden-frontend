@@ -41,7 +41,7 @@ const Footer: FC = () => {
       </Tooltip>
 
       <Typography variant='body2' align='center'>
-        &copy; 2023 Greg T. Wallace
+        &copy; 2024 Greg T. Wallace
       </Typography>
     </Box>
   );
