@@ -165,7 +165,7 @@ const fieldsInfo: fieldInfoType[] = [
   {
     nameRegex: /^(.+\.)?post_processing_environment\.[0-9]+$/,
     htmlType: 'text',
-    errorMessage: 'N/A',
+    errorMessage: 'Environment variable format must be `VAR=value`.',
   },
 
   {
@@ -207,7 +207,8 @@ const fieldsInfo: fieldInfoType[] = [
   {
     nameRegex: /^(.+\.)?csr_extra_extensions\.[0-9]+.value_hex$/,
     htmlType: 'text',
-    errorMessage: 'Hex bytes value must be a valid sequence of concatenated hex bytes.',
+    errorMessage:
+      'Hex bytes value must be a valid sequence of concatenated hex bytes.',
   },
   {
     nameRegex: /^(.+\.)?csr_extra_extensions\.[0-9]+.critical$/,
@@ -295,14 +296,14 @@ const fieldsInfo: fieldInfoType[] = [
   {
     nameRegex: /^(.+\.)?environment\.[0-9]+$/,
     htmlType: 'text',
-    errorMessage: 'Environment variables should be specified.',
+    errorMessage:
+      'Environment variables should be specified. The format must be `VAR=value`.',
   },
   {
     nameRegex: /^(.+\.)?dns_provider_name$/,
     htmlType: 'text',
     errorMessage: 'CLI flag name (i.e. Code) must be specified.',
   },
-
 
   // backup and restore
   {

@@ -31,6 +31,7 @@ const Dns01GoAcmeFields: FC<providerSubFormPropsType> = (props) => {
             subLabel='Variable'
             value={formState.dataToSubmit.config.environment}
             onChange={onChange}
+            validationErrors={formState.validationErrors}
           />
         </>
       ) : (

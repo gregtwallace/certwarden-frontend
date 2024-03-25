@@ -143,3 +143,29 @@ export const isHexStringValid = (hex: string): boolean => {
 
   return true;
 };
+
+// isEnvironmentParamValid returns true if the environment param is in proper
+// format for the backend (e.g. VAR=some_val)
+// Note: Backend doesn't check this, it just discards invalid. Frontend can prevent
+// saving bad ones to begin with though
+export const isEnvironmentParamValid = (envParam: string): boolean => {
+  // split on =
+  const paramPieces = envParam.split('=');
+
+  // must be exactly 2 pieces (0 is name, 1 is value)
+  if (paramPieces.length != 2) {
+    return false;
+  }
+
+  // name must exist
+  if (!paramPieces[0] || paramPieces[0].length <= 0) {
+    return false;
+  } else if (paramPieces[0] === "''" || paramPieces[0] === '""') {
+    // empty quotes is also 'blank'
+    return false;
+  }
+
+  // don't worry about quoting, backend will adjust if need be
+
+  return true;
+};

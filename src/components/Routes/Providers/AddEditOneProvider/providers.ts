@@ -10,6 +10,7 @@ import {
 import {
   isDomainValid,
   isEmailValid,
+  isEnvironmentParamValid,
   isPortValid,
 } from '../../../../helpers/form-validation';
 
@@ -209,6 +210,16 @@ export const providersList: provider[] = [
         validationErrors['dataToSubmit.config.dns_hook'] = true;
       }
 
+      // check env vars (if exist)
+      if ('environment' in formState.dataToSubmit.config) {
+        formState.dataToSubmit.config.environment.forEach((param, index) => {
+          // check each param
+          if (!isEnvironmentParamValid(param)) {
+            validationErrors[`dataToSubmit.config.environment.${index}`] = true;
+          }
+        });
+      }
+
       return validationErrors;
     },
 
@@ -338,6 +349,16 @@ export const providersList: provider[] = [
         validationErrors['dataToSubmit.config.delete_script'] = true;
       }
 
+      // check env vars (if exist)
+      if ('environment' in formState.dataToSubmit.config) {
+        formState.dataToSubmit.config.environment.forEach((param, index) => {
+          // check each param
+          if (!isEnvironmentParamValid(param)) {
+            validationErrors[`dataToSubmit.config.environment.${index}`] = true;
+          }
+        });
+      }
+
       return validationErrors;
     },
 
@@ -378,6 +399,16 @@ export const providersList: provider[] = [
         formState.dataToSubmit.config.dns_provider_name === ''
       ) {
         validationErrors['dataToSubmit.config.dns_provider_name'] = true;
+      }
+
+      // check env vars (if exist)
+      if ('environment' in formState.dataToSubmit.config) {
+        formState.dataToSubmit.config.environment.forEach((param, index) => {
+          // check each param
+          if (!isEnvironmentParamValid(param)) {
+            validationErrors[`dataToSubmit.config.environment.${index}`] = true;
+          }
+        });
       }
 
       return validationErrors;

@@ -21,6 +21,7 @@ import useAxiosSend from '../../../../hooks/useAxiosSend';
 import { inputHandlerFuncMaker } from '../../../../helpers/input-handler';
 import {
   isDomainValid,
+  isEnvironmentParamValid,
   isHexStringValid,
   isNameValid,
   isOIDValid,
@@ -255,6 +256,18 @@ const EditOneCert: FC = () => {
         validationErrors[`dataToSubmit.subject_alts.${index}`] = true;
       }
     });
+
+    // post processing env vars
+    formState.dataToSubmit.post_processing_environment.forEach(
+      (param, index) => {
+        // check each param
+        if (!isEnvironmentParamValid(param)) {
+          validationErrors[
+            `dataToSubmit.post_processing_environment.${index}`
+          ] = true;
+        }
+      }
+    );
 
     //TODO: CSR validation?
 
@@ -506,6 +519,7 @@ const EditOneCert: FC = () => {
                     subLabel='Variable'
                     value={formState.dataToSubmit.post_processing_environment}
                     onChange={inputChangeHandler}
+                    validationErrors={formState.validationErrors}
                   />
                 </AccordionDetails>
               </Accordion>
