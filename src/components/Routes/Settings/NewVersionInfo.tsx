@@ -49,7 +49,7 @@ const NewVersionInfo: FC = () => {
               {!newVersion.database_version_matches && (
                 <GridItemText color='error.main'>
                   Warning: Update database version does not match current
-                  database version. LeGo will modify the database after upgrade.
+                  database version. Cert Warden will modify the database after upgrade.
                   You should backup your database file before upgrading.
                 </GridItemText>
               )}

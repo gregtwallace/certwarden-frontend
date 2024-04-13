@@ -217,7 +217,7 @@ const EditOneProvider: FC = () => {
               value={formState.dataToSubmit.domains}
               onChange={inputChangeHandler}
               validationErrors={formState.validationErrors}
-              helpURL='https://www.legocerthub.com/docs/user_interface/providers/#domains'
+              helpURL='https://www.certwarden.com/docs/user_interface/providers/#domains'
             />
 
             <provider.FormComponent

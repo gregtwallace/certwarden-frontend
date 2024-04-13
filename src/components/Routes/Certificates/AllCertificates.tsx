@@ -72,7 +72,7 @@ const AllCertificates: FC = () => {
     <TableContainer>
       <TitleBar
         title='Certificates'
-        helpURL='https://www.legocerthub.com/docs/user_interface/certificates/'
+        helpURL='https://www.certwarden.com/docs/user_interface/certificates/'
       >
         <ButtonAsLink to={`/certificates/${newId}`}>
           New Certificate

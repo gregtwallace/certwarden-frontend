@@ -17,7 +17,7 @@ const Settings: FC = () => {
     <GridContainer>
       <TitleBar
         title='Settings'
-        helpURL='https://www.legocerthub.com/docs/user_interface/settings/'
+        helpURL='https://www.certwarden.com/docs/user_interface/settings/'
       />
 
       <GridChildrenContainer>

@@ -45,7 +45,7 @@ const AllProviders: FC = () => {
     <GridContainer>
       <TitleBar
         title='Challenge Providers'
-        helpURL='https://www.legocerthub.com/docs/user_interface/providers/'
+        helpURL='https://www.certwarden.com/docs/user_interface/providers/'
       >
         <ButtonAsLink to={`/providers/${newId}`}>New Provider</ButtonAsLink>
       </TitleBar>

@@ -156,7 +156,7 @@ const EditOneACMEServer: FC = () => {
     <FormContainer>
       <TitleBar
         title='Edit ACME Server'
-        helpURL='https://www.legocerthub.com/docs/user_interface/acme_servers/'
+        helpURL='https://www.certwarden.com/docs/user_interface/acme_servers/'
       >
         {formState.getResponseData && (
           <Button

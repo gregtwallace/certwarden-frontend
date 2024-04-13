@@ -24,7 +24,7 @@ const Header: FC = () => {
           color='inherit'
           sx={{ flexGrow: 1 }}
         >
-          LeGo CertHub
+          Cert Warden
         </Typography>
 
         {isLoggedIn && (

@@ -76,7 +76,7 @@ const AllACMEAccounts: FC = () => {
     <TableContainer>
       <TitleBar
         title='ACME Accounts'
-        helpURL='https://www.legocerthub.com/docs/user_interface/acme_accounts/'
+        helpURL='https://www.certwarden.com/docs/user_interface/acme_accounts/'
       >
         <ButtonAsLink to={`/acmeaccounts/${newId}`}>New Account</ButtonAsLink>
       </TitleBar>

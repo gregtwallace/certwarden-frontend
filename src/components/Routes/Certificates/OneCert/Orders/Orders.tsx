@@ -247,7 +247,7 @@ const Orders: FC<propTypes> = (props) => {
       <TitleBar
         title='ACME Orders'
         headerComponent='h3'
-        helpURL='https://www.legocerthub.com/docs/user_interface/certificates/#acme-orders'
+        helpURL='https://www.certwarden.com/docs/user_interface/certificates/#acme-orders'
       >
         {getState.responseData && (
           <Button

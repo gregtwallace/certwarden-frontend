@@ -69,7 +69,7 @@ const dummyProvider: provider = {
   },
 
   // link to help page
-  helpUrl: 'https://www.legocerthub.com/docs/user_interface/providers/',
+  helpUrl: 'https://www.certwarden.com/docs/user_interface/providers/',
 };
 
 // providerTypes lists all of the provider type options and related details
@@ -163,7 +163,7 @@ export const providersList: provider[] = [
     },
 
     helpUrl:
-      'https://www.legocerthub.com/docs/user_interface/providers/dns01_acme_dns/',
+      'https://www.certwarden.com/docs/user_interface/providers/dns01_acme_dns/',
   },
 
   {
@@ -224,7 +224,7 @@ export const providersList: provider[] = [
     },
 
     helpUrl:
-      'https://www.legocerthub.com/docs/user_interface/providers/dns01_acme.sh/',
+      'https://www.certwarden.com/docs/user_interface/providers/dns01_acme.sh/',
   },
 
   {
@@ -304,7 +304,7 @@ export const providersList: provider[] = [
     },
 
     helpUrl:
-      'https://www.legocerthub.com/docs/user_interface/providers/dns01_cloudflare/',
+      'https://www.certwarden.com/docs/user_interface/providers/dns01_cloudflare/',
   },
 
   {
@@ -363,7 +363,7 @@ export const providersList: provider[] = [
     },
 
     helpUrl:
-      'https://www.legocerthub.com/docs/user_interface/providers/dns01_manual_script/',
+      'https://www.certwarden.com/docs/user_interface/providers/dns01_manual_script/',
   },
 
   {
@@ -415,7 +415,7 @@ export const providersList: provider[] = [
     },
 
     helpUrl:
-      'https://www.legocerthub.com/docs/user_interface/providers/dns01_go_acme_le_go/',
+      'https://www.certwarden.com/docs/user_interface/providers/dns01_go_acme_le_go/',
   },
 
   {
@@ -456,7 +456,7 @@ export const providersList: provider[] = [
     },
 
     helpUrl:
-      'https://www.legocerthub.com/docs/user_interface/providers/http01_internal/',
+      'https://www.certwarden.com/docs/user_interface/providers/http01_internal/',
   },
 ];
 

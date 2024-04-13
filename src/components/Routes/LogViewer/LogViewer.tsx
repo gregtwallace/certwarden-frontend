@@ -48,7 +48,7 @@ const LogViewer: FC = () => {
       >
         <TitleBar
           title='Most Recent Log'
-          helpURL='https://www.legocerthub.com/docs/user_interface/logs/'
+          helpURL='https://www.certwarden.com/docs/user_interface/logs/'
         >
           <Button
             onClick={downloadAllClickHandler}

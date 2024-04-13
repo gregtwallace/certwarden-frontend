@@ -334,7 +334,7 @@ const EditOneCert: FC = () => {
       <FormContainer>
         <TitleBar
           title='Edit Certificate'
-          helpURL='https://www.legocerthub.com/docs/user_interface/certificates/'
+          helpURL='https://www.certwarden.com/docs/user_interface/certificates/'
         >
           {formState.getCertResponseData &&
             formState.getOptionsResponseData && (
@@ -460,8 +460,8 @@ const EditOneCert: FC = () => {
                   <FormInfo sx={{ p: 1 }}>Post Processing</FormInfo>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <FormInfo helpURL='https://www.legocerthub.com/docs/using_certificates/lego_client/'>
-                    LeGo Client
+                  <FormInfo helpURL='https://www.certwarden.com/docs/using_certificates/client/'>
+                    Cert Warden Client
                   </FormInfo>
                   <FormRowRight>
                     <InputTextField
@@ -502,7 +502,7 @@ const EditOneCert: FC = () => {
                     </Button>
                   </FormRowRight>
 
-                  <FormInfo helpURL='https://www.legocerthub.com/docs/using_certificates/post_process_bin/'>
+                  <FormInfo helpURL='https://www.certwarden.com/docs/using_certificates/post_process_bin/'>
                     Script or Binary
                   </FormInfo>
 
@@ -532,7 +532,7 @@ const EditOneCert: FC = () => {
                 >
                   <FormInfo
                     sx={{ p: 1 }}
-                    helpURL='https://www.legocerthub.com/docs/user_interface/certificates/#csr-fields'
+                    helpURL='https://www.certwarden.com/docs/user_interface/certificates/#csr-fields'
                   >
                     CSR Fields
                   </FormInfo>

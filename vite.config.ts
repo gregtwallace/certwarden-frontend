@@ -18,7 +18,7 @@ export default defineConfig({
     },
   },
   plugins: [react()],
-  base: '/legocerthub/app',
+  base: '/certwarden/app',
   html: {
     cspNonce: '{SERVER-CSP-NONCE}',
   },

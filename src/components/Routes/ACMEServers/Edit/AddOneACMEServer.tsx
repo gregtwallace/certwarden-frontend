@@ -107,7 +107,7 @@ const AddOneACMEServer: FC = () => {
     <FormContainer>
       <TitleBar
         title='New ACME Server'
-        helpURL='https://www.legocerthub.com/docs/user_interface/acme_servers/'
+        helpURL='https://www.certwarden.com/docs/user_interface/acme_servers/'
       />
 
       <Form onSubmit={submitFormHandler}>

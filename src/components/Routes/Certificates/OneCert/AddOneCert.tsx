@@ -274,7 +274,7 @@ const AddOneCert: FC = () => {
     <FormContainer>
       <TitleBar
         title='New Certificate'
-        helpURL='https://www.legocerthub.com/docs/user_interface/certificates/'
+        helpURL='https://www.certwarden.com/docs/user_interface/certificates/'
       />
 
       {!formState.getResponseData && !formState.getError && <ApiLoading />}
@@ -364,18 +364,18 @@ const AddOneCert: FC = () => {
               <FormInfo sx={{ p: 1 }}>Post Processing</FormInfo>
             </AccordionSummary>
             <AccordionDetails>
-              <FormInfo helpURL='https://www.legocerthub.com/docs/using_certificates/lego_client/'>
-                LeGo Client
+              <FormInfo helpURL='https://www.certwarden.com/docs/using_certificates/client/'>
+                Cert Warden Client
               </FormInfo>
               <InputCheckbox
                 id='dataToSubmit.post_processing_client_enable'
                 checked={formState.dataToSubmit.post_processing_client_enable}
                 onChange={inputChangeHandler}
               >
-                Enable LeGo Client Post Processing
+                Enable Cert Warden Client Post Processing
               </InputCheckbox>
 
-              <FormInfo helpURL='https://www.legocerthub.com/docs/using_certificates/post_process_bin/'>
+              <FormInfo helpURL='https://www.certwarden.com/docs/using_certificates/post_process_bin/'>
                 Script or Binary
               </FormInfo>
 
@@ -405,7 +405,7 @@ const AddOneCert: FC = () => {
             >
               <FormInfo
                 sx={{ p: 1 }}
-                helpURL='https://www.legocerthub.com/docs/user_interface/certificates/#csr-fields'
+                helpURL='https://www.certwarden.com/docs/user_interface/certificates/#csr-fields'
               >
                 CSR Fields
               </FormInfo>

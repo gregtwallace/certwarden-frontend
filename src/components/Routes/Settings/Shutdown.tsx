@@ -85,9 +85,9 @@ const Shutdown: FC = () => {
 
   return (
     <GridItemContainer>
-      <GridTitle title='Shutdown LeGo' />
+      <GridTitle title='Shutdown Cert Warden' />
 
-      <GridItemText>Programmatically stop and restart LeGo.</GridItemText>
+      <GridItemText>Programmatically stop and restart Cert Warden.</GridItemText>
 
       <Button
         color='warning'
@@ -99,7 +99,7 @@ const Shutdown: FC = () => {
       </Button>
 
       <GridItemText>
-        Programmatically stop LeGo. Depending on how you run LeGo, something
+        Programmatically stop Cert Warden. Depending on how you run Cert Warden, something
         else may restart it automatically.
       </GridItemText>
 

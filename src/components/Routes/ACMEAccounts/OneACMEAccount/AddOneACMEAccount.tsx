@@ -160,7 +160,7 @@ const AddOneACMEAccount: FC = () => {
     <FormContainer>
       <TitleBar
         title='New ACME Account'
-        helpURL='https://www.legocerthub.com/docs/user_interface/acme_accounts/'
+        helpURL='https://www.certwarden.com/docs/user_interface/acme_accounts/'
       />
 
       {!formState.getResponseData && !formState.getError && <ApiLoading />}
