@@ -175,23 +175,31 @@ export const isHexStringValid = (hex: string): boolean => {
 // Note: Backend doesn't check this, it just discards invalid. Frontend can prevent
 // saving bad ones to begin with though
 export const isEnvironmentParamValid = (envParam: string): boolean => {
-  // split on =
-  const paramPieces = envParam.split('=');
-
-  // must be exactly 2 pieces (0 is name, 1 is value)
-  if (paramPieces.length != 2) {
+  // check for separator =
+  const indexOfEqual = envParam.indexOf('=');
+  if (indexOfEqual < 0) {
+    // invalid param (no equal sign)
     return false;
   }
 
-  // name must exist
-  if (!paramPieces[0] || paramPieces[0].length <= 0) {
-    return false;
-  } else if (paramPieces[0] === "''" || paramPieces[0] === '""') {
-    // empty quotes is also 'blank'
-    return false;
+  // get param name
+  let paramName = envParam.substring(0, indexOfEqual);
+  // no checks for param value
+
+  // remove quoting from param name, if it exists
+  if (
+    (paramName.startsWith('"') && paramName.endsWith('"')) ||
+    (paramName.startsWith("'") && paramName.endsWith("'"))
+  ) {
+    paramName = paramName.substring(1, paramName.length - 1);
   }
 
-  // don't worry about quoting, backend will adjust if need be
+  // validate paramName - must be at least len(1), start with letter, and only contain letters,
+  // numbers, and _
+  const regex = /^[A-Za-z][A-Za-z0-9_]*$/;
+  if (!paramName.match(regex)) {
+    return false;
+  }
 
   return true;
 };

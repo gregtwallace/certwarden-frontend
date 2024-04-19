@@ -165,7 +165,8 @@ const fieldsInfo: fieldInfoType[] = [
   {
     nameRegex: /^(.+\.)?post_processing_environment\.[0-9]+$/,
     htmlType: 'text',
-    errorMessage: 'Environment variable format must be `VAR=value`.',
+    errorMessage:
+      'Param format must be `NAME=value`. NAME must contain letters, numbers, and _ only and start with a letter.',
   },
 
   {
@@ -297,7 +298,7 @@ const fieldsInfo: fieldInfoType[] = [
     nameRegex: /^(.+\.)?environment\.[0-9]+$/,
     htmlType: 'text',
     errorMessage:
-      'Environment variables should be specified. The format must be `VAR=value`.',
+      'Param format must be `NAME=value`. NAME must contain letters, numbers, and _ only and start with a letter.',
   },
   {
     nameRegex: /^(.+\.)?dns_provider_name$/,
