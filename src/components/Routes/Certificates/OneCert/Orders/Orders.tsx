@@ -23,6 +23,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import SubjectIcon from '@mui/icons-material/Subject';
 
 import ApiLoading from '../../../../UI/Api/ApiLoading';
 import ApiError from '../../../../UI/Api/ApiError';
@@ -32,7 +33,7 @@ import TableContainer from '../../../../UI/TableMui/TableContainer';
 import TableHeaderRow from '../../../../UI/TableMui/TableHeaderRow';
 import TitleBar from '../../../../UI/TitleBar/TitleBar';
 import TablePagination from '../../../../UI/TableMui/TablePagination';
-import DnsPopper from './DnsPopper';
+import Popper from '../../../../UI/Popper/Popper';
 import KeyItem from './KeyItem';
 
 // table headers and sortable param
@@ -295,7 +296,7 @@ const Orders: FC<propTypes> = (props) => {
                   <TableCell>{orderStatus(ord)}</TableCell>
 
                   <TableCell>
-                    <DnsPopper dnsNames={ord.dns_identifiers} />
+                    <Popper content={ord.dns_identifiers} Icon={SubjectIcon} />
                   </TableCell>
 
                   <TableCell>

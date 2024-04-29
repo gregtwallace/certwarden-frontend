@@ -1,12 +1,13 @@
-import { type FC, type MouseEventHandler } from 'react';
+import type { FC, MouseEventHandler } from 'react';
+import type { SvgIconTypeMap } from '@mui/material';
+import type { OverridableComponent } from '@mui/material/OverridableComponent';
 
 import { Fragment, useState } from 'react';
 
 import { styled, css } from '@mui/system';
-import { Popper } from '@mui/material';
-import SubjectIcon from '@mui/icons-material/Subject';
+import { Popper as MuiPopper } from '@mui/material';
 
-import IconButton from '../../../../UI/Button/IconButton';
+import IconButton from '../Button/IconButton';
 
 const grey = {
   50: '#F3F6F9',
@@ -40,11 +41,12 @@ const StyledPopperDiv = styled('div')(
 );
 
 type propTypes = {
-  dnsNames: string[];
+  content: string[];
+  Icon: OverridableComponent<SvgIconTypeMap>;
 };
 
-const DnsPopper: FC<propTypes> = (props) => {
-  const { dnsNames } = props;
+const Popper: FC<propTypes> = (props) => {
+  const { content, Icon } = props;
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -60,20 +62,21 @@ const DnsPopper: FC<propTypes> = (props) => {
   return (
     <>
       <IconButton onClick={clickHandler} tooltip='Click to View'>
-        <SubjectIcon />
+        <Icon fontSize='small' />
       </IconButton>
-      <Popper open={open} anchorEl={anchorEl} placement='right'>
+      <MuiPopper open={open} anchorEl={anchorEl} placement='right'>
         <StyledPopperDiv>
-          {dnsNames.map((name, i) => (
+          {content.map((name, i) => (
             <Fragment key={i}>
               {name}
-              <br />
+
+              {i + 1 < content.length && <br />}
             </Fragment>
           ))}
         </StyledPopperDiv>
-      </Popper>
+      </MuiPopper>
     </>
   );
 };
 
-export default DnsPopper;
+export default Popper;

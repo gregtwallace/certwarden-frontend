@@ -21,7 +21,6 @@ import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
 import { inputHandlerFuncMaker } from '../../../../helpers/input-handler';
 import { isNameValid } from '../../../../helpers/form-validation';
-import { showDebugInfo } from '../../../../helpers/environment';
 
 import { Box } from '@mui/material';
 import ApiError from '../../../UI/Api/ApiError';
@@ -38,6 +37,8 @@ import InputCheckbox from '../../../UI/FormMui/InputCheckbox';
 import InputSelect from '../../../UI/FormMui/InputSelect';
 import InputTextField from '../../../UI/FormMui/InputTextField';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
+import Popper from '../../../UI/Popper/Popper';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 // TODO
 // Add: refresh LE status button
@@ -424,12 +425,16 @@ const EditOneACMEAccount: FC = () => {
                 </Box>
               )}
 
-            {showDebugInfo &&
-              formState.getResponseData.acme_account.kid !== '' && (
-                <FormInfo>
-                  KID: {formState.getResponseData.acme_account.kid}
-                </FormInfo>
-              )}
+            {formState.getResponseData.acme_account.kid !== '' && (
+              <FormInfo>
+                Account URL:
+                {/*  {} */}
+                <Popper
+                  content={[formState.getResponseData.acme_account.kid]}
+                  Icon={InfoOutlinedIcon}
+                ></Popper>
+              </FormInfo>
+            )}
 
             <FormInfo>
               Account Status:{' '}
