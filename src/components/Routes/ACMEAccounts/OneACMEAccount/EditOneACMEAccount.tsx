@@ -185,7 +185,7 @@ const EditOneACMEAccount: FC = () => {
 
     apiCall<acmeAccountRegisterResponseType>(
       'POST',
-      thisAcmeAccountUrl + '/register-account',
+      thisAcmeAccountUrl + '/register',
       formState.dataToSubmitRegister,
       parseAcmeAccountRegisterResponseType
     ).then(({ responseData, error }) => {
