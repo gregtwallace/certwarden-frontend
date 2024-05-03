@@ -6,6 +6,8 @@ import {
   parseAcmeAccountDeactivateResponseType,
   type acmeAccountRegisterResponseType,
   parseAcmeAccountRegisterResponseType,
+  type acmeAccountRefreshResponseType,
+  parseAcmeAccountRefreshResponseType,
   type oneAcmeAccountResponseType,
   parseOneAcmeAccountResponseType,
 } from '../../../../types/api';
@@ -186,6 +188,29 @@ const EditOneACMEAccount: FC = () => {
       thisAcmeAccountUrl + '/register-account',
       formState.dataToSubmitRegister,
       parseAcmeAccountRegisterResponseType
+    ).then(({ responseData, error }) => {
+      if (responseData) {
+        updateGet();
+      } else {
+        // failed, set error
+        setFormState((prevState) => ({
+          ...prevState,
+          sendError: error,
+        }));
+      }
+    });
+  };
+
+  // refresh ACME account handler
+  const refreshClickHandler: MouseEventHandler = () => {
+    // client side validation
+    // none to do
+
+    apiCall<acmeAccountRefreshResponseType>(
+      'POST',
+      thisAcmeAccountUrl + '/refresh',
+      {},
+      parseAcmeAccountRefreshResponseType
     ).then(({ responseData, error }) => {
       if (responseData) {
         updateGet();
@@ -451,6 +476,17 @@ const EditOneACMEAccount: FC = () => {
                 disabled={axiosSendState.isSending || !canRegister}
               >
                 Register
+              </Button>
+
+              <Button
+                color='primary'
+                onClick={refreshClickHandler}
+                disabled={
+                  axiosSendState.isSending ||
+                  formState.getResponseData.acme_account.kid == ''
+                }
+              >
+                Refresh
               </Button>
             </FormRowRight>
 

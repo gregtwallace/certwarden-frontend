@@ -493,6 +493,20 @@ export const parseAcmeAccountRegisterResponseType = (
   return acmeAccountRegisterResponse.parse(unk);
 };
 
+// refresh response
+const acmeAccountRefreshResponse = basicGoodResponse.extend({
+  status_code: z.literal(200),
+});
+
+export type acmeAccountRefreshResponseType = z.infer<
+  typeof acmeAccountRefreshResponse
+>;
+export const parseAcmeAccountRefreshResponseType = (
+  unk: unknown
+): acmeAccountRefreshResponseType => {
+  return acmeAccountRefreshResponse.parse(unk);
+};
+
 // deactivate response
 const acmeAccountDeactivateResponse = basicGoodResponse.extend({
   status_code: z.literal(200),
