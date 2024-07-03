@@ -202,7 +202,7 @@ const EditOnePrivateKey: FC = () => {
     <FormContainer>
       <TitleBar
         title='Edit Private Key'
-        helpURL='http://localhost:3000/docs/user_interface/private_keys/'
+        helpURL='https://www.certwarden.com/docs/user_interface/private_keys/'
       >
         {formState.getResponseData && (
           <>
