@@ -67,7 +67,7 @@ const AllPrivateKeys: FC = () => {
     <TableContainer>
       <TitleBar
         title='Private Keys'
-        helpURL='http://localhost:3000/docs/user_interface/private_keys/'
+        helpURL='https://www.certwarden.com/docs/user_interface/private_keys/'
       >
         <ButtonAsLink to={`/privatekeys/${newId}`}>New Key</ButtonAsLink>
       </TitleBar>

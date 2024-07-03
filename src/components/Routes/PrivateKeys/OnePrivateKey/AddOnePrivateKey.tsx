@@ -168,7 +168,7 @@ const AddOnePrivateKey: FC = () => {
     <FormContainer>
       <TitleBar
         title='New Private Key'
-        helpURL='http://localhost:3000/docs/user_interface/private_keys/'
+        helpURL='https://www.certwarden.com/docs/user_interface/private_keys/'
       />
 
       {!getState.responseData && !getState.error && <ApiLoading />}
