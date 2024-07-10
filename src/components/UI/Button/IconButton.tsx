@@ -12,12 +12,13 @@ type propTypes = {
 
   color?: MuiIconButtonProps['color'];
   edge?: MuiIconButtonProps['edge'];
+  sx?: MuiIconButtonProps['sx'];
   tooltip?: string;
 };
 
 // component
 const IconButton: FC<propTypes> = (props) => {
-  const { children, color, edge, type, onClick, tooltip } = props;
+  const { children, color, edge, type, onClick, sx, tooltip } = props;
 
   return (
     /* Note: Tooltip doesn't show anything if title is blank */
@@ -27,6 +28,9 @@ const IconButton: FC<propTypes> = (props) => {
         onClick={onClick}
         color={color ? color : 'inherit'}
         edge={edge ? edge : false}
+        sx={{
+          ...sx,
+        }}
       >
         {children}
       </MuiIconButton>
