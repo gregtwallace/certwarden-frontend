@@ -42,9 +42,6 @@ import TitleBar from '../../../UI/TitleBar/TitleBar';
 import PopperWithCopy from '../../../UI/Popper/PopperWithCopy';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
-// TODO
-// Add: refresh LE status button
-
 const ACME_ACCOUNT_URL = '/v1/acmeaccounts';
 
 // form shape
