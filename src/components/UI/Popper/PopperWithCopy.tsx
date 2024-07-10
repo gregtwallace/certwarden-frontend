@@ -2,10 +2,11 @@ import type { FC, MouseEventHandler } from 'react';
 import type { SvgIconTypeMap } from '@mui/material';
 import type { OverridableComponent } from '@mui/material/OverridableComponent';
 
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 
 import { styled, css } from '@mui/system';
 import { Popper as MuiPopper } from '@mui/material';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 import IconButton from '../Button/IconButton';
 
@@ -41,11 +42,11 @@ const StyledPopperDiv = styled('div')(
 );
 
 type propTypes = {
-  content: string[];
+  content: string;
   Icon: OverridableComponent<SvgIconTypeMap>;
 };
 
-const Popper: FC<propTypes> = (props) => {
+const PopperWithCopy: FC<propTypes> = (props) => {
   const { content, Icon } = props;
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -57,6 +58,12 @@ const Popper: FC<propTypes> = (props) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
+  // click copy button (copies and closes popper)
+  const handleCopyClick: MouseEventHandler = () => {
+    setAnchorEl(null);
+    navigator.clipboard.writeText(content);
+  };
+
   const open = Boolean(anchorEl);
 
   return (
@@ -66,17 +73,21 @@ const Popper: FC<propTypes> = (props) => {
       </IconButton>
       <MuiPopper open={open} anchorEl={anchorEl} placement='right'>
         <StyledPopperDiv>
-          {content.map((name, i) => (
-            <Fragment key={i}>
-              {name}
-
-              {i + 1 < content.length && <br />}
-            </Fragment>
-          ))}
+          {content}
+          <IconButton
+            onClick={handleCopyClick}
+            tooltip='Copy & Close'
+            sx={{
+              p: 0,
+              ml: 2,
+            }}
+          >
+            <ContentCopyIcon />
+          </IconButton>
         </StyledPopperDiv>
       </MuiPopper>
     </>
   );
 };
 
-export default Popper;
+export default PopperWithCopy;

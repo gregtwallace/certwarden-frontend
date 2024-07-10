@@ -39,7 +39,7 @@ import InputCheckbox from '../../../UI/FormMui/InputCheckbox';
 import InputSelect from '../../../UI/FormMui/InputSelect';
 import InputTextField from '../../../UI/FormMui/InputTextField';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
-import Popper from '../../../UI/Popper/Popper';
+import PopperWithCopy from '../../../UI/Popper/PopperWithCopy';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 // TODO
@@ -451,11 +451,10 @@ const EditOneACMEAccount: FC = () => {
             {formState.getResponseData.acme_account.kid !== '' && (
               <FormInfo>
                 Account URL:
-                {/*  {} */}
-                <Popper
-                  content={[formState.getResponseData.acme_account.kid]}
+                <PopperWithCopy
+                  content={formState.getResponseData.acme_account.kid}
                   Icon={InfoOutlinedIcon}
-                ></Popper>
+                />
               </FormInfo>
             )}
 
