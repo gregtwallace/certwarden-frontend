@@ -148,12 +148,11 @@ const BackupOnDisk: FC = () => {
 
       <DialogAlert
         title={`Are you sure you want to delete ${deleteOpenedFor}?`}
+        contentText='This backup file will not be recoverable.'
         open={deleteOpenedFor !== ''}
         onCancel={() => setDeleteOpenedFor('')}
         onConfirm={() => deleteDiskBackupHandler(deleteOpenedFor)}
-      >
-        This backup file will not be recoverable.
-      </DialogAlert>
+      />
 
       {!getState.responseData && !getState.error && <ApiLoading />}
 

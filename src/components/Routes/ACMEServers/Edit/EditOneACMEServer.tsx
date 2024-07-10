@@ -184,14 +184,13 @@ const EditOneACMEServer: FC = () => {
         <>
           <DialogAlert
             title={`Are you sure you want to delete ${formState.dataToSubmit.name}?`}
+            contentText='Deleting this ACME Server will make it unavailable for use.'
             open={deleteOpen}
             onCancel={() => {
               setDeleteOpen(false);
             }}
             onConfirm={deleteConfirmHandler}
-          >
-            Deleting this ACME Server will make it unavailable for use.
-          </DialogAlert>
+          />
 
           <Form onSubmit={submitFormHandler}>
             <InputTextField

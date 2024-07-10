@@ -10,8 +10,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 // prop types
 type propTypes = {
-  children: ReactNode;
+  children?: ReactNode;
   title: string;
+  contentText: string;
   open: boolean;
   onCancel: MuiButtonProps['onClick'];
   onConfirm: MuiButtonProps['onClick'];
@@ -19,7 +20,7 @@ type propTypes = {
 
 // component
 const DialogAlert: FC<propTypes> = (props) => {
-  const { children, open, onCancel, onConfirm, title } = props;
+  const { children, contentText, open, onCancel, onConfirm, title } = props;
 
   return (
     <Dialog
@@ -32,8 +33,9 @@ const DialogAlert: FC<propTypes> = (props) => {
       <DialogTitle id='alert-dialog-title'>{title}</DialogTitle>
       <DialogContent>
         <DialogContentText id='alert-dialog-description'>
-          {children}
+          {contentText}
         </DialogContentText>
+        {children}
       </DialogContent>
       <DialogActions
         sx={{

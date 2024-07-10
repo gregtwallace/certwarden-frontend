@@ -217,6 +217,13 @@ const fieldsInfo: fieldInfoType[] = [
     errorMessage: 'N/A',
   },
 
+  // orders
+  {
+    nameRegex: /^(.+\.)?reason_code$/,
+    htmlType: 'number',
+    errorMessage: 'Reason code must be selected.',
+  },
+
   // providers
   {
     nameRegex: /^(.+\.)?domains\.[0-9]+$/,

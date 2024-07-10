@@ -236,12 +236,11 @@ const EditOnePrivateKey: FC = () => {
         <>
           <DialogAlert
             title={`Are you sure you want to delete ${formState.dataToSubmit.name}?`}
+            contentText='This action cannot be undone and the key will NOT be recoverable!'
             open={deleteOpen}
             onCancel={() => setDeleteOpen(false)}
             onConfirm={deleteConfirmHandler}
-          >
-            This action cannot be undone and the key will NOT be recoverable!{' '}
-          </DialogAlert>
+          />
 
           <Form onSubmit={submitFormHandler}>
             <InputTextField

@@ -378,15 +378,12 @@ const EditOneCert: FC = () => {
           <>
             <DialogAlert
               title={`Are you sure you want to delete ${formState.dataToSubmit.name}?`}
+              contentText='All orders associated with this certificate will also be deleted
+              and irrecoverable. Any associated account and private keys will be unchanged.'
               open={deleteOpen}
               onCancel={() => setDeleteOpen(false)}
               onConfirm={deleteConfirmHandler}
-            >
-              All orders associated with this certificate will also be deleted
-              and irrecoverable.
-              <br />
-              Any associated account and private keys will be unchanged.
-            </DialogAlert>
+            />
 
             <Form onSubmit={submitFormHandler}>
               <InputTextField

@@ -315,23 +315,21 @@ const EditOneACMEAccount: FC = () => {
         <>
           <DialogAlert
             title={`Are you sure you want to delete ${formState.dataToSubmitEdit.name}?`}
+            contentText='The account can be recovered as long as the associated key is not
+            lost or deleted.'
             open={deleteOpen}
             onCancel={() => setDeleteOpen(false)}
             onConfirm={deleteConfirmHandler}
-          >
-            The account can be recovered as long as the associated key is not
-            lost or deleted.
-          </DialogAlert>
+          />
 
           <DialogAlert
             title={`Are you sure you want to deactivate ${formState.dataToSubmitEdit.name}?`}
+            contentText='This process cannot be reversed! Ensure you understand all
+            consequences of this action before confirming!'
             open={deactivateOpen}
             onCancel={() => setDeactivateOpen(false)}
             onConfirm={deactivateConfirmHandler}
-          >
-            This process cannot be reversed! Ensure you understand all
-            consequences of this action before confirming!
-          </DialogAlert>
+          />
 
           <Form onSubmit={submitFormHandler}>
             <InputTextField

@@ -1,4 +1,9 @@
-import { type FC, type Dispatch, type SetStateAction } from 'react';
+import {
+  type FC,
+  type Dispatch,
+  type MouseEventHandler,
+  type SetStateAction,
+} from 'react';
 import {
   type ordersResponseType,
   parseOrdersResponseType,
@@ -15,6 +20,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import useAxiosGet from '../../../../../hooks/useAxiosGet';
+import { inputHandlerFuncMaker } from '../../../../../helpers/input-handler';
 import { queryParser } from '../../../../UI/TableMui/query';
 import { convertUnixTime } from '../../../../../helpers/time';
 
@@ -29,6 +35,8 @@ import ApiLoading from '../../../../UI/Api/ApiLoading';
 import ApiError from '../../../../UI/Api/ApiError';
 import ApiSuccess from '../../../../UI/Api/ApiSuccess';
 import Button from '../../../../UI/Button/Button';
+import DialogAlert from '../../../../UI/Dialog/DialogAlert';
+import InputSelect from '../../../../UI/FormMui/InputSelect';
 import TableContainer from '../../../../UI/TableMui/TableContainer';
 import TableHeaderRow from '../../../../UI/TableMui/TableHeaderRow';
 import TitleBar from '../../../../UI/TitleBar/TitleBar';
@@ -80,6 +88,46 @@ type orderStatusObj = {
   status: string;
   valid_to: number | null;
 };
+
+// object to hold revoke info
+type revokeOrderRevokeFormType = {
+  orderID: number;
+  dataToSubmit: {
+    reason_code: number;
+  };
+};
+
+const closedOrderRevokeForm: revokeOrderRevokeFormType = {
+  orderID: -1,
+  dataToSubmit: {
+    reason_code: 0,
+  },
+};
+
+// revocation reason codes (see: RFC 5280 s. 5.3.1)
+// some defined codes are not relevant and are thus omitted
+const revocationReasonOptions = [
+  {
+    value: 0,
+    name: 'Code 0: Unspecified',
+  },
+  {
+    value: 1,
+    name: 'Code 1: Key Compromise',
+  },
+  {
+    value: 4,
+    name: 'Code 4: Superseded',
+  },
+  {
+    value: 5,
+    name: 'Code 5: Cessation of Operation',
+  },
+  {
+    value: 9,
+    name: 'Code 9: Privilege Withdrawn',
+  },
+];
 
 // calculate the order status value to display
 const orderStatus = (order: orderStatusObj): string => {
@@ -226,12 +274,20 @@ const Orders: FC<propTypes> = (props) => {
   };
 
   // handler to revoke a valid order's certificate
-  const revokeCertHandler = (orderId: number): void => {
-    // TODO: add ability to specify revocation reason
+  const [revokeOrderForm, setRevokeOrderForm] = useState(closedOrderRevokeForm);
+  const revokeInputChangeHandler = inputHandlerFuncMaker(setRevokeOrderForm);
+
+  const revokeOrderConfirmHandler: MouseEventHandler = () => {
+    // save params for submission and close form
+    const orderID = revokeOrderForm.orderID;
+    const toSubmit = revokeOrderForm.dataToSubmit;
+    setRevokeOrderForm(closedOrderRevokeForm);
+
+    // send POST
     apiCall<orderResponseType>(
       'POST',
-      `/v1/certificates/${certId}/orders/${orderId}/revoke`,
-      {},
+      `/v1/certificates/${certId}/orders/${orderID}/revoke`,
+      toSubmit,
       parseOrderResponseType
     ).then(({ error }) => {
       setSendResultState(undefined);
@@ -281,6 +337,23 @@ const Orders: FC<propTypes> = (props) => {
 
       {getState.responseData && (
         <>
+          <DialogAlert
+            title={`Are you sure you want to revoke the selected order?`}
+            contentText='This action cannot be undone.'
+            open={revokeOrderForm.orderID !== -1}
+            onCancel={() => setRevokeOrderForm(closedOrderRevokeForm)}
+            onConfirm={revokeOrderConfirmHandler}
+          >
+            <br />
+            <InputSelect
+              id='dataToSubmit.reason_code'
+              label='Revocation Reason'
+              value={revokeOrderForm.dataToSubmit.reason_code}
+              onChange={revokeInputChangeHandler}
+              options={revocationReasonOptions}
+            />
+          </DialogAlert>
+
           <Table size='small'>
             <TableHead>
               <TableHeaderRow headers={tableHeaders} />
@@ -339,7 +412,14 @@ const Orders: FC<propTypes> = (props) => {
                             size='small'
                             color='error'
                             disabled={disableAllButtons}
-                            onClick={(_event) => revokeCertHandler(ord.id)}
+                            onClick={() =>
+                              setRevokeOrderForm({
+                                orderID: ord.id,
+                                dataToSubmit: {
+                                  reason_code: 0,
+                                },
+                              })
+                            }
                           >
                             Revoke
                           </Button>

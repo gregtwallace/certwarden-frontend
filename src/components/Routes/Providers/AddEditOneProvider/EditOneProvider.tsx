@@ -183,17 +183,24 @@ const EditOneProvider: FC = () => {
                 ? ' (id:' + formState.getResponseData.provider.id + ') '
                 : ''
             }?`}
+            contentText={
+              'Domain' +
+              (formState.getResponseData.provider.domains.length > 1
+                ? 's ' +
+                  formState.getResponseData.provider.domains
+                    .slice(0, -1)
+                    .join(',') +
+                  ', and ' +
+                  formState.getResponseData.provider.domains.slice(-1)
+                : ' ' + formState.getResponseData.provider.domains[0]) +
+              ' will become unavilable for challenge solving unless there is a wilcard provider.'
+            }
             open={deleteOpen}
             onCancel={() => {
               setDeleteOpen(false);
             }}
             onConfirm={deleteConfirmHandler}
-          >
-            The following domain(s) will become unavilable for challenge solving
-            unless there is a wilcard provider and it supports them.
-            <br />
-            {formState.getResponseData.provider.domains.join(', ')}
-          </DialogAlert>
+          />
 
           <Form onSubmit={submitFormHandler}>
             <InputSelect
