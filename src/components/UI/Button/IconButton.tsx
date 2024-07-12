@@ -13,7 +13,7 @@ type propTypes = {
   color?: MuiIconButtonProps['color'];
   edge?: MuiIconButtonProps['edge'];
   sx?: MuiIconButtonProps['sx'];
-  tooltip?: string;
+  tooltip?: ReactNode;
 };
 
 // component

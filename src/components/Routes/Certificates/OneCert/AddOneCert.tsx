@@ -108,6 +108,7 @@ type formObj = {
     post_processing_command: string;
     post_processing_environment: string[];
     post_processing_client_enable: boolean;
+    preferred_root_cn: string,
     organization: string;
     organizational_unit: string;
     country: string;
@@ -144,6 +145,7 @@ const AddOneCert: FC = () => {
         post_processing_command: '',
         post_processing_environment: [],
         post_processing_client_enable: false,
+        preferred_root_cn: '',
         organization: '',
         organizational_unit: '',
         country: '',
@@ -415,6 +417,13 @@ const AddOneCert: FC = () => {
                 These fields are optional and some or all of them may be ignored
                 by the CA, with or without error.
               </FormInfo>
+
+              <InputTextField
+                id='dataToSubmit.preferred_root_cn'
+                label='Preferred Root Cert&apos;s Common Name'
+                value={formState.dataToSubmit.preferred_root_cn}
+                onChange={inputChangeHandler}
+              />
 
               <InputTextField
                 id='dataToSubmit.country'

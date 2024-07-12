@@ -13,7 +13,7 @@ type propTypes = {
   target?: RouterLinkProps['target'];
 
   color?: IconButtonProps['color'];
-  tooltip?: string;
+  tooltip?: ReactNode;
 };
 
 // component
@@ -22,7 +22,7 @@ const IconButtonAsLink: FC<propTypes> = (props) => {
 
   return (
     /* Note: Tooltip doesn't show anything if title is blank */
-    <Tooltip title={tooltip}>
+    <Tooltip title={tooltip} placement='right'>
       <MuiIconButton
         component={RouterLink}
         to={to}

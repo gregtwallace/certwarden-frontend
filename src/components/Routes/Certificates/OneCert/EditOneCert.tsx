@@ -67,6 +67,7 @@ type formObj = {
     api_key_via_url: boolean;
     post_processing_command: string;
     post_processing_environment: string[];
+    preferred_root_cn: string;
     organization: string;
     organizational_unit: string;
     country: string;
@@ -126,6 +127,8 @@ const EditOneCert: FC = () => {
           certResponseData?.certificate.post_processing_command || '',
         post_processing_environment:
           certResponseData?.certificate.post_processing_environment || [],
+        preferred_root_cn:
+          certResponseData?.certificate.preferred_root_cn || '',
         organization: certResponseData?.certificate.organization || '',
         organizational_unit:
           certResponseData?.certificate.organizational_unit || '',
@@ -539,6 +542,13 @@ const EditOneCert: FC = () => {
                     These fields are optional and some or all of them may be
                     ignored by the CA, with or without error.
                   </FormInfo>
+
+                  <InputTextField
+                    id='dataToSubmit.preferred_root_cn'
+                    label="Preferred Root Cert's Common Name"
+                    value={formState.dataToSubmit.preferred_root_cn}
+                    onChange={inputChangeHandler}
+                  />
 
                   <InputTextField
                     id='dataToSubmit.country'

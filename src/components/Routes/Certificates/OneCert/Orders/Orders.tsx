@@ -16,7 +16,7 @@ import { type frontendErrorType } from '../../../../../types/frontend';
 import { type useAxiosSendReturnType } from '../../../../../hooks/useAxiosSend';
 import { type headerType } from '../../../../UI/TableMui/TableHeaderRow';
 
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import useAxiosGet from '../../../../../hooks/useAxiosGet';
@@ -30,19 +30,21 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import SubjectIcon from '@mui/icons-material/Subject';
+import KeyIcon from '@mui/icons-material/Key';
+import LinkIcon from '@mui/icons-material/Link';
 
 import ApiLoading from '../../../../UI/Api/ApiLoading';
 import ApiError from '../../../../UI/Api/ApiError';
 import ApiSuccess from '../../../../UI/Api/ApiSuccess';
 import Button from '../../../../UI/Button/Button';
 import DialogAlert from '../../../../UI/Dialog/DialogAlert';
+import IconButton from '../../../../UI/Button/IconButton';
+import IconButtonAsLink from '../../../../UI/Button/IconButtonAsLink';
 import InputSelect from '../../../../UI/FormMui/InputSelect';
 import TableContainer from '../../../../UI/TableMui/TableContainer';
 import TableHeaderRow from '../../../../UI/TableMui/TableHeaderRow';
 import TitleBar from '../../../../UI/TitleBar/TitleBar';
 import TablePagination from '../../../../UI/TableMui/TablePagination';
-import Popper from '../../../../UI/Popper/Popper';
-import KeyItem from './KeyItem';
 
 // table headers and sortable param
 const tableHeaders: headerType[] = [
@@ -62,14 +64,9 @@ const tableHeaders: headerType[] = [
     sortable: true,
   },
   {
-    id: 'dns_identifiers',
-    label: 'DNS Names',
+    id: 'details',
+    label: 'Details',
     sortable: false,
-  },
-  {
-    id: 'keyname',
-    label: 'Key',
-    sortable: true,
   },
   {
     id: 'actions',
@@ -368,15 +365,49 @@ const Orders: FC<propTypes> = (props) => {
 
                   <TableCell>{orderStatus(ord)}</TableCell>
 
+                  {/* Details Column */}
                   <TableCell>
-                    <Popper content={ord.dns_identifiers} Icon={SubjectIcon} />
-                  </TableCell>
+                    <IconButton
+                      tooltip={
+                        <>
+                          DNS Identifiers: <br />
+                          {ord.dns_identifiers.map((id, indx) => (
+                            <Fragment key={indx}>
+                              {id} <br />
+                            </Fragment>
+                          ))}
+                        </>
+                      }
+                    >
+                      <SubjectIcon />
+                    </IconButton>
 
-                  <TableCell>
-                    <KeyItem
-                      keyId={ord.finalized_key?.id}
-                      keyName={ord.finalized_key?.name}
-                    />
+                    {ord.finalized_key && (
+                      <IconButtonAsLink
+                        to={`/privatekeys/${ord.finalized_key.id}`}
+                        tooltip={
+                          <>
+                            Key: <br />
+                            {ord.finalized_key.name}
+                          </>
+                        }
+                      >
+                        <KeyIcon />
+                      </IconButtonAsLink>
+                    )}
+
+                    {ord.chain_root_cn && (
+                      <IconButton
+                        tooltip={
+                          <>
+                            Root Cert CN: <br />
+                            {ord.chain_root_cn}
+                          </>
+                        }
+                      >
+                        <LinkIcon />
+                      </IconButton>
+                    )}
                   </TableCell>
 
                   <TableCell>

@@ -170,6 +170,11 @@ const fieldsInfo: fieldInfoType[] = [
   },
 
   {
+    nameRegex: /^(.+\.)?preferred_root_cn$/,
+    htmlType: 'url',
+    errorMessage: 'N/A / TODO: If ever validate CSR',
+  },
+  {
     nameRegex: /^(.+\.)?country$/,
     htmlType: 'url',
     errorMessage: 'N/A / TODO: If ever validate CSR',

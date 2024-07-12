@@ -626,6 +626,7 @@ const oneCertificateResponse = basicGoodResponse.extend({
         value_hex: z.string(),
       })
     ),
+    preferred_root_cn: z.string(),
     api_key: z.string(),
     api_key_new: z.string().optional(),
     post_processing_command: z.string(),
@@ -715,6 +716,7 @@ const ordersResponse = basicGoodResponse.extend({
       status: z.string(),
       known_revoked: z.boolean(),
       dns_identifiers: z.array(z.string()),
+      chain_root_cn: z.union([z.string(), z.null()]),
       finalized_key: z.union([
         z
           .object({
