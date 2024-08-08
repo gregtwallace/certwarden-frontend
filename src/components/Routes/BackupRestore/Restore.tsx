@@ -10,7 +10,11 @@ const Restore: FC = () => {
     <FormContainer>
       <TitleBar title='Restore' />
 
-      <Form onSubmit={() => {}}>
+      <Form
+        onSubmit={() => {
+          /* TODO */
+        }}
+      >
         <FormInfo>Coming soon.</FormInfo>
       </Form>
     </FormContainer>

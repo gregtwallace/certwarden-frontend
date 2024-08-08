@@ -41,9 +41,9 @@ export type useAxiosSendReturnType = {
 // hook
 const useAxiosSend = (): useAxiosSendReturnType => {
   // state
-  const [axiosSendState, setAxiosSendState] = useState(<axiosSendStateType>{
+  const [axiosSendState, setAxiosSendState] = useState({
     isSending: false,
-  });
+  } as axiosSendStateType);
 
   // axios instance
   const { axiosInstance } = useAxiosWithToken();

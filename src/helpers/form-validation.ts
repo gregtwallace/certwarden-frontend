@@ -25,7 +25,7 @@ export const isNameValid = (name: string): boolean => {
 // subdomain as well)
 export const isDomainValid = (
   domain: string,
-  allowWildSubdomain: boolean = true
+  allowWildSubdomain = true
 ): boolean => {
   // depending on what is being validated, wild subdomain prefix allowed is optional
   // e.g. RFC 8555 7.1.3 allows wildcard

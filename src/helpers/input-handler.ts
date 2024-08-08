@@ -34,7 +34,9 @@ const nextNodeToSet = (
 ): nodeType => {
   // for use if next node needs to be created (depending on next node type (string or number))
   const nextIsNum = isInteger(nextKey) ? true : false;
-  const nextEmptyNode = nextIsNum ? <arrayNodeType>[] : <objectNodeType>{};
+  const nextEmptyNode = nextIsNum
+    ? ([] as arrayNodeType)
+    : ({} as objectNodeType);
 
   // nextNode is narrowed to node later
   let nextNode: unknown;
@@ -70,7 +72,7 @@ const setObjPathVal = <T extends nodeType>(
   value: unknown
 ): T => {
   // missing args
-  if (!obj) return <T>{};
+  if (!obj) return {} as T;
   if (!path) return obj;
 
   // split path
@@ -109,6 +111,18 @@ const setObjPathVal = <T extends nodeType>(
       // finalKey depends on final node type
       if (isObjectNodeType(node)) {
         if (value === undefined) {
+          // NOTE: Doesn't work; node reverts
+          // create a new record without the key that needs to be deleted
+          // console.log('delete obj ' + finalKey);
+          // const filteredNode = {} as Record<string, unknown>;
+          // for (const key in node) {
+          //   if (key !== finalKey) {
+          //     filteredNode[key] = node[key];
+          //   }
+          // }
+          // node = filteredNode;
+
+          // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
           delete node[finalKey];
         } else {
           node[finalKey] = value;
@@ -117,7 +131,7 @@ const setObjPathVal = <T extends nodeType>(
         // must be array
         const finalKeyInt = parseInt(finalKey);
         if (value === undefined) {
-          delete node[finalKeyInt];
+          node.splice(finalKeyInt, 1);
         } else {
           node[finalKeyInt] = value;
         }

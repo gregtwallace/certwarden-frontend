@@ -22,7 +22,9 @@ export type newVersionContextType = {
 
 const NewVersionContext = createContext<newVersionContextType>({
   newVersion: undefined,
-  checkNewVersion: (_event: MouseEvent) => {},
+  checkNewVersion: (_event: MouseEvent) => {
+    /* No-Op */
+  },
   error: undefined,
 });
 

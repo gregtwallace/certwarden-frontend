@@ -101,7 +101,9 @@ export type authContextType = {
 const AuthContext = createContext<authContextType>({
   isLoggedIn: false,
   getAccessToken: () => '',
-  setAuth: (_unused) => {},
+  setAuth: (_unused) => {
+    /* No-Op */
+  },
 });
 
 // props type

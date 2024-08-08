@@ -17,18 +17,20 @@ export type themeContextType = {
 // create theme context
 const ThemeContext = createContext<themeContextType>({
   themeIsDarkMode: false,
-  toggleThemeIsDarkMode: () => {},
+  toggleThemeIsDarkMode: () => {
+    /* No-Op */
+  },
 });
 
 // props type
-interface ThemeProviderPropsType {
+type themeProviderPropsType = {
   children: ReactNode;
-}
+};
 
 // Theme Provider component
-const ThemeProvider: FC<ThemeProviderPropsType> = ({ children }) => {
+const ThemeProvider: FC<themeProviderPropsType> = ({ children }) => {
   // calculate initial theme
-  let initialThemeIsDarkMode: boolean = false;
+  let initialThemeIsDarkMode = false;
   const userPrefersDark = useMediaQuery('(prefers-color-scheme: dark)');
   const localStorageThemeDarkMode: string | null =
     localStorage.getItem('theme_dark_mode');
@@ -50,7 +52,7 @@ const ThemeProvider: FC<ThemeProviderPropsType> = ({ children }) => {
   const toggleThemeIsDarkMode = (): void => {
     setThemeIsDarkMode((prevState) => {
       // reverse prior state
-      const newIsDarkMode: boolean = !prevState;
+      const newIsDarkMode = !prevState;
 
       localStorage.setItem('theme_dark_mode', newIsDarkMode.toString());
       return newIsDarkMode;
