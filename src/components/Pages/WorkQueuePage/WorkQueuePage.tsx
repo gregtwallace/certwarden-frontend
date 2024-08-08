@@ -12,7 +12,7 @@ import { convertUnixTime } from '../../../helpers/time';
 
 import ApiLoading from '../../UI/Api/ApiLoading';
 import ApiError from '../../UI/Api/ApiError';
-import Flag from '../../UI/Flag/Flag';
+import FlagIdle from '../../UI/Flag/FlagIdle';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import { TableCell } from '@mui/material';
@@ -103,9 +103,7 @@ const WorkQueuePage: FC<propTypes> = (props) => {
                   <TableRow key={wId}>
                     <TableCell>{wId}</TableCell>
 
-                    <TableCell>
-                      {wJob ? wJob.order.id : <Flag type='idle' />}
-                    </TableCell>
+                    <TableCell>{wJob ? wJob.order.id : <FlagIdle />}</TableCell>
 
                     <TableCell>
                       {wJob && (

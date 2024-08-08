@@ -21,7 +21,8 @@ import TableRow from '@mui/material/TableRow';
 import ApiLoading from '../../UI/Api/ApiLoading';
 import ApiError from '../../UI/Api/ApiError';
 import ButtonAsLink from '../../UI/Button/ButtonAsLink';
-import Flag from '../../UI/Flag/Flag';
+import FlagLegacyAPI from '../../UI/Flag/FlagLegacyAPI';
+import FlagStaging from '../../UI/Flag/FlagStaging';
 import TableContainer from '../../UI/TableMui/TableContainer';
 import TableHeaderRow from '../../UI/TableMui/TableHeaderRow';
 import TitleBar from '../../UI/TitleBar/TitleBar';
@@ -110,9 +111,9 @@ const AllCertificates: FC = () => {
 
                   <TableCell>
                     {cert.acme_account.acme_server.is_staging && (
-                      <Flag type='staging' />
+                      <FlagStaging />
                     )}
-                    {cert.api_key_via_url && <Flag type='legacy_api' />}
+                    {cert.api_key_via_url && <FlagLegacyAPI />}
                   </TableCell>
 
                   <TableCell>

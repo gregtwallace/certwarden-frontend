@@ -15,12 +15,14 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
 import useAxiosGet from '../../../hooks/useAxiosGet';
-import { convertUnixTime, daysUntil } from '../../../helpers/time';
+import { convertUnixTime } from '../../../helpers/time';
 import { queryParser } from '../../UI/TableMui/query';
 
 import ApiLoading from '../../UI/Api/ApiLoading';
 import ApiError from '../../UI/Api/ApiError';
-import Flag from '../../UI/Flag/Flag';
+import FlagExpireDays from '../../UI/Flag/FlagExpireDays';
+import FlagLegacyAPI from '../../UI/Flag/FlagLegacyAPI';
+import FlagStaging from '../../UI/Flag/FlagStaging';
 import TableContainer from '../../UI/TableMui/TableContainer';
 import TableHeaderRow from '../../UI/TableMui/TableHeaderRow';
 import TablePagination from '../../UI/TableMui/TablePagination';
@@ -67,7 +69,10 @@ const Dashboard: FC = () => {
 
   return (
     <TableContainer>
-      <TitleBar title='Dashboard' helpURL="https://www.certwarden.com/docs/user_interface/dashboard/" />
+      <TitleBar
+        title='Dashboard'
+        helpURL='https://www.certwarden.com/docs/user_interface/dashboard/'
+      />
 
       {!getState.responseData && !getState.error && <ApiLoading />}
 
@@ -98,15 +103,16 @@ const Dashboard: FC = () => {
                   <TableCell>{order.certificate.subject}</TableCell>
                   <TableCell>
                     {order.certificate.acme_account.acme_server.is_staging && (
-                      <Flag type='staging' />
+                      <FlagStaging />
                     )}
-                    {order.certificate.api_key_via_url && (
-                      <Flag type='legacy_api' />
-                    )}
+                    {order.certificate.api_key_via_url && <FlagLegacyAPI />}
                   </TableCell>
                   <TableCell>
                     {convertUnixTime(order.valid_to)}{' '}
-                    <Flag type='expire-days' days={daysUntil(order.valid_to)} />
+                    <FlagExpireDays
+                      validFrom={order.valid_from}
+                      validTo={order.valid_to}
+                    />
                   </TableCell>
                 </TableRow>
               ))}

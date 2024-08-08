@@ -245,6 +245,7 @@ const currentValidOrdersResponse = basicGoodResponse.extend({
         subject: z.string(),
         api_key_via_url: z.boolean(),
       }),
+      valid_from: z.number(),
       valid_to: z.number(),
     })
   ),

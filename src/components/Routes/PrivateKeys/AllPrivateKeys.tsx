@@ -21,7 +21,8 @@ import { newId } from '../../../helpers/constants';
 import ApiLoading from '../../UI/Api/ApiLoading';
 import ApiError from '../../UI/Api/ApiError';
 import ButtonAsLink from '../../UI/Button/ButtonAsLink';
-import Flag from '../../UI/Flag/Flag';
+import FlagAPIDisabled from '../../UI/Flag/FlagAPIDisabled';
+import FlagLegacyAPI from '../../UI/Flag/FlagLegacyAPI';
 import TableContainer from '../../UI/TableMui/TableContainer';
 import TableHeaderRow from '../../UI/TableMui/TableHeaderRow';
 import TitleBar from '../../UI/TitleBar/TitleBar';
@@ -97,8 +98,8 @@ const AllPrivateKeys: FC = () => {
                   </TableCell>
                   <TableCell>{key.description}</TableCell>
                   <TableCell>
-                    {key.api_key_via_url && <Flag type='legacy_api' />}
-                    {key.api_key_disabled && <Flag type='api_key_disabled' />}
+                    {key.api_key_via_url && <FlagLegacyAPI />}
+                    {key.api_key_disabled && <FlagAPIDisabled />}
                   </TableCell>
                   <TableCell>{key.algorithm.name}</TableCell>
                 </TableRow>
