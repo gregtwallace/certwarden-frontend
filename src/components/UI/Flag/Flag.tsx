@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { type FC } from 'react';
 
 import { Typography } from '@mui/material';
 
@@ -10,15 +10,11 @@ type propTypes = {
 };
 
 // component
-const Flag = forwardRef<HTMLSpanElement, propTypes>((props, ref) => {
+const Flag: FC<propTypes> = (props) => {
   const { bgcolor, color, text } = props;
 
   return (
     <Typography
-      // allows Tooltip wrapper
-      {...props}
-      ref={ref}
-      // allows Tooltip wrapper - end
       component='span'
       variant='caption'
       noWrap
@@ -34,7 +30,6 @@ const Flag = forwardRef<HTMLSpanElement, propTypes>((props, ref) => {
       {text}
     </Typography>
   );
-});
+};
 
-Flag.displayName = 'Flag';
 export default Flag;
