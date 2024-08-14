@@ -3,7 +3,7 @@ import { type FC } from 'react';
 import { useTheme } from '@mui/material';
 
 import { Box, Tooltip, Typography } from '@mui/material';
-import { convertUnixTime, daysUntil } from '../../../helpers/time';
+import { convertUnixTime, daysUntil, secsUntil } from '../../../helpers/time';
 
 // consts that determine when certs will be considered expiring and thus eligible
 // for auto renewal
@@ -27,10 +27,10 @@ const FlagExpireDays: FC<propTypes> = (props) => {
 
   // there are two renewal thresholds, calculate both
   // elapsed fraction of valid time
-  const totalDuration = validTo - validFrom;
+  const totalDurationSecs = validTo - validFrom;
 
   const remainingValidFractionThresholdDate =
-    validTo - totalDuration * expiringRemainingValidFraction;
+    validTo - totalDurationSecs * expiringRemainingValidFraction;
 
   // remaining valid time
   const remainingValidMinThresholdDate = validTo - expiringMinRemaining;
@@ -53,12 +53,12 @@ const FlagExpireDays: FC<propTypes> = (props) => {
     bgcolorHex = theme.palette['warning']['main'];
   }
 
-  // for Flag display text
+  // for display text
   const daysRemainingValid = daysUntil(validTo);
 
   // for tooltip text & bar fill
-  const bgFillPercent = Math.floor(
-    (daysRemainingValid / (totalDuration / (60 * 60 * 24))) * 100
+  const percentValidRemaining = Math.floor(
+    (secsUntil(validTo) / totalDurationSecs) * 100
   );
 
   // linear gradient background string
@@ -66,7 +66,7 @@ const FlagExpireDays: FC<propTypes> = (props) => {
     'linear-gradient(to right, ' +
     bgcolorHex +
     ' ' +
-    bgFillPercent +
+    percentValidRemaining +
     '%, transparent 0%)';
 
   return (
@@ -76,7 +76,7 @@ const FlagExpireDays: FC<propTypes> = (props) => {
           Validity Remaining:
           <br />
           {daysRemainingValid.toString() + ' Days ('}
-          {bgFillPercent + '%)'}
+          {percentValidRemaining + '%)'}
           <br />
           Renews After:
           <br />

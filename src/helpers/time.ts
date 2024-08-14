@@ -33,9 +33,14 @@ export const convertUnixTime = (
   );
 };
 
+// function to return number of seconds until the specified time
+export const secsUntil = (unixTime: number): number => {
+  return unixTime - Math.floor(Date.now() / 1000);
+};
+
 // function to return number of days until the specified time
 export const daysUntil = (unixTime: number): number => {
-  return Math.floor((unixTime - Date.now() / 1000) / (3600 * 24));
+  return Math.floor(secsUntil(unixTime) / (3600 * 24));
 };
 
 // dateToPretty provides a pretty output for the client from a date
