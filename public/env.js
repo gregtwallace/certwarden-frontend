@@ -1,4 +1,4 @@
 window.env = {
-  API_URL: '__API_URL__',
-  SHOW_DEBUG_INFO: '__SHOW_DEBUG_INFO__',
+  API_URL: '/certwarden/api',
+  SHOW_DEBUG_INFO: false
 };
