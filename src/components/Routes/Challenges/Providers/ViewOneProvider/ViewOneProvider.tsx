@@ -1,12 +1,12 @@
 import { type FC } from 'react';
-import { type providerType } from '../../../../types/api';
+import { type providerType } from '../../../../../types/api';
 
 import { Box } from '@mui/material';
 
-import GridItemContainer from '../../../UI/Grid/GridItemContainer';
+import GridItemContainer from '../../../../UI/Grid/GridItemContainer';
 // import GridItemText from '../../../UI/Grid/GridItemText';
-import FormRowRight from '../../../UI/FormMui/FormRowRight';
-import ButtonAsLink from '../../../UI/Button/ButtonAsLink';
+import FormRowRight from '../../../../UI/FormMui/FormRowRight';
+import ButtonAsLink from '../../../../UI/Button/ButtonAsLink';
 
 import ProviderTitle from './ProviderTitle';
 import ProviderDomainsView from './ProviderDomainsView';
@@ -41,7 +41,7 @@ const ViewOneProvider: FC<propTypes> = (props) => {
       />
 
       <FormRowRight>
-        <ButtonAsLink color='warning' to={`/providers/${provider.id}`}>
+        <ButtonAsLink color='warning' to={`/challenges/providers/${provider.id}`}>
           Edit
         </ButtonAsLink>
       </FormRowRight>

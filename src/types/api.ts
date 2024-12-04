@@ -799,7 +799,32 @@ export const parseQueueResponseType = (unk: unknown): queueResponseType => {
 };
 
 //
-// Providers
+// Challenges: Domain Aliases
+//
+
+const domainAliases = z.array(
+  z.object({
+    challenge_domain: z.string(),
+    provision_domain: z.string(),
+  })
+);
+
+export type domainAliasesType = z.infer<typeof domainAliases>;
+
+// responses
+const domainAliasesResponse = basicGoodResponse.extend({
+  domain_aliases: domainAliases,
+});
+
+export type domainAliasesResponseType = z.infer<typeof domainAliasesResponse>;
+export const parseDomainAliasesResponseType = (
+  unk: unknown
+): domainAliasesResponseType => {
+  return domainAliasesResponse.parse(unk);
+};
+
+//
+// Challenges: Providers
 //
 
 const providerBase = z.object({

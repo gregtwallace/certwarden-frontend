@@ -2,7 +2,7 @@ import { type FC } from 'react';
 
 import { List, ListItem, ListItemText } from '@mui/material';
 
-import GridItemText from '../../../UI/Grid/GridItemText';
+import GridItemText from '../../../../UI/Grid/GridItemText';
 
 type propTypes = {
   domains: string[];

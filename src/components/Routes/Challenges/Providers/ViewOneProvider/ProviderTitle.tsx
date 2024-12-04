@@ -1,8 +1,8 @@
 import { type FC } from 'react';
 
-import { showDebugInfo } from '../../../../helpers/environment';
+import { showDebugInfo } from '../../../../../helpers/environment';
 
-import GridTitle from '../../../UI/Grid/GridTitle';
+import GridTitle from '../../../../UI/Grid/GridTitle';
 
 type propTypes = {
   provider: {

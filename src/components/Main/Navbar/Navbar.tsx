@@ -80,7 +80,7 @@ const Navbar: FC = () => {
 
         <Divider sx={{ my: 1 }} />
 
-        <NavLink to='/providers' IconComponent={WidgetsIcon}>
+        <NavLink to='/challenges/providers' IconComponent={WidgetsIcon}>
           Providers
         </NavLink>
 

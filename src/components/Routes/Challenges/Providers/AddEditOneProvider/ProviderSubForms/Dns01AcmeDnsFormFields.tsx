@@ -1,9 +1,9 @@
 import { type FC } from 'react';
-import { type providerSubFormPropsType } from '../../../../../types/frontend';
+import { type providerSubFormPropsType } from '../../../../../../types/frontend';
 
 import SubFormError from './SubFormError';
-import InputArrayObjectsOfText from '../../../../UI/FormMui/InputArrayObjectsOfText';
-import InputTextField from '../../../../UI/FormMui/InputTextField';
+import InputArrayObjectsOfText from '../../../../../UI/FormMui/InputArrayObjectsOfText';
+import InputTextField from '../../../../../UI/FormMui/InputTextField';
 
 const Dns01AcmeDnsFormFields: FC<providerSubFormPropsType> = (props) => {
   const { formState, onChange } = props;

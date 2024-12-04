@@ -2,24 +2,24 @@ import { type FC, type FormEventHandler } from 'react';
 import {
   type providerResponseType,
   parseProviderResponseType,
-} from '../../../../types/api';
-import { type providerFormStateType } from '../../../../types/frontend';
+} from '../../../../../types/api';
+import { type providerFormStateType } from '../../../../../types/frontend';
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAxiosSend from '../../../../hooks/useAxiosSend';
+import useAxiosSend from '../../../../../hooks/useAxiosSend';
 import { getProvider, providersList } from './providers';
-import { inputHandlerFuncMaker } from '../../../../helpers/input-handler';
-import { isDomainValid } from '../../../../helpers/form-validation';
+import { inputHandlerFuncMaker } from '../../../../../helpers/input-handler';
+import { isDomainValid } from '../../../../../helpers/form-validation';
 
-import ApiError from '../../../UI/Api/ApiError';
-import Form from '../../../UI/FormMui/Form';
-import FormFooter from '../../../UI/FormMui/FormFooter';
-import FormInfo from '../../../UI/FormMui/FormInfo';
-import InputSelect from '../../../UI/FormMui/InputSelect';
-import InputArrayText from '../../../UI/FormMui/InputArrayText';
-import FormContainer from '../../../UI/FormMui/FormContainer';
-import TitleBar from '../../../UI/TitleBar/TitleBar';
+import ApiError from '../../../../UI/Api/ApiError';
+import Form from '../../../../UI/FormMui/Form';
+import FormFooter from '../../../../UI/FormMui/FormFooter';
+import FormInfo from '../../../../UI/FormMui/FormInfo';
+import InputSelect from '../../../../UI/FormMui/InputSelect';
+import InputArrayText from '../../../../UI/FormMui/InputArrayText';
+import FormContainer from '../../../../UI/FormMui/FormContainer';
+import TitleBar from '../../../../UI/TitleBar/TitleBar';
 
 const NEW_PROVIDER_URL = '/v1/app/challenges/providers/services';
 

@@ -4,29 +4,29 @@ import {
   parseProviderResponseType,
   type oneProviderDeleteResponseType,
   parseOneProviderDeleteResponse,
-} from '../../../../types/api';
-import { type providerFormStateType } from '../../../../types/frontend';
+} from '../../../../../types/api';
+import { type providerFormStateType } from '../../../../../types/frontend';
 
 import { useState, useCallback, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 
-import useAxiosGet from '../../../../hooks/useAxiosGet';
-import useAxiosSend from '../../../../hooks/useAxiosSend';
-import { showDebugInfo } from '../../../../helpers/environment';
-import { inputHandlerFuncMaker } from '../../../../helpers/input-handler';
+import useAxiosGet from '../../../../../hooks/useAxiosGet';
+import useAxiosSend from '../../../../../hooks/useAxiosSend';
+import { showDebugInfo } from '../../../../../helpers/environment';
+import { inputHandlerFuncMaker } from '../../../../../helpers/input-handler';
 import { getProvider } from './providers';
-import { isDomainValid } from '../../../../helpers/form-validation';
+import { isDomainValid } from '../../../../../helpers/form-validation';
 
-import ApiError from '../../../UI/Api/ApiError';
-import ApiLoading from '../../../UI/Api/ApiLoading';
-import Button from '../../../UI/Button/Button';
-import DialogAlert from '../../../UI/Dialog/DialogAlert';
-import Form from '../../../UI/FormMui/Form';
-import InputSelect from '../../../UI/FormMui/InputSelect';
-import InputArrayText from '../../../UI/FormMui/InputArrayText';
-import FormContainer from '../../../UI/FormMui/FormContainer';
-import FormFooter from '../../../UI/FormMui/FormFooter';
-import TitleBar from '../../../UI/TitleBar/TitleBar';
+import ApiError from '../../../../UI/Api/ApiError';
+import ApiLoading from '../../../../UI/Api/ApiLoading';
+import Button from '../../../../UI/Button/Button';
+import DialogAlert from '../../../../UI/Dialog/DialogAlert';
+import Form from '../../../../UI/FormMui/Form';
+import InputSelect from '../../../../UI/FormMui/InputSelect';
+import InputArrayText from '../../../../UI/FormMui/InputArrayText';
+import FormContainer from '../../../../UI/FormMui/FormContainer';
+import FormFooter from '../../../../UI/FormMui/FormFooter';
+import TitleBar from '../../../../UI/TitleBar/TitleBar';
 
 const ONE_PROVIDER_URL = '/v1/app/challenges/providers/services';
 

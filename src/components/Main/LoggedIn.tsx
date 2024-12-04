@@ -15,8 +15,8 @@ import AllACMEAccounts from '../Routes/ACMEAccounts/AllACMEAccounts';
 import AllACMEServers from '../Routes/ACMEServers/AllACMEServers';
 import AllCertificates from '../Routes/Certificates/AllCertificates';
 import AllPrivateKeys from '../Routes/PrivateKeys/AllPrivateKeys';
-import AllProviders from '../Routes/Providers/AllProviders';
-import AddOneProvider from '../Routes/Providers/AddEditOneProvider/AddOneProvider';
+import AllProviders from '../Routes/Challenges/Providers/AllProviders';
+import AddOneProvider from '../Routes/Challenges/Providers/AddEditOneProvider/AddOneProvider';
 import BackupRestore from '../Routes/BackupRestore/BackupRestore';
 import ChangeAccountEmail from '../Routes/ACMEAccounts/OneACMEAccount/Edit/ChangeAccountEmail';
 import Dashboard from '../Routes/Dashboard/Dashboard';
@@ -25,13 +25,14 @@ import EditOneACMEAccount from '../Routes/ACMEAccounts/OneACMEAccount/EditOneACM
 import EditOneACMEServer from '../Routes/ACMEServers/Edit/EditOneACMEServer';
 import EditOneCert from '../Routes/Certificates/OneCert/EditOneCert';
 import EditOnePrivateKey from '../Routes/PrivateKeys/OnePrivateKey/EditOnePrivateKey';
-import EditOneProvider from '../Routes/Providers/AddEditOneProvider/EditOneProvider';
+import EditOneProvider from '../Routes/Challenges/Providers/AddEditOneProvider/EditOneProvider';
 import Logout from '../Routes/Logout/Logout';
 import LogViewer from '../Routes/LogViewer/LogViewer';
 import OrderFulfillQueue from '../Routes/OrderFulfillQueue/OrderFulfillQueue';
 import OrderPostProcessQueue from '../Routes/OrderPostProcessQueue/OrderPostProcessQueue';
 import RolloverAccountKey from '../Routes/ACMEAccounts/OneACMEAccount/Edit/RolloverAccountKey';
 import Settings from '../Routes/Settings/Settings';
+import EditAliases from '../Routes/Challenges/Aliases/EditAliases';
 
 // no props
 
@@ -99,9 +100,10 @@ const LoggedIn: FC = () => {
           <Route path={'/logs'} element={<LogViewer />} />
 
           {/* Providers */}
-          <Route path={'/providers'} element={<AllProviders />} />
-          <Route path={`/providers/${newId}`} element={<AddOneProvider />} />
-          <Route path={'/providers/:id'} element={<EditOneProvider />} />
+          <Route path={'/challenges/aliases'} element={<EditAliases />} />
+          <Route path={'/challenges/providers'} element={<AllProviders />} />
+          <Route path={`/challenges/providers/${newId}`} element={<AddOneProvider />} />
+          <Route path={'/challenges/providers/:id'} element={<EditOneProvider />} />
 
           {/* ACME Servers */}
           <Route path='/acmeservers' element={<AllACMEServers />} />

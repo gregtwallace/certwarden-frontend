@@ -1,18 +1,18 @@
 import { type FC } from 'react';
-import { type alsoSetType } from '../../../../helpers/input-handler';
+import { type alsoSetType } from '../../../../../helpers/input-handler';
 import {
   type providerConfigType,
   type providerFormStateType,
   type providerSubFormPropsType,
   type validationErrorsType,
-} from '../../../../types/frontend';
+} from '../../../../../types/frontend';
 
 import {
   isDomainValid,
   isEmailValid,
   isEnvironmentParamValid,
   isPortValid,
-} from '../../../../helpers/form-validation';
+} from '../../../../../helpers/form-validation';
 
 import DummyFormFields from './ProviderSubForms/DummyFormFields';
 import Http01InternalFormFields from './ProviderSubForms/Http01InternalFormFields';

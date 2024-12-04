@@ -229,7 +229,7 @@ const fieldsInfo: fieldInfoType[] = [
     errorMessage: 'Reason code must be selected.',
   },
 
-  // providers
+  // challenges: providers
   {
     nameRegex: /^(.+\.)?domains\.[0-9]+$/,
     htmlType: 'text',
@@ -316,6 +316,18 @@ const fieldsInfo: fieldInfoType[] = [
     nameRegex: /^(.+\.)?dns_provider_name$/,
     htmlType: 'text',
     errorMessage: 'CLI flag name (i.e. Code) must be specified.',
+  },
+
+  // challenges: aliases
+  {
+    nameRegex: /^(.+\.)?domain_aliases\.[0-9]+.challenge_domain$/,
+    htmlType: 'text',
+    errorMessage: 'Challenge domain must be valid and not duplicated.',
+  },
+  {
+    nameRegex: /^(.+\.)?domain_aliases\.[0-9]+.provision_domain$/,
+    htmlType: 'text',
+    errorMessage: 'Provision domain must be valid.',
   },
 
   // backup and restore

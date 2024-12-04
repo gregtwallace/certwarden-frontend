@@ -1,10 +1,10 @@
 import { type FC } from 'react';
-import { type providerSubFormPropsType } from '../../../../../types/frontend';
-import { type selectInputOption } from '../../../../../helpers/input-handler';
+import { type providerSubFormPropsType } from '../../../../../../types/frontend';
+import { type selectInputOption } from '../../../../../../helpers/input-handler';
 
 import SubFormError from './SubFormError';
-import InputSelect from '../../../../UI/FormMui/InputSelect';
-import InputTextField from '../../../../UI/FormMui/InputTextField';
+import InputSelect from '../../../../../UI/FormMui/InputSelect';
+import InputTextField from '../../../../../UI/FormMui/InputTextField';
 
 const apiAccessTypes: selectInputOption<number>[] = [
   {

@@ -2,19 +2,19 @@ import { type FC } from 'react';
 import {
   type providersResponseType,
   parseProvidersResponseType,
-} from '../../../types/api';
+} from '../../../../types/api';
 
-import useAxiosGet from '../../../hooks/useAxiosGet';
-import { newId } from '../../../helpers/constants';
+import useAxiosGet from '../../../../hooks/useAxiosGet';
+import { newId } from '../../../../helpers/constants';
 
-import ApiLoading from '../../UI/Api/ApiLoading';
-import ApiError from '../../UI/Api/ApiError';
-import ButtonAsLink from '../../UI/Button/ButtonAsLink';
-import GridContainer from '../../UI/Grid/GridContainer';
-import GridChildrenContainer from '../../UI/Grid/GridChildrenContainer';
-import GridItemFull from '../../UI/Grid/GridItemFull';
-import GridItemThird from '../../UI/Grid/GridItemThird';
-import TitleBar from '../../UI/TitleBar/TitleBar';
+import ApiLoading from '../../../UI/Api/ApiLoading';
+import ApiError from '../../../UI/Api/ApiError';
+import ButtonAsLink from '../../../UI/Button/ButtonAsLink';
+import GridContainer from '../../../UI/Grid/GridContainer';
+import GridChildrenContainer from '../../../UI/Grid/GridChildrenContainer';
+import GridItemFull from '../../../UI/Grid/GridItemFull';
+import GridItemThird from '../../../UI/Grid/GridItemThird';
+import TitleBar from '../../../UI/TitleBar/TitleBar';
 import ViewOneProvider from './ViewOneProvider/ViewOneProvider';
 
 const PROVIDERS_URL = '/v1/app/challenges/providers/services';
@@ -47,7 +47,12 @@ const AllProviders: FC = () => {
         title='Challenge Providers'
         helpURL='https://www.certwarden.com/docs/user_interface/providers/'
       >
-        <ButtonAsLink to={`/providers/${newId}`}>New Provider</ButtonAsLink>
+        <ButtonAsLink to='/challenges/aliases' color='secondary'>
+          Domain Aliases
+        </ButtonAsLink>
+        <ButtonAsLink to={`/challenges/providers/${newId}`}>
+          New Provider
+        </ButtonAsLink>
       </TitleBar>
 
       <GridChildrenContainer>
