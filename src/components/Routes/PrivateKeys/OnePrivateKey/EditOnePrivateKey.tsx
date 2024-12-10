@@ -354,6 +354,7 @@ const EditOnePrivateKey: FC = () => {
                     .dataToSubmit
                 )
               }
+              lastAccess={formState.getResponseData.private_key.last_access}
               createdAt={formState.getResponseData.private_key.created_at}
               updatedAt={formState.getResponseData.private_key.updated_at}
             />

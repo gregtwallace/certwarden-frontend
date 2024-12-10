@@ -24,6 +24,7 @@ const FooterInfo: FC<propTypesInfo> = (props) => {
 
 // prop types
 type propTypesFooter = {
+  lastAccess?: number;
   createdAt?: number;
   updatedAt?: number;
 
@@ -40,6 +41,7 @@ const FormFooter: FC<propTypesFooter> = (props) => {
     createdAt,
     disabledAllButtons,
     disabledResetButton,
+    lastAccess,
     resetOnClick,
     updatedAt,
   } = props;
@@ -47,6 +49,13 @@ const FormFooter: FC<propTypesFooter> = (props) => {
   return (
     <Toolbar variant='dense' disableGutters sx={{ mt: 1 }}>
       <Box sx={{ flexGrow: 1 }}>
+        {lastAccess !== undefined ? (
+          <FooterInfo>
+            Last API Access:{' '}
+            {lastAccess === 0 ? 'Never' : convertUnixTime(lastAccess)}
+          </FooterInfo>
+        ) : null}
+
         {createdAt ? (
           <FooterInfo>Created: {convertUnixTime(createdAt)}</FooterInfo>
         ) : null}

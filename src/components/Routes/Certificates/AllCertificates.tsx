@@ -8,6 +8,7 @@ import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 
 import useAxiosGet from '../../../hooks/useAxiosGet';
+import { convertUnixTime } from '../../../helpers/time';
 import { queryParser } from '../../UI/TableMui/query';
 import { newId } from '../../../helpers/constants';
 
@@ -55,6 +56,11 @@ const tableHeaders: headerType[] = [
   {
     id: 'accountname',
     label: 'Account',
+    sortable: true,
+  },
+  {
+    id: 'last_access',
+    label: 'Last API Access',
     sortable: true,
   },
 ];
@@ -132,6 +138,11 @@ const AllCertificates: FC = () => {
                     >
                       {cert.acme_account.name}
                     </Link>
+                  </TableCell>
+                  <TableCell>
+                    {cert.last_access === 0
+                      ? 'Never'
+                      : convertUnixTime(cert.last_access)}
                   </TableCell>
                 </TableRow>
               ))}

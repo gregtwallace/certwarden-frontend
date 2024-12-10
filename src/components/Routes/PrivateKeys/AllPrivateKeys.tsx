@@ -15,6 +15,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
 import useAxiosGet from '../../../hooks/useAxiosGet';
+import { convertUnixTime } from '../../../helpers/time';
 import { queryParser } from '../../UI/TableMui/query';
 import { newId } from '../../../helpers/constants';
 
@@ -50,6 +51,11 @@ const tableHeaders: headerType[] = [
   {
     id: 'algorithm',
     label: 'Algorithm',
+    sortable: true,
+  },
+  {
+    id: 'last_access',
+    label: 'Last API Access',
     sortable: true,
   },
 ];
@@ -102,6 +108,11 @@ const AllPrivateKeys: FC = () => {
                     {key.api_key_disabled && <FlagAPIDisabled />}
                   </TableCell>
                   <TableCell>{key.algorithm.name}</TableCell>
+                  <TableCell>
+                    {key.last_access === 0
+                      ? 'Never'
+                      : convertUnixTime(key.last_access)}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

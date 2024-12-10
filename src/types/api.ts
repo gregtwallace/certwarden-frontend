@@ -244,6 +244,7 @@ const currentValidOrdersResponse = basicGoodResponse.extend({
         }),
         subject: z.string(),
         api_key_via_url: z.boolean(),
+        last_access: z.number(),
       }),
       valid_from: z.number(),
       valid_to: z.number(),
@@ -332,6 +333,7 @@ const privateKeysResponse = basicGoodResponse.extend({
       }),
       api_key_disabled: z.boolean(),
       api_key_via_url: z.boolean(),
+      last_access: z.number(),
     })
   ),
 });
@@ -356,6 +358,7 @@ const onePrivateKeyResponse = basicGoodResponse.extend({
     api_key_via_url: z.boolean(),
     api_key: z.string(),
     api_key_new: z.string().optional(),
+    last_access: z.number(),
     created_at: z.number(),
     updated_at: z.number(),
   }),
@@ -581,6 +584,7 @@ const certificatesResponse = basicGoodResponse.extend({
       }),
       subject: z.string(),
       api_key_via_url: z.boolean(),
+      last_access: z.number(),
     })
   ),
 });
@@ -633,6 +637,7 @@ const oneCertificateResponse = basicGoodResponse.extend({
     post_processing_command: z.string(),
     post_processing_environment: z.array(z.string()),
     post_processing_client_key: z.string(),
+    last_access: z.number(),
     created_at: z.number(),
     updated_at: z.number(),
   }),

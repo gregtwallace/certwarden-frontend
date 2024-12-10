@@ -48,6 +48,11 @@ const tableHeaders: headerType[] = [
     sortable: false,
   },
   {
+    id: 'last_access',
+    label: 'Last API Access',
+    sortable: true,
+  },
+  {
     id: 'valid_to',
     label: 'Expiration (Remaining)',
     sortable: true,
@@ -106,6 +111,11 @@ const Dashboard: FC = () => {
                       <FlagStaging />
                     )}
                     {order.certificate.api_key_via_url && <FlagLegacyAPI />}
+                  </TableCell>
+                  <TableCell>
+                    {order.certificate.last_access === 0
+                      ? 'Never'
+                      : convertUnixTime(order.certificate.last_access)}
                   </TableCell>
                   <TableCell>
                     {convertUnixTime(order.valid_to)}{' '}
