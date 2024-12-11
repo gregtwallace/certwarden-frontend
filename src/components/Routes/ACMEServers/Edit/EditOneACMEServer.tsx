@@ -17,7 +17,7 @@ import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
 import { inputHandlerFuncMaker } from '../../../../helpers/input-handler';
 import {
-  isDirectoryUrlValid,
+  isHttpsUrlValid,
   isNameValid,
 } from '../../../../helpers/form-validation';
 
@@ -121,7 +121,7 @@ const EditOneACMEServer: FC = () => {
     }
 
     // directory url
-    if (!isDirectoryUrlValid(formState.dataToSubmit.directory_url)) {
+    if (!isHttpsUrlValid(formState.dataToSubmit.directory_url)) {
       validationErrors['dataToSubmit.directory_url'] = true;
     }
 

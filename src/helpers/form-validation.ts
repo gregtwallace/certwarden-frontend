@@ -82,9 +82,9 @@ export const isEmailValid = (email: string): boolean => {
   return true;
 };
 
-// isDirectoryUrlValid validates an acme server url. It verifies the url
-// contains only valid chars and starts with https.
-export const isDirectoryUrlValid = (url: string): boolean => {
+// isHttpsUrlValid validates a string only contains url chars and also that
+// the string starts with `https://`
+export const isHttpsUrlValid = (url: string): boolean => {
   // https://en.wikipedia.org/wiki/Percent-encoding#Types_of_URI_characters
   const regex = /^[A-Za-z0-9-_.~!#$&'()*+,/:;=?@%[\]]*$/;
   if (!url.match(regex)) {

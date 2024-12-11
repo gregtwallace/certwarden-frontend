@@ -525,6 +525,21 @@ export const parseAcmeAccountDeactivateResponseType = (
   return acmeAccountDeactivateResponse.parse(unk);
 };
 
+// Post-as-Get response
+const postAsGetResponse = basicGoodResponse.extend({
+  status_code: z.literal(200),
+  url: z.string(),
+  body: z.string(),
+  headers: z.record(z.string(), z.array(z.string())),
+});
+
+export type postAsGetResponseType = z.infer<typeof postAsGetResponse>;
+export const parsePostAsGetResponseType = (
+  unk: unknown
+): postAsGetResponseType => {
+  return postAsGetResponse.parse(unk);
+};
+
 // response to get options for new/edit account
 const acmeAccountOptionsResponse = basicGoodResponse.extend({
   acme_account_options: z.object({

@@ -33,6 +33,7 @@ import OrderPostProcessQueue from '../Routes/OrderPostProcessQueue/OrderPostProc
 import RolloverAccountKey from '../Routes/ACMEAccounts/OneACMEAccount/Edit/RolloverAccountKey';
 import Settings from '../Routes/Settings/Settings';
 import EditAliases from '../Routes/Challenges/Aliases/EditAliases';
+import PostAsGet from '../Routes/ACMEAccounts/OneACMEAccount/Edit/PostAsGet';
 
 // no props
 
@@ -79,6 +80,7 @@ const LoggedIn: FC = () => {
             path='/acmeaccounts/:id/key-change'
             element={<RolloverAccountKey />}
           />
+          <Route path='/acmeaccounts/:id/post-as-get' element={<PostAsGet />} />
           <Route path='/acmeaccounts' element={<AllACMEAccounts />} />
 
           {/* Certificates */}
@@ -102,8 +104,14 @@ const LoggedIn: FC = () => {
           {/* Providers */}
           <Route path={'/challenges/aliases'} element={<EditAliases />} />
           <Route path={'/challenges/providers'} element={<AllProviders />} />
-          <Route path={`/challenges/providers/${newId}`} element={<AddOneProvider />} />
-          <Route path={'/challenges/providers/:id'} element={<EditOneProvider />} />
+          <Route
+            path={`/challenges/providers/${newId}`}
+            element={<AddOneProvider />}
+          />
+          <Route
+            path={'/challenges/providers/:id'}
+            element={<EditOneProvider />}
+          />
 
           {/* ACME Servers */}
           <Route path='/acmeservers' element={<AllACMEServers />} />

@@ -138,6 +138,11 @@ const fieldsInfo: fieldInfoType[] = [
     htmlType: 'text',
     errorMessage: 'External Account Binding requires a Key ID.',
   },
+  {
+    nameRegex: /^(.+\.)?url$/,
+    htmlType: 'text',
+    errorMessage: 'URL must be https and valid.',
+  },
 
   // certificate
   {
