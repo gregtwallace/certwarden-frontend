@@ -1,13 +1,13 @@
 import { type FC } from 'react';
 
 import useNewVersion from '../../../hooks/useNewVersion';
-import { convertUnixTime } from '../../../helpers/time';
 
 import Link from '@mui/material/Link';
 
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
 import Button from '../../UI/Button/Button';
+import DateWithTooltip from '../../UI/DateWithTooltip/DateWithTooltip';
 import GridItemRowRight from '../../UI/Grid/GridItemRowRight';
 import GridItemContainer from '../../UI/Grid/GridItemContainer';
 import GridItemText from '../../UI/Grid/GridItemText';
@@ -49,8 +49,9 @@ const NewVersionInfo: FC = () => {
               {!newVersion.database_version_matches && (
                 <GridItemText color='error.main'>
                   Warning: Update database version does not match current
-                  database version. Cert Warden will modify the database after upgrade.
-                  You should backup your database file before upgrading.
+                  database version. Cert Warden will modify the database after
+                  upgrade. You should backup your database file before
+                  upgrading.
                 </GridItemText>
               )}
 
@@ -71,7 +72,8 @@ const NewVersionInfo: FC = () => {
           )}
 
           <GridItemText>
-            Last Checked: {convertUnixTime(newVersion.last_checked_time, true)}
+            Last Checked:{' '}
+            <DateWithTooltip unixTime={newVersion.last_checked_time} />
           </GridItemText>
 
           <GridItemRowRight>

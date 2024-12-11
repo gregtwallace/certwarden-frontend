@@ -3,7 +3,7 @@ import { type FC } from 'react';
 import { useTheme } from '@mui/material';
 
 import { Box, Tooltip, Typography } from '@mui/material';
-import { convertUnixTime, daysUntil, secsUntil } from '../../../helpers/time';
+import { daysUntil, secsUntil, unixTimeToString } from '../../../helpers/time';
 
 // consts that determine when certs will be considered expiring and thus eligible
 // for auto renewal
@@ -80,7 +80,7 @@ const FlagExpireDays: FC<propTypes> = (props) => {
           <br />
           Renews After:
           <br />
-          {convertUnixTime(remainingValidThresholdDate)}
+          {unixTimeToString(remainingValidThresholdDate)}
         </>
       }
       placement='left'

@@ -1,10 +1,9 @@
 import { type FC, type MouseEventHandler, type ReactNode } from 'react';
 
-import { convertUnixTime } from '../../../helpers/time';
-
 import { Box, Toolbar, Typography } from '@mui/material';
 import Button from '../Button/Button';
 import ButtonAsLink from '../Button/ButtonAsLink';
+import DateWithTooltip from '../DateWithTooltip/DateWithTooltip';
 
 // prop types (subcomponent)
 type propTypesInfo = {
@@ -49,20 +48,23 @@ const FormFooter: FC<propTypesFooter> = (props) => {
   return (
     <Toolbar variant='dense' disableGutters sx={{ mt: 1 }}>
       <Box sx={{ flexGrow: 1 }}>
-        {lastAccess !== undefined ? (
+        {lastAccess !== undefined && (
           <FooterInfo>
-            Last API Access:{' '}
-            {lastAccess === 0 ? 'Never' : convertUnixTime(lastAccess)}
+            Last API Access: <DateWithTooltip unixTime={lastAccess} />
           </FooterInfo>
-        ) : null}
+        )}
 
-        {createdAt ? (
-          <FooterInfo>Created: {convertUnixTime(createdAt)}</FooterInfo>
-        ) : null}
+        {createdAt !== undefined && (
+          <FooterInfo>
+            Created: <DateWithTooltip unixTime={createdAt} />
+          </FooterInfo>
+        )}
 
-        {updatedAt ? (
-          <FooterInfo>Last Updated: {convertUnixTime(updatedAt)}</FooterInfo>
-        ) : null}
+        {updatedAt !== undefined && (
+          <FooterInfo>
+            Last Updated: <DateWithTooltip unixTime={updatedAt} />
+          </FooterInfo>
+        )}
       </Box>
 
       {cancelHref && (

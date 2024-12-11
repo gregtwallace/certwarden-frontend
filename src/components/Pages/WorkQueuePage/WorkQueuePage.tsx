@@ -8,10 +8,10 @@ import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 import useAxiosGet from '../../../hooks/useAxiosGet';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from '@mui/material';
-import { convertUnixTime } from '../../../helpers/time';
 
 import ApiLoading from '../../UI/Api/ApiLoading';
 import ApiError from '../../UI/Api/ApiError';
+import DateWithTooltip from '../../UI/DateWithTooltip/DateWithTooltip';
 import FlagIdle from '../../UI/Flag/FlagIdle';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -117,7 +117,9 @@ const WorkQueuePage: FC<propTypes> = (props) => {
                     </TableCell>
 
                     <TableCell>
-                      {wJob && convertUnixTime(wJob.added_to_queue, true)}
+                      {wJob && (
+                        <DateWithTooltip unixTime={wJob.added_to_queue} />
+                      )}
                     </TableCell>
 
                     <TableCell>
@@ -150,12 +152,12 @@ const WorkQueuePage: FC<propTypes> = (props) => {
                   </TableCell>
 
                   <TableCell>
-                    {convertUnixTime(job.added_to_queue, true) || ''}
+                    <DateWithTooltip unixTime={job.added_to_queue} />
                   </TableCell>
 
                   <TableCell>{job.high_priority ? 'High' : 'Low'}</TableCell>
 
-                  <TableCell>{job.order.certificate.subject || ''}</TableCell>
+                  <TableCell>{job.order.certificate.subject}</TableCell>
                 </TableRow>
               );
             })}

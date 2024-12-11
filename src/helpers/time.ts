@@ -1,30 +1,21 @@
-// function to convert unix time to something friendlier
-export const convertUnixTime = (
+const defaultDateFormat: Intl.DateTimeFormatOptions = {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+};
+
+// unixTimeToString returns a human readable date/time in the format specified
+// if no format specified, a default for just the date is used
+export const unixTimeToString = (
   unixTime: number | null,
-  withTime = false
+  dateTimeFormat: Intl.DateTimeFormatOptions = defaultDateFormat
 ): string => {
   if (unixTime === null) {
     return '';
   }
 
-  if (unixTime < 0) {
+  if (unixTime <= 0) {
     return 'Never';
-  }
-
-  let dateTimeFormat: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  };
-
-  // if with time, add time formatting
-  if (withTime) {
-    dateTimeFormat = {
-      ...dateTimeFormat,
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    };
   }
 
   // Note: * 1000 due to millisecond conversion

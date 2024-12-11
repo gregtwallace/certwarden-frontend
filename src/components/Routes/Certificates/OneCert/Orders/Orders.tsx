@@ -22,7 +22,6 @@ import { useSearchParams } from 'react-router-dom';
 import useAxiosGet from '../../../../../hooks/useAxiosGet';
 import { inputHandlerFuncMaker } from '../../../../../helpers/input-handler';
 import { queryParser } from '../../../../UI/TableMui/query';
-import { convertUnixTime } from '../../../../../helpers/time';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -37,6 +36,7 @@ import ApiLoading from '../../../../UI/Api/ApiLoading';
 import ApiError from '../../../../UI/Api/ApiError';
 import ApiSuccess from '../../../../UI/Api/ApiSuccess';
 import Button from '../../../../UI/Button/Button';
+import DateWithTooltip from '../../../../UI/DateWithTooltip/DateWithTooltip';
 import DialogAlert from '../../../../UI/Dialog/DialogAlert';
 import IconButton from '../../../../UI/Button/IconButton';
 import IconButtonAsLink from '../../../../UI/Button/IconButtonAsLink';
@@ -359,9 +359,13 @@ const Orders: FC<propTypes> = (props) => {
             <TableBody>
               {getState.responseData.orders.map((ord) => (
                 <TableRow key={ord.id}>
-                  <TableCell>{convertUnixTime(ord.created_at)}</TableCell>
+                  <TableCell>
+                    <DateWithTooltip unixTime={ord.created_at} />
+                  </TableCell>
 
-                  <TableCell>{convertUnixTime(ord.valid_to)}</TableCell>
+                  <TableCell>
+                    <DateWithTooltip unixTime={ord.valid_to} />
+                  </TableCell>
 
                   <TableCell>{orderStatus(ord)}</TableCell>
 

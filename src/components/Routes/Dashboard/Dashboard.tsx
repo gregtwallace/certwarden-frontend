@@ -15,11 +15,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
 import useAxiosGet from '../../../hooks/useAxiosGet';
-import { convertUnixTime } from '../../../helpers/time';
 import { queryParser } from '../../UI/TableMui/query';
 
 import ApiLoading from '../../UI/Api/ApiLoading';
 import ApiError from '../../UI/Api/ApiError';
+import DateWithTooltip from '../../UI/DateWithTooltip/DateWithTooltip';
 import FlagExpireDays from '../../UI/Flag/FlagExpireDays';
 import FlagLegacyAPI from '../../UI/Flag/FlagLegacyAPI';
 import FlagStaging from '../../UI/Flag/FlagStaging';
@@ -113,12 +113,10 @@ const Dashboard: FC = () => {
                     {order.certificate.api_key_via_url && <FlagLegacyAPI />}
                   </TableCell>
                   <TableCell>
-                    {order.certificate.last_access === 0
-                      ? 'Never'
-                      : convertUnixTime(order.certificate.last_access)}
+                    <DateWithTooltip unixTime={order.certificate.last_access} />
                   </TableCell>
                   <TableCell>
-                    {convertUnixTime(order.valid_to)}{' '}
+                    <DateWithTooltip unixTime={order.valid_to} />{' '}
                     <FlagExpireDays
                       validFrom={order.valid_from}
                       validTo={order.valid_to}

@@ -17,7 +17,6 @@ import { useState } from 'react';
 
 import useAxiosGet from '../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../hooks/useAxiosSend';
-import { convertUnixTime } from '../../../helpers/time';
 
 import { Link } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -30,6 +29,7 @@ import TableRow from '@mui/material/TableRow';
 import ApiLoading from '../../UI/Api/ApiLoading';
 import ApiError from '../../UI/Api/ApiError';
 import Button from '../../UI/Button/Button';
+import DateWithTooltip from '../../UI/DateWithTooltip/DateWithTooltip';
 import DialogAlert from '../../UI/Dialog/DialogAlert';
 import IconButton from '../../UI/Button/IconButton';
 import TableContainer from '../../UI/TableMui/TableContainer';
@@ -213,9 +213,11 @@ const BackupOnDisk: FC = () => {
                     </TableCell>
                     <TableCell>{(file.size / 1000000).toFixed(2)} MB</TableCell>
                     <TableCell>
-                      {file.created_at
-                        ? convertUnixTime(file.created_at, true)
-                        : convertUnixTime(file.modtime, true)}
+                      {file.created_at ? (
+                        <DateWithTooltip unixTime={file.created_at} />
+                      ) : (
+                        <DateWithTooltip unixTime={file.modtime} />
+                      )}
                     </TableCell>
                     <TableCell>
                       <IconButton

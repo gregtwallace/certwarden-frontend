@@ -8,7 +8,6 @@ import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 
 import useAxiosGet from '../../../hooks/useAxiosGet';
-import { convertUnixTime } from '../../../helpers/time';
 import { queryParser } from '../../UI/TableMui/query';
 import { newId } from '../../../helpers/constants';
 
@@ -22,6 +21,7 @@ import TableRow from '@mui/material/TableRow';
 import ApiLoading from '../../UI/Api/ApiLoading';
 import ApiError from '../../UI/Api/ApiError';
 import ButtonAsLink from '../../UI/Button/ButtonAsLink';
+import DateWithTooltip from '../../UI/DateWithTooltip/DateWithTooltip';
 import FlagLegacyAPI from '../../UI/Flag/FlagLegacyAPI';
 import FlagStaging from '../../UI/Flag/FlagStaging';
 import TableContainer from '../../UI/TableMui/TableContainer';
@@ -140,9 +140,7 @@ const AllCertificates: FC = () => {
                     </Link>
                   </TableCell>
                   <TableCell>
-                    {cert.last_access === 0
-                      ? 'Never'
-                      : convertUnixTime(cert.last_access)}
+                    <DateWithTooltip unixTime={cert.last_access} />
                   </TableCell>
                 </TableRow>
               ))}

@@ -15,13 +15,13 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
 import useAxiosGet from '../../../hooks/useAxiosGet';
-import { convertUnixTime } from '../../../helpers/time';
 import { queryParser } from '../../UI/TableMui/query';
 import { newId } from '../../../helpers/constants';
 
 import ApiLoading from '../../UI/Api/ApiLoading';
 import ApiError from '../../UI/Api/ApiError';
 import ButtonAsLink from '../../UI/Button/ButtonAsLink';
+import DateWithTooltip from '../../UI/DateWithTooltip/DateWithTooltip';
 import FlagAPIDisabled from '../../UI/Flag/FlagAPIDisabled';
 import FlagLegacyAPI from '../../UI/Flag/FlagLegacyAPI';
 import TableContainer from '../../UI/TableMui/TableContainer';
@@ -109,9 +109,7 @@ const AllPrivateKeys: FC = () => {
                   </TableCell>
                   <TableCell>{key.algorithm.name}</TableCell>
                   <TableCell>
-                    {key.last_access === 0
-                      ? 'Never'
-                      : convertUnixTime(key.last_access)}
+                    <DateWithTooltip unixTime={key.last_access} />
                   </TableCell>
                 </TableRow>
               ))}
