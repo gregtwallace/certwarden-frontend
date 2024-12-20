@@ -85,13 +85,17 @@ export const isEmailValid = (email: string): boolean => {
 // isHttpsUrlValid validates a string only contains url chars and also that
 // the string starts with `https://`
 export const isHttpsUrlValid = (url: string): boolean => {
+  if (!url.startsWith('https://')) {
+    return false;
+  }
+
   // https://en.wikipedia.org/wiki/Percent-encoding#Types_of_URI_characters
   const regex = /^[A-Za-z0-9-_.~!#$&'()*+,/:;=?@%[\]]*$/;
   if (!url.match(regex)) {
     return false;
   }
 
-  return url.startsWith('https://');
+  return true;
 };
 
 // isPortValid confirms that port is a number and is between the range

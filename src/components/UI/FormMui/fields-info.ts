@@ -269,17 +269,18 @@ const fieldsInfo: fieldInfoType[] = [
   {
     nameRegex: /^(.+\.)?acme_dns_address$/,
     htmlType: 'url',
-    errorMessage: 'An acme-dns server address must be specified.',
+    errorMessage:
+      "An acme-dns server address must be specified and begin with 'https://'.",
   },
   {
     nameRegex: /^(.+\.)?resources\.[0-9]+.real_domain$/,
     htmlType: 'text',
-    errorMessage: 'Real domain must be populated.',
+    errorMessage: 'Real domain must be populated with a valid domain.',
   },
   {
     nameRegex: /^(.+\.)?resources\.[0-9]+.full_domain$/,
     htmlType: 'text',
-    errorMessage: 'Full domain must be populated.',
+    errorMessage: 'Full domain must be populated with a valid domain.',
   },
   {
     nameRegex: /^(.+\.)?resources\.[0-9]+.username$/,

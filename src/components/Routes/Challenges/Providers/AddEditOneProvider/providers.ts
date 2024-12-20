@@ -11,6 +11,7 @@ import {
   isDomainValid,
   isEmailValid,
   isEnvironmentParamValid,
+  isHttpsUrlValid,
   isPortValid,
 } from '../../../../../helpers/form-validation';
 
@@ -112,7 +113,8 @@ export const providersList: provider[] = [
       // must specify server address
       if (
         !('acme_dns_address' in formState.dataToSubmit.config) ||
-        formState.dataToSubmit.config.acme_dns_address === ''
+        formState.dataToSubmit.config.acme_dns_address === '' ||
+        !isHttpsUrlValid(formState.dataToSubmit.config.acme_dns_address)
       ) {
         validationErrors['dataToSubmit.config.acme_dns_address'] = true;
       }
