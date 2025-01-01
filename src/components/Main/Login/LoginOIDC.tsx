@@ -33,6 +33,19 @@ const LoginOIDC: FC = () => {
   const qCode = searchParams.get('code');
   const qOIDCError = searchParams.get('oidc_error');
 
+  // during compilation, absolute links are prepended with the base path, which will break
+  // this link; instead, do some logic to set the proper url
+  let backendApiRoot = apiUrl;
+  if (apiUrl.startsWith('/')) {
+    // if api path is absolute, it is on the same origin as frontend
+    backendApiRoot = window.location.origin + apiUrl;
+  }
+  const oidcLoginURL =
+    backendApiRoot +
+    LOGIN_URL +
+    '?redirect_uri=' +
+    encodeURIComponent(window.location.href);
+
   // if there is a state in the query, try to finalize oidc login
   useEffect(() => {
     if ((qState !== null || qCode !== null) && !isFinalLoggingIn) {
@@ -75,15 +88,7 @@ const LoginOIDC: FC = () => {
       <Toolbar variant='dense' disableGutters sx={{ mt: 2 }}>
         <Box sx={{ flexGrow: 1 }}></Box>
 
-        <ButtonAsLink
-          color='secondary'
-          to={
-            apiUrl +
-            LOGIN_URL +
-            '?redirect_uri=' +
-            encodeURIComponent(window.location.href)
-          }
-        >
+        <ButtonAsLink color='secondary' to={oidcLoginURL}>
           OIDC Login
         </ButtonAsLink>
       </Toolbar>
