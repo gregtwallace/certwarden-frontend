@@ -13,7 +13,7 @@ declare global {
 const useFile = import.meta.env.PROD === true;
 
 // api url  API_URL: '__API_URL__',
-export const apiUrl = useFile
+export const apiUrl: string = useFile
   ? window.env.API_URL
   : import.meta.env['VITE_API_URL'];
 
@@ -22,6 +22,6 @@ export const apiUrl = useFile
 // Changes:
 // - provides some extra console.log() information
 // - provides some additional information on various pages (such as IDs)
-export const showDebugInfo = useFile
+export const showDebugInfo: boolean = useFile
   ? window.env.SHOW_DEBUG_INFO
   : import.meta.env['VITE_SHOW_DEBUG_INFO'];
