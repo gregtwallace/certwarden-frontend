@@ -18,35 +18,27 @@ const resetIdleLogoutTimer = (
     logoutTimer = setTimeout(() => {
       // on expire clear auth
       setAuth(undefined);
-    }, auth.session_token_claims.exp * 1000 - Date.now());
+    }, auth.session_exp * 1000 - Date.now());
   }
 };
 
 // getAuth fetches the current auth from session storage
 const getAuth = (): authorizationType | undefined => {
-  let auth: authorizationType = {
-    access_token: sessionStorage.getItem('auth_access_token') || '',
-    access_token_claims: JSON.parse(
-      sessionStorage.getItem('auth_access_token_claims') || '{}'
-    ),
-    session_token_claims: JSON.parse(
-      sessionStorage.getItem('auth_session_token_claims') || '{}'
-    ),
-  };
+  let auth: authorizationType = JSON.parse(
+    sessionStorage.getItem('authorization') || '{}'
+  );
 
   try {
     // parse auth for validity
     auth = parseAuthorizationType(auth);
 
     // check expiration
-    if (auth.session_token_claims.exp < Date.now() / 1000) {
+    if (auth.session_exp < Date.now() / 1000) {
       throw new Error('session expired');
     }
   } catch (_err) {
     // not proper type or expired, delete storage & return undefined
-    sessionStorage.removeItem('auth_access_token');
-    sessionStorage.removeItem('auth_access_token_claims');
-    sessionStorage.removeItem('auth_session_token_claims');
+    sessionStorage.removeItem('authorization');
 
     return undefined;
   }
@@ -71,23 +63,13 @@ const getAccessToken = (): string => {
 const setAuthStorage = (newAuth: authorizationType | undefined): void => {
   if (!newAuth) {
     // undefined
-    sessionStorage.removeItem('auth_access_token');
-    sessionStorage.removeItem('auth_access_token_claims');
-    sessionStorage.removeItem('auth_session_token_claims');
+    sessionStorage.removeItem('authorization');
 
     return;
   }
 
   // is auth type
-  sessionStorage.setItem('auth_access_token', newAuth.access_token);
-  sessionStorage.setItem(
-    'auth_access_token_claims',
-    JSON.stringify(newAuth.access_token_claims)
-  );
-  sessionStorage.setItem(
-    'auth_session_token_claims',
-    JSON.stringify(newAuth.session_token_claims)
-  );
+  sessionStorage.setItem('authorization', JSON.stringify(newAuth));
 };
 
 // context type

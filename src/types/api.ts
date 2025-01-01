@@ -31,16 +31,14 @@ export const isErrorResponseType = (unk: unknown): unk is errorResponseType => {
 //
 
 // login and refresh
-const authorizationTokenClaims = z.object({
-  exp: z.number().min(Date.now() / 1000, {
-    message: 'token expired (host or client time clock issue?)',
-  }),
-});
-
 const authorization = z.object({
   access_token: z.string().min(1),
-  access_token_claims: authorizationTokenClaims,
-  session_token_claims: authorizationTokenClaims,
+  access_token_exp: z.number().min(Date.now() / 1000, {
+    message: 'access token expired (host or client time clock issue?)',
+  }),
+  session_exp: z.number().min(Date.now() / 1000, {
+    message: 'session expired (host or client time clock issue?)',
+  }),
 });
 
 export type authorizationType = z.infer<typeof authorization>;
@@ -67,6 +65,26 @@ const logoutResponse = basicGoodResponse.extend({
 export type logoutResponseType = z.infer<typeof logoutResponse>;
 export const parseLogoutResponseType = (unk: unknown): logoutResponseType => {
   return logoutResponse.parse(unk);
+};
+
+// auth status
+const authStatusResponse = basicGoodResponse.extend({
+  status_code: z.literal(200),
+  auth_status: z.object({
+    local: z.object({
+      enabled: z.boolean(),
+    }),
+    oidc: z.object({
+      enabled: z.boolean(),
+    }),
+  }),
+});
+
+export type authStatusResponseType = z.infer<typeof authStatusResponse>;
+export const parseAuthStatusResponseType = (
+  unk: unknown
+): authStatusResponseType => {
+  return authStatusResponse.parse(unk);
 };
 
 //
