@@ -23,6 +23,7 @@ import FormContainer from '../../../../UI/FormMui/FormContainer';
 import FormFooter from '../../../../UI/FormMui/FormFooter';
 import InputTextField from '../../../../UI/FormMui/InputTextField';
 import TitleBar from '../../../../UI/TitleBar/TitleBar';
+import FormInfo from '../../../../UI/FormMui/FormInfo';
 
 // form shape
 type formObj = {
@@ -98,8 +99,14 @@ const PostAsGet: FC = () => {
   return (
     <>
       <FormContainer>
-        <TitleBar title='Post-As-Get' />
+        <TitleBar title='Debug POST-as-GET' />
         <Form onSubmit={submitFormHandler}>
+          <FormInfo>
+            This page sends a signed POST-as-GET request as described in RFC
+            8555, section 6.3, to the specifed URL. This page then displays the
+            returned response body and headers.
+          </FormInfo>
+
           <InputTextField
             id='dataToSubmit.url'
             label='URL to PaG'

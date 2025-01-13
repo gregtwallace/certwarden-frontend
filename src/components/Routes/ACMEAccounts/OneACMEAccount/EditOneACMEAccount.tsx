@@ -482,6 +482,14 @@ const EditOneACMEAccount: FC = () => {
               >
                 Refresh
               </Button>
+
+              <ButtonAsLink
+                color='info'
+                to={`/acmeaccounts/${id}/post-as-get`}
+                disabled={axiosSendState.isSending || !canDoAccountActions}
+              >
+                Debug PaG
+              </ButtonAsLink>
             </FormRowRight>
 
             <InputCheckbox
