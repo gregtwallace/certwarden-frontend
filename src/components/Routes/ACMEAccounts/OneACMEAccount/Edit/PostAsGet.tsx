@@ -186,6 +186,28 @@ const PostAsGet: FC = () => {
             />
 
             <InputTextField
+              id='disabled.description'
+              label='Description'
+              value={
+                getState.responseData.acme_accounts.find(
+                  (acct) => acct.id === formState.dontSubmit.acme_account_id
+                )?.description || ''
+              }
+              disabled
+            />
+
+            <InputTextField
+              id='disabled.description'
+              label='Account URL / KID'
+              value={
+                getState.responseData.acme_accounts.find(
+                  (acct) => acct.id === formState.dontSubmit.acme_account_id
+                )?.kid || ''
+              }
+              disabled
+            />
+
+            <InputTextField
               id='dataToSubmit.url'
               label='URL to PaG'
               value={formState.dataToSubmit.url}
