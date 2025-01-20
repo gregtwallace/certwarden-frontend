@@ -668,7 +668,9 @@ const EditOneCert: FC = () => {
                 }
                 disabledAllButtons={axiosSendState.isSending}
                 disabledResetButton={formUnchanged}
-                lastAccess={formState.getCertResponseData.certificate.last_access}
+                lastAccess={
+                  formState.getCertResponseData.certificate.last_access
+                }
                 createdAt={formState.getCertResponseData.certificate.created_at}
                 updatedAt={formState.getCertResponseData.certificate.updated_at}
               />

@@ -108,7 +108,7 @@ type formObj = {
     post_processing_command: string;
     post_processing_environment: string[];
     post_processing_client_enable: boolean;
-    preferred_root_cn: string,
+    preferred_root_cn: string;
     organization: string;
     organizational_unit: string;
     country: string;
@@ -420,7 +420,7 @@ const AddOneCert: FC = () => {
 
               <InputTextField
                 id='dataToSubmit.preferred_root_cn'
-                label='Preferred Root Cert&apos;s Common Name'
+                label="Preferred Root Cert's Common Name"
                 value={formState.dataToSubmit.preferred_root_cn}
                 onChange={inputChangeHandler}
               />
