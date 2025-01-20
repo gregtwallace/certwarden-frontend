@@ -725,6 +725,8 @@ const certificateOptionsResponse = basicGoodResponse.extend({
         acme_server: z.object({
           is_staging: z.boolean(),
         }),
+        status: z.string(),
+        kid: z.string(),
       })
     ),
   }),
