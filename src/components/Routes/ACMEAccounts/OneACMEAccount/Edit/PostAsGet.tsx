@@ -36,7 +36,6 @@ import FormFooter from '../../../../UI/FormMui/FormFooter';
 import InputSelect from '../../../../UI/FormMui/InputSelect';
 import InputTextField from '../../../../UI/FormMui/InputTextField';
 import TitleBar from '../../../../UI/TitleBar/TitleBar';
-import FormInfo from '../../../../UI/FormMui/FormInfo';
 
 const ACME_ACCOUNTS_URL = '/v1/acmeaccounts';
 
@@ -158,7 +157,10 @@ const PostAsGet: FC = () => {
   return (
     <>
       <FormContainer>
-        <TitleBar title='Debug POST-as-GET' />
+        <TitleBar
+          title='Debug POST-as-GET'
+          helpURL='https://www.certwarden.com/docs/user_interface/acme_accounts/#debug-pag'
+        />
 
         {!getState.responseData && !getState.error && <ApiLoading />}
 
@@ -171,12 +173,6 @@ const PostAsGet: FC = () => {
 
         {getState.responseData && (
           <Form onSubmit={submitFormHandler}>
-            <FormInfo>
-              This page sends a signed POST-as-GET request as described in RFC
-              8555, section 6.3, to the specifed URL. This page then displays
-              the returned response body and headers.
-            </FormInfo>
-
             <InputSelect
               id='dontSubmit.acme_account_id'
               label='Sign With ACME Account'
