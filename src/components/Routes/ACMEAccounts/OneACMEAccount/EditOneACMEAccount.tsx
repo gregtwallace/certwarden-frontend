@@ -155,30 +155,8 @@ const EditOneACMEAccount: FC = () => {
 
   // register ACME account handler
   const registerClickHandler: MouseEventHandler = () => {
-    const eabRequired =
-      formState.getResponseData?.acme_account.acme_server
-        .external_account_required || false;
-
-    // client side validation
-    const validationErrors: validationErrorsType = {};
-
-    // EAB KID if EAB required
-    if (eabRequired && formState.dataToSubmitRegister.eab_kid === '') {
-      validationErrors['dataToSubmitRegister.eab_kid'] = true;
-    }
-
-    // EAB Key if EAB required
-    if (eabRequired && formState.dataToSubmitRegister.eab_hmac_key === '') {
-      validationErrors['dataToSubmitRegister.eab_hmac_key'] = true;
-    }
-
-    setFormState((prevState) => ({
-      ...prevState,
-      validationErrors: validationErrors,
-    }));
-    if (Object.keys(validationErrors).length > 0) {
-      return;
-    }
+    // dont check EAB - if re-adding an existing account that is already bound,
+    // these fields are not necessary
 
     apiCall<acmeAccountRegisterResponseType>(
       'POST',
