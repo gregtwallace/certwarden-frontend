@@ -1,5 +1,7 @@
 import { type FC, type FormEventHandler } from 'react';
 import {
+  type acmeAccountsResponseType,
+  parseAcmeAccountsResponseType,
   type postAsGetResponseType,
   parsePostAsGetResponseType,
 } from '../../../../../types/api';
@@ -7,28 +9,44 @@ import {
   type frontendErrorType,
   type validationErrorsType,
 } from '../../../../../types/frontend';
+import { selectInputOption } from '../../../../../helpers/input-handler';
 
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
+import useAxiosGet from '../../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../../hooks/useAxiosSend';
-import { inputHandlerFuncMaker } from '../../../../../helpers/input-handler';
+import {
+  inputHandlerFuncMaker,
+  inputHandlerFuncType,
+} from '../../../../../helpers/input-handler';
 import { isHttpsUrlValid } from '../../../../../helpers/form-validation';
+import {
+  type acmeAccount,
+  buildAcmeAccountOptions,
+} from '../../../../../helpers/options_builders';
 
 import { Paper, TextField } from '@mui/material';
 
 import ApiError from '../../../../UI/Api/ApiError';
+import ApiLoading from '../../../../UI/Api/ApiLoading';
 import Form from '../../../../UI/FormMui/Form';
 import FormContainer from '../../../../UI/FormMui/FormContainer';
 import FormFooter from '../../../../UI/FormMui/FormFooter';
+import InputSelect from '../../../../UI/FormMui/InputSelect';
 import InputTextField from '../../../../UI/FormMui/InputTextField';
 import TitleBar from '../../../../UI/TitleBar/TitleBar';
 import FormInfo from '../../../../UI/FormMui/FormInfo';
+
+const ACME_ACCOUNTS_URL = '/v1/acmeaccounts';
 
 // form shape
 type formObj = {
   dataToSubmit: {
     url: string;
+  };
+  dontSubmit: {
+    acme_account_id: number;
   };
   sendResult: postAsGetResponseType | undefined;
   sendError: frontendErrorType | undefined;
@@ -37,13 +55,23 @@ type formObj = {
 
 const PostAsGet: FC = () => {
   const { id } = useParams();
-  const thisPostAsGetUrl = `/v1/acmeaccounts/${id}/post-as-get`;
+  const idVal = Number(id);
+
+  const navigate = useNavigate();
+
+  const { getState } = useAxiosGet<acmeAccountsResponseType>(
+    ACME_ACCOUNTS_URL,
+    parseAcmeAccountsResponseType
+  );
 
   const { axiosSendState, apiCall } = useAxiosSend();
 
   const [formState, setFormState] = useState<formObj>({
     dataToSubmit: {
       url: '',
+    },
+    dontSubmit: {
+      acme_account_id: idVal,
     },
     sendResult: undefined,
     sendError: undefined,
@@ -52,6 +80,37 @@ const PostAsGet: FC = () => {
 
   // data change handler
   const inputChangeHandler = inputHandlerFuncMaker(setFormState);
+
+  // data change handler for account selection (special to update url)
+  const inputAcctSelectChangeHandler: inputHandlerFuncType = (
+    event,
+    convertValueTo
+  ) => {
+    navigate(`/acmeaccounts/${event.target.value}/post-as-get`);
+    inputChangeHandler(event, convertValueTo);
+  };
+
+  // build account options
+  let acctOptions: selectInputOption<number>[] = [];
+  if (getState.responseData?.acme_accounts) {
+    acctOptions = buildAcmeAccountOptions(
+      getState.responseData.acme_accounts,
+      // filter out accounts that aren't valid or don't have a kid
+      (acct: acmeAccount) => {
+        return acct.status === 'valid' && acct.kid !== '';
+      }
+    );
+  }
+
+  // if page is loaded and the account # is not acceptable, redirect
+  if (getState.responseData?.acme_accounts) {
+    const acctIndx = acctOptions.findIndex((value) => {
+      return value.value === idVal;
+    });
+    if (acctIndx < 0) {
+      navigate('/acmeaccounts');
+    }
+  }
 
   // form submission handler
   const submitFormHandler: FormEventHandler = (event) => {
@@ -76,7 +135,7 @@ const PostAsGet: FC = () => {
 
     apiCall<postAsGetResponseType>(
       'POST',
-      thisPostAsGetUrl,
+      `/v1/acmeaccounts/${formState.dontSubmit.acme_account_id}/post-as-get`,
       formState.dataToSubmit,
       parsePostAsGetResponseType
     ).then(({ responseData, error }) => {
@@ -100,34 +159,54 @@ const PostAsGet: FC = () => {
     <>
       <FormContainer>
         <TitleBar title='Debug POST-as-GET' />
-        <Form onSubmit={submitFormHandler}>
-          <FormInfo>
-            This page sends a signed POST-as-GET request as described in RFC
-            8555, section 6.3, to the specifed URL. This page then displays the
-            returned response body and headers.
-          </FormInfo>
 
-          <InputTextField
-            id='dataToSubmit.url'
-            label='URL to PaG'
-            value={formState.dataToSubmit.url}
-            onChange={inputChangeHandler}
-            error={formState.validationErrors['dataToSubmit.url']}
+        {!getState.responseData && !getState.error && <ApiLoading />}
+
+        {getState.error && (
+          <ApiError
+            statusCode={getState.error.statusCode}
+            message={getState.error.message}
           />
+        )}
 
-          {formState.sendError &&
-            Object.keys(formState.validationErrors).length <= 0 && (
-              <ApiError
-                statusCode={formState.sendError.statusCode}
-                message={formState.sendError.message}
-              />
-            )}
+        {getState.responseData && (
+          <Form onSubmit={submitFormHandler}>
+            <FormInfo>
+              This page sends a signed POST-as-GET request as described in RFC
+              8555, section 6.3, to the specifed URL. This page then displays
+              the returned response body and headers.
+            </FormInfo>
 
-          <FormFooter
-            cancelHref={`/acmeaccounts/${id}`}
-            disabledAllButtons={axiosSendState.isSending}
-          />
-        </Form>
+            <InputSelect
+              id='dontSubmit.acme_account_id'
+              label='Sign With ACME Account'
+              value={formState.dontSubmit.acme_account_id}
+              onChange={inputAcctSelectChangeHandler}
+              options={acctOptions}
+            />
+
+            <InputTextField
+              id='dataToSubmit.url'
+              label='URL to PaG'
+              value={formState.dataToSubmit.url}
+              onChange={inputChangeHandler}
+              error={formState.validationErrors['dataToSubmit.url']}
+            />
+
+            {formState.sendError &&
+              Object.keys(formState.validationErrors).length <= 0 && (
+                <ApiError
+                  statusCode={formState.sendError.statusCode}
+                  message={formState.sendError.message}
+                />
+              )}
+
+            <FormFooter
+              cancelHref={`/acmeaccounts/${id}`}
+              disabledAllButtons={axiosSendState.isSending}
+            />
+          </Form>
+        )}
       </FormContainer>
 
       {formState.sendResult !== undefined && (

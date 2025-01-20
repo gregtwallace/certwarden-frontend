@@ -444,6 +444,7 @@ const acmeAccountsResponse = basicGoodResponse.extend({
       }),
       status: z.string(),
       email: z.string(),
+      kid: z.string(),
     })
   ),
 });

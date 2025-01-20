@@ -79,31 +79,36 @@ export const buildPrivateKeyOptions = (
 };
 
 // func to build acme account list
-type acmeAccount = {
+export type acmeAccount = {
   id: number;
   name: string;
+  status: string;
+  kid: string;
   acme_server: {
     is_staging: boolean;
   };
 };
 
 export const buildAcmeAccountOptions = (
-  allAcmeAccounts: acmeAccount[]
-  // currentAcmeAccount?: acmeAccount | undefined
+  allAcmeAccounts: acmeAccount[],
+  filterFunc?: (acct: acmeAccount) => boolean
 ): selectInputOption<number>[] => {
   const acmeAccounts: selectInputOption<number>[] = [];
 
-  // special treatment if current key is provided
-  // if (currentAcmeAccount) {
-  //   acmeAccounts.push({
-  //     value: currentAcmeAccount.id,
-  //     name:
-  //       currentAcmeAccount.name +
-  //       (currentAcmeAccount.acme_server.is_staging ? ' (Staging)' : '') +
-  //       ' - Current',
-  //   });
-  // }
+  // if received a filterFunc, use it
+  if (filterFunc) {
+    allAcmeAccounts.map((acct) => {
+      if (filterFunc(acct)) {
+        acmeAccounts.push({
+          value: acct.id,
+          name: acct.name + (acct.acme_server.is_staging ? ' (Staging)' : ''),
+        });
+      }
+    });
+    return acmeAccounts;
+  }
 
+  // else, no filter
   return acmeAccounts.concat(
     allAcmeAccounts.map((acct) => ({
       value: acct.id,
