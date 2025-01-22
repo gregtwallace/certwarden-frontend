@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 
-import useTheme from './hooks/useTheme';
+import useClientSettings from './hooks/useClientSettings';
 
 import { Box, Typography } from '@mui/material';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
@@ -12,7 +12,7 @@ import IconButton from './components/UI/Button/IconButton';
 
 // component
 const Footer: FC = () => {
-  const { themeIsDarkMode, toggleThemeIsDarkMode } = useTheme();
+  const { themeIsDarkMode, toggleThemeIsDarkMode } = useClientSettings();
 
   return (
     <Box

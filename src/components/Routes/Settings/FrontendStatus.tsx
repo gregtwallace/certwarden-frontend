@@ -1,14 +1,20 @@
 import { type FC } from 'react';
 
 import { frontendVersion } from '../../../helpers/constants';
-import { showDebugInfo } from '../../../helpers/environment';
 import { apiUrl } from '../../../helpers/environment';
 
+import useClientSettings from '../../../hooks/useClientSettings';
+
+import Button from '../../UI/Button/Button';
 import GridItemContainer from '../../UI/Grid/GridItemContainer';
+import GridItemRowRight from '../../UI/Grid/GridItemRowRight';
 import GridItemText from '../../UI/Grid/GridItemText';
 import GridTitle from '../../UI/Grid/GridTitle';
 
 const FrontendStatus: FC = () => {
+  // debug?
+  const { showDebugInfo, toggleShowDebugInfo } = useClientSettings();
+
   return (
     <GridItemContainer>
       <GridTitle title='Frontend Status' />
@@ -22,6 +28,10 @@ const FrontendStatus: FC = () => {
       <GridItemText>
         Show Debug Info: {showDebugInfo ? 'Yes' : 'No'}
       </GridItemText>
+
+      <GridItemRowRight>
+        <Button onClick={toggleShowDebugInfo}>Toggle Debug</Button>
+      </GridItemRowRight>
     </GridItemContainer>
   );
 };

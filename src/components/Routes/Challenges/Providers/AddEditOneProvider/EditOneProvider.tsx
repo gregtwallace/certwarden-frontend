@@ -12,7 +12,7 @@ import { useParams, useNavigate } from 'react-router';
 
 import useAxiosGet from '../../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../../hooks/useAxiosSend';
-import { showDebugInfo } from '../../../../../helpers/environment';
+import useClientSettings from '../../../../../hooks/useClientSettings';
 import { inputHandlerFuncMaker } from '../../../../../helpers/input-handler';
 import { getProvider } from './providers';
 import { isDomainValid } from '../../../../../helpers/form-validation';
@@ -31,6 +31,9 @@ import TitleBar from '../../../../UI/TitleBar/TitleBar';
 const ONE_PROVIDER_URL = '/v1/app/challenges/providers/services';
 
 const EditOneProvider: FC = () => {
+  // debug?
+  const { showDebugInfo } = useClientSettings();
+
   const { axiosSendState, apiCall } = useAxiosSend();
   const navigate = useNavigate();
 

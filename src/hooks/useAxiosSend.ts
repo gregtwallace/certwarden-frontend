@@ -4,8 +4,8 @@ import { type frontendErrorType } from '../types/frontend';
 import { useCallback, useState } from 'react';
 
 import { redactJSONObject } from '../helpers/logging';
-import { showDebugInfo } from '../helpers/environment';
 import { parseAxiosError } from '../helpers/axios';
+import useClientSettings from './useClientSettings';
 import useAxiosWithToken from './useAxiosWithToken';
 
 // sending state
@@ -40,6 +40,9 @@ export type useAxiosSendReturnType = {
 
 // hook
 const useAxiosSend = (): useAxiosSendReturnType => {
+  // debug?
+  const { showDebugInfo } = useClientSettings();
+
   // state
   const [axiosSendState, setAxiosSendState] = useState({
     isSending: false,
@@ -129,7 +132,7 @@ const useAxiosSend = (): useAxiosSendReturnType => {
         return { error: await parseAxiosError(err) };
       }
     },
-    [axiosInstance]
+    [axiosInstance, showDebugInfo]
   );
 
   // Send data to the node using the specified method and a payload from the specified event
@@ -198,7 +201,7 @@ const useAxiosSend = (): useAxiosSendReturnType => {
         return { responseData: undefined, error: await parseAxiosError(err) };
       }
     },
-    [axiosInstance]
+    [axiosInstance, showDebugInfo]
   );
 
   return { axiosSendState, apiCall, downloadFile };

@@ -9,26 +9,60 @@ import {
 } from '@mui/material';
 
 // context type
-export type themeContextType = {
+export type clientSettingsContextType = {
+  showDebugInfo: boolean;
+  toggleShowDebugInfo: () => void;
   themeIsDarkMode: boolean;
   toggleThemeIsDarkMode: () => void;
 };
 
 // create theme context
-const ThemeContext = createContext<themeContextType>({
+const ClientSettingsContext = createContext<clientSettingsContextType>({
+  showDebugInfo: false,
+  toggleShowDebugInfo: () => {
+    /*no-op*/
+  },
+
   themeIsDarkMode: false,
   toggleThemeIsDarkMode: () => {
-    /* No-Op */
+    /*no-op*/
   },
 });
 
 // props type
-type themeProviderPropsType = {
+type clientSettingsProviderType = {
   children: ReactNode;
 };
 
 // Theme Provider component
-const ThemeProvider: FC<themeProviderPropsType> = ({ children }) => {
+const ClientSettingsProvider: FC<clientSettingsProviderType> = ({
+  children,
+}) => {
+  // Show Debug Info
+  const localStorageShowDebugInfo: string | null =
+    localStorage.getItem('show_debug_info');
+
+  const [showDebugInfo, setShowDebugInfo] = useState<boolean>(
+    localStorageShowDebugInfo === 'true'
+  );
+
+  if (showDebugInfo) {
+    console.log("Client show debug info is enabled. Go to 'Settings' if you want to turn it off.")
+  }
+
+  const toggleShowDebugInfo = (): void => {
+    setShowDebugInfo((prevState) => {
+      // reverse prior state
+      const newState = !prevState;
+
+      localStorage.setItem('show_debug_info', newState.toString());
+      return newState;
+    });
+  };
+
+  // Show Debug Info -- end
+
+  // THEME
   // calculate initial theme
   let initialThemeIsDarkMode = false;
   const userPrefersDark = useMediaQuery('(prefers-color-scheme: dark)');
@@ -52,10 +86,10 @@ const ThemeProvider: FC<themeProviderPropsType> = ({ children }) => {
   const toggleThemeIsDarkMode = (): void => {
     setThemeIsDarkMode((prevState) => {
       // reverse prior state
-      const newIsDarkMode = !prevState;
+      const newState = !prevState;
 
-      localStorage.setItem('theme_dark_mode', newIsDarkMode.toString());
-      return newIsDarkMode;
+      localStorage.setItem('theme_dark_mode', newState.toString());
+      return newState;
     });
   };
 
@@ -65,13 +99,21 @@ const ThemeProvider: FC<themeProviderPropsType> = ({ children }) => {
       mode: themeIsDarkMode ? 'dark' : 'light',
     },
   });
+  // THEME -- end
 
   return (
-    <ThemeContext.Provider value={{ themeIsDarkMode, toggleThemeIsDarkMode }}>
+    <ClientSettingsContext.Provider
+      value={{
+        showDebugInfo,
+        toggleShowDebugInfo,
+        themeIsDarkMode,
+        toggleThemeIsDarkMode,
+      }}
+    >
       <ThemeProviderMui theme={theme}>{children}</ThemeProviderMui>
-    </ThemeContext.Provider>
+    </ClientSettingsContext.Provider>
   );
 };
 
 // exports
-export { ThemeContext, ThemeProvider };
+export { ClientSettingsContext, ClientSettingsProvider };

@@ -5,8 +5,9 @@ import { useEffect, useState, useCallback, useMemo } from 'react';
 
 import useAxiosWithToken from './useAxiosWithToken';
 import { redactJSONObject } from '../helpers/logging';
-import { showDebugInfo } from '../helpers/environment';
 import { parseAxiosError } from '../helpers/axios';
+
+import useClientSettings from './useClientSettings';
 
 // get state
 type axiosGetStateType<ExpectedResponseType> = {
@@ -25,6 +26,9 @@ const useAxiosGet = <ExpectedResponseType>(
   getState: axiosGetStateType<ExpectedResponseType>;
   updateGet: axiosDoUpdateGetType;
 } => {
+  // debug?
+  const { showDebugInfo } = useClientSettings();
+
   //
   // axios instance
   const { axiosInstance } = useAxiosWithToken();
@@ -77,7 +81,7 @@ const useAxiosGet = <ExpectedResponseType>(
         error: await parseAxiosError(err),
       });
     }
-  }, [apiNode, axiosInstance, emptyUnloadedState, parseResponseDataFunc]);
+  }, [apiNode, axiosInstance, emptyUnloadedState, parseResponseDataFunc, showDebugInfo]);
 
   // do initial load immediately
   useEffect(() => {

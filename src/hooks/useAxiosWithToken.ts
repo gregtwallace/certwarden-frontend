@@ -5,8 +5,8 @@ import axios, { AxiosError } from 'axios';
 import { axiosConfig, axiosInstance } from '../helpers/axios';
 
 import { parseAuthorizationResponseType } from '../types/api';
-import { showDebugInfo } from '../helpers/environment';
 import useAuth from './useAuth';
+import useClientSettings from './useClientSettings';
 
 // backend node for refreshing access_token
 const REFRESH_NODE = '/v1/app/auth/refresh';
@@ -20,6 +20,9 @@ const NO_RETRY_HEADER = 'x-no-retry';
 let isRefreshing = false;
 
 const useAxiosWithToken = (): { axiosInstance: AxiosInstance } => {
+  // debug?
+  const { showDebugInfo } = useClientSettings();
+
   const { getAccessToken, setAuth } = useAuth();
 
   // refreshAccessToken calls the refresh route and updates session
@@ -54,7 +57,7 @@ const useAxiosWithToken = (): { axiosInstance: AxiosInstance } => {
         console.log('access token failed refresh');
       }
     }
-  }, [setAuth]);
+  }, [setAuth, showDebugInfo]);
 
   // axios intercepts for injecting auth header and possibly doing refresh
   // of access_token and then retry of request

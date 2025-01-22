@@ -5,7 +5,7 @@ import {
 } from '../../../types/api';
 
 import useAxiosGet from '../../../hooks/useAxiosGet';
-import { showDebugInfo } from '../../../helpers/environment';
+import useClientSettings from '../../../hooks/useClientSettings';
 
 import ApiError from '../../UI/Api/ApiError';
 import ApiLoading from '../../UI/Api/ApiLoading';
@@ -16,6 +16,9 @@ import GridTitle from '../../UI/Grid/GridTitle';
 const STATUS_URL = '/status';
 
 const BackendStatus: FC = () => {
+  // debug?
+  const { showDebugInfo } = useClientSettings();
+
   //backendStatusResponseType
   const { getState } = useAxiosGet<backendStatusResponseType>(
     STATUS_URL,

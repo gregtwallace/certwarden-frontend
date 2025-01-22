@@ -3,7 +3,7 @@ import { type FC } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import { AuthProvider } from './context/AuthProvider';
-import { ThemeProvider } from './context/ThemeProvider';
+import { ClientSettingsProvider } from './context/ClientSettingsProvider';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -17,7 +17,7 @@ import Footer from './Footer';
 // component
 const App: FC = () => {
   return (
-    <ThemeProvider>
+    <ClientSettingsProvider>
       <CssBaseline />
       <Box
         sx={{
@@ -38,7 +38,7 @@ const App: FC = () => {
         </Router>
         <Footer />
       </Box>
-    </ThemeProvider>
+    </ClientSettingsProvider>
   );
 };
 

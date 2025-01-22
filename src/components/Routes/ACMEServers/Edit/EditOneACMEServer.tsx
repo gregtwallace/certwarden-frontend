@@ -15,12 +15,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
+import useClientSettings from '../../../../hooks/useClientSettings';
 import { inputHandlerFuncMaker } from '../../../../helpers/input-handler';
 import {
   isHttpsUrlValid,
   isNameValid,
 } from '../../../../helpers/form-validation';
-import { showDebugInfo } from '../../../../helpers/environment';
 
 import { TextField as MuiTextField } from '@mui/material';
 
@@ -53,6 +53,9 @@ type formObj = {
 };
 
 const EditOneACMEServer: FC = () => {
+  // debug?
+  const { showDebugInfo } = useClientSettings();
+
   const { id } = useParams();
   const thisAcmeServerUrl = `${ONE_ACME_SERVER_URL}/${id}`;
 

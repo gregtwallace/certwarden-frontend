@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 
-import { showDebugInfo } from '../../../../../helpers/environment';
+import useClientSettings from '../../../../../hooks/useClientSettings';
 
 import GridTitle from '../../../../UI/Grid/GridTitle';
 
@@ -12,6 +12,9 @@ type propTypes = {
 };
 
 const ProviderTitle: FC<propTypes> = (props) => {
+  // debug?
+  const { showDebugInfo } = useClientSettings();
+
   const titleText =
     props.provider.type +
     (showDebugInfo ? ' (id: ' + props.provider.id + ')' : '');
