@@ -20,6 +20,9 @@ import {
   isHttpsUrlValid,
   isNameValid,
 } from '../../../../helpers/form-validation';
+import { showDebugInfo } from '../../../../helpers/environment';
+
+import { TextField as MuiTextField } from '@mui/material';
 
 import ApiError from '../../../UI/Api/ApiError';
 import ApiLoading from '../../../UI/Api/ApiLoading';
@@ -229,6 +232,29 @@ const EditOneACMEServer: FC = () => {
             >
               Staging Environment Server
             </InputCheckbox>
+
+            {showDebugInfo && (
+              <MuiTextField
+                id='disabled.raw_directory_response'
+                label='Raw Directory Response'
+                fullWidth
+                variant='standard'
+                value={JSON.stringify(
+                  formState.getResponseData.acme_server.raw_directory_response,
+                  null,
+                  2
+                )}
+                sx={{ my: 1, px: 1, overflowY: 'auto' }}
+                multiline
+                InputProps={{
+                  disableUnderline: true,
+                  style: {
+                    fontFamily: 'Monospace',
+                    fontSize: 12,
+                  },
+                }}
+              />
+            )}
 
             {formState.sendError &&
               Object.keys(formState.validationErrors).length <= 0 && (

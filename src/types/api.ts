@@ -313,6 +313,7 @@ const oneAcmeServerResponse = basicGoodResponse.extend({
     directory_url: z.string(),
     is_staging: z.boolean(),
     external_account_required: z.boolean(),
+    raw_directory_response: z.object({}).passthrough(),
     created_at: z.number(),
     updated_at: z.number(),
   }),

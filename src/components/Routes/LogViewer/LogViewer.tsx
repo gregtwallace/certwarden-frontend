@@ -7,7 +7,7 @@ import useAxiosGet from '../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../hooks/useAxiosSend';
 import { iso8601StringToPretty } from '../../../helpers/time';
 
-import { Paper, TextField } from '@mui/material';
+import { Paper, TextField as MuiTextField } from '@mui/material';
 
 import ApiLoading from '../../UI/Api/ApiLoading';
 import ApiError from '../../UI/Api/ApiError';
@@ -75,7 +75,7 @@ const LogViewer: FC = () => {
         )}
 
         {getState.responseData && (
-          <TextField
+          <MuiTextField
             id='disabled.logs'
             fullWidth
             variant='standard'
