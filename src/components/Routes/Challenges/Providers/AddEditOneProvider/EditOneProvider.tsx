@@ -91,7 +91,7 @@ const EditOneProvider: FC = () => {
       parseOneProviderDeleteResponse
     ).then(({ responseData, error }) => {
       if (responseData) {
-        navigate('/providers');
+        navigate('/challenges/providers');
       } else {
         // failed, set error
         setFormState((prevState) => ({
@@ -142,7 +142,7 @@ const EditOneProvider: FC = () => {
       parseProviderResponseType
     ).then(({ responseData, error }) => {
       if (responseData) {
-        navigate('/providers');
+        navigate('/challenges/providers');
       } else {
         // failed, set error
         setFormState((prevState) => ({
@@ -244,7 +244,7 @@ const EditOneProvider: FC = () => {
               )}
 
             <FormFooter
-              cancelHref='/providers'
+              cancelHref='/challenges/providers'
               resetOnClick={() => {
                 setFormState(makeStartingForm());
               }}

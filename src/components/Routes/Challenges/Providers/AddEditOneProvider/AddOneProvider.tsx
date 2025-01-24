@@ -150,7 +150,7 @@ const AddOneProvider: FC = () => {
           )}
 
         <FormFooter
-          cancelHref='/providers'
+          cancelHref='/challenges/providers'
           resetOnClick={() => {
             setFormState(blankForm);
           }}
