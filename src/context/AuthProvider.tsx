@@ -58,6 +58,13 @@ const getAccessToken = (): string => {
   return auth.access_token;
 };
 
+// getAccessToken returns the auth's access_token if auth is defined
+const getUserType = (): string | undefined => {
+  const auth = getAuth();
+
+  return auth?.user_type;
+};
+
 // setAuthStorage saves the newAuth in session storage or clears storage if
 // undefined is set
 const setAuthStorage = (newAuth: authorizationType | undefined): void => {
@@ -76,6 +83,7 @@ const setAuthStorage = (newAuth: authorizationType | undefined): void => {
 export type authContextType = {
   isLoggedIn: boolean;
   getAccessToken: () => string;
+  getUserType: () => string | undefined;
   setAuth: (newAuth: authorizationType | undefined) => void;
 };
 
@@ -83,6 +91,7 @@ export type authContextType = {
 const AuthContext = createContext<authContextType>({
   isLoggedIn: false,
   getAccessToken: () => '',
+  getUserType: () => undefined,
   setAuth: (_unused) => {
     /* No-Op */
   },
@@ -128,7 +137,9 @@ const AuthProvider: FC<AuthProviderProps> = (props) => {
   }, [isLoggedIn, setAuth]);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, getAccessToken, setAuth }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn, getAccessToken, getUserType, setAuth }}
+    >
       {children}
     </AuthContext.Provider>
   );

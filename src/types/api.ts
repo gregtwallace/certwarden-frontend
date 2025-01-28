@@ -32,6 +32,7 @@ export const isErrorResponseType = (unk: unknown): unk is errorResponseType => {
 
 // login and refresh
 const authorization = z.object({
+  user_type: z.string().min(1),
   access_token: z.string().min(1),
   access_token_exp: z.number().min(Date.now() / 1000, {
     message: 'access token expired (host or client time clock issue?)',

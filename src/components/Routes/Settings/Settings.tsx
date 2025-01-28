@@ -1,5 +1,7 @@
 import { type FC } from 'react';
 
+import useAuth from '../../../hooks/useAuth';
+
 import GridChildrenContainer from '../../UI/Grid/GridChildrenContainer';
 import GridContainer from '../../UI/Grid/GridContainer';
 import GridItemThird from '../../UI/Grid/GridItemThird';
@@ -13,6 +15,9 @@ import NewVersionInfo from './NewVersionInfo';
 import Shutdown from './Shutdown';
 
 const Settings: FC = () => {
+  const { getUserType } = useAuth();
+  const userType = getUserType();
+
   return (
     <GridContainer>
       <TitleBar
@@ -29,9 +34,11 @@ const Settings: FC = () => {
           <BackendStatus />
         </GridItemThird>
 
-        <GridItemThird>
-          <ChangePassword />
-        </GridItemThird>
+        {userType === 'local' && (
+          <GridItemThird>
+            <ChangePassword />
+          </GridItemThird>
+        )}
 
         <GridItemThird>
           <NewVersionInfo />
