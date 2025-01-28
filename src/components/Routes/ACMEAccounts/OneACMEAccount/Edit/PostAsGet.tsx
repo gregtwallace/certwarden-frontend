@@ -193,7 +193,7 @@ const PostAsGet: FC = () => {
             />
 
             <InputTextField
-              id='disabled.description'
+              id='disabled.kid'
               label='Account URL / KID'
               value={
                 getState.responseData.acme_accounts.find(
