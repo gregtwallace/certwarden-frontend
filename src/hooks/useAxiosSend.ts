@@ -18,7 +18,9 @@ type axiosApiCallType = <ExpectedResponseType>(
   method: 'GET' | 'POST' | 'PUT' | 'DELETE',
   apiNode: string,
   payloadObj: object,
-  isResponseDataValidFunc: (response: unknown) => ExpectedResponseType
+  isResponseDataValidFunc: (
+    response: unknown
+  ) => ExpectedResponseType
 ) => Promise<{
   responseData: ExpectedResponseType | undefined;
   error: frontendErrorType | undefined;
@@ -95,14 +97,16 @@ const useAxiosSend = (): useAxiosSendReturnType => {
 
         // capture the filename from content-disposition
         const filenameRegex = /filename="(.*)"/;
-        const filenameMatches = filenameRegex.exec(
-          response.headers['content-disposition']
-        );
+        const contentHeaderVal: unknown =
+          response.headers['content-disposition'];
+        if (typeof contentHeaderVal === 'string') {
+          const filenameMatches = filenameRegex.exec(contentHeaderVal);
 
-        if (filenameMatches !== null && filenameMatches.length >= 2) {
-          const filename = filenameMatches[1];
-          if (filename) {
-            link.setAttribute('download', filename);
+          if (filenameMatches !== null && filenameMatches.length >= 2) {
+            const filename = filenameMatches[1];
+            if (filename) {
+              link.setAttribute('download', filename);
+            }
           }
         }
 
@@ -163,7 +167,7 @@ const useAxiosSend = (): useAxiosSendReturnType => {
             if (response.config) {
               response.config.data = JSON.parse(response.config.data);
             }
-          } catch {
+          } catch (_err) {
             // ignore failed, leave as-is
           }
 
@@ -183,7 +187,7 @@ const useAxiosSend = (): useAxiosSendReturnType => {
 
         // parse (narrows and throws err if not valid)
         if (!isResponseDataValidFunc(response.data)) {
-          throw response;
+          throw new Error('axios send failed, wrong data type returned');
         }
 
         // success, return

@@ -127,7 +127,7 @@ const WorkQueuePage: FC<propTypes> = (props) => {
                     </TableCell>
 
                     <TableCell>
-                      {wJob && wJob.order.certificate.subject}
+                      {wJob?.order.certificate.subject}
                     </TableCell>
                   </TableRow>
                 );

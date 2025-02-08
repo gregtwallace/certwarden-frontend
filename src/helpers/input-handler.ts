@@ -122,7 +122,6 @@ const setObjPathVal = <T extends nodeType>(
           // }
           // node = filteredNode;
 
-          // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
           delete node[finalKey];
         } else {
           node[finalKey] = value;
@@ -141,7 +140,7 @@ const setObjPathVal = <T extends nodeType>(
 
   // avoid deep copy issues - use json stringify and then parse back to a new object
   const json = JSON.stringify(obj);
-  const newObj = JSON.parse(json);
+  const newObj = JSON.parse(json) as T;
 
   setNode(newObj);
 

@@ -71,12 +71,15 @@ const AllProviders: FC = () => {
           </GridItemFull>
         )}
 
-        {getState.responseData &&
-          getState.responseData.providers.map((prov) => (
-            <GridItemThird key={prov.id}>
-              <ViewOneProvider provider={prov} />
-            </GridItemThird>
-          ))}
+        {getState.responseData && (
+          <>
+            {getState.responseData.providers.map((prov) => (
+              <GridItemThird key={prov.id}>
+                <ViewOneProvider provider={prov} />
+              </GridItemThird>
+            ))}
+          </>
+        )}
       </GridChildrenContainer>
     </GridContainer>
   );

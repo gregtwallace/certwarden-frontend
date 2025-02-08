@@ -37,10 +37,10 @@ const useAxiosWithToken = (): { axiosInstance: AxiosInstance } => {
       });
 
       // parse (narrows and throws err if not valid)
-      response.data = parseAuthorizationResponseType(response.data);
+      const authResponse = parseAuthorizationResponseType(response.data);
 
       // good, set auth
-      setAuth(response.data.authorization);
+      setAuth(authResponse.authorization);
 
       // debug log
       if (showDebugInfo) {
@@ -88,7 +88,7 @@ const useAxiosWithToken = (): { axiosInstance: AxiosInstance } => {
           if (
             error.response?.status === 401 &&
             prevRequest.headers[NO_RETRY_HEADER] == null &&
-            (!error.config.url || !error.config.url.endsWith('/app/auth/login'))
+            !error.config.url?.endsWith('/app/auth/login')
           ) {
             // do refresh only if not already refreshing, otherwise sleep until the other
             // refresh job is done

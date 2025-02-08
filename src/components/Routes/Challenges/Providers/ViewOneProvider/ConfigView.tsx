@@ -29,14 +29,15 @@ const isRecord = (obj: unknown): obj is Record<string, unknown> => {
   return true;
 };
 
-const parseValue = (value: unknown): unknown => {
+const parseValue = (value: unknown): string => {
+  let returnVal = '';
   // handle different value types different ways
   if (isRecord(value) || Array.isArray(value)) {
-    value = "'Edit' to View";
+    returnVal = "'Edit' to View";
   } else if (typeof value === 'string') {
     // no-op
   } else if (typeof value === 'number') {
-    value = value.toString();
+    returnVal = value.toString();
   } else {
     console.error(
       new Error(
@@ -45,7 +46,7 @@ const parseValue = (value: unknown): unknown => {
     );
   }
 
-  return value;
+  return returnVal;
 };
 
 // makeListObjects unnests an object and returns all key:value pairs
@@ -53,7 +54,7 @@ const parseValue = (value: unknown): unknown => {
 // since domains are handled elsewhere
 const makeListObjects = (
   obj: Record<string, unknown>
-): Record<string, unknown>[] => {
+): Record<string, string>[] => {
   const arr = [];
 
   for (const [key, value] of Object.entries(obj)) {

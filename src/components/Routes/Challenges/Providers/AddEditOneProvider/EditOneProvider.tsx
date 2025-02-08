@@ -68,9 +68,8 @@ const EditOneProvider: FC = () => {
     }),
     [getState, provider]
   );
-  const [formState, setFormState] = useState<providerFormStateType>(
-    makeStartingForm()
-  );
+  const [formState, setFormState] =
+    useState<providerFormStateType>(makeStartingForm());
 
   // reload starting form after GET loads
   useEffect(() => {
@@ -192,9 +191,14 @@ const EditOneProvider: FC = () => {
                 ? 's ' +
                   formState.getResponseData.provider.domains
                     .slice(0, -1)
-                    .join(',') +
-                  ', and ' +
-                  formState.getResponseData.provider.domains.slice(-1)
+                    .join(', ') +
+                  (formState.getResponseData.provider.domains.length > 2
+                    ? ','
+                    : '') +
+                  ' and ' +
+                  formState.getResponseData.provider.domains[
+                    formState.getResponseData.provider.domains.length - 1
+                  ]
                 : ' ' + formState.getResponseData.provider.domains[0]) +
               ' will become unavilable for challenge solving unless there is a wilcard provider.'
             }

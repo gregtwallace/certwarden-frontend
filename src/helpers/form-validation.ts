@@ -119,7 +119,7 @@ export const isOIDValid = (oid: string): boolean => {
     oidParts.forEach((elem) => {
       // on any not a number, abort and return invalid
       if (!isInteger(elem)) {
-        throw 'not a number';
+        throw new Error('not a number');
       }
     });
   } catch (_err) {
@@ -152,7 +152,7 @@ export const isHexStringValid = (hex: string): boolean => {
       // invalid (i.e. false)
       hexParts.forEach((elem) => {
         if (elem.length != 2) {
-          throw 'not a valid byte length';
+          throw new Error('not a valid byte length');
         }
 
         valueHexNoSep += elem;

@@ -58,7 +58,7 @@ type privateKeyWithAlgType = privateKeyType & {
 
 export const buildPrivateKeyOptions = (
   allKeys: privateKeyWithAlgType[],
-  currentKey?: privateKeyType | undefined
+  currentKey?: privateKeyType
 ): selectInputOption<number>[] => {
   const privateKeys: selectInputOption<number>[] = [];
 

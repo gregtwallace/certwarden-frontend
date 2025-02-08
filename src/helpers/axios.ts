@@ -28,7 +28,7 @@ export const parseAxiosError = async (
     if (err.data instanceof Blob) {
       try {
         const blobText = await err.data.text();
-        const blobJson = JSON.parse(blobText);
+        const blobJson: unknown = JSON.parse(blobText);
 
         if (isErrorResponseType(blobJson)) {
           const retErr = {
@@ -66,7 +66,7 @@ export const parseAxiosError = async (
     if (err.response.data instanceof Blob) {
       try {
         const blobText = await err.response.data.text();
-        const blobJson = JSON.parse(blobText);
+        const blobJson: unknown = JSON.parse(blobText);
 
         if (isErrorResponseType(blobJson)) {
           const retErr = {
@@ -99,7 +99,8 @@ export const parseAxiosError = async (
     if (err.issues[0]) {
       return {
         statusCode: 'first zod err: ' + err.issues[0].code,
-        message: '[' + err.issues[0].path + ']: ' + err.issues[0].message,
+        message:
+          '[' + err.issues[0].path.toString() + ']: ' + err.issues[0].message,
       };
     } else {
       // should never happen
