@@ -48,5 +48,5 @@
     "noUncheckedSideEffectImports": true
     /* linting - end */
   },
-  "include": ["src"]
+  "include": ["src", "*.js", "*.ts"]
 }
