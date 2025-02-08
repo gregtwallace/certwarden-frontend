@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router';
 
 import { AuthProvider } from './context/AuthProvider';
 import { ClientSettingsProvider } from './context/ClientSettingsProvider';

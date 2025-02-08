@@ -4,7 +4,7 @@ import {
   parseAuthorizationResponseType,
 } from '../../../types/api';
 
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 
 import useAuth from '../../../hooks/useAuth';
 import useAxiosSend from '../../../hooks/useAxiosSend';

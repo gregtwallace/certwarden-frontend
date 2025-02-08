@@ -13,7 +13,7 @@ import { type selectInputOption } from '../../../../helpers/input-handler';
 import { type certExtension } from './InputExtraExtensions/InputExtraExtensions';
 
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';

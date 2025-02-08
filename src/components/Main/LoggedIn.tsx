@@ -1,5 +1,5 @@
 import { type FC } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router';
 import { Box } from '@mui/system';
 
 import { NewVersionProvider } from '../../context/NewVersionProvider';

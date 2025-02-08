@@ -5,7 +5,7 @@ import {
 } from '../../../types/api';
 
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import useAuth from '../../../hooks/useAuth';
 import useAxiosSend from '../../../hooks/useAxiosSend';

@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 
 import { TableRow } from '@mui/material';
 

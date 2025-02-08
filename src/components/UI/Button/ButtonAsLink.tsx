@@ -1,8 +1,8 @@
 import { type FC, type ReactNode } from 'react';
-import { type LinkProps as RouterLinkProps } from 'react-router-dom';
+import { type LinkProps as RouterLinkProps } from 'react-router';
 import { type ButtonProps as MuiButtonProps } from '@mui/material';
 
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router';
 import { Button as MuiButton } from '@mui/material';
 
 // prop types

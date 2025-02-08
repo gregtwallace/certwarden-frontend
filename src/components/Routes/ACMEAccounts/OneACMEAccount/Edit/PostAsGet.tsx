@@ -12,7 +12,7 @@ import {
 import { selectInputOption } from '../../../../../helpers/input-handler';
 
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 
 import useAxiosGet from '../../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../../hooks/useAxiosSend';

@@ -5,7 +5,7 @@ import {
 } from '../../../types/api';
 import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 
-import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import { Link as RouterLink, useSearchParams } from 'react-router';
 
 import useAxiosGet from '../../../hooks/useAxiosGet';
 import { queryParser } from '../../UI/TableMui/query';

@@ -6,7 +6,7 @@ import {
 import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 
 import useAxiosGet from '../../../hooks/useAxiosGet';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router';
 import { Link } from '@mui/material';
 
 import ApiLoading from '../../UI/Api/ApiLoading';

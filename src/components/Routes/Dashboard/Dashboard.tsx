@@ -5,7 +5,7 @@ import {
 } from '../../../types/api';
 import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 
-import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import { Link as RouterLink, useSearchParams } from 'react-router';
 import { Link } from '@mui/material';
 
 import Table from '@mui/material/Table';

@@ -4,9 +4,9 @@ import {
   type SvgIconTypeMap,
 } from '@mui/material/SvgIcon';
 import { type OverridableComponent } from '@mui/material/OverridableComponent';
-import { type LinkProps as RouterLinkProps } from 'react-router-dom';
+import { type LinkProps as RouterLinkProps } from 'react-router';
 
-import { Link, matchPath, useLocation } from 'react-router-dom';
+import { Link, matchPath, useLocation } from 'react-router';
 
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';

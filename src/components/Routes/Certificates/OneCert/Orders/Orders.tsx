@@ -17,7 +17,7 @@ import { type useAxiosSendReturnType } from '../../../../../hooks/useAxiosSend';
 import { type headerType } from '../../../../UI/TableMui/TableHeaderRow';
 
 import { Fragment, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 
 import useAxiosGet from '../../../../../hooks/useAxiosGet';
 import { inputHandlerFuncMaker } from '../../../../../helpers/input-handler';
