@@ -17,7 +17,11 @@ const FormInfo: FC<propTypes> = (props) => {
   const { children, color, helpURL, sx } = props;
 
   return (
-    <Typography color={color} variant='body2' sx={sx || { mx: 2, my: 1 }}>
+    <Typography
+      color={color || 'primary'}
+      variant='body2'
+      sx={sx || { mx: 2, my: 1 }}
+    >
       {children}
 
       {helpURL != undefined && (

@@ -12,7 +12,12 @@ const TableText: FC<propTypes> = (props) => {
   const { children, color } = props;
 
   return (
-    <Typography variant='body2' color={color} sx={{ m: 3 }} display='block'>
+    <Typography
+      variant='body2'
+      color={color || 'primary'}
+      sx={{ m: 3 }}
+      display='block'
+    >
       {children}
     </Typography>
   );

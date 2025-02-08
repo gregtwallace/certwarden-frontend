@@ -15,7 +15,7 @@ const GridItemText: FC<propTypes> = (props) => {
   return (
     <Typography
       variant='body2'
-      color={color}
+      color={color || 'primary'}
       sx={{ my: 1, wordBreak: wordBreak }}
       display='block'
     >
