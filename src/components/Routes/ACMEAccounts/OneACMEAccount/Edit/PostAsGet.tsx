@@ -85,6 +85,11 @@ const PostAsGet: FC = () => {
     event,
     convertValueTo
   ) => {
+    // this should not be necessary
+    if (typeof event.target.value !== 'number') {
+      throw new Error('pag account select value not a number')
+    }
+
     navigate(`/acmeaccounts/${event.target.value}/post-as-get`);
     inputChangeHandler(event, convertValueTo);
   };
