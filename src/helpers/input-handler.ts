@@ -6,37 +6,37 @@ import { isInteger } from './form-validation';
 // import { redactJSONObject } from './logging';
 
 // input nodes
-const objectNode = z.record(z.string(), z.unknown());
-const arrayNode = z.array(z.unknown());
-const node = z.union([objectNode, arrayNode]);
+const objectInputNode = z.record(z.string(), z.unknown());
+const arrayInputNode = z.array(z.unknown());
+const _inputNode = z.union([objectInputNode, arrayInputNode]);
 
-type objectNodeType = z.infer<typeof objectNode>;
-type arrayNodeType = z.infer<typeof arrayNode>;
-type nodeType = z.infer<typeof node>;
+type objectInputNodeType = z.infer<typeof objectInputNode>;
+type arrayInputNodeType = z.infer<typeof arrayInputNode>;
+type nodeInputType = z.infer<typeof _inputNode>;
 
 // type guards for circulars (nodes)
-const isObjectNodeType = (unk: unknown): unk is objectNodeType => {
-  const { success } = objectNode.safeParse(unk);
+const isObjectNodeType = (unk: unknown): unk is objectInputNodeType => {
+  const { success } = objectInputNode.safeParse(unk);
   return success;
 };
-const isArrayNodeType = (unk: unknown): unk is arrayNodeType => {
-  const { success } = arrayNode.safeParse(unk);
+const isArrayNodeType = (unk: unknown): unk is arrayInputNodeType => {
+  const { success } = arrayInputNode.safeParse(unk);
   return success;
 };
 
 // next node calculator (creates empty node if next doesn't exist or
 // it isn't a node or it isn't the right node type)
 const nextNodeToSet = (
-  currentNode: nodeType,
+  currentNode: nodeInputType,
   // current key is always initially string (it is part of the string path)
   currentKey: string,
   nextKey: string
-): nodeType => {
+): nodeInputType => {
   // for use if next node needs to be created (depending on next node type (string or number))
   const nextIsNum = isInteger(nextKey) ? true : false;
   const nextEmptyNode = nextIsNum
-    ? ([] as arrayNodeType)
-    : ({} as objectNodeType);
+    ? ([] as arrayInputNodeType)
+    : ({} as objectInputNodeType);
 
   // nextNode is narrowed to node later
   let nextNode: unknown;
@@ -66,7 +66,7 @@ const nextNodeToSet = (
 };
 
 // actual object modifier function
-const setObjPathVal = <T extends nodeType>(
+const setObjPathVal = <T extends nodeInputType>(
   obj: T,
   path: string,
   value: unknown
@@ -79,7 +79,7 @@ const setObjPathVal = <T extends nodeType>(
   const segments = path.split(/[.[\]]/g).filter((x) => !!x.trim());
 
   // setter
-  const setNode = (node: nodeType): void => {
+  const setNode = (node: nodeInputType): void => {
     // case 1: more nesting to handle
     if (segments.length > 1) {
       const key = segments.shift();
@@ -186,7 +186,7 @@ export type inputHandlerFuncType = (
 
 // formChangeHandlerFunc returns the input change handler specific
 // to the setFormState func that is passed in
-export const inputHandlerFuncMaker = <StateObject extends objectNodeType>(
+export const inputHandlerFuncMaker = <StateObject extends objectInputNodeType>(
   setFormState: Dispatch<SetStateAction<StateObject>>
 ): inputHandlerFuncType => {
   return (

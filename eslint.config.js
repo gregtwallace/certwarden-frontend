@@ -34,22 +34,21 @@ export default tseslint.config(
       ],
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
       'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          vars: 'all',
+          args: 'all',
+          argsIgnorePattern: '^_',
+          caughtErrors: 'all',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
 
       // TODO: Fix / re-enable these
-      '@typescript-eslint/no-unused-vars': 'off',
-      // '@typescript-eslint/no-unused-vars': [
-      //   'error',
-      //   {
-      //     vars: 'all',
-      //     args: 'after-used',
-      //     caughtErrors: 'all',
-      //     ignoreRestSiblings: false,
-      //     reportUsedIgnorePattern: true,
-      //     varsIgnorePattern: '^_',
-      //     argsIgnorePattern: '^_',
-      //     caughtErrorsIgnorePattern: '^_',
-      //   },
-      // ],
       '@typescript-eslint/no-floating-promises': 'off',
       '@typescript-eslint/prefer-nullish-coalescing': 'off',
       '@typescript-eslint/dot-notation': 'off',

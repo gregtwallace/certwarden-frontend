@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 // field names with w/ some info about them
-const htmlTypeVal = z.enum([
+const _htmlTypeVal = z.enum([
   'checkbox',
   'email',
   'number',
@@ -9,13 +9,14 @@ const htmlTypeVal = z.enum([
   'text',
   'url',
 ]);
-type htmlTypeValType = z.infer<typeof htmlTypeVal>;
+type htmlTypeValType = z.infer<typeof _htmlTypeVal>;
 
 type fieldInfoType = {
   nameRegex: RegExp;
   htmlType: htmlTypeValType;
   errorMessage: string;
 };
+
 // fieldsInfo contains information about field names
 const fieldsInfo: fieldInfoType[] = [
   // general
