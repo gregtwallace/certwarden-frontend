@@ -124,6 +124,11 @@ const fieldsInfo: fieldInfoType[] = [
     errorMessage: 'An account must be selected.',
   },
   {
+    nameRegex: /^(.+\.)?kid$/,
+    htmlType: 'text',
+    errorMessage: 'N/A',
+  },
+  {
     nameRegex: /^(.+\.)?accepted_tos$/,
     htmlType: 'checkbox',
     errorMessage: 'You must accept the Terms of Service.',
