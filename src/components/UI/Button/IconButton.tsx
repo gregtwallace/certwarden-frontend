@@ -27,8 +27,8 @@ const IconButton: FC<propTypes> = (props) => {
       <MuiIconButton
         type={type}
         onClick={onClick}
-        color={color ? color : 'inherit'}
-        edge={edge ? edge : false}
+        color={color ?? 'inherit'}
+        edge={edge ?? false}
         sx={{
           ...sx,
         }}

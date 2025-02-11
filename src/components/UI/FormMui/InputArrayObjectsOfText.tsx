@@ -51,7 +51,7 @@ const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
 
     const syntheticEvent = {
       target: {
-        name: name || id,
+        name: name ?? id,
         value: newArrayVal,
       },
     };
@@ -86,13 +86,13 @@ const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
           // if errIndex < delete index, just copy
           if (errIndex < index) {
             newValidationErrors[fieldName] =
-              currentValidationErrors[fieldName] || false;
+              currentValidationErrors[fieldName] ?? false;
           }
 
           // if errIndex is greater than delete index, shift error -1
           if (errIndex > index) {
             newValidationErrors[`${id}.${(errIndex - 1).toString()}`] =
-              currentValidationErrors[fieldName] || false;
+              currentValidationErrors[fieldName] ?? false;
           }
 
           // if errIndex is delete index, discard error
@@ -111,14 +111,14 @@ const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
           // if errIndex < delete index, just copy
           if (errIndex < index) {
             newValidationErrors[fieldName] =
-              currentValidationErrors[fieldName] || false;
+              currentValidationErrors[fieldName] ?? false;
           }
 
           // if errIndex is greater than delete index, shift error -1
           if (errIndex > index) {
             newValidationErrors[
               `${id}.${(errIndex - 1).toString()}.${subFieldName}`
-            ] = currentValidationErrors[fieldName] || false;
+            ] = currentValidationErrors[fieldName] ?? false;
           }
 
           // if errIndex is delete index, discard error
@@ -126,7 +126,7 @@ const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
         } else {
           // if not related to this input, just copy
           newValidationErrors[fieldName] =
-            currentValidationErrors[fieldName] || false;
+            currentValidationErrors[fieldName] ?? false;
         }
       }
 
@@ -146,7 +146,7 @@ const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
 
     const syntheticEvent = {
       target: {
-        name: name || id,
+        name: name ?? id,
         value: newArrayVal,
       },
     };
@@ -196,7 +196,7 @@ const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
 
               <Box sx={{ flexGrow: 1 }} />
 
-              {value.length > (minElements || 0) && (
+              {value.length > (minElements ?? 0) && (
                 <Button
                   size='small'
                   color='error'

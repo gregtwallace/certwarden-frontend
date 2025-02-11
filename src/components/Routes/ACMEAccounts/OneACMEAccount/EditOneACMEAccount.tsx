@@ -86,8 +86,8 @@ const EditOneACMEAccount: FC = () => {
       getResponseData: responseData,
       getError: error,
       dataToSubmitEdit: {
-        name: responseData?.acme_account.name || '',
-        description: responseData?.acme_account.description || '',
+        name: responseData?.acme_account.name ?? '',
+        description: responseData?.acme_account.description ?? '',
       },
       dataToSubmitRegister: {
         eab_kid: '',

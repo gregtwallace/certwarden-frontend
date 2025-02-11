@@ -63,7 +63,7 @@ const ChangeAccountEmail: FC = () => {
       getResponseData: responseData,
       getError: error,
       dataToSubmit: {
-        email: responseData?.acme_account.email || '',
+        email: responseData?.acme_account.email ?? '',
       },
       sendError: undefined,
       validationErrors: {},

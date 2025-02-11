@@ -42,7 +42,7 @@ const InputExtraExtensions = (props: propTypes): ReactNode => {
   const addElementHandler = (newExt?: certExtension): void => {
     const newArrayVal = [...value];
     newArrayVal.push(
-      newExt || {
+      newExt ?? {
         description: '',
         oid: '',
         critical: false,
@@ -87,13 +87,13 @@ const InputExtraExtensions = (props: propTypes): ReactNode => {
           // if errIndex < delete index, just copy
           if (errIndex < index) {
             newValidationErrors[fieldName] =
-              currentValidationErrors[fieldName] || false;
+              currentValidationErrors[fieldName] ?? false;
           }
 
           // if errIndex is greater than delete index, shift error -1
           if (errIndex > index) {
             newValidationErrors[`${id}.${(errIndex - 1).toString()}`] =
-              currentValidationErrors[fieldName] || false;
+              currentValidationErrors[fieldName] ?? false;
           }
 
           // if errIndex is delete index, discard error
@@ -112,14 +112,14 @@ const InputExtraExtensions = (props: propTypes): ReactNode => {
           // if errIndex < delete index, just copy
           if (errIndex < index) {
             newValidationErrors[fieldName] =
-              currentValidationErrors[fieldName] || false;
+              currentValidationErrors[fieldName] ?? false;
           }
 
           // if errIndex is greater than delete index, shift error -1
           if (errIndex > index) {
             newValidationErrors[
               `${id}.${(errIndex - 1).toString()}.${subFieldName}`
-            ] = currentValidationErrors[fieldName] || false;
+            ] = currentValidationErrors[fieldName] ?? false;
           }
 
           // if errIndex is delete index, discard error
@@ -127,7 +127,7 @@ const InputExtraExtensions = (props: propTypes): ReactNode => {
         } else {
           // if not related to this input, just copy
           newValidationErrors[fieldName] =
-            currentValidationErrors[fieldName] || false;
+            currentValidationErrors[fieldName] ?? false;
         }
       }
 

@@ -51,7 +51,7 @@ const EditAliases: FC = () => {
       getResponseData: getState.responseData,
       getError: getState.error,
       dataToSubmit: {
-        domain_aliases: getState.responseData?.domain_aliases || [],
+        domain_aliases: getState.responseData?.domain_aliases ?? [],
       },
       sendError: undefined,
       validationErrors: {},

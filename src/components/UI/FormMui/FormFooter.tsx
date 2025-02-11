@@ -81,7 +81,7 @@ const FormFooter: FC<propTypesFooter> = (props) => {
         <Button
           color='info'
           onClick={resetOnClick}
-          disabled={disabledAllButtons || disabledResetButton}
+          disabled={disabledAllButtons ?? disabledResetButton}
         >
           Reset
         </Button>

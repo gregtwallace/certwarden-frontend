@@ -23,12 +23,12 @@ const InputTextField: FC<propTypes> = (props) => {
     props;
 
   // get field info
-  const { errorMessage, htmlType } = fieldInformation(name || id);
+  const { errorMessage, htmlType } = fieldInformation(name ?? id);
 
   return (
     <MuiTextField
       id={id}
-      name={name || id}
+      name={name ?? id}
       type={htmlType}
       label={label}
       value={value}

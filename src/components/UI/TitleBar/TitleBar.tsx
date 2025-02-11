@@ -21,7 +21,7 @@ const TitleBar: FC<propTypes> = (props) => {
   return (
     <Toolbar variant='dense' disableGutters sx={{ m: 0, px: 2 }}>
       <Typography
-        component={headerComponent || 'h2'}
+        component={headerComponent ?? 'h2'}
         variant='h6'
         color='primary'
         sx={{ flexGrow: 1 }}

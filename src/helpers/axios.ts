@@ -114,7 +114,7 @@ export const parseAxiosError = async (
   // if axios error, return axios code and message
   if (isAxiosError(err)) {
     const retErr = {
-      statusCode: err.code || 'unknown',
+      statusCode: err.code ?? 'unknown',
       message: err.message,
     };
 

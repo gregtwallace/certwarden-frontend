@@ -65,8 +65,8 @@ const EditAPIKeysPage: FC<propTypes> = (props) => {
       getResponseData: responseData,
       getError: error,
       dataToSubmit: {
-        api_key: responseData?.api_key || '',
-        api_key_new: responseData?.api_key_new || '',
+        api_key: responseData?.api_key ?? '',
+        api_key_new: responseData?.api_key_new ?? '',
       },
       sendError: undefined,
       validationErrors: {},

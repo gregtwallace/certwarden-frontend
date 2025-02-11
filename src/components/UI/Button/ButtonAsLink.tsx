@@ -30,8 +30,8 @@ const ButtonAsLink: FC<propTypes> = (props) => {
       target={target}
       disabled={!!disabled}
       variant='contained'
-      color={color ? color : 'primary'}
-      size={size ? size : 'medium'}
+      color={color ?? 'primary'}
+      size={size ?? 'medium'}
       sx={{
         ml: 2,
         ...sx,

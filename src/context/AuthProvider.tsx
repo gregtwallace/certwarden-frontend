@@ -29,7 +29,7 @@ const resetIdleLogoutTimer = (
 const getAuth = (): authorizationType | undefined => {
   try {
     const maybeAuth: unknown = JSON.parse(
-      sessionStorage.getItem('authorization') || '{}'
+      sessionStorage.getItem('authorization') ?? '{}'
     );
 
     // parse auth for validity

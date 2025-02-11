@@ -195,7 +195,7 @@ const PostAsGet: FC = () => {
               value={
                 getState.responseData.acme_accounts.find(
                   (acct) => acct.id === formState.dontSubmit.acme_account_id
-                )?.description || ''
+                )?.description ?? ''
               }
               disabled
             />
@@ -206,7 +206,7 @@ const PostAsGet: FC = () => {
               value={
                 getState.responseData.acme_accounts.find(
                   (acct) => acct.id === formState.dontSubmit.acme_account_id
-                )?.kid || ''
+                )?.kid ?? ''
               }
               disabled
             />

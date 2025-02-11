@@ -27,7 +27,7 @@ const IconButtonAsLink: FC<propTypes> = (props) => {
         component={RouterLink}
         to={to}
         target={target}
-        color={color != undefined ? color : 'inherit'}
+        color={color ?? 'inherit'}
       >
         {children}
       </MuiIconButton>

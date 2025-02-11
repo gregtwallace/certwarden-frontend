@@ -56,8 +56,8 @@ export const isEmailValid = (email: string): boolean => {
   }
 
   // label each piece
-  const username = emailPieces[0] || '';
-  const domain = emailPieces[1] || '';
+  const username = emailPieces[0] ?? '';
+  const domain = emailPieces[1] ?? '';
 
   // username regex
   const usernameRegex = /^[A-Za-z0-9][A-Za-z0-9-_.]{0,62}[A-Za-z0-9]$/;

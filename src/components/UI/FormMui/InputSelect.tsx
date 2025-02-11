@@ -43,7 +43,7 @@ const InputSelect = <ValType extends selectInputOptionValuesType>(
   } = props;
 
   // get field info
-  const { errorMessage, htmlType } = fieldInformation(name || id);
+  const { errorMessage, htmlType } = fieldInformation(name ?? id);
 
   return (
     <FormControl fullWidth sx={{ my: 1 }}>
@@ -54,7 +54,7 @@ const InputSelect = <ValType extends selectInputOptionValuesType>(
       <Select
         labelId={`${id}-label`}
         id={id}
-        name={name || id}
+        name={name ?? id}
         label={label}
         value={value}
         onChange={

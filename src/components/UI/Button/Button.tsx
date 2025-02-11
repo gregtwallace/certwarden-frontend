@@ -27,8 +27,8 @@ const Button: FC<propTypes> = (props) => {
       onClick={onClick}
       disabled={!!disabled}
       variant='contained'
-      color={color ? color : 'primary'}
-      size={size ? size : 'medium'}
+      color={color ?? 'primary'}
+      size={size ?? 'medium'}
       sx={{
         ml: 2,
         ...sx,

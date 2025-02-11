@@ -47,7 +47,7 @@ const NavLink: FC<propTypes> = (props) => {
           target={target}
         >
           <ListItemIcon style={{ minWidth: '40px' }}>
-            <IconComponent color={iconColor || 'inherit'} />
+            <IconComponent color={iconColor ?? 'inherit'} />
           </ListItemIcon>
 
           <ListItemText

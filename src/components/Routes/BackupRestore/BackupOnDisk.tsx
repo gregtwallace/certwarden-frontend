@@ -199,8 +199,8 @@ const BackupOnDisk: FC = () => {
               {getState.responseData.backup_files
                 .sort((a, b) => {
                   // sort newest to be first TODO: Allow sorting changes
-                  const aTime = a.created_at ? a.created_at : a.modtime;
-                  const bTime = b.created_at ? b.created_at : b.modtime;
+                  const aTime = a.created_at ?? a.modtime;
+                  const bTime = b.created_at ?? b.modtime;
                   return bTime - aTime;
                 })
                 .map((file) => (

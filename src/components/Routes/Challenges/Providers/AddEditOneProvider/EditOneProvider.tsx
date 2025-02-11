@@ -51,21 +51,21 @@ const EditOneProvider: FC = () => {
   );
 
   // get provider type
-  const provider = getProvider(getState.responseData?.provider.type || '');
+  const provider = getProvider(getState.responseData?.provider.type ?? '');
 
   const makeStartingForm: () => providerFormStateType = useCallback(
     () => ({
       getResponseData: getState.responseData,
       getError: getState.error,
-      provider_type_value: getState.responseData?.provider.type || '',
+      provider_type_value: getState.responseData?.provider.type ?? '',
       provider_options: provider.providerOptionsForEdit
         ? provider.providerOptionsForEdit(
             getState.responseData?.provider.config
           )
         : undefined,
       dataToSubmit: {
-        domains: getState.responseData?.provider.domains || [''],
-        config: getState.responseData?.provider.config || {},
+        domains: getState.responseData?.provider.domains ?? [''],
+        config: getState.responseData?.provider.config ?? {},
       },
       sendError: undefined,
       validationErrors: {},

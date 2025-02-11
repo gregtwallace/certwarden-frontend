@@ -24,7 +24,7 @@ const InputCheckbox: FC<propTypes> = (props) => {
   const { checked, children, disabled, error, id, name, onChange } = props;
 
   // get field info
-  const { errorMessage } = fieldInformation(name || id);
+  const { errorMessage } = fieldInformation(name ?? id);
 
   return (
     <FormControl fullWidth sx={{ my: 1 }}>
@@ -32,7 +32,7 @@ const InputCheckbox: FC<propTypes> = (props) => {
         control={
           <Checkbox
             id={id}
-            name={name || id}
+            name={name ?? id}
             onChange={
               onChange
                 ? (event, checked) => {
