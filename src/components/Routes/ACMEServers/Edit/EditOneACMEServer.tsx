@@ -217,7 +217,7 @@ const EditOneACMEServer: FC = () => {
               onChange={inputChangeHandler}
             />
 
-            <FormInfo color='error.main'>
+            <FormInfo sx={{ color: 'error.main' }}>
               You should only update the Directory URL if your provider has
               actually changed it. If you are trying to change provider, create
               a new server instead.

@@ -23,7 +23,9 @@ const FrontendStatus: FC = () => {
 
       <GridItemText>Version: {frontendVersion}</GridItemText>
 
-      <GridItemText wordBreak='break-word'>API URL: {apiUrl}</GridItemText>
+      <GridItemText sx={{ wordBreak: 'break-word' }}>
+        API URL: {apiUrl}
+      </GridItemText>
 
       <GridItemText>
         Show Debug Info: {showDebugInfo ? 'Yes' : 'No'}

@@ -5,6 +5,8 @@ import { escapeStringForRegExp } from '../../../helpers/regex';
 
 import { Box, FormControl, Toolbar } from '@mui/material';
 
+import { objectHasKeyStartingWith } from '../../../helpers/form-validation';
+
 import Button from '../Button/Button';
 import FormInfo from './FormInfo';
 import FormLabel from './FormLabel';
@@ -23,7 +25,7 @@ type propTypes<valueObject extends Record<string, string>> = {
   onChange: inputHandlerFuncType;
 
   minElements?: number;
-  validationErrors?: validationErrorsType;
+  validationErrors: validationErrorsType;
 };
 
 const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
@@ -169,22 +171,25 @@ const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
               border: 1,
               borderRadius: '4px',
               /* Note: action.disabled isn't the exact default field border color, but it is close */
-              borderColor:
-                validationErrors &&
-                `${id}.${objIndex.toString()}` in validationErrors
-                  ? 'error.main'
-                  : 'action.disabled',
+              borderColor: objectHasKeyStartingWith(
+                validationErrors,
+                `${id}.${objIndex.toString()}`
+              )
+                ? 'error.main'
+                : 'action.disabled',
             }}
           >
             <Toolbar variant='dense' disableGutters sx={{ mb: 1 }}>
               <FormInfo
-                color={
-                  validationErrors &&
-                  `${id}.${objIndex.toString()}` in validationErrors
+                sx={{
+                  m: 1,
+                  color: objectHasKeyStartingWith(
+                    validationErrors,
+                    `${id}.${objIndex.toString()}`
+                  )
                     ? 'error.main'
-                    : undefined
-                }
-                sx={{ m: 1 }}
+                    : undefined,
+                }}
               >
                 {subLabel + ' ' + (objIndex + 1).toString()}
               </FormInfo>
@@ -228,7 +233,6 @@ const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
                     value={fieldValue}
                     onChange={onChange}
                     error={
-                      !!validationErrors &&
                       validationErrors[
                         id + '.' + objIndex.toString() + '.' + fieldKey
                       ]

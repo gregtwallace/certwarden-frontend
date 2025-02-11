@@ -10,10 +10,9 @@ type propTypes = {
 
 const GridItemContainer: FC<propTypes> = (props) => {
   const { children, sx } = props;
-  const sxTest = sx || {};
 
   return (
-    <Container component={Paper} sx={{ ...sxTest, p: 1, height: 1 }}>
+    <Container component={Paper} sx={{ p: 1, height: 1, ...sx }}>
       {children}
     </Container>
   );

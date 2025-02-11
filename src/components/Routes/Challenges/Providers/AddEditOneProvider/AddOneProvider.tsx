@@ -117,7 +117,7 @@ const AddOneProvider: FC = () => {
         {formState.provider_type_value !== '' && (
           <>
             {!provider.supportsWindows && (
-              <FormInfo color='error'>
+              <FormInfo sx={{ color: 'error.main' }}>
                 Warning: This provider does not work if the backend is running
                 on Windows OS.
               </FormInfo>

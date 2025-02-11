@@ -30,8 +30,8 @@ const Button: FC<propTypes> = (props) => {
       color={color ? color : 'primary'}
       size={size ? size : 'medium'}
       sx={{
-        ...sx,
         ml: 2,
+        ...sx,
       }}
     >
       {children}

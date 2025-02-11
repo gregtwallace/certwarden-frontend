@@ -146,7 +146,7 @@ const EditAPIKeysPage: FC<propTypes> = (props) => {
 
       {formState.getResponseData && (
         <Form onSubmit={submitFormHandler}>
-          <FormInfo color='error.main'>
+          <FormInfo sx={{ color: 'error.main' }}>
             Do not manually edit the API Keys unless you have a specific need.
             Use the &quot;New&quot; and &quot;Retire&quot; buttons on the
             previous page instead, as these generate cryptographically random

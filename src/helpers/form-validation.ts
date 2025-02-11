@@ -207,3 +207,18 @@ export const isEnvironmentParamValid = (envParam: string): boolean => {
 
   return true;
 };
+
+// objectHasKeyStartingWith checks if the specified object has any key beginning with the
+// secified string
+export const objectHasKeyStartingWith = (
+  obj: object,
+  keyStartsWith: string
+): boolean => {
+  // filter to any keys that match the starts with string
+  const matchingKeys = Object.keys(obj).filter((key) =>
+    key.startsWith(keyStartsWith)
+  );
+
+  // if any matches, true, else false
+  return matchingKeys.length > 0;
+};
