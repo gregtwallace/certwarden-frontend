@@ -50,6 +50,10 @@ type formObj = {
 
 const EditOnePrivateKey: FC = () => {
   const { id } = useParams();
+  if (!id) {
+    throw new Error('id is invalid');
+  }
+
   const thisPrivateKeyUrl = `${ONE_PRIVATE_KEY_URL}/${id}`;
   const thisPrivateKeyDownloadUrl = `${thisPrivateKeyUrl}/download`;
   const thisPrivateKeyApiKeyUrl = `${thisPrivateKeyUrl}/apikey`;
@@ -214,7 +218,9 @@ const EditOnePrivateKey: FC = () => {
             </Button>
             <Button
               color='error'
-              onClick={() => setDeleteOpen(true)}
+              onClick={() => {
+                setDeleteOpen(true);
+              }}
               disabled={axiosSendState.isSending}
             >
               Delete
@@ -238,7 +244,9 @@ const EditOnePrivateKey: FC = () => {
             title={`Are you sure you want to delete ${formState.dataToSubmit.name}?`}
             contentText='This action cannot be undone and the key will NOT be recoverable!'
             open={deleteOpen}
-            onCancel={() => setDeleteOpen(false)}
+            onCancel={() => {
+              setDeleteOpen(false);
+            }}
             onConfirm={deleteConfirmHandler}
           />
 
@@ -341,11 +349,11 @@ const EditOnePrivateKey: FC = () => {
 
             <FormFooter
               cancelHref='/privatekeys'
-              resetOnClick={() =>
+              resetOnClick={() => {
                 setFormState((prevState) =>
                   initialForm(prevState.getResponseData, prevState.getError)
-                )
-              }
+                );
+              }}
               disabledAllButtons={axiosSendState.isSending}
               disabledResetButton={
                 JSON.stringify(formState.dataToSubmit) ===

@@ -83,7 +83,7 @@ const useAxiosWithToken = (): { axiosInstance: AxiosInstance } => {
       async (error: AxiosError) => {
         // get previous request (config)
         if (error.config) {
-          const prevRequest = error?.config;
+          const prevRequest = error.config;
           // if the error was 401 & not already a retry, and not login, try refresh
           if (
             error.response?.status === 401 &&
@@ -97,6 +97,8 @@ const useAxiosWithToken = (): { axiosInstance: AxiosInstance } => {
               await refreshAccessToken();
               isRefreshing = false;
             } else {
+              // disable this rule as ts thinks this is always true, even though it can be false
+              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
               while (isRefreshing) {
                 // sleep before checking isRefreshing again
                 await new Promise((resolve) => setTimeout(resolve, 100));
@@ -105,7 +107,7 @@ const useAxiosWithToken = (): { axiosInstance: AxiosInstance } => {
 
             // don't retry if token appears invalid
             const newAccessToken = getAccessToken();
-            if (newAccessToken == null || newAccessToken === '') {
+            if (newAccessToken === '') {
               // new token doesn't look valid, return original error
               return error;
             }

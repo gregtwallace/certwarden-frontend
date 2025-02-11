@@ -33,7 +33,7 @@ import InputTextField from '../../../UI/FormMui/InputTextField';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
 
 const NEW_PRIVATE_KEY_URL = '/v1/privatekeys';
-const PRIVATE_KEY_OPTIONS_URL = NEW_PRIVATE_KEY_URL + '/' + newId;
+const PRIVATE_KEY_OPTIONS_URL = NEW_PRIVATE_KEY_URL + '/' + newId.toString();
 
 const keySources = [
   {
@@ -153,7 +153,7 @@ const AddOnePrivateKey: FC = () => {
       parseOnePrivateKeyResponseType
     ).then(({ responseData, error }) => {
       if (responseData) {
-        navigate(`/privatekeys/${responseData.private_key.id}`);
+        navigate(`/privatekeys/${responseData.private_key.id.toString()}`);
       } else {
         // failed, set error
         setFormState((prevState) => ({
@@ -246,7 +246,7 @@ const AddOnePrivateKey: FC = () => {
 
           <FormFooter
             cancelHref='/privatekeys'
-            resetOnClick={() => setFormState(blankForm)}
+            resetOnClick={() => {setFormState(blankForm)}}
             disabledAllButtons={axiosSendState.isSending}
             disabledResetButton={
               JSON.stringify(formState.dataToSubmit) ===

@@ -30,7 +30,7 @@ const TableHeaderRow: FC<propTypes> = (props) => {
   if (currentSort != null) {
     const sortComponents = currentSort.split('.');
     if (
-      sortComponents?.length === 2 &&
+      sortComponents.length === 2 &&
       sortComponents[0] &&
       (sortComponents[1] === 'asc' || sortComponents[1] === 'desc')
     ) {

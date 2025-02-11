@@ -36,7 +36,7 @@ import InputTextField from '../../../UI/FormMui/InputTextField';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
 
 const NEW_ACME_ACCOUNT_URL = '/v1/acmeaccounts';
-const ACME_ACCOUNT_OPTIONS_URL = `/v1/acmeaccounts/${newId}`;
+const ACME_ACCOUNT_OPTIONS_URL = `/v1/acmeaccounts/${newId.toString()}`;
 
 // form shape
 type formObj = {
@@ -119,7 +119,7 @@ const AddOneACMEAccount: FC = () => {
     }
 
     // ToS must be accepted
-    if (formState.dataToSubmit.accepted_tos !== true) {
+    if (!formState.dataToSubmit.accepted_tos) {
       validationErrors['dataToSubmit.accepted_tos'] = true;
     }
 
@@ -139,7 +139,7 @@ const AddOneACMEAccount: FC = () => {
       parseOneAcmeAccountResponseType
     ).then(({ responseData, error }) => {
       if (responseData) {
-        navigate(`/acmeaccounts/${responseData.acme_account.id}`);
+        navigate(`/acmeaccounts/${responseData.acme_account.id.toString()}`);
       } else {
         // failed, set error
         setFormState((prevState) => ({
@@ -246,7 +246,7 @@ const AddOneACMEAccount: FC = () => {
 
           <FormFooter
             cancelHref='/acmeaccounts'
-            resetOnClick={() => setFormState(blankForm)}
+            resetOnClick={() => {setFormState(blankForm)}}
             disabledAllButtons={axiosSendState.isSending}
             disabledResetButton={
               JSON.stringify(formState.dataToSubmit) ===

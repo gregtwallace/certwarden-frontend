@@ -1,6 +1,6 @@
 import { type FC, type ReactNode } from 'react';
 
-import { Grid } from '@mui/material';
+import { Grid2 } from '@mui/material';
 
 type propTypes = {
   children: ReactNode;
@@ -10,9 +10,15 @@ const GridItemThird: FC<propTypes> = (props) => {
   const { children } = props;
 
   return (
-    <Grid item xs={2} sm={4} md={4}>
+    <Grid2
+      size={{
+        xs: 2,
+        sm: 4,
+        md: 4,
+      }}
+    >
       {children}
-    </Grid>
+    </Grid2>
   );
 };
 

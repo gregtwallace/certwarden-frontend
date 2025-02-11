@@ -1,5 +1,6 @@
 import { type FC, type ReactNode } from 'react';
-import { type TypographyProps, type SxProps } from '@mui/material';
+import { type TypographyProps } from '@mui/material';
+import { type SystemStyleObject } from '@mui/system';
 
 import HelpIcon from '@mui/icons-material/Help';
 import { Typography } from '@mui/material';
@@ -9,7 +10,7 @@ import IconButtonAsLink from '../../UI/Button/IconButtonAsLink';
 type propTypes = {
   children: ReactNode;
   color?: TypographyProps['color'];
-  sx?: SxProps;
+  sx?: SystemStyleObject;
   helpURL?: string;
 };
 

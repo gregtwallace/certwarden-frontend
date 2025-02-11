@@ -50,7 +50,7 @@ const AllProviders: FC = () => {
         <ButtonAsLink to='/challenges/aliases' color='secondary'>
           Domain Aliases
         </ButtonAsLink>
-        <ButtonAsLink to={`/challenges/providers/${newId}`}>
+        <ButtonAsLink to={`/challenges/providers/${newId.toString()}`}>
           New Provider
         </ButtonAsLink>
       </TitleBar>

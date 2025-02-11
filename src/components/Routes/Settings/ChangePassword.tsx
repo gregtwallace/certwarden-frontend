@@ -145,7 +145,7 @@ const ChangePassword: FC = () => {
         {formState.sendSuccess && <ApiSuccess>Password changed.</ApiSuccess>}
 
         <FormFooter
-          resetOnClick={() => setFormState(blankFormState)}
+          resetOnClick={() => {setFormState(blankFormState)}}
           disabledAllButtons={axiosSendState.isSending}
         />
       </Form>

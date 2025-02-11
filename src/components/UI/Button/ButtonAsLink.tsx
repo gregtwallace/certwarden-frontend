@@ -1,6 +1,7 @@
 import { type FC, type ReactNode } from 'react';
 import { type LinkProps as RouterLinkProps } from 'react-router';
 import { type ButtonProps as MuiButtonProps } from '@mui/material';
+import { type SystemStyleObject } from '@mui/system';
 
 import { Link as RouterLink } from 'react-router';
 import { Button as MuiButton } from '@mui/material';
@@ -15,7 +16,7 @@ type propTypes = {
   color?: MuiButtonProps['color'];
   disabled?: MuiButtonProps['disabled'];
   size?: MuiButtonProps['size'];
-  sx?: MuiButtonProps['sx'];
+  sx?: SystemStyleObject;
 };
 
 // component

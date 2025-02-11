@@ -100,7 +100,7 @@ const Dashboard: FC = () => {
                   <TableCell>
                     <Link
                       component={RouterLink}
-                      to={'/certificates/' + order.certificate.id}
+                      to={'/certificates/' + order.certificate.id.toString()}
                     >
                       {order.certificate.name}
                     </Link>
@@ -129,7 +129,7 @@ const Dashboard: FC = () => {
           <TablePagination
             page={page}
             rowsPerPage={rowsPerPage}
-            count={getState?.responseData.total_records}
+            count={getState.responseData.total_records}
           />
         </>
       )}

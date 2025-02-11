@@ -9,7 +9,7 @@ declare global {
 
 // environment file variables
 // use process.env in dev and window.env (env.js) in prod
-const useFile = import.meta.env.PROD === true;
+const useFile = import.meta.env.PROD;
 
 // api url  API_URL: '__API_URL__',
 export const apiUrl: string = useFile

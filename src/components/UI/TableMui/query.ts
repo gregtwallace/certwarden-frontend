@@ -79,6 +79,9 @@ const getSort = (
   }
 
   // use param sort
+  if (sortComponents[0] === undefined || sortComponents[1] === undefined) {
+    return defaultSort;
+  }
   const orderBy = sortComponents[0];
   const order = sortComponents[1];
 
@@ -112,7 +115,7 @@ export const queryParser = (
   const pageOffset = page * rowsPerPage;
 
   // make query params (piece after `?`)
-  const queryParams = `limit=${rowsPerPage}&offset=${pageOffset}&sort=${sort}`;
+  const queryParams = `limit=${rowsPerPage.toString()}&offset=${pageOffset.toString()}&sort=${sort}`;
 
   return { page, rowsPerPage, queryParams };
 };

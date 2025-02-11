@@ -59,19 +59,20 @@ const InputSelect = <ValType extends selectInputOptionValuesType>(
         value={value}
         onChange={
           onChange
-            ? (event) =>
+            ? (event) => {
                 onChange(
                   event,
                   htmlType === 'number' ? 'number' : 'unchanged',
                   options
-                )
+                );
+              }
             : undefined
         }
         readOnly={!!readOnly}
         disabled={!!disabled}
       >
         {/* Check options exists and has at least one entry */}
-        {options && options.length > 0 ? (
+        {options.length > 0 ? (
           options.map((o) => (
             <MenuItem key={o.value} value={o.value}>
               {o.name}

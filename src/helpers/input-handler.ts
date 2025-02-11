@@ -72,7 +72,7 @@ const setObjPathVal = <T extends nodeInputType>(
   value: unknown
 ): T => {
   // missing args
-  if (!obj) return {} as T;
+  // if (!obj) return {} as T;
   if (!path) return obj;
 
   // split path
@@ -122,6 +122,8 @@ const setObjPathVal = <T extends nodeInputType>(
           // }
           // node = filteredNode;
 
+          // TODO: Maybe do this differently?
+          // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
           delete node[finalKey];
         } else {
           node[finalKey] = value;
@@ -211,7 +213,7 @@ export const inputHandlerFuncMaker = <StateObject extends objectInputNodeType>(
 
       // further modification if there are alsoSet values on inputOptions
       if (inputOptions) {
-        const alsoSet = inputOptions?.find((o) => o.value === value)?.alsoSet;
+        const alsoSet = inputOptions.find((o) => o.value === value)?.alsoSet;
         if (alsoSet != undefined) {
           alsoSet.forEach((fieldValObj) => {
             prevState = setObjPathVal(

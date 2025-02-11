@@ -86,7 +86,7 @@ const InputArrayText: FC<propsType> = (props) => {
 
           // if errIndex is greater than delete index, shift error -1
           if (errIndex > index) {
-            newValidationErrors[`${id}.${errIndex - 1}`] =
+            newValidationErrors[`${id}.${(errIndex - 1).toString()}`] =
               currentValidationErrors[fieldName] || false;
           }
 
@@ -130,11 +130,7 @@ const InputArrayText: FC<propsType> = (props) => {
         {label}
 
         {helpURL != undefined && (
-          <IconButtonAsLink
-            tooltip='Help'
-            to={helpURL}
-            target='_blank'
-          >
+          <IconButtonAsLink tooltip='Help' to={helpURL} target='_blank'>
             <HelpIcon style={{ fontSize: '17px' }} />
           </IconButtonAsLink>
         )}
@@ -144,23 +140,27 @@ const InputArrayText: FC<propsType> = (props) => {
         <FormInfo sx={{ m: 1 }}>None</FormInfo>
       ) : (
         value.map((subValue, index) => (
-          <FormRowRight key={`${id}.${index}`}>
+          <FormRowRight key={`${id}.${index.toString()}`}>
             <InputTextField
-              id={id + '.' + index}
-              name={name ? name + '.' + index : id + '.' + index}
-              label={subLabel + ' ' + (index + 1)}
+              id={id + '.' + index.toString()}
+              name={
+                name
+                  ? name + '.' + index.toString()
+                  : id + '.' + index.toString()
+              }
+              label={subLabel + ' ' + (index + 1).toString()}
               value={subValue}
               onChange={onChange}
-              error={!!validationErrors && validationErrors[id + '.' + index]}
+              error={validationErrors[id + '.' + index.toString()]}
             />
 
             {value.length > (minElements || 0) && (
               <Button
                 size='small'
                 color='error'
-                onClick={(_event) =>
-                  removeElementHandler(index, validationErrors)
-                }
+                onClick={(_event) => {
+                  removeElementHandler(index, validationErrors);
+                }}
               >
                 Remove
               </Button>

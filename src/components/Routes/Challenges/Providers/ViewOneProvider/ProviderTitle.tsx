@@ -17,7 +17,7 @@ const ProviderTitle: FC<propTypes> = (props) => {
 
   const titleText =
     props.provider.type +
-    (showDebugInfo ? ' (id: ' + props.provider.id + ')' : '');
+    (showDebugInfo ? ' (id: ' + props.provider.id.toString() + ')' : '');
 
   return <GridTitle title={titleText} />;
 };

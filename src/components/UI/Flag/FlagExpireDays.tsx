@@ -66,7 +66,7 @@ const FlagExpireDays: FC<propTypes> = (props) => {
     'linear-gradient(to right, ' +
     bgcolorHex +
     ' ' +
-    percentValidRemaining +
+    percentValidRemaining.toString() +
     '%, transparent 0%)';
 
   return (
@@ -76,7 +76,7 @@ const FlagExpireDays: FC<propTypes> = (props) => {
           Validity Remaining:
           <br />
           {daysRemainingValid.toString() + ' Days ('}
-          {percentValidRemaining + '%)'}
+          {percentValidRemaining.toString() + '%)'}
           <br />
           Renews After:
           <br />

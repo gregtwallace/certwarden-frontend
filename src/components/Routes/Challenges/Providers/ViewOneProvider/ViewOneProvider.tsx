@@ -41,7 +41,10 @@ const ViewOneProvider: FC<propTypes> = (props) => {
       />
 
       <FormRowRight>
-        <ButtonAsLink color='warning' to={`/challenges/providers/${provider.id}`}>
+        <ButtonAsLink
+          color='warning'
+          to={`/challenges/providers/${provider.id.toString()}`}
+        >
           Edit
         </ButtonAsLink>
       </FormRowRight>
