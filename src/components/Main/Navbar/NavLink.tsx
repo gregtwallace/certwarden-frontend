@@ -52,11 +52,13 @@ const NavLink: FC<propTypes> = (props) => {
 
           <ListItemText
             primary={children}
-            primaryTypographyProps={{
-              style: {
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
+            slotProps={{
+              primary: {
+                style: {
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                },
               },
             }}
           />

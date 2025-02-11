@@ -90,7 +90,7 @@ const InputExtraExtensions = (props: propTypes): ReactNode => {
 
           // if errIndex is greater than delete index, shift error -1
           if (errIndex > index) {
-            newValidationErrors[`${id}.${errIndex - 1}`] =
+            newValidationErrors[`${id}.${(errIndex - 1).toString()}`] =
               currentValidationErrors[fieldName] || false;
           }
 
@@ -100,6 +100,10 @@ const InputExtraExtensions = (props: propTypes): ReactNode => {
           // modify subfields
           const fieldPath = fieldName.split('.');
           const subFieldName = fieldPath[fieldPath.length - 1];
+          if (!subFieldName) {
+            throw new Error('invalid subFieldName');
+          }
+
           const errIndexStr = fieldPath[fieldPath.length - 2];
           const errIndex = Number(errIndexStr);
 
@@ -111,8 +115,9 @@ const InputExtraExtensions = (props: propTypes): ReactNode => {
 
           // if errIndex is greater than delete index, shift error -1
           if (errIndex > index) {
-            newValidationErrors[`${id}.${errIndex - 1}.${subFieldName}`] =
-              currentValidationErrors[fieldName] || false;
+            newValidationErrors[
+              `${id}.${(errIndex - 1).toString()}.${subFieldName}`
+            ] = currentValidationErrors[fieldName] || false;
           }
 
           // if errIndex is delete index, discard error
@@ -158,7 +163,7 @@ const InputExtraExtensions = (props: propTypes): ReactNode => {
         /* Output each member of the object array */
         value.map((oneExt, objIndex) => (
           <Box
-            key={`${id}.${objIndex}`}
+            key={`${id}.${objIndex.toString()}`}
             sx={{
               mt: 1,
               p: 1,
@@ -166,7 +171,7 @@ const InputExtraExtensions = (props: propTypes): ReactNode => {
               borderRadius: '4px',
               /* Note: action.disabled isn't the exact default field border color, but it is close */
               borderColor:
-                validationErrors && `${id}.${objIndex}` in validationErrors
+                `${id}.${objIndex.toString()}` in validationErrors
                   ? 'error.main'
                   : 'action.disabled',
             }}
@@ -174,24 +179,24 @@ const InputExtraExtensions = (props: propTypes): ReactNode => {
             <Toolbar variant='dense' disableGutters sx={{ mb: 1 }}>
               <FormInfo
                 color={
-                  validationErrors && `${id}.${objIndex}` in validationErrors
+                  `${id}.${objIndex.toString()}` in validationErrors
                     ? 'error.main'
                     : undefined
                 }
                 sx={{ m: 1 }}
               >
-                {subLabel + ' ' + (objIndex + 1)}
+                {subLabel + ' ' + (objIndex + 1).toString()}
               </FormInfo>
 
               <Box sx={{ flexGrow: 1 }} />
 
-              {value.length > (minElements || 0) && (
+              {value.length > minElements && (
                 <Button
                   size='small'
                   color='error'
-                  onClick={(_event) =>
-                    removeElementHandler(objIndex, validationErrors)
-                  }
+                  onClick={(_event) => {
+                    removeElementHandler(objIndex, validationErrors);
+                  }}
                 >
                   Remove
                 </Button>
@@ -201,55 +206,56 @@ const InputExtraExtensions = (props: propTypes): ReactNode => {
             <Box>
               {/* Output each cert extension field */}
               <InputTextField
-                id={id + '.' + objIndex + '.description'}
+                id={id + '.' + objIndex.toString() + '.description'}
                 name={
                   name
-                    ? name + '.' + objIndex + '.description'
-                    : id + '.' + objIndex + '.description'
+                    ? name + '.' + objIndex.toString() + '.description'
+                    : id + '.' + objIndex.toString() + '.description'
                 }
                 label='Description'
                 value={oneExt.description}
                 onChange={onChange}
                 error={
-                  !!validationErrors &&
-                  validationErrors[id + '.' + objIndex + '.description']
+                  validationErrors[
+                    id + '.' + objIndex.toString() + '.description'
+                  ]
                 }
               />
 
               <InputTextField
-                id={id + '.' + objIndex + '.oid'}
+                id={id + '.' + objIndex.toString() + '.oid'}
                 name={
                   name
-                    ? name + '.' + objIndex + '.oid'
-                    : id + '.' + objIndex + '.oid'
+                    ? name + '.' + objIndex.toString() + '.oid'
+                    : id + '.' + objIndex.toString() + '.oid'
                 }
                 label='OID'
                 value={oneExt.oid}
                 onChange={onChange}
                 error={
-                  !!validationErrors &&
-                  validationErrors[id + '.' + objIndex + '.oid']
+                  validationErrors[id + '.' + objIndex.toString() + '.oid']
                 }
               />
 
               <InputTextField
-                id={id + '.' + objIndex + '.value_hex'}
+                id={id + '.' + objIndex.toString() + '.value_hex'}
                 name={
                   name
-                    ? name + '.' + objIndex + '.value_hex'
-                    : id + '.' + objIndex + '.value_hex'
+                    ? name + '.' + objIndex.toString() + '.value_hex'
+                    : id + '.' + objIndex.toString() + '.value_hex'
                 }
                 label='Hex Bytes Value'
                 value={oneExt.value_hex}
                 onChange={onChange}
                 error={
-                  !!validationErrors &&
-                  validationErrors[id + '.' + objIndex + '.value_hex']
+                  validationErrors[
+                    id + '.' + objIndex.toString() + '.value_hex'
+                  ]
                 }
               />
 
               <InputCheckbox
-                id={id + '.' + objIndex + '.critical'}
+                id={id + '.' + objIndex.toString() + '.critical'}
                 checked={oneExt.critical}
                 onChange={onChange}
               >
@@ -264,7 +270,9 @@ const InputExtraExtensions = (props: propTypes): ReactNode => {
         <Button
           color='success'
           size='small'
-          onClick={(_event) => addElementHandler(undefined)}
+          onClick={(_event) => {
+            addElementHandler(undefined);
+          }}
         >
           Add
         </Button>
@@ -272,14 +280,14 @@ const InputExtraExtensions = (props: propTypes): ReactNode => {
         <Button
           color='success'
           size='small'
-          onClick={(_event) =>
+          onClick={(_event) => {
             addElementHandler({
               description: 'OCSP Must Staple',
               oid: '1.3.6.1.5.5.7.1.24',
               critical: false,
               value_hex: '3003020105',
-            })
-          }
+            });
+          }}
         >
           Add Must Staple
         </Button>

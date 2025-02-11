@@ -39,6 +39,10 @@ type formObj = {
 
 const ChangeAccountEmail: FC = () => {
   const { id } = useParams();
+  if (!id) {
+    throw new Error('id is invalid');
+  }
+
   const thisAccountUrl = `${ONE_ACCOUNT_URL}/${id}`;
   const thisAccountEmailUrl = `${thisAccountUrl}/email`;
 
@@ -173,11 +177,11 @@ const ChangeAccountEmail: FC = () => {
 
           <FormFooter
             cancelHref={`/acmeaccounts/${id}`}
-            resetOnClick={() =>
+            resetOnClick={() => {
               setFormState((prevState) =>
                 initialForm(prevState.getResponseData, prevState.getError)
-              )
-            }
+              );
+            }}
             disabledAllButtons={axiosSendState.isSending}
             disabledResetButton={
               JSON.stringify(formState.dataToSubmit) ===

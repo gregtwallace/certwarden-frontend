@@ -98,7 +98,11 @@ const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
         } else if (fieldName.match(regexSubfield)) {
           // modify subfields
           const fieldPath = fieldName.split('.');
-          const subFieldName = fieldPath[fieldPath.length - 1] || ''; // '' should never occur
+          const subFieldName = fieldPath[fieldPath.length - 1];
+          if (!subFieldName) {
+            throw new Error('invalid subFieldName');
+          }
+
           const errIndexStr = fieldPath[fieldPath.length - 2];
           const errIndex = Number(errIndexStr);
 

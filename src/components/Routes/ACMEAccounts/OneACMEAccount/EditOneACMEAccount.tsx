@@ -62,6 +62,10 @@ type formObj = {
 
 const EditOneACMEAccount: FC = () => {
   const { id } = useParams();
+  if (!id) {
+    throw new Error('id is invalid');
+  }
+
   const thisAcmeAccountUrl = `${ACME_ACCOUNT_URL}/${id}`;
 
   // fetch account
@@ -260,7 +264,9 @@ const EditOneACMEAccount: FC = () => {
           <>
             <Button
               color='warning'
-              onClick={() => setDeactivateOpen(true)}
+              onClick={() => {
+                setDeactivateOpen(true);
+              }}
               disabled={axiosSendState.isSending || !canDoAccountActions}
             >
               Deactivate
@@ -268,7 +274,9 @@ const EditOneACMEAccount: FC = () => {
 
             <Button
               color='error'
-              onClick={() => setDeleteOpen(true)}
+              onClick={() => {
+                setDeleteOpen(true);
+              }}
               disabled={axiosSendState.isSending}
             >
               Delete
@@ -293,7 +301,9 @@ const EditOneACMEAccount: FC = () => {
             contentText='The account can be recovered as long as the associated key is not
             lost or deleted.'
             open={deleteOpen}
-            onCancel={() => setDeleteOpen(false)}
+            onCancel={() => {
+              setDeleteOpen(false);
+            }}
             onConfirm={deleteConfirmHandler}
           />
 
@@ -302,7 +312,9 @@ const EditOneACMEAccount: FC = () => {
             contentText='This process cannot be reversed! Ensure you understand all
             consequences of this action before confirming!'
             open={deactivateOpen}
-            onCancel={() => setDeactivateOpen(false)}
+            onCancel={() => {
+              setDeactivateOpen(false);
+            }}
             onConfirm={deactivateConfirmHandler}
           />
 
@@ -488,11 +500,11 @@ const EditOneACMEAccount: FC = () => {
 
             <FormFooter
               cancelHref='/acmeaccounts'
-              resetOnClick={() =>
+              resetOnClick={() => {
                 setFormState((prevState) =>
                   makeBlankForm(prevState.getResponseData, prevState.getError)
-                )
-              }
+                );
+              }}
               disabledAllButtons={axiosSendState.isSending}
               disabledResetButton={
                 JSON.stringify(formState.dataToSubmitEdit) ===

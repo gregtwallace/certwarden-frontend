@@ -78,17 +78,19 @@ const EditAliases: FC = () => {
     formState.dataToSubmit.domain_aliases.map((alias, index) => {
       // challenge domain
       if (!isDomainValid(alias.challenge_domain)) {
-        validationErrors[`dataToSubmit.domain_aliases.${index}`] = true;
+        validationErrors[`dataToSubmit.domain_aliases.${index.toString()}`] =
+          true;
         validationErrors[
-          `dataToSubmit.domain_aliases.${index}.challenge_domain`
+          `dataToSubmit.domain_aliases.${index.toString()}.challenge_domain`
         ] = true;
       }
 
       // provision domain
       if (!isDomainValid(alias.provision_domain)) {
-        validationErrors[`dataToSubmit.domain_aliases.${index}`] = true;
+        validationErrors[`dataToSubmit.domain_aliases.${index.toString()}`] =
+          true;
         validationErrors[
-          `dataToSubmit.domain_aliases.${index}.provision_domain`
+          `dataToSubmit.domain_aliases.${index.toString()}.provision_domain`
         ] = true;
       }
 
@@ -98,9 +100,10 @@ const EditAliases: FC = () => {
           alias.challenge_domain === dupeAlias.challenge_domain &&
           index !== dupeIndex
         ) {
-          validationErrors[`dataToSubmit.domain_aliases.${index}`] = true;
+          validationErrors[`dataToSubmit.domain_aliases.${index.toString()}`] =
+            true;
           validationErrors[
-            `dataToSubmit.domain_aliases.${index}.challenge_domain`
+            `dataToSubmit.domain_aliases.${index.toString()}.challenge_domain`
           ] = true;
         }
       });
@@ -174,7 +177,9 @@ const EditAliases: FC = () => {
 
           <FormFooter
             cancelHref='/challenges/providers'
-            resetOnClick={() => setFormState(makeStartingForm())}
+            resetOnClick={() => {
+              setFormState(makeStartingForm());
+            }}
             disabledAllButtons={axiosSendState.isSending}
             disabledResetButton={
               JSON.stringify(formState.dataToSubmit) ===

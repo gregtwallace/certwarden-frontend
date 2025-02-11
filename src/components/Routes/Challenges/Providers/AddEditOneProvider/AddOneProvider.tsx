@@ -64,7 +64,7 @@ const AddOneProvider: FC = () => {
     ) {
       formState.dataToSubmit['domains'].forEach((domain, i) => {
         if (!isDomainValid(domain, false)) {
-          validationErrors['dataToSubmit.domains.' + i] = true;
+          validationErrors['dataToSubmit.domains.' + i.toString()] = true;
         }
       });
     }

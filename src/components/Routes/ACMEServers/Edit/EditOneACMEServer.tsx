@@ -53,10 +53,13 @@ type formObj = {
 };
 
 const EditOneACMEServer: FC = () => {
+  const { id } = useParams();
+  if (!id) {
+    throw new Error('id is invalid');
+  }
+
   // debug?
   const { showDebugInfo } = useClientSettings();
-
-  const { id } = useParams();
   const thisAcmeServerUrl = `${ONE_ACME_SERVER_URL}/${id}`;
 
   const { getState } = useAxiosGet<oneAcmeServerResponseType>(
@@ -249,11 +252,13 @@ const EditOneACMEServer: FC = () => {
                 )}
                 sx={{ my: 1, px: 1, overflowY: 'auto' }}
                 multiline
-                InputProps={{
-                  disableUnderline: true,
-                  style: {
-                    fontFamily: 'Monospace',
-                    fontSize: 12,
+                slotProps={{
+                  input: {
+                    disableUnderline: true,
+                    style: {
+                      fontFamily: 'Monospace',
+                      fontSize: 12,
+                    },
                   },
                 }}
               />
@@ -269,7 +274,9 @@ const EditOneACMEServer: FC = () => {
 
             <FormFooter
               cancelHref='/acmeservers'
-              resetOnClick={() => setFormState(makeStartingForm())}
+              resetOnClick={() => {
+                setFormState(makeStartingForm());
+              }}
               disabledAllButtons={axiosSendState.isSending}
               disabledResetButton={
                 JSON.stringify(formState.dataToSubmit) ===

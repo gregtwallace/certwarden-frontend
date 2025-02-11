@@ -150,8 +150,12 @@ const BackupOnDisk: FC = () => {
         title={`Are you sure you want to delete ${deleteOpenedFor}?`}
         contentText='This backup file will not be recoverable.'
         open={deleteOpenedFor !== ''}
-        onCancel={() => setDeleteOpenedFor('')}
-        onConfirm={() => deleteDiskBackupHandler(deleteOpenedFor)}
+        onCancel={() => {
+          setDeleteOpenedFor('');
+        }}
+        onConfirm={() => {
+          deleteDiskBackupHandler(deleteOpenedFor);
+        }}
       />
 
       {!getState.responseData && !getState.error && <ApiLoading />}
@@ -175,15 +179,13 @@ const BackupOnDisk: FC = () => {
         <>
           <TableText>
             {getState.responseData.config.enabled
-              ? `Automatic backup will occur every ${
-                  getState.responseData.config.interval_days
-                } days. ${
+              ? `Automatic backup will occur every ${getState.responseData.config.interval_days.toString()} days. ${
                   getState.responseData.config.retention.max_count >= 0
-                    ? `Only the last ${getState.responseData.config.retention.max_count} backups will be retained.`
+                    ? `Only the last ${getState.responseData.config.retention.max_count.toString()} backups will be retained.`
                     : ''
                 } ${
                   getState.responseData.config.retention.max_days >= 0
-                    ? `Only backups younger than ${getState.responseData.config.retention.max_days} days will be retained.`
+                    ? `Only backups younger than ${getState.responseData.config.retention.max_days.toString()} days will be retained.`
                     : ''
                 }`
               : 'Automatic backup is disabled.'}
@@ -194,7 +196,7 @@ const BackupOnDisk: FC = () => {
               <TableHeaderRow headers={tableHeaders} />
             </TableHead>
             <TableBody>
-              {getState.responseData?.backup_files
+              {getState.responseData.backup_files
                 .sort((a, b) => {
                   // sort newest to be first TODO: Allow sorting changes
                   const aTime = a.created_at ? a.created_at : a.modtime;
@@ -206,7 +208,9 @@ const BackupOnDisk: FC = () => {
                     <TableCell>
                       <Link
                         component='button'
-                        onClick={() => downloadDiskBackupHandler(file.name)}
+                        onClick={() => {
+                          downloadDiskBackupHandler(file.name);
+                        }}
                       >
                         {file.name}
                       </Link>
@@ -221,7 +225,9 @@ const BackupOnDisk: FC = () => {
                     </TableCell>
                     <TableCell>
                       <IconButton
-                        onClick={() => setDeleteOpenedFor(file.name)}
+                        onClick={() => {
+                          setDeleteOpenedFor(file.name);
+                        }}
                         tooltip='Delete'
                         color='error'
                       >

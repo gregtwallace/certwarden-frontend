@@ -54,7 +54,9 @@ type formObj = {
 
 const PostAsGet: FC = () => {
   const { id } = useParams();
-  const idVal = Number(id);
+  if (!id) {
+    throw new Error('id is invalid');
+  }
 
   const navigate = useNavigate();
 
@@ -70,7 +72,7 @@ const PostAsGet: FC = () => {
       url: '',
     },
     dontSubmit: {
-      acme_account_id: idVal,
+      acme_account_id: Number(id),
     },
     sendResult: undefined,
     sendError: undefined,
@@ -87,10 +89,10 @@ const PostAsGet: FC = () => {
   ) => {
     // this should not be necessary
     if (typeof event.target.value !== 'number') {
-      throw new Error('pag account select value not a number')
+      throw new Error('pag account select value not a number');
     }
 
-    navigate(`/acmeaccounts/${event.target.value}/post-as-get`);
+    navigate(`/acmeaccounts/${event.target.value.toString()}/post-as-get`);
     inputChangeHandler(event, convertValueTo);
   };
 
@@ -108,8 +110,9 @@ const PostAsGet: FC = () => {
 
   // if page is loaded and the account # is not acceptable, redirect
   if (getState.responseData?.acme_accounts) {
+    // returns -1 if not found
     const acctIndx = acctOptions.findIndex((value) => {
-      return value.value === idVal;
+      return value.value === Number(id);
     });
     if (acctIndx < 0) {
       navigate('/acmeaccounts');
@@ -139,7 +142,7 @@ const PostAsGet: FC = () => {
 
     apiCall<postAsGetResponseType>(
       'POST',
-      `/v1/acmeaccounts/${formState.dontSubmit.acme_account_id}/post-as-get`,
+      `/v1/acmeaccounts/${formState.dontSubmit.acme_account_id.toString()}/post-as-get`,
       formState.dataToSubmit,
       parsePostAsGetResponseType
     ).then(({ responseData, error }) => {
@@ -258,11 +261,13 @@ const PostAsGet: FC = () => {
             value={formState.sendResult.body}
             sx={{ my: 2 }}
             multiline
-            InputProps={{
-              disableUnderline: true,
-              style: {
-                fontFamily: 'Monospace',
-                fontSize: 14,
+            slotProps={{
+              input: {
+                disableUnderline: true,
+                style: {
+                  fontFamily: 'Monospace',
+                  fontSize: 14,
+                },
               },
             }}
           />
@@ -274,11 +279,13 @@ const PostAsGet: FC = () => {
             value={JSON.stringify(formState.sendResult.headers, null, '\t')}
             sx={{ my: 2 }}
             multiline
-            InputProps={{
-              disableUnderline: true,
-              style: {
-                fontFamily: 'Monospace',
-                fontSize: 14,
+            slotProps={{
+              input: {
+                disableUnderline: true,
+                style: {
+                  fontFamily: 'Monospace',
+                  fontSize: 14,
+                },
               },
             }}
           />

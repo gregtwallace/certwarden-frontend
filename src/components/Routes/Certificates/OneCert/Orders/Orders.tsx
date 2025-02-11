@@ -134,7 +134,7 @@ const orderStatus = (order: orderStatusObj): string => {
       return 'Waiting in Order Queue';
     }
 
-    return 'With Order Worker ' + order.fulfillment_worker;
+    return 'With Order Worker ' + order.fulfillment_worker.toString();
   }
 
   // if revoked
@@ -178,7 +178,7 @@ const Orders: FC<propTypes> = (props) => {
   );
 
   const { getState, updateGet } = useAxiosGet<ordersResponseType>(
-    `/v1/certificates/${certId}/orders?${queryParams}`,
+    `/v1/certificates/${certId.toString()}/orders?${queryParams}`,
     parseOrdersResponseType
   );
 
@@ -193,7 +193,6 @@ const Orders: FC<propTypes> = (props) => {
 
     // check if any orders, and if any are usable
     if (
-      setHasValidOrders &&
       getState.responseData &&
       getState.responseData.orders.length > 0 &&
       getState.responseData.orders.some(isUsable)
@@ -221,7 +220,7 @@ const Orders: FC<propTypes> = (props) => {
   const postProcessClickHandler = (orderId: number): void => {
     apiCall<orderPostProcessResponseType>(
       'POST',
-      `/v1/certificates/${certId}/orders/${orderId}/postprocess`,
+      `/v1/certificates/${certId.toString()}/orders/${orderId.toString()}/postprocess`,
       {},
       parseOrderPostProcessResponseType
     ).then(({ responseData, error }): void => {
@@ -234,19 +233,19 @@ const Orders: FC<propTypes> = (props) => {
 
   // download order pem
   const downloadClickHandler = (orderId: number): void => {
-    downloadFile(`/v1/certificates/${certId}/orders/${orderId}/download`).then(
-      ({ error }) => {
-        setSendResultState(undefined);
-        setSendError(error);
-      }
-    );
+    downloadFile(
+      `/v1/certificates/${certId.toString()}/orders/${orderId.toString()}/download`
+    ).then(({ error }) => {
+      setSendResultState(undefined);
+      setSendError(error);
+    });
   };
 
   // handler to place a new order
   const newOrderHandler = (): void => {
     apiCall<orderResponseType>(
       'POST',
-      `/v1/certificates/${certId}/orders`,
+      `/v1/certificates/${certId.toString()}/orders`,
       {},
       parseOrderResponseType
     ).then(({ error }) => {
@@ -260,7 +259,7 @@ const Orders: FC<propTypes> = (props) => {
   const retryOrderHandler = (orderId: number): void => {
     apiCall<orderResponseType>(
       'POST',
-      `/v1/certificates/${certId}/orders/${orderId}`,
+      `/v1/certificates/${certId.toString()}/orders/${orderId.toString()}`,
       {},
       parseOrderResponseType
     ).then(({ error }) => {
@@ -283,7 +282,7 @@ const Orders: FC<propTypes> = (props) => {
     // send POST
     apiCall<orderResponseType>(
       'POST',
-      `/v1/certificates/${certId}/orders/${orderID}/revoke`,
+      `/v1/certificates/${certId.toString()}/orders/${orderID.toString()}/revoke`,
       toSubmit,
       parseOrderResponseType
     ).then(({ error }) => {
@@ -338,7 +337,9 @@ const Orders: FC<propTypes> = (props) => {
             title={`Are you sure you want to revoke the selected order?`}
             contentText='This action cannot be undone.'
             open={revokeOrderForm.orderID !== -1}
-            onCancel={() => setRevokeOrderForm(closedOrderRevokeForm)}
+            onCancel={() => {
+              setRevokeOrderForm(closedOrderRevokeForm);
+            }}
             onConfirm={revokeOrderConfirmHandler}
           >
             <br />
@@ -388,7 +389,7 @@ const Orders: FC<propTypes> = (props) => {
 
                     {ord.finalized_key && (
                       <IconButtonAsLink
-                        to={`/privatekeys/${ord.finalized_key.id}`}
+                        to={`/privatekeys/${ord.finalized_key.id.toString()}`}
                         tooltip={
                           <>
                             Key: <br />
@@ -422,7 +423,9 @@ const Orders: FC<propTypes> = (props) => {
                           size='small'
                           color='info'
                           disabled={disableAllButtons}
-                          onClick={(_event) => retryOrderHandler(ord.id)}
+                          onClick={(_event) => {
+                            retryOrderHandler(ord.id);
+                          }}
                         >
                           Retry
                         </Button>
@@ -437,7 +440,9 @@ const Orders: FC<propTypes> = (props) => {
                             size='small'
                             color='primary'
                             sx={{ mr: 1 }}
-                            onClick={() => downloadClickHandler(ord.id)}
+                            onClick={() => {
+                              downloadClickHandler(ord.id);
+                            }}
                             disabled={disableAllButtons}
                           >
                             Download
@@ -447,14 +452,14 @@ const Orders: FC<propTypes> = (props) => {
                             size='small'
                             color='error'
                             disabled={disableAllButtons}
-                            onClick={() =>
+                            onClick={() => {
                               setRevokeOrderForm({
                                 orderID: ord.id,
                                 dataToSubmit: {
                                   reason_code: 0,
                                 },
-                              })
-                            }
+                              });
+                            }}
                           >
                             Revoke
                           </Button>
@@ -464,7 +469,9 @@ const Orders: FC<propTypes> = (props) => {
                               size='small'
                               color='info'
                               sx={{ mr: 1 }}
-                              onClick={() => postProcessClickHandler(ord.id)}
+                              onClick={() => {
+                                postProcessClickHandler(ord.id);
+                              }}
                               disabled={disableAllButtons}
                             >
                               Post Process

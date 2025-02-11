@@ -123,7 +123,9 @@ const LoginLocal: FC = () => {
         )}
 
       <FormFooter
-        resetOnClick={() => setFormState(blankForm)}
+        resetOnClick={() => {
+          setFormState(blankForm);
+        }}
         disabledAllButtons={axiosSendState.isSending}
         disabledResetButton={
           JSON.stringify(formState.dataToSubmit) ===

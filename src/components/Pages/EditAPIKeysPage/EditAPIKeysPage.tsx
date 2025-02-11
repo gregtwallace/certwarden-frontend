@@ -41,9 +41,13 @@ type propTypes = {
 };
 
 const EditAPIKeysPage: FC<propTypes> = (props) => {
+  const { id } = useParams();
+  if (!id) {
+    throw new Error('id is invalid');
+  }
+
   const { objectType } = props;
 
-  const { id } = useParams();
   const { getState } = useAxiosGet<objectWithApiKeysType>(
     `/v1/${objectType}/${id}`,
     parseObjectWithApiKeysResponse
@@ -205,11 +209,11 @@ const EditAPIKeysPage: FC<propTypes> = (props) => {
 
           <FormFooter
             cancelHref={`/${objectType}/${id}`}
-            resetOnClick={() =>
+            resetOnClick={() => {
               setFormState((prevState) =>
                 initialForm(prevState.getResponseData, prevState.getError)
-              )
-            }
+              );
+            }}
             disabledAllButtons={axiosSendState.isSending}
             disabledResetButton={
               JSON.stringify(formState.dataToSubmit) ===
