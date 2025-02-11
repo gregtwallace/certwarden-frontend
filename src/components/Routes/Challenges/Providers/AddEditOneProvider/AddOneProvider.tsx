@@ -60,9 +60,9 @@ const AddOneProvider: FC = () => {
     // common domain validation
     // if singular wildcard domain, allow as this is wildcard provider
     if (
-      JSON.stringify(formState.dataToSubmit['domains']) != JSON.stringify(['*'])
+      JSON.stringify(formState.dataToSubmit.domains) != JSON.stringify(['*'])
     ) {
-      formState.dataToSubmit['domains'].forEach((domain, i) => {
+      formState.dataToSubmit.domains.forEach((domain, i) => {
         if (!isDomainValid(domain, false)) {
           validationErrors['dataToSubmit.domains.' + i.toString()] = true;
         }

@@ -43,14 +43,14 @@ const FlagExpireDays: FC<propTypes> = (props) => {
   const daysUntilThreshold = daysUntil(remainingValidThresholdDate);
 
   // default color
-  let bgcolorHex = theme.palette['info']['main'];
+  let bgcolorHex = theme.palette.info.main;
 
   // renewal imminent or overdue, set error color
   if (daysUntilThreshold <= 0) {
-    bgcolorHex = theme.palette['error']['main'];
+    bgcolorHex = theme.palette.error.main;
   } else if (daysUntilThreshold <= 7) {
     // renewal within the next week, set warning color
-    bgcolorHex = theme.palette['warning']['main'];
+    bgcolorHex = theme.palette.warning.main;
   }
 
   // for display text

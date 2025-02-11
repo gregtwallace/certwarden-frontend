@@ -65,8 +65,8 @@ const useAxiosWithToken = (): { axiosInstance: AxiosInstance } => {
     // add the Authorization header to all Private requests
     const requestIntercept = axiosInstance.interceptors.request.use(
       (config) => {
-        if (!config.headers['Authorization']) {
-          config.headers['Authorization'] = getAccessToken();
+        if (!config.headers.Authorization) {
+          config.headers.Authorization = getAccessToken();
         }
         return config;
       },
@@ -114,7 +114,7 @@ const useAxiosWithToken = (): { axiosInstance: AxiosInstance } => {
 
             // new token seemed ok, retry with it & no retry header
             prevRequest.headers[NO_RETRY_HEADER] = 'true';
-            prevRequest.headers['Authorization'] = newAccessToken;
+            prevRequest.headers.Authorization = newAccessToken;
             return axiosInstance(prevRequest);
           }
         }
