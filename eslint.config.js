@@ -50,7 +50,6 @@ export default tseslint.config(
 
       // TODO: Fix / re-enable these
       '@typescript-eslint/no-floating-promises': 'off',
-      '@typescript-eslint/prefer-regexp-exec': 'off',
     },
   }
 );
