@@ -18,7 +18,7 @@ type axiosApiCallType = <ExpectedResponseType>(
   method: 'GET' | 'POST' | 'PUT' | 'DELETE',
   apiNode: string,
   payloadObj: object,
-  isResponseDataValidFunc: (response: unknown) => ExpectedResponseType
+  parseResponseDataValidFunc: (response: unknown) => ExpectedResponseType
 ) => Promise<{
   responseData: ExpectedResponseType | undefined;
   error: frontendErrorType | undefined;
@@ -95,14 +95,16 @@ const useAxiosSend = (): useAxiosSendReturnType => {
 
         // capture the filename from content-disposition
         const filenameRegex = /filename="(.*)"/;
-        const filenameMatches = filenameRegex.exec(
-          response.headers['content-disposition']
-        );
+        const contentHeaderVal: unknown =
+          response.headers['content-disposition'];
+        if (typeof contentHeaderVal === 'string') {
+          const filenameMatches = filenameRegex.exec(contentHeaderVal);
 
-        if (filenameMatches !== null && filenameMatches.length >= 2) {
-          const filename = filenameMatches[1];
-          if (filename) {
-            link.setAttribute('download', filename);
+          if (filenameMatches !== null && filenameMatches.length >= 2) {
+            const filename = filenameMatches[1];
+            if (filename) {
+              link.setAttribute('download', filename);
+            }
           }
         }
 
@@ -138,7 +140,7 @@ const useAxiosSend = (): useAxiosSendReturnType => {
   // Send data to the node using the specified method and a payload from the specified event
   // return true if success and no error, return false if something goes wrong
   const apiCall: axiosApiCallType = useCallback(
-    async (method, apiNode, payloadObj, isResponseDataValidFunc) => {
+    async (method, apiNode, payloadObj, parseResponseDataValidFunc) => {
       // set state to sending
       setAxiosSendState({
         isSending: true,
@@ -158,14 +160,8 @@ const useAxiosSend = (): useAxiosSendReturnType => {
 
         // dev log response
         if (showDebugInfo) {
-          // try to turn config payload into an actual object
-          try {
-            if (response.config) {
-              response.config.data = JSON.parse(response.config.data);
-            }
-          } catch {
-            // ignore failed, leave as-is
-          }
+          // insert payload object so it is an object instead of stringified
+          response.config.data = payloadObj;
 
           console.log(
             method,
@@ -182,16 +178,14 @@ const useAxiosSend = (): useAxiosSendReturnType => {
         }
 
         // parse (narrows and throws err if not valid)
-        if (!isResponseDataValidFunc(response.data)) {
-          throw response;
-        }
+        const respData = parseResponseDataValidFunc(response.data)
 
         // success, return
         setAxiosSendState({
           isSending: false,
         });
 
-        return { responseData: response.data, error: undefined };
+        return { responseData: respData, error: undefined };
       } catch (err: unknown) {
         // done & return error
         setAxiosSendState({

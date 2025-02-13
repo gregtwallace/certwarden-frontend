@@ -1,8 +1,9 @@
 import { type FC, type ReactNode } from 'react';
-import { type LinkProps as RouterLinkProps } from 'react-router-dom';
+import { type LinkProps as RouterLinkProps } from 'react-router';
 import { type ButtonProps as MuiButtonProps } from '@mui/material';
+import { type SystemStyleObject } from '@mui/system';
 
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router';
 import { Button as MuiButton } from '@mui/material';
 
 // prop types
@@ -15,7 +16,7 @@ type propTypes = {
   color?: MuiButtonProps['color'];
   disabled?: MuiButtonProps['disabled'];
   size?: MuiButtonProps['size'];
-  sx?: MuiButtonProps['sx'];
+  sx?: SystemStyleObject;
 };
 
 // component
@@ -29,11 +30,11 @@ const ButtonAsLink: FC<propTypes> = (props) => {
       target={target}
       disabled={!!disabled}
       variant='contained'
-      color={color ? color : 'primary'}
-      size={size ? size : 'medium'}
+      color={color ?? 'primary'}
+      size={size ?? 'medium'}
       sx={{
-        ...sx,
         ml: 2,
+        ...sx,
       }}
     >
       {children}

@@ -5,7 +5,7 @@ import {
 } from '../../../types/api';
 import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 
-import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import { Link as RouterLink, useSearchParams } from 'react-router';
 import { Link } from '@mui/material';
 
 import Table from '@mui/material/Table';
@@ -100,7 +100,7 @@ const Dashboard: FC = () => {
                   <TableCell>
                     <Link
                       component={RouterLink}
-                      to={'/certificates/' + order.certificate.id}
+                      to={'/certificates/' + order.certificate.id.toString()}
                     >
                       {order.certificate.name}
                     </Link>
@@ -129,7 +129,7 @@ const Dashboard: FC = () => {
           <TablePagination
             page={page}
             rowsPerPage={rowsPerPage}
-            count={getState?.responseData.total_records}
+            count={getState.responseData.total_records}
           />
         </>
       )}

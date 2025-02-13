@@ -13,9 +13,9 @@ export type frontendErrorType = z.infer<typeof frontendError>;
 //
 // Validation Errors Shape
 //
-const validationErrors = z.record(z.string(), z.boolean());
+const _validationErrors = z.record(z.string(), z.boolean());
 
-export type validationErrorsType = z.infer<typeof validationErrors>;
+export type validationErrorsType = z.infer<typeof _validationErrors>;
 
 //
 // Providers
@@ -82,7 +82,7 @@ const providerConfig = z.union([
 export type providerConfigType = z.infer<typeof providerConfig>;
 
 // form state
-const providerFormState = z.object({
+const _providerFormState = z.object({
   getResponseData: z
     .object({
       provider: z.object({
@@ -112,7 +112,7 @@ const providerFormState = z.object({
   validationErrors: z.record(z.string(), z.boolean()),
 });
 
-export type providerFormStateType = z.infer<typeof providerFormState>;
+export type providerFormStateType = z.infer<typeof _providerFormState>;
 
 export type providerSubFormPropsType = {
   formState: providerFormStateType;

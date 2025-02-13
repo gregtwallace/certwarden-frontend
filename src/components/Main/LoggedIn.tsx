@@ -1,5 +1,5 @@
 import { type FC } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router';
 import { Box } from '@mui/system';
 
 import { NewVersionProvider } from '../../context/NewVersionProvider';
@@ -56,7 +56,7 @@ const LoggedIn: FC = () => {
 
           {/* Private Keys */}
           <Route
-            path={`/privatekeys/${newId}`}
+            path={`/privatekeys/${newId.toString()}`}
             element={<AddOnePrivateKey />}
           />
           <Route path='/privatekeys/:id' element={<EditOnePrivateKey />} />
@@ -68,7 +68,7 @@ const LoggedIn: FC = () => {
 
           {/* ACME Accounts */}
           <Route
-            path={`/acmeaccounts/${newId}`}
+            path={`/acmeaccounts/${newId.toString()}`}
             element={<AddOneACMEAccount />}
           />
           <Route path='/acmeaccounts/:id' element={<EditOneACMEAccount />} />
@@ -90,7 +90,7 @@ const LoggedIn: FC = () => {
             path='/certificates/:id/apikeys'
             element={<EditAPIKeysPage objectType='certificates' />}
           />
-          <Route path={`/certificates/${newId}`} element={<AddOneCert />} />
+          <Route path={`/certificates/${newId.toString()}`} element={<AddOneCert />} />
 
           {/* Order Fulfill Queue */}
           <Route path={'/orderacmequeue'} element={<OrderFulfillQueue />} />
@@ -105,7 +105,7 @@ const LoggedIn: FC = () => {
           <Route path={'/challenges/aliases'} element={<EditAliases />} />
           <Route path={'/challenges/providers'} element={<AllProviders />} />
           <Route
-            path={`/challenges/providers/${newId}`}
+            path={`/challenges/providers/${newId.toString()}`}
             element={<AddOneProvider />}
           />
           <Route
@@ -116,7 +116,7 @@ const LoggedIn: FC = () => {
           {/* ACME Servers */}
           <Route path='/acmeservers' element={<AllACMEServers />} />
           <Route
-            path={`/acmeservers/${newId}`}
+            path={`/acmeservers/${newId.toString()}`}
             element={<AddOneACMEServer />}
           />
           <Route path='/acmeservers/:id' element={<EditOneACMEServer />} />

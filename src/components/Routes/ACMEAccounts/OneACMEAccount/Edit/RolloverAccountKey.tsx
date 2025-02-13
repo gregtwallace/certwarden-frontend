@@ -11,7 +11,7 @@ import {
 } from '../../../../../types/frontend';
 
 import { useCallback, useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 
 import useAxiosGet from '../../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../../hooks/useAxiosSend';
@@ -29,7 +29,7 @@ import InputTextField from '../../../../UI/FormMui/InputTextField';
 import TitleBar from '../../../../UI/TitleBar/TitleBar';
 
 const ONE_ACCOUNT_URL = '/v1/acmeaccounts';
-const ACCOUNT_OPTIONS_URL = `/v1/acmeaccounts/${newId}`;
+const ACCOUNT_OPTIONS_URL = `/v1/acmeaccounts/${newId.toString()}`;
 
 // form shape
 type formObj = {
@@ -46,6 +46,10 @@ type formObj = {
 
 const RolloverAccountKey: FC = () => {
   const { id } = useParams();
+  if (!id) {
+    throw new Error('id is invalid');
+  }
+
   const thisAccountUrl = `${ONE_ACCOUNT_URL}/${id}`;
   const thisAccountKeyChangeUrl = `${ONE_ACCOUNT_URL}/${id}/key-change`;
 
@@ -238,7 +242,7 @@ const RolloverAccountKey: FC = () => {
 
           <FormFooter
             cancelHref={`/acmeaccounts/${id}`}
-            resetOnClick={() =>
+            resetOnClick={() => {
               setFormState((prevState) =>
                 initialForm(
                   prevState.getAccountResponseData,
@@ -246,8 +250,8 @@ const RolloverAccountKey: FC = () => {
                   prevState.getOptionsResponseData,
                   prevState.getOptionsError
                 )
-              )
-            }
+              );
+            }}
             disabledAllButtons={axiosSendState.isSending}
             disabledResetButton={
               JSON.stringify(formState.dataToSubmit) ===

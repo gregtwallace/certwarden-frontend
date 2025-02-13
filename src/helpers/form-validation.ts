@@ -2,7 +2,7 @@
 // very strict and does not allow floats, whitespaces, etc.
 export const isInteger = (maybeNumber: string): boolean => {
   const regex = /^[0-9]+$/;
-  return maybeNumber.match(regex) !== null;
+  return regex.exec(maybeNumber) !== null;
 };
 
 // check if name is valid (only permitted to contain URL path chars)
@@ -38,7 +38,7 @@ export const isDomainValid = (
   // valid domain regex
   const regex =
     /^(([A-Za-z0-9][A-Za-z0-9-]{0,61}\.)*([A-Za-z0-9][A-Za-z0-9-]{0,61}\.)[A-Za-z][A-Za-z0-9-]{0,61}[A-Za-z0-9])$/;
-  if (domain.match(regex)) {
+  if (regex.exec(domain)) {
     return true;
   }
 
@@ -56,19 +56,19 @@ export const isEmailValid = (email: string): boolean => {
   }
 
   // label each piece
-  const username = emailPieces[0] || '';
-  const domain = emailPieces[1] || '';
+  const username = emailPieces[0] ?? '';
+  const domain = emailPieces[1] ?? '';
 
   // username regex
   const usernameRegex = /^[A-Za-z0-9][A-Za-z0-9-_.]{0,62}[A-Za-z0-9]$/;
-  if (!username.match(usernameRegex)) {
+  if (!usernameRegex.exec(username)) {
     // no match = invalid username
     return false;
   }
 
   // check for invalid consecutive special chars in username
   const usernameConsecSpecialRegex = /[-_.]{2,}/;
-  if (username.match(usernameConsecSpecialRegex)) {
+  if (usernameConsecSpecialRegex.exec(username)) {
     // match = invalid consecutive special chars
     return false;
   }
@@ -91,7 +91,7 @@ export const isHttpsUrlValid = (url: string): boolean => {
 
   // https://en.wikipedia.org/wiki/Percent-encoding#Types_of_URI_characters
   const regex = /^[A-Za-z0-9-_.~!#$&'()*+,/:;=?@%[\]]*$/;
-  if (!url.match(regex)) {
+  if (!regex.exec(url)) {
     return false;
   }
 
@@ -119,7 +119,7 @@ export const isOIDValid = (oid: string): boolean => {
     oidParts.forEach((elem) => {
       // on any not a number, abort and return invalid
       if (!isInteger(elem)) {
-        throw 'not a number';
+        throw new Error('not a number');
       }
     });
   } catch (_err) {
@@ -152,7 +152,7 @@ export const isHexStringValid = (hex: string): boolean => {
       // invalid (i.e. false)
       hexParts.forEach((elem) => {
         if (elem.length != 2) {
-          throw 'not a valid byte length';
+          throw new Error('not a valid byte length');
         }
 
         valueHexNoSep += elem;
@@ -167,7 +167,7 @@ export const isHexStringValid = (hex: string): boolean => {
   // verify only valid hex chars in hex string && must be length that is a multiple
   // of 2 (since each byte is 2 hex chars)
   const regex = /^[A-Fa-f0-9]*$/;
-  if (valueHexNoSep.length % 2 !== 0 || !valueHexNoSep.match(regex)) {
+  if (valueHexNoSep.length % 2 !== 0 || !regex.exec(valueHexNoSep)) {
     return false;
   }
 
@@ -201,9 +201,24 @@ export const isEnvironmentParamValid = (envParam: string): boolean => {
   // validate paramName - must be at least len(1), start with letter, and only contain letters,
   // numbers, and _
   const regex = /^[A-Za-z][A-Za-z0-9_]*$/;
-  if (!paramName.match(regex)) {
+  if (!regex.exec(paramName)) {
     return false;
   }
 
   return true;
+};
+
+// objectHasKeyStartingWith checks if the specified object has any key beginning with the
+// secified string
+export const objectHasKeyStartingWith = (
+  obj: object,
+  keyStartsWith: string
+): boolean => {
+  // filter to any keys that match the starts with string
+  const matchingKeys = Object.keys(obj).filter((key) =>
+    key.startsWith(keyStartsWith)
+  );
+
+  // if any matches, true, else false
+  return matchingKeys.length > 0;
 };

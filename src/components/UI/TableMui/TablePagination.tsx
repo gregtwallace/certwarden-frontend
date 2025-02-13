@@ -1,7 +1,7 @@
 import { type ChangeEvent, type FC, type MouseEvent } from 'react';
 
 import { useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 
 import { perPageOptions } from './query';
 

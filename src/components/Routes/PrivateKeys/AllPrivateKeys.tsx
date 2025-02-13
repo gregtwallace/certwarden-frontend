@@ -5,7 +5,7 @@ import {
 } from '../../../types/api';
 import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 
-import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import { Link as RouterLink, useSearchParams } from 'react-router';
 import { Link } from '@mui/material';
 
 import Table from '@mui/material/Table';
@@ -76,7 +76,7 @@ const AllPrivateKeys: FC = () => {
         title='Private Keys'
         helpURL='https://www.certwarden.com/docs/user_interface/private_keys/'
       >
-        <ButtonAsLink to={`/privatekeys/${newId}`}>New Key</ButtonAsLink>
+        <ButtonAsLink to={`/privatekeys/${newId.toString()}`}>New Key</ButtonAsLink>
       </TitleBar>
 
       {!getState.responseData && !getState.error && <ApiLoading />}
@@ -98,7 +98,7 @@ const AllPrivateKeys: FC = () => {
               {getState.responseData.private_keys.map((key) => (
                 <TableRow key={key.id}>
                   <TableCell>
-                    <Link component={RouterLink} to={'/privatekeys/' + key.id}>
+                    <Link component={RouterLink} to={'/privatekeys/' + key.id.toString()}>
                       {key.name}
                     </Link>
                   </TableCell>

@@ -9,7 +9,7 @@ import {
 } from '../../../types/frontend';
 
 import { useCallback, useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 
 import useAxiosGet from '../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../hooks/useAxiosSend';
@@ -41,9 +41,13 @@ type propTypes = {
 };
 
 const EditAPIKeysPage: FC<propTypes> = (props) => {
+  const { id } = useParams();
+  if (!id) {
+    throw new Error('id is invalid');
+  }
+
   const { objectType } = props;
 
-  const { id } = useParams();
   const { getState } = useAxiosGet<objectWithApiKeysType>(
     `/v1/${objectType}/${id}`,
     parseObjectWithApiKeysResponse
@@ -61,8 +65,8 @@ const EditAPIKeysPage: FC<propTypes> = (props) => {
       getResponseData: responseData,
       getError: error,
       dataToSubmit: {
-        api_key: responseData?.api_key || '',
-        api_key_new: responseData?.api_key_new || '',
+        api_key: responseData?.api_key ?? '',
+        api_key_new: responseData?.api_key_new ?? '',
       },
       sendError: undefined,
       validationErrors: {},
@@ -142,7 +146,7 @@ const EditAPIKeysPage: FC<propTypes> = (props) => {
 
       {formState.getResponseData && (
         <Form onSubmit={submitFormHandler}>
-          <FormInfo color='error.main'>
+          <FormInfo sx={{ color: 'error.main' }}>
             Do not manually edit the API Keys unless you have a specific need.
             Use the &quot;New&quot; and &quot;Retire&quot; buttons on the
             previous page instead, as these generate cryptographically random
@@ -205,11 +209,11 @@ const EditAPIKeysPage: FC<propTypes> = (props) => {
 
           <FormFooter
             cancelHref={`/${objectType}/${id}`}
-            resetOnClick={() =>
+            resetOnClick={() => {
               setFormState((prevState) =>
                 initialForm(prevState.getResponseData, prevState.getError)
-              )
-            }
+              );
+            }}
             disabledAllButtons={axiosSendState.isSending}
             disabledResetButton={
               JSON.stringify(formState.dataToSubmit) ===

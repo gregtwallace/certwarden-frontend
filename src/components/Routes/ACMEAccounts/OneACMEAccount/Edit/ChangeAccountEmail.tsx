@@ -9,7 +9,7 @@ import {
 } from '../../../../../types/frontend';
 
 import { useCallback, useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 
 import useAxiosGet from '../../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../../hooks/useAxiosSend';
@@ -39,6 +39,10 @@ type formObj = {
 
 const ChangeAccountEmail: FC = () => {
   const { id } = useParams();
+  if (!id) {
+    throw new Error('id is invalid');
+  }
+
   const thisAccountUrl = `${ONE_ACCOUNT_URL}/${id}`;
   const thisAccountEmailUrl = `${thisAccountUrl}/email`;
 
@@ -59,7 +63,7 @@ const ChangeAccountEmail: FC = () => {
       getResponseData: responseData,
       getError: error,
       dataToSubmit: {
-        email: responseData?.acme_account.email || '',
+        email: responseData?.acme_account.email ?? '',
       },
       sendError: undefined,
       validationErrors: {},
@@ -173,11 +177,11 @@ const ChangeAccountEmail: FC = () => {
 
           <FormFooter
             cancelHref={`/acmeaccounts/${id}`}
-            resetOnClick={() =>
+            resetOnClick={() => {
               setFormState((prevState) =>
                 initialForm(prevState.getResponseData, prevState.getError)
-              )
-            }
+              );
+            }}
             disabledAllButtons={axiosSendState.isSending}
             disabledResetButton={
               JSON.stringify(formState.dataToSubmit) ===

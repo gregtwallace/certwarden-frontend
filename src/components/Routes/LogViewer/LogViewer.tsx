@@ -94,11 +94,13 @@ const LogViewer: FC = () => {
               .join('\n')}
             sx={{ my: 1, px: 1, overflowY: 'auto' }}
             multiline
-            InputProps={{
-              disableUnderline: true,
-              style: {
-                fontFamily: 'Monospace',
-                fontSize: 14,
+            slotProps={{
+              input: {
+                disableUnderline: true,
+                style: {
+                  fontFamily: 'Monospace',
+                  fontSize: 14,
+                },
               },
             }}
           />

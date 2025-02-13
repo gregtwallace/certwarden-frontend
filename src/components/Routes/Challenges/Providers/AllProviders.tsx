@@ -50,7 +50,7 @@ const AllProviders: FC = () => {
         <ButtonAsLink to='/challenges/aliases' color='secondary'>
           Domain Aliases
         </ButtonAsLink>
-        <ButtonAsLink to={`/challenges/providers/${newId}`}>
+        <ButtonAsLink to={`/challenges/providers/${newId.toString()}`}>
           New Provider
         </ButtonAsLink>
       </TitleBar>
@@ -71,12 +71,15 @@ const AllProviders: FC = () => {
           </GridItemFull>
         )}
 
-        {getState.responseData &&
-          getState.responseData.providers.map((prov) => (
-            <GridItemThird key={prov.id}>
-              <ViewOneProvider provider={prov} />
-            </GridItemThird>
-          ))}
+        {getState.responseData && (
+          <>
+            {getState.responseData.providers.map((prov) => (
+              <GridItemThird key={prov.id}>
+                <ViewOneProvider provider={prov} />
+              </GridItemThird>
+            ))}
+          </>
+        )}
       </GridChildrenContainer>
     </GridContainer>
   );

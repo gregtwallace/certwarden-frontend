@@ -68,10 +68,10 @@ const useAxiosGet = <ExpectedResponseType>(
       }
 
       // parse (narrows and throws err if not valid)
-      response.data = parseResponseDataFunc(response.data);
+      const responseData = parseResponseDataFunc(response.data);
 
       setGetState({
-        responseData: response.data,
+        responseData: responseData,
         error: undefined,
       });
     } catch (err: unknown) {
@@ -81,7 +81,13 @@ const useAxiosGet = <ExpectedResponseType>(
         error: await parseAxiosError(err),
       });
     }
-  }, [apiNode, axiosInstance, emptyUnloadedState, parseResponseDataFunc, showDebugInfo]);
+  }, [
+    apiNode,
+    axiosInstance,
+    emptyUnloadedState,
+    parseResponseDataFunc,
+    showDebugInfo,
+  ]);
 
   // do initial load immediately
   useEffect(() => {

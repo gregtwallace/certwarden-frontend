@@ -1,6 +1,6 @@
 import { type FC, type ReactNode } from 'react';
-
 import { type ButtonProps as MuiButtonProps } from '@mui/material';
+import { type SystemStyleObject } from '@mui/system';
 
 import { Button as MuiButton } from '@mui/material';
 
@@ -14,7 +14,7 @@ type propTypes = {
   color?: MuiButtonProps['color'];
   disabled?: MuiButtonProps['disabled'];
   size?: MuiButtonProps['size'];
-  sx?: MuiButtonProps['sx'];
+  sx?: SystemStyleObject;
 };
 
 // component
@@ -27,11 +27,11 @@ const Button: FC<propTypes> = (props) => {
       onClick={onClick}
       disabled={!!disabled}
       variant='contained'
-      color={color ? color : 'primary'}
-      size={size ? size : 'medium'}
+      color={color ?? 'primary'}
+      size={size ?? 'medium'}
       sx={{
-        ...sx,
         ml: 2,
+        ...sx,
       }}
     >
       {children}

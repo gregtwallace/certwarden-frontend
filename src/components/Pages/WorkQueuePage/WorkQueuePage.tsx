@@ -6,7 +6,7 @@ import {
 import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 
 import useAxiosGet from '../../../hooks/useAxiosGet';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router';
 import { Link } from '@mui/material';
 
 import ApiLoading from '../../UI/Api/ApiLoading';
@@ -109,7 +109,10 @@ const WorkQueuePage: FC<propTypes> = (props) => {
                       {wJob && (
                         <Link
                           component={RouterLink}
-                          to={'/certificates/' + wJob.order.certificate.id}
+                          to={
+                            '/certificates/' +
+                            wJob.order.certificate.id.toString()
+                          }
                         >
                           {wJob.order.certificate.name}
                         </Link>
@@ -126,9 +129,7 @@ const WorkQueuePage: FC<propTypes> = (props) => {
                       {wJob ? (wJob.high_priority ? 'High' : 'Low') : ''}
                     </TableCell>
 
-                    <TableCell>
-                      {wJob && wJob.order.certificate.subject}
-                    </TableCell>
+                    <TableCell>{wJob?.order.certificate.subject}</TableCell>
                   </TableRow>
                 );
               }
@@ -145,7 +146,9 @@ const WorkQueuePage: FC<propTypes> = (props) => {
                   <TableCell>
                     <Link
                       component={RouterLink}
-                      to={'/certificates/' + job.order.certificate.id}
+                      to={
+                        '/certificates/' + job.order.certificate.id.toString()
+                      }
                     >
                       {job.order.certificate.name}
                     </Link>

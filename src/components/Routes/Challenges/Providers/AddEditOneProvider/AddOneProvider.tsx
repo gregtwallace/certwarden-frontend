@@ -6,7 +6,7 @@ import {
 import { type providerFormStateType } from '../../../../../types/frontend';
 
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import useAxiosSend from '../../../../../hooks/useAxiosSend';
 import { getProvider, providersList } from './providers';
 import { inputHandlerFuncMaker } from '../../../../../helpers/input-handler';
@@ -60,11 +60,11 @@ const AddOneProvider: FC = () => {
     // common domain validation
     // if singular wildcard domain, allow as this is wildcard provider
     if (
-      JSON.stringify(formState.dataToSubmit['domains']) != JSON.stringify(['*'])
+      JSON.stringify(formState.dataToSubmit.domains) != JSON.stringify(['*'])
     ) {
-      formState.dataToSubmit['domains'].forEach((domain, i) => {
+      formState.dataToSubmit.domains.forEach((domain, i) => {
         if (!isDomainValid(domain, false)) {
-          validationErrors['dataToSubmit.domains.' + i] = true;
+          validationErrors['dataToSubmit.domains.' + i.toString()] = true;
         }
       });
     }
@@ -117,7 +117,7 @@ const AddOneProvider: FC = () => {
         {formState.provider_type_value !== '' && (
           <>
             {!provider.supportsWindows && (
-              <FormInfo color='error'>
+              <FormInfo sx={{ color: 'error.main' }}>
                 Warning: This provider does not work if the backend is running
                 on Windows OS.
               </FormInfo>

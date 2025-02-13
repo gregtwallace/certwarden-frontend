@@ -1,24 +1,18 @@
 import { type FC, type ReactNode } from 'react';
-import { type TypographyProps } from '@mui/material';
+import { type SystemStyleObject } from '@mui/system';
 
 import { Typography } from '@mui/material';
 
 type propTypes = {
   children: ReactNode;
-  color?: TypographyProps['color'];
-  wordBreak?: 'normal' | 'break-all' | 'keep-all' | 'break-word';
+  sx?: SystemStyleObject;
 };
 
 const GridItemText: FC<propTypes> = (props) => {
-  const { children, color, wordBreak } = props;
+  const { children, sx } = props;
 
   return (
-    <Typography
-      variant='body2'
-      color={color}
-      sx={{ my: 1, wordBreak: wordBreak }}
-      display='block'
-    >
+    <Typography variant='body2' display='block' sx={{ my: 1, ...sx }}>
       {children}
     </Typography>
   );

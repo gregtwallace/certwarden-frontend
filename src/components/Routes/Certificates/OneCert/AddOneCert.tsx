@@ -13,7 +13,7 @@ import { type selectInputOption } from '../../../../helpers/input-handler';
 import { type certExtension } from './InputExtraExtensions/InputExtraExtensions';
 
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
@@ -51,7 +51,7 @@ import InputTextField from '../../../UI/FormMui/InputTextField';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
 
 const NEW_CERTIFICATE_URL = '/v1/certificates';
-const CERTIFICATE_OPTIONS_URL = `/v1/certificates/${newId}`;
+const CERTIFICATE_OPTIONS_URL = `/v1/certificates/${newId.toString()}`;
 
 // customize key builder to deal with option to generate new key
 type privateKeyType = {
@@ -205,7 +205,8 @@ const AddOneCert: FC = () => {
     // subject alts
     formState.dataToSubmit.subject_alts.forEach((alt, index) => {
       if (!isDomainValid(alt)) {
-        validationErrors[`dataToSubmit.subject_alts.${index}`] = true;
+        validationErrors[`dataToSubmit.subject_alts.${index.toString()}`] =
+          true;
       }
     });
 
@@ -215,7 +216,7 @@ const AddOneCert: FC = () => {
         // check each param
         if (!isEnvironmentParamValid(param)) {
           validationErrors[
-            `dataToSubmit.post_processing_environment.${index}`
+            `dataToSubmit.post_processing_environment.${index.toString()}`
           ] = true;
         }
       }
@@ -229,14 +230,15 @@ const AddOneCert: FC = () => {
 
       // OID must exist and be in proper format
       if (!isOIDValid(extension.oid)) {
-        validationErrors[`dataToSubmit.csr_extra_extensions.${index}.oid`] =
-          true;
+        validationErrors[
+          `dataToSubmit.csr_extra_extensions.${index.toString()}.oid`
+        ] = true;
       }
 
       // Hex Bytes Value must be in proper format, if exists
       if (!isHexStringValid(extension.value_hex)) {
         validationErrors[
-          `dataToSubmit.csr_extra_extensions.${index}.value_hex`
+          `dataToSubmit.csr_extra_extensions.${index.toString()}.value_hex`
         ] = true;
       }
 
@@ -261,7 +263,7 @@ const AddOneCert: FC = () => {
       parseOneCertificateResponseType
     ).then(({ responseData, error }) => {
       if (responseData) {
-        navigate(`/certificates/${responseData.certificate.id}`);
+        navigate(`/certificates/${responseData.certificate.id.toString()}`);
       } else {
         // failed, set error
         setFormState((prevState) => ({
@@ -479,7 +481,9 @@ const AddOneCert: FC = () => {
 
           <FormFooter
             cancelHref='/certificates'
-            resetOnClick={() => setFormState(makeBlankForm())}
+            resetOnClick={() => {
+              setFormState(makeBlankForm());
+            }}
             disabledAllButtons={axiosSendState.isSending}
             disabledResetButton={
               JSON.stringify(formState.dataToSubmit) ===

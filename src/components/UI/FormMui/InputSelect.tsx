@@ -43,7 +43,7 @@ const InputSelect = <ValType extends selectInputOptionValuesType>(
   } = props;
 
   // get field info
-  const { errorMessage, htmlType } = fieldInformation(name || id);
+  const { errorMessage, htmlType } = fieldInformation(name ?? id);
 
   return (
     <FormControl fullWidth sx={{ my: 1 }}>
@@ -54,24 +54,25 @@ const InputSelect = <ValType extends selectInputOptionValuesType>(
       <Select
         labelId={`${id}-label`}
         id={id}
-        name={name || id}
+        name={name ?? id}
         label={label}
         value={value}
         onChange={
           onChange
-            ? (event) =>
+            ? (event) => {
                 onChange(
                   event,
                   htmlType === 'number' ? 'number' : 'unchanged',
                   options
-                )
+                );
+              }
             : undefined
         }
         readOnly={!!readOnly}
         disabled={!!disabled}
       >
         {/* Check options exists and has at least one entry */}
-        {options && options.length > 0 ? (
+        {options.length > 0 ? (
           options.map((o) => (
             <MenuItem key={o.value} value={o.value}>
               {o.name}

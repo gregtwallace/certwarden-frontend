@@ -9,7 +9,7 @@ import {
 } from '../../../../types/frontend';
 
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import useAxiosSend from '../../../../hooks/useAxiosSend';
 import { inputHandlerFuncMaker } from '../../../../helpers/input-handler';
@@ -92,7 +92,7 @@ const AddOneACMEServer: FC = () => {
       parseOneAcmeServerResponseType
     ).then(({ responseData, error }) => {
       if (responseData) {
-        navigate(`/acmeservers/${responseData.acme_server.id}`);
+        navigate(`/acmeservers/${responseData.acme_server.id.toString()}`);
       } else {
         // failed, set error
         setFormState((prevState) => ({
@@ -152,7 +152,9 @@ const AddOneACMEServer: FC = () => {
 
         <FormFooter
           cancelHref='/acmeservers'
-          resetOnClick={() => setFormState(blankForm)}
+          resetOnClick={() => {
+            setFormState(blankForm);
+          }}
           disabledAllButtons={axiosSendState.isSending}
           disabledResetButton={
             JSON.stringify(formState.dataToSubmit) ===

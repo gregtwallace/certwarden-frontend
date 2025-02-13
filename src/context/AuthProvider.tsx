@@ -15,36 +15,40 @@ const resetIdleLogoutTimer = (
 
   // if auth, set new logout timer using its session expiration
   if (auth) {
-    logoutTimer = setTimeout(() => {
-      // on expire clear auth
-      setAuth(undefined);
-    }, auth.session_exp * 1000 - Date.now());
+    logoutTimer = setTimeout(
+      () => {
+        // on expire clear auth
+        setAuth(undefined);
+      },
+      auth.session_exp * 1000 - Date.now()
+    );
   }
 };
 
 // getAuth fetches the current auth from session storage
 const getAuth = (): authorizationType | undefined => {
-  let auth: authorizationType = JSON.parse(
-    sessionStorage.getItem('authorization') || '{}'
-  );
-
   try {
+    const maybeAuth: unknown = JSON.parse(
+      sessionStorage.getItem('authorization') ?? '{}'
+    );
+
     // parse auth for validity
-    auth = parseAuthorizationType(auth);
+    const auth = parseAuthorizationType(maybeAuth);
 
     // check expiration
     if (auth.session_exp < Date.now() / 1000) {
       throw new Error('session expired');
     }
+
+    // valid & not expired
+    return auth;
   } catch (_err) {
     // not proper type or expired, delete storage & return undefined
     sessionStorage.removeItem('authorization');
-
     return undefined;
   }
 
-  // valid & not expired
-  return auth;
+  // unreachable
 };
 
 // getAccessToken returns the auth's access_token if auth is defined

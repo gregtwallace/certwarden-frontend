@@ -30,7 +30,7 @@ const NewVersionInfo: FC = () => {
         <>
           {newVersion.available && newVersion.info ? (
             <>
-              <GridItemText color='success.main'>
+              <GridItemText sx={{ color: 'success.main' }}>
                 Update Available ({newVersion.info.version}) !
               </GridItemText>
               <GridItemText>
@@ -40,14 +40,14 @@ const NewVersionInfo: FC = () => {
               </GridItemText>
 
               {!newVersion.config_version_matches && (
-                <GridItemText color='error.main'>
+                <GridItemText sx={{ color: 'error.main' }}>
                   Warning: Update config version does not match current config
                   version. Please review the release notes.
                 </GridItemText>
               )}
 
               {!newVersion.database_version_matches && (
-                <GridItemText color='error.main'>
+                <GridItemText sx={{ color: 'error.main' }}>
                   Warning: Update database version does not match current
                   database version. Cert Warden will modify the database after
                   upgrade. You should backup your database file before

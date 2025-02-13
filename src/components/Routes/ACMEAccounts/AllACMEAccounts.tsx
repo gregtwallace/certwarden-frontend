@@ -5,7 +5,7 @@ import {
 } from '../../../types/api';
 import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 
-import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import { Link as RouterLink, useSearchParams } from 'react-router';
 import { Link } from '@mui/material';
 
 import Table from '@mui/material/Table';
@@ -78,7 +78,7 @@ const AllACMEAccounts: FC = () => {
         title='ACME Accounts'
         helpURL='https://www.certwarden.com/docs/user_interface/acme_accounts/'
       >
-        <ButtonAsLink to={`/acmeaccounts/${newId}`}>New Account</ButtonAsLink>
+        <ButtonAsLink to={`/acmeaccounts/${newId.toString()}`}>New Account</ButtonAsLink>
       </TitleBar>
 
       {!getState.responseData && !getState.error && <ApiLoading />}
@@ -102,7 +102,7 @@ const AllACMEAccounts: FC = () => {
                   <TableCell>
                     <Link
                       component={RouterLink}
-                      to={'/acmeaccounts/' + acct.id}
+                      to={'/acmeaccounts/' + acct.id.toString()}
                     >
                       {acct.name}
                     </Link>
@@ -111,7 +111,7 @@ const AllACMEAccounts: FC = () => {
                   <TableCell>
                     <Link
                       component={RouterLink}
-                      to={'/privatekeys/' + acct.private_key.id}
+                      to={'/privatekeys/' + acct.private_key.id.toString()}
                     >
                       {acct.private_key.name}
                     </Link>

@@ -5,7 +5,7 @@ import {
 } from '../../../types/api';
 import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 
-import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import { Link as RouterLink, useSearchParams } from 'react-router';
 
 import useAxiosGet from '../../../hooks/useAxiosGet';
 import { queryParser } from '../../UI/TableMui/query';
@@ -81,7 +81,7 @@ const AllCertificates: FC = () => {
         title='Certificates'
         helpURL='https://www.certwarden.com/docs/user_interface/certificates/'
       >
-        <ButtonAsLink to={`/certificates/${newId}`}>
+        <ButtonAsLink to={`/certificates/${newId.toString()}`}>
           New Certificate
         </ButtonAsLink>
       </TitleBar>
@@ -107,7 +107,7 @@ const AllCertificates: FC = () => {
                   <TableCell>
                     <Link
                       component={RouterLink}
-                      to={'/certificates/' + cert.id}
+                      to={'/certificates/' + cert.id.toString()}
                     >
                       {cert.name}
                     </Link>
@@ -125,7 +125,7 @@ const AllCertificates: FC = () => {
                   <TableCell>
                     <Link
                       component={RouterLink}
-                      to={'/privatekeys/' + cert.private_key.id}
+                      to={'/privatekeys/' + cert.private_key.id.toString()}
                     >
                       {cert.private_key.name}
                     </Link>
@@ -134,7 +134,7 @@ const AllCertificates: FC = () => {
                   <TableCell>
                     <Link
                       component={RouterLink}
-                      to={'/acmeaccounts/' + cert.acme_account.id}
+                      to={'/acmeaccounts/' + cert.acme_account.id.toString()}
                     >
                       {cert.acme_account.name}
                     </Link>

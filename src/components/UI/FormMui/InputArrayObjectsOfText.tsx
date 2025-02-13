@@ -5,6 +5,8 @@ import { escapeStringForRegExp } from '../../../helpers/regex';
 
 import { Box, FormControl, Toolbar } from '@mui/material';
 
+import { objectHasKeyStartingWith } from '../../../helpers/form-validation';
+
 import Button from '../Button/Button';
 import FormInfo from './FormInfo';
 import FormLabel from './FormLabel';
@@ -23,7 +25,7 @@ type propTypes<valueObject extends Record<string, string>> = {
   onChange: inputHandlerFuncType;
 
   minElements?: number;
-  validationErrors?: validationErrorsType;
+  validationErrors: validationErrorsType;
 };
 
 const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
@@ -49,7 +51,7 @@ const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
 
     const syntheticEvent = {
       target: {
-        name: name || id,
+        name: name ?? id,
         value: newArrayVal,
       },
     };
@@ -84,13 +86,13 @@ const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
           // if errIndex < delete index, just copy
           if (errIndex < index) {
             newValidationErrors[fieldName] =
-              currentValidationErrors[fieldName] || false;
+              currentValidationErrors[fieldName] ?? false;
           }
 
           // if errIndex is greater than delete index, shift error -1
           if (errIndex > index) {
-            newValidationErrors[`${id}.${errIndex - 1}`] =
-              currentValidationErrors[fieldName] || false;
+            newValidationErrors[`${id}.${(errIndex - 1).toString()}`] =
+              currentValidationErrors[fieldName] ?? false;
           }
 
           // if errIndex is delete index, discard error
@@ -99,19 +101,24 @@ const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
           // modify subfields
           const fieldPath = fieldName.split('.');
           const subFieldName = fieldPath[fieldPath.length - 1];
+          if (!subFieldName) {
+            throw new Error('invalid subFieldName');
+          }
+
           const errIndexStr = fieldPath[fieldPath.length - 2];
           const errIndex = Number(errIndexStr);
 
           // if errIndex < delete index, just copy
           if (errIndex < index) {
             newValidationErrors[fieldName] =
-              currentValidationErrors[fieldName] || false;
+              currentValidationErrors[fieldName] ?? false;
           }
 
           // if errIndex is greater than delete index, shift error -1
           if (errIndex > index) {
-            newValidationErrors[`${id}.${errIndex - 1}.${subFieldName}`] =
-              currentValidationErrors[fieldName] || false;
+            newValidationErrors[
+              `${id}.${(errIndex - 1).toString()}.${subFieldName}`
+            ] = currentValidationErrors[fieldName] ?? false;
           }
 
           // if errIndex is delete index, discard error
@@ -119,7 +126,7 @@ const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
         } else {
           // if not related to this input, just copy
           newValidationErrors[fieldName] =
-            currentValidationErrors[fieldName] || false;
+            currentValidationErrors[fieldName] ?? false;
         }
       }
 
@@ -139,7 +146,7 @@ const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
 
     const syntheticEvent = {
       target: {
-        name: name || id,
+        name: name ?? id,
         value: newArrayVal,
       },
     };
@@ -157,40 +164,45 @@ const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
         /* Output each member of the object array */
         value.map((subValue, objIndex) => (
           <Box
-            key={`${id}.${objIndex}`}
+            key={`${id}.${objIndex.toString()}`}
             sx={{
               mt: 1,
               p: 1,
               border: 1,
               borderRadius: '4px',
               /* Note: action.disabled isn't the exact default field border color, but it is close */
-              borderColor:
-                validationErrors && `${id}.${objIndex}` in validationErrors
-                  ? 'error.main'
-                  : 'action.disabled',
+              borderColor: objectHasKeyStartingWith(
+                validationErrors,
+                `${id}.${objIndex.toString()}`
+              )
+                ? 'error.main'
+                : 'action.disabled',
             }}
           >
             <Toolbar variant='dense' disableGutters sx={{ mb: 1 }}>
               <FormInfo
-                color={
-                  validationErrors && `${id}.${objIndex}` in validationErrors
+                sx={{
+                  m: 1,
+                  color: objectHasKeyStartingWith(
+                    validationErrors,
+                    `${id}.${objIndex.toString()}`
+                  )
                     ? 'error.main'
-                    : undefined
-                }
-                sx={{ m: 1 }}
+                    : undefined,
+                }}
               >
-                {subLabel + ' ' + (objIndex + 1)}
+                {subLabel + ' ' + (objIndex + 1).toString()}
               </FormInfo>
 
               <Box sx={{ flexGrow: 1 }} />
 
-              {value.length > (minElements || 0) && (
+              {value.length > (minElements ?? 0) && (
                 <Button
                   size='small'
                   color='error'
-                  onClick={(_event) =>
-                    removeElementHandler(objIndex, validationErrors)
-                  }
+                  onClick={(_event) => {
+                    removeElementHandler(objIndex, validationErrors);
+                  }}
                 >
                   Remove
                 </Button>
@@ -210,19 +222,20 @@ const InputArrayObjectsOfText = <valueObject extends Record<string, string>>(
 
                 return (
                   <InputTextField
-                    key={`${id}.${objIndex}.${fieldKey}`}
-                    id={id + '.' + objIndex + '.' + fieldKey}
+                    key={`${id}.${objIndex.toString()}.${fieldKey}`}
+                    id={id + '.' + objIndex.toString() + '.' + fieldKey}
                     name={
                       name
-                        ? name + '.' + objIndex + '.' + fieldKey
-                        : id + '.' + objIndex + '.' + fieldKey
+                        ? name + '.' + objIndex.toString() + '.' + fieldKey
+                        : id + '.' + objIndex.toString() + '.' + fieldKey
                     }
                     label={keyPretty}
                     value={fieldValue}
                     onChange={onChange}
                     error={
-                      !!validationErrors &&
-                      validationErrors[id + '.' + objIndex + '.' + fieldKey]
+                      validationErrors[
+                        id + '.' + objIndex.toString() + '.' + fieldKey
+                      ]
                     }
                   />
                 );

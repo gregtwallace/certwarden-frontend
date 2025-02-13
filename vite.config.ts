@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
   build: {
     rollupOptions: {
@@ -13,6 +13,9 @@ export default defineConfig({
               return 'emotion_sheet';
             }
           }
+
+          // return (void)
+          return
         },
       },
     },

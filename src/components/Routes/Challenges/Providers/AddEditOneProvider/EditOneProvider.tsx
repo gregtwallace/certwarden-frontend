@@ -31,14 +31,18 @@ import TitleBar from '../../../../UI/TitleBar/TitleBar';
 const ONE_PROVIDER_URL = '/v1/app/challenges/providers/services';
 
 const EditOneProvider: FC = () => {
+  // get provider info
+  const { id } = useParams();
+  if (!id) {
+    throw new Error('id is invalid');
+  }
+
   // debug?
   const { showDebugInfo } = useClientSettings();
 
   const { axiosSendState, apiCall } = useAxiosSend();
   const navigate = useNavigate();
 
-  // get provider info
-  const { id } = useParams();
   const thisProviderUrl = `${ONE_PROVIDER_URL}/${id}`;
 
   const { getState } = useAxiosGet<providerResponseType>(
@@ -47,30 +51,29 @@ const EditOneProvider: FC = () => {
   );
 
   // get provider type
-  const provider = getProvider(getState.responseData?.provider.type || '');
+  const provider = getProvider(getState.responseData?.provider.type ?? '');
 
   const makeStartingForm: () => providerFormStateType = useCallback(
     () => ({
       getResponseData: getState.responseData,
       getError: getState.error,
-      provider_type_value: getState.responseData?.provider.type || '',
+      provider_type_value: getState.responseData?.provider.type ?? '',
       provider_options: provider.providerOptionsForEdit
         ? provider.providerOptionsForEdit(
             getState.responseData?.provider.config
           )
         : undefined,
       dataToSubmit: {
-        domains: getState.responseData?.provider.domains || [''],
-        config: getState.responseData?.provider.config || {},
+        domains: getState.responseData?.provider.domains ?? [''],
+        config: getState.responseData?.provider.config ?? {},
       },
       sendError: undefined,
       validationErrors: {},
     }),
     [getState, provider]
   );
-  const [formState, setFormState] = useState<providerFormStateType>(
-    makeStartingForm()
-  );
+  const [formState, setFormState] =
+    useState<providerFormStateType>(makeStartingForm());
 
   // reload starting form after GET loads
   useEffect(() => {
@@ -112,11 +115,11 @@ const EditOneProvider: FC = () => {
     // common domain validation
     // if singular wildcard domain, allow as this is wildcard provider
     if (
-      JSON.stringify(formState.dataToSubmit['domains']) != JSON.stringify(['*'])
+      JSON.stringify(formState.dataToSubmit.domains) != JSON.stringify(['*'])
     ) {
-      formState.dataToSubmit['domains'].forEach((domain, i) => {
+      formState.dataToSubmit.domains.forEach((domain, i) => {
         if (!isDomainValid(domain, false)) {
-          validationErrors['dataToSubmit.domains.' + i] = true;
+          validationErrors['dataToSubmit.domains.' + i.toString()] = true;
         }
       });
     }
@@ -153,13 +156,46 @@ const EditOneProvider: FC = () => {
     });
   };
 
+  // generate delete dialog text
+  let deleteText = 'Domain';
+  if (formState.getResponseData) {
+    // make code a little easier to read
+    const domains = formState.getResponseData.provider.domains;
+
+    // only one domain
+    if (domains.length == 1) {
+      if (!domains[0]) {
+        throw new Error('invalid domain 0');
+      }
+      deleteText += ' ' + domains[0];
+    } else if (domains.length > 1) {
+      // more than one domain
+      const lastDomain = domains[domains.length - 1];
+      if (!lastDomain) {
+        throw new Error('invalid domain 0');
+      }
+
+      // comma only used when >2 domains
+      deleteText +=
+        's ' +
+        domains.slice(0, -1).join(', ') +
+        (domains.length > 2 ? ',' : '') +
+        ' and ' +
+        lastDomain;
+    }
+  }
+  deleteText +=
+    ' will become unavilable for challenge solving unless there is a wilcard provider.';
+
   return (
     <FormContainer>
       <TitleBar title='Edit Challenge Provider' helpURL={provider.helpUrl}>
         {formState.getResponseData && (
           <Button
             color='error'
-            onClick={() => setDeleteOpen(true)}
+            onClick={() => {
+              setDeleteOpen(true);
+            }}
             disabled={axiosSendState.isSending}
           >
             Delete
@@ -183,21 +219,12 @@ const EditOneProvider: FC = () => {
               formState.getResponseData.provider.type
             }${
               showDebugInfo
-                ? ' (id:' + formState.getResponseData.provider.id + ') '
+                ? ' (id:' +
+                  formState.getResponseData.provider.id.toString() +
+                  ') '
                 : ''
             }?`}
-            contentText={
-              'Domain' +
-              (formState.getResponseData.provider.domains.length > 1
-                ? 's ' +
-                  formState.getResponseData.provider.domains
-                    .slice(0, -1)
-                    .join(',') +
-                  ', and ' +
-                  formState.getResponseData.provider.domains.slice(-1)
-                : ' ' + formState.getResponseData.provider.domains[0]) +
-              ' will become unavilable for challenge solving unless there is a wilcard provider.'
-            }
+            contentText={deleteText}
             open={deleteOpen}
             onCancel={() => {
               setDeleteOpen(false);

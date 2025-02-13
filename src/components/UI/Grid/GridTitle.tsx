@@ -14,7 +14,7 @@ const GridTitle: FC<propTypes> = (props) => {
   return (
     <Toolbar variant='dense' disableGutters sx={{ m: 0, px: 1 }}>
       <Typography
-        component={headerComponent || 'h3'}
+        component={headerComponent ?? 'h3'}
         variant='subtitle2'
         color='primary'
         sx={{ flexGrow: 1 }}

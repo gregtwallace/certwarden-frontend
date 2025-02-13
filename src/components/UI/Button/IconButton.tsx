@@ -1,5 +1,6 @@
 import { type FC, type ReactNode } from 'react';
 import { type IconButtonProps as MuiIconButtonProps } from '@mui/material';
+import { type SystemStyleObject } from '@mui/system';
 
 import { IconButton as MuiIconButton, Tooltip } from '@mui/material';
 
@@ -12,7 +13,7 @@ type propTypes = {
 
   color?: MuiIconButtonProps['color'];
   edge?: MuiIconButtonProps['edge'];
-  sx?: MuiIconButtonProps['sx'];
+  sx?: SystemStyleObject;
   tooltip?: ReactNode;
 };
 
@@ -26,8 +27,8 @@ const IconButton: FC<propTypes> = (props) => {
       <MuiIconButton
         type={type}
         onClick={onClick}
-        color={color ? color : 'inherit'}
-        edge={edge ? edge : false}
+        color={color ?? 'inherit'}
+        edge={edge ?? false}
         sx={{
           ...sx,
         }}

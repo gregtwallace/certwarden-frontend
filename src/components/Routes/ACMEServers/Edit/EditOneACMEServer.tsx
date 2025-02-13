@@ -11,7 +11,7 @@ import {
 } from '../../../../types/frontend';
 
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 
 import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
@@ -53,10 +53,13 @@ type formObj = {
 };
 
 const EditOneACMEServer: FC = () => {
+  const { id } = useParams();
+  if (!id) {
+    throw new Error('id is invalid');
+  }
+
   // debug?
   const { showDebugInfo } = useClientSettings();
-
-  const { id } = useParams();
   const thisAcmeServerUrl = `${ONE_ACME_SERVER_URL}/${id}`;
 
   const { getState } = useAxiosGet<oneAcmeServerResponseType>(
@@ -72,10 +75,10 @@ const EditOneACMEServer: FC = () => {
       getResponseData: getState.responseData,
       getError: getState.error,
       dataToSubmit: {
-        name: getState.responseData?.acme_server.name || '',
-        description: getState.responseData?.acme_server.description || '',
-        directory_url: getState.responseData?.acme_server.directory_url || '',
-        is_staging: getState.responseData?.acme_server.is_staging || false,
+        name: getState.responseData?.acme_server.name ?? '',
+        description: getState.responseData?.acme_server.description ?? '',
+        directory_url: getState.responseData?.acme_server.directory_url ?? '',
+        is_staging: getState.responseData?.acme_server.is_staging ?? false,
       },
       sendError: undefined,
       validationErrors: {},
@@ -214,7 +217,7 @@ const EditOneACMEServer: FC = () => {
               onChange={inputChangeHandler}
             />
 
-            <FormInfo color='error.main'>
+            <FormInfo sx={{ color: 'error.main' }}>
               You should only update the Directory URL if your provider has
               actually changed it. If you are trying to change provider, create
               a new server instead.
@@ -249,11 +252,13 @@ const EditOneACMEServer: FC = () => {
                 )}
                 sx={{ my: 1, px: 1, overflowY: 'auto' }}
                 multiline
-                InputProps={{
-                  disableUnderline: true,
-                  style: {
-                    fontFamily: 'Monospace',
-                    fontSize: 12,
+                slotProps={{
+                  input: {
+                    disableUnderline: true,
+                    style: {
+                      fontFamily: 'Monospace',
+                      fontSize: 12,
+                    },
                   },
                 }}
               />
@@ -269,7 +274,9 @@ const EditOneACMEServer: FC = () => {
 
             <FormFooter
               cancelHref='/acmeservers'
-              resetOnClick={() => setFormState(makeStartingForm())}
+              resetOnClick={() => {
+                setFormState(makeStartingForm());
+              }}
               disabledAllButtons={axiosSendState.isSending}
               disabledResetButton={
                 JSON.stringify(formState.dataToSubmit) ===

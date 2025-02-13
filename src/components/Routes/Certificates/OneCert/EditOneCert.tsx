@@ -14,7 +14,7 @@ import {
 import { type certExtension } from './InputExtraExtensions/InputExtraExtensions';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router';
 
 import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
@@ -51,7 +51,7 @@ import Orders from './Orders/Orders';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
 
 const ONE_CERTIFICATE_SERVER_URL = '/v1/certificates';
-const CERTIFICATE_OPTIONS_URL = `/v1/certificates/${newId}`;
+const CERTIFICATE_OPTIONS_URL = `/v1/certificates/${newId.toString()}`;
 
 // form shape
 type formObj = {
@@ -81,6 +81,10 @@ type formObj = {
 
 const EditOneCert: FC = () => {
   const { id } = useParams();
+  if (!id) {
+    throw new Error('id is invalid');
+  }
+
   const thisCertUrl = `${ONE_CERTIFICATE_SERVER_URL}/${id}`;
   const thisCertDownloadUrl = `${thisCertUrl}/download`;
   const thisCertApiKeyUrl = `${thisCertUrl}/apikey`;
@@ -118,25 +122,25 @@ const EditOneCert: FC = () => {
       getOptionsResponseData: optionsResponseData,
       getOptionsError: optionsError,
       dataToSubmit: {
-        name: certResponseData?.certificate.name || '',
-        description: certResponseData?.certificate.description || '',
-        private_key_id: certResponseData?.certificate.private_key.id || -1,
-        subject_alts: certResponseData?.certificate.subject_alts || [],
-        api_key_via_url: certResponseData?.certificate.api_key_via_url || false,
+        name: certResponseData?.certificate.name ?? '',
+        description: certResponseData?.certificate.description ?? '',
+        private_key_id: certResponseData?.certificate.private_key.id ?? -1,
+        subject_alts: certResponseData?.certificate.subject_alts ?? [],
+        api_key_via_url: certResponseData?.certificate.api_key_via_url ?? false,
         post_processing_command:
-          certResponseData?.certificate.post_processing_command || '',
+          certResponseData?.certificate.post_processing_command ?? '',
         post_processing_environment:
-          certResponseData?.certificate.post_processing_environment || [],
+          certResponseData?.certificate.post_processing_environment ?? [],
         preferred_root_cn:
-          certResponseData?.certificate.preferred_root_cn || '',
-        organization: certResponseData?.certificate.organization || '',
+          certResponseData?.certificate.preferred_root_cn ?? '',
+        organization: certResponseData?.certificate.organization ?? '',
         organizational_unit:
-          certResponseData?.certificate.organizational_unit || '',
-        country: certResponseData?.certificate.country || '',
-        state: certResponseData?.certificate.state || '',
-        city: certResponseData?.certificate.city || '',
+          certResponseData?.certificate.organizational_unit ?? '',
+        country: certResponseData?.certificate.country ?? '',
+        state: certResponseData?.certificate.state ?? '',
+        city: certResponseData?.certificate.city ?? '',
         csr_extra_extensions:
-          certResponseData?.certificate.csr_extra_extensions || [],
+          certResponseData?.certificate.csr_extra_extensions ?? [],
       },
       sendError: undefined,
       validationErrors: {},
@@ -256,7 +260,8 @@ const EditOneCert: FC = () => {
     // subject alts
     formState.dataToSubmit.subject_alts.forEach((alt, index) => {
       if (!isDomainValid(alt)) {
-        validationErrors[`dataToSubmit.subject_alts.${index}`] = true;
+        validationErrors[`dataToSubmit.subject_alts.${index.toString()}`] =
+          true;
       }
     });
 
@@ -266,7 +271,7 @@ const EditOneCert: FC = () => {
         // check each param
         if (!isEnvironmentParamValid(param)) {
           validationErrors[
-            `dataToSubmit.post_processing_environment.${index}`
+            `dataToSubmit.post_processing_environment.${index.toString()}`
           ] = true;
         }
       }
@@ -280,14 +285,15 @@ const EditOneCert: FC = () => {
 
       // OID must exist and be in proper format
       if (!isOIDValid(extension.oid)) {
-        validationErrors[`dataToSubmit.csr_extra_extensions.${index}.oid`] =
-          true;
+        validationErrors[
+          `dataToSubmit.csr_extra_extensions.${index.toString()}.oid`
+        ] = true;
       }
 
       // Hex Bytes Value must be in proper format, if exists
       if (!isHexStringValid(extension.value_hex)) {
         validationErrors[
-          `dataToSubmit.csr_extra_extensions.${index}.value_hex`
+          `dataToSubmit.csr_extra_extensions.${index.toString()}.value_hex`
         ] = true;
       }
 
@@ -350,7 +356,9 @@ const EditOneCert: FC = () => {
                 </Button>
                 <Button
                   color='error'
-                  onClick={() => setDeleteOpen(true)}
+                  onClick={() => {
+                    setDeleteOpen(true);
+                  }}
                   disabled={axiosSendState.isSending}
                 >
                   Delete
@@ -384,7 +392,9 @@ const EditOneCert: FC = () => {
               contentText='All orders associated with this certificate will also be deleted
               and irrecoverable. Any associated account and private keys will be unchanged.'
               open={deleteOpen}
-              onCancel={() => setDeleteOpen(false)}
+              onCancel={() => {
+                setDeleteOpen(false);
+              }}
               onConfirm={deleteConfirmHandler}
             />
 
@@ -656,7 +666,7 @@ const EditOneCert: FC = () => {
 
               <FormFooter
                 cancelHref='/certificates'
-                resetOnClick={() =>
+                resetOnClick={() => {
                   setFormState((prevState) =>
                     initialForm(
                       prevState.getCertResponseData,
@@ -664,8 +674,8 @@ const EditOneCert: FC = () => {
                       prevState.getOptionsResponseData,
                       prevState.getOptionsError
                     )
-                  )
-                }
+                  );
+                }}
                 disabledAllButtons={axiosSendState.isSending}
                 disabledResetButton={formUnchanged}
                 lastAccess={
@@ -679,7 +689,7 @@ const EditOneCert: FC = () => {
         )}
       </FormContainer>
 
-      {id !== undefined && formState.getCertResponseData !== undefined && (
+      {formState.getCertResponseData !== undefined && (
         <Orders
           setHasValidOrders={setHasValidOrders}
           certId={parseInt(id)}

@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 
 import { TableRow } from '@mui/material';
 
@@ -30,7 +30,7 @@ const TableHeaderRow: FC<propTypes> = (props) => {
   if (currentSort != null) {
     const sortComponents = currentSort.split('.');
     if (
-      sortComponents?.length === 2 &&
+      sortComponents.length === 2 &&
       sortComponents[0] &&
       (sortComponents[1] === 'asc' || sortComponents[1] === 'desc')
     ) {

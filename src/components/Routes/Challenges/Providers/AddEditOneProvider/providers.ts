@@ -124,42 +124,41 @@ export const providersList: provider[] = [
         console.error(new Error('resources missing on dns01acmedns'));
         validationErrors['dataToSubmit.config.resources'] = true;
       } else {
-        formState.dataToSubmit.config['resources'].forEach(
-          (resc, rescIndex) => {
-            // check each resource field
-            let rescError = false;
-            if (!isDomainValid(resc.real_domain)) {
-              validationErrors[
-                `dataToSubmit.config.resources.${rescIndex}.real_domain`
-              ] = true;
-              rescError = true;
-            }
-            if (!isDomainValid(resc.full_domain)) {
-              validationErrors[
-                `dataToSubmit.config.resources.${rescIndex}.full_domain`
-              ] = true;
-              rescError = true;
-            }
-            if (resc.username === '') {
-              validationErrors[
-                `dataToSubmit.config.resources.${rescIndex}.username`
-              ] = true;
-              rescError = true;
-            }
-            if (resc.password === '') {
-              validationErrors[
-                `dataToSubmit.config.resources.${rescIndex}.password`
-              ] = true;
-              rescError = true;
-            }
-
-            // set error on resource if any field failed
-            if (rescError) {
-              validationErrors[`dataToSubmit.config.resources.${rescIndex}`] =
-                true;
-            }
+        formState.dataToSubmit.config.resources.forEach((resc, rescIndex) => {
+          // check each resource field
+          let rescError = false;
+          if (!isDomainValid(resc.real_domain)) {
+            validationErrors[
+              `dataToSubmit.config.resources.${rescIndex.toString()}.real_domain`
+            ] = true;
+            rescError = true;
           }
-        );
+          if (!isDomainValid(resc.full_domain)) {
+            validationErrors[
+              `dataToSubmit.config.resources.${rescIndex.toString()}.full_domain`
+            ] = true;
+            rescError = true;
+          }
+          if (resc.username === '') {
+            validationErrors[
+              `dataToSubmit.config.resources.${rescIndex.toString()}.username`
+            ] = true;
+            rescError = true;
+          }
+          if (resc.password === '') {
+            validationErrors[
+              `dataToSubmit.config.resources.${rescIndex.toString()}.password`
+            ] = true;
+            rescError = true;
+          }
+
+          // set error on resource if any field failed
+          if (rescError) {
+            validationErrors[
+              `dataToSubmit.config.resources.${rescIndex.toString()}`
+            ] = true;
+          }
+        });
       }
       return validationErrors;
     },
@@ -217,7 +216,9 @@ export const providersList: provider[] = [
         formState.dataToSubmit.config.environment.forEach((param, index) => {
           // check each param
           if (!isEnvironmentParamValid(param)) {
-            validationErrors[`dataToSubmit.config.environment.${index}`] = true;
+            validationErrors[
+              `dataToSubmit.config.environment.${index.toString()}`
+            ] = true;
           }
         });
       }
@@ -356,7 +357,9 @@ export const providersList: provider[] = [
         formState.dataToSubmit.config.environment.forEach((param, index) => {
           // check each param
           if (!isEnvironmentParamValid(param)) {
-            validationErrors[`dataToSubmit.config.environment.${index}`] = true;
+            validationErrors[
+              `dataToSubmit.config.environment.${index.toString()}`
+            ] = true;
           }
         });
       }
@@ -408,7 +411,9 @@ export const providersList: provider[] = [
         formState.dataToSubmit.config.environment.forEach((param, index) => {
           // check each param
           if (!isEnvironmentParamValid(param)) {
-            validationErrors[`dataToSubmit.config.environment.${index}`] = true;
+            validationErrors[
+              `dataToSubmit.config.environment.${index.toString()}`
+            ] = true;
           }
         });
       }

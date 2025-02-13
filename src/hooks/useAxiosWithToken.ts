@@ -37,10 +37,10 @@ const useAxiosWithToken = (): { axiosInstance: AxiosInstance } => {
       });
 
       // parse (narrows and throws err if not valid)
-      response.data = parseAuthorizationResponseType(response.data);
+      const authResponse = parseAuthorizationResponseType(response.data);
 
       // good, set auth
-      setAuth(response.data.authorization);
+      setAuth(authResponse.authorization);
 
       // debug log
       if (showDebugInfo) {
@@ -65,8 +65,8 @@ const useAxiosWithToken = (): { axiosInstance: AxiosInstance } => {
     // add the Authorization header to all Private requests
     const requestIntercept = axiosInstance.interceptors.request.use(
       (config) => {
-        if (!config.headers['Authorization']) {
-          config.headers['Authorization'] = getAccessToken();
+        if (!config.headers.Authorization) {
+          config.headers.Authorization = getAccessToken();
         }
         return config;
       },
@@ -83,12 +83,12 @@ const useAxiosWithToken = (): { axiosInstance: AxiosInstance } => {
       async (error: AxiosError) => {
         // get previous request (config)
         if (error.config) {
-          const prevRequest = error?.config;
+          const prevRequest = error.config;
           // if the error was 401 & not already a retry, and not login, try refresh
           if (
             error.response?.status === 401 &&
             prevRequest.headers[NO_RETRY_HEADER] == null &&
-            (!error.config.url || !error.config.url.endsWith('/app/auth/login'))
+            !error.config.url?.endsWith('/app/auth/login')
           ) {
             // do refresh only if not already refreshing, otherwise sleep until the other
             // refresh job is done
@@ -97,6 +97,8 @@ const useAxiosWithToken = (): { axiosInstance: AxiosInstance } => {
               await refreshAccessToken();
               isRefreshing = false;
             } else {
+              // disable this rule as ts thinks this is always true, even though it can be false
+              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
               while (isRefreshing) {
                 // sleep before checking isRefreshing again
                 await new Promise((resolve) => setTimeout(resolve, 100));
@@ -105,14 +107,14 @@ const useAxiosWithToken = (): { axiosInstance: AxiosInstance } => {
 
             // don't retry if token appears invalid
             const newAccessToken = getAccessToken();
-            if (newAccessToken == null || newAccessToken === '') {
+            if (newAccessToken === '') {
               // new token doesn't look valid, return original error
               return error;
             }
 
             // new token seemed ok, retry with it & no retry header
             prevRequest.headers[NO_RETRY_HEADER] = 'true';
-            prevRequest.headers['Authorization'] = newAccessToken;
+            prevRequest.headers.Authorization = newAccessToken;
             return axiosInstance(prevRequest);
           }
         }

@@ -23,19 +23,20 @@ const InputTextField: FC<propTypes> = (props) => {
     props;
 
   // get field info
-  const { errorMessage, htmlType } = fieldInformation(name || id);
+  const { errorMessage, htmlType } = fieldInformation(name ?? id);
 
   return (
     <MuiTextField
       id={id}
-      name={name || id}
+      name={name ?? id}
       type={htmlType}
       label={label}
       value={value}
       onChange={
         onChange
-          ? (event) =>
-              onChange(event, htmlType === 'number' ? 'number' : 'unchanged')
+          ? (event) => {
+              onChange(event, htmlType === 'number' ? 'number' : 'unchanged');
+            }
           : undefined
       }
       disabled={!!disabled}
@@ -48,16 +49,16 @@ const InputTextField: FC<propTypes> = (props) => {
       multiline={!!multiline}
       minRows={5}
       maxRows={10}
-      InputProps={
-        multiline
+      slotProps={{
+        input: multiline
           ? {
               style: {
                 fontFamily: 'Monospace',
                 fontSize: 14,
               },
             }
-          : {}
-      }
+          : {},
+      }}
       // multiline / text area -- end
     />
   );

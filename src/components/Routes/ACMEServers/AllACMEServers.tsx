@@ -5,7 +5,7 @@ import {
 } from '../../../types/api';
 import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 
-import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import { Link as RouterLink, useSearchParams } from 'react-router';
 
 import useAxiosGet from '../../../hooks/useAxiosGet';
 import { queryParser } from '../../UI/TableMui/query';
@@ -69,7 +69,7 @@ const AllACMEServers: FC = () => {
         helpURL='https://www.certwarden.com/docs/user_interface/acme_servers/'
 
       >
-        <ButtonAsLink to={`/acmeservers/${newId}`}>New Server</ButtonAsLink>
+        <ButtonAsLink to={`/acmeservers/${newId.toString()}`}>New Server</ButtonAsLink>
       </TitleBar>
 
       {!getState.responseData && !getState.error && <ApiLoading />}
@@ -91,7 +91,7 @@ const AllACMEServers: FC = () => {
               {getState.responseData.acme_servers.map((serv) => (
                 <TableRow key={serv.id}>
                   <TableCell>
-                    <Link component={RouterLink} to={'/acmeservers/' + serv.id}>
+                    <Link component={RouterLink} to={'/acmeservers/' + serv.id.toString()}>
                       {serv.name}
                     </Link>
                   </TableCell>

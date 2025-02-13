@@ -18,7 +18,9 @@ const TableHeaderSortable: FC<propTypes> = (props) => {
       <TableSortLabel
         active={orderBy === id}
         direction={order}
-        onClick={(_event) => onClick(id)}
+        onClick={(_event) => {
+          onClick(id);
+        }}
       >
         {label}
       </TableSortLabel>
