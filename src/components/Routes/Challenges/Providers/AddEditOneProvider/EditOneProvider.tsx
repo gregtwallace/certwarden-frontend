@@ -185,7 +185,7 @@ const EditOneProvider: FC = () => {
     }
   }
   deleteText +=
-    ' will become unavilable for challenge solving unless there is a wilcard provider.';
+    ' will become unavailable for challenge solving unless there is a wildcard provider.';
 
   return (
     <FormContainer>
