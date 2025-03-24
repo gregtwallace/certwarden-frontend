@@ -1,9 +1,10 @@
 import { type ChangeEvent, type FC, type MouseEvent } from 'react';
+import { storageSuffixType } from './query';
 
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router';
 
-import { perPageOptions } from './query';
+import { perPageOptions, getRowsPerPageInfo } from './query';
 
 import { TablePagination as MuiTablePagination } from '@mui/material';
 
@@ -11,10 +12,14 @@ type propTypes = {
   page: number;
   rowsPerPage: number;
   count: number;
+  storageSuffix?: storageSuffixType;
 };
 
 const TablePagination: FC<propTypes> = (props) => {
-  const { count, page, rowsPerPage } = props;
+  const { count, page, rowsPerPage, storageSuffix } = props;
+
+  // get storage item name
+  const [storageItemName] = getRowsPerPageInfo(storageSuffix);
 
   // page is valid if page 0 (1st page) -or-
   // valid if page beginning is within the result set (that is,
@@ -42,16 +47,14 @@ const TablePagination: FC<propTypes> = (props) => {
 
     // set new page and per page
     searchParams.set('page', newPage.toString());
-    searchParams.set('perpage', newRowsPerPage.toString());
+    localStorage.setItem(storageItemName, newRowsPerPage.toString());
     setSearchParams(searchParams);
   };
 
-  // if page is invalid, delete page and per page then reload
-  // AKA load default page and per page
+  // if page is invalid, delete page then reload
   useEffect(() => {
     if (!pageIsValid) {
       searchParams.delete('page');
-      searchParams.delete('perpage');
       setSearchParams(searchParams);
     }
   }, [pageIsValid, searchParams, setSearchParams]);

@@ -2,17 +2,31 @@ import { isInteger } from '../../../helpers/form-validation';
 
 export const perPageOptions = [5, 10, 20, 50];
 
-const defRowsPerPage = 20;
 const defPage = 0;
+const perPageItemNamePrefix = 'rows_per_page';
+const perPageDefaultValue = 20;
+
+// type for storing per page settings
+export type storageSuffixType = 'orders' | '';
+
+export const getRowsPerPageInfo = (
+  storageSuffix: storageSuffixType = ''
+): [storageItemName: string, defaultValue: number] => {
+  if (storageSuffix !== '') {
+    return [perPageItemNamePrefix + '_' + storageSuffix, 5];
+  }
+
+  return [perPageItemNamePrefix, perPageDefaultValue];
+};
 
 // getRowsPerPage returns the rows per page that is specified
 // or the default if specified is not valid
-const getRowsPerPage = (
-  searchParams: URLSearchParams,
-  defaultRows: number = defRowsPerPage
-): number => {
+const getRowsPerPage = (storageSuffix: storageSuffixType = ''): number => {
+  // set storage name and default value based on suffix
+  const [storageItemName, defaultRows] = getRowsPerPageInfo(storageSuffix);
+
   // if no param, use default
-  const perPageParam = searchParams.get('perpage');
+  const perPageParam = localStorage.getItem(storageItemName);
   if (perPageParam === null) {
     return defaultRows;
   }
@@ -105,11 +119,11 @@ export const queryParser = (
   searchParams: URLSearchParams,
   defaultSortField: string,
   defaultSortDirection: 'asc' | 'desc' = 'asc',
-  defaultRowsPerPage: number = defRowsPerPage
+  perPageSuffix: storageSuffixType = ''
 ): queryParserReturnType => {
   const sort = getSort(searchParams, defaultSortField, defaultSortDirection);
   const page = getPage(searchParams);
-  const rowsPerPage = getRowsPerPage(searchParams, defaultRowsPerPage);
+  const rowsPerPage = getRowsPerPage(perPageSuffix);
 
   // calculate offset
   const pageOffset = page * rowsPerPage;

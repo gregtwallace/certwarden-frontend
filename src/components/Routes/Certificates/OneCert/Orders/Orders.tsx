@@ -174,7 +174,7 @@ const Orders: FC<propTypes> = (props) => {
     searchParams,
     'created_at',
     'desc',
-    5
+    'orders'
   );
 
   const { getState, updateGet } = useAxiosGet<ordersResponseType>(
@@ -489,6 +489,7 @@ const Orders: FC<propTypes> = (props) => {
             page={page}
             rowsPerPage={rowsPerPage}
             count={getState.responseData.total_records}
+            storageSuffix='orders'
           />
         </>
       )}
