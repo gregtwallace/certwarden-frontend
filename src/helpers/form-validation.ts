@@ -60,14 +60,14 @@ export const isEmailValid = (email: string): boolean => {
   const domain = emailPieces[1] ?? '';
 
   // username regex
-  const usernameRegex = /^[A-Za-z0-9][A-Za-z0-9-_.]{0,62}[A-Za-z0-9]$/;
+  const usernameRegex = /^[A-Za-z0-9][A-Za-z0-9-_.+]{0,62}[A-Za-z0-9]$/;
   if (!usernameRegex.exec(username)) {
     // no match = invalid username
     return false;
   }
 
   // check for invalid consecutive special chars in username
-  const usernameConsecSpecialRegex = /[-_.]{2,}/;
+  const usernameConsecSpecialRegex = /[-_.+]{2,}/;
   if (usernameConsecSpecialRegex.exec(username)) {
     // match = invalid consecutive special chars
     return false;
