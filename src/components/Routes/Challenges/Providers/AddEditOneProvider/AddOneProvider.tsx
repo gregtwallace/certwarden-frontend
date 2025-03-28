@@ -89,7 +89,7 @@ const AddOneProvider: FC = () => {
       parseProviderResponseType
     ).then(({ responseData, error }) => {
       if (responseData) {
-        navigate(`/providers`);
+        navigate('/challenges/providers');
       } else {
         // failed, set error
         setFormState((prevState) => ({
