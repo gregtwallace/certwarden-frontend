@@ -1,5 +1,5 @@
 import { type FC, type ReactNode } from 'react';
-import { type authorizationType, parseAuthorizationType } from '../types/api';
+import { type storedAuthorizationType, parseStoredAuthorizationType } from '../types/api';
 
 import { createContext, useCallback, useEffect, useState } from 'react';
 
@@ -7,8 +7,8 @@ import { createContext, useCallback, useEffect, useState } from 'react';
 let logoutTimer: number;
 
 const resetIdleLogoutTimer = (
-  auth: authorizationType | undefined,
-  setAuth: (auth: authorizationType | undefined) => void
+  auth: storedAuthorizationType | undefined,
+  setAuth: (auth: storedAuthorizationType | undefined) => void
 ): void => {
   // always clear any previous timer
   clearTimeout(logoutTimer);
@@ -26,14 +26,14 @@ const resetIdleLogoutTimer = (
 };
 
 // getAuth fetches the current auth from session storage
-const getAuth = (): authorizationType | undefined => {
+const getAuth = (): storedAuthorizationType | undefined => {
   try {
     const maybeAuth: unknown = JSON.parse(
       sessionStorage.getItem('authorization') ?? '{}'
     );
 
     // parse auth for validity
-    const auth = parseAuthorizationType(maybeAuth);
+    const auth = parseStoredAuthorizationType(maybeAuth);
 
     // check expiration
     if (auth.session_exp < Date.now() / 1000) {
@@ -71,7 +71,7 @@ const getUserType = (): string | undefined => {
 
 // setAuthStorage saves the newAuth in session storage or clears storage if
 // undefined is set
-const setAuthStorage = (newAuth: authorizationType | undefined): void => {
+const setAuthStorage = (newAuth: storedAuthorizationType | undefined): void => {
   if (!newAuth) {
     // undefined
     sessionStorage.removeItem('authorization');
@@ -88,7 +88,7 @@ export type authContextType = {
   isLoggedIn: boolean;
   getAccessToken: () => string;
   getUserType: () => string | undefined;
-  setAuth: (newAuth: authorizationType | undefined) => void;
+  setAuth: (newAuth: storedAuthorizationType | undefined) => void;
 };
 
 // create context
@@ -117,7 +117,7 @@ const AuthProvider: FC<AuthProviderProps> = (props) => {
   // any time setAuth is called, it should save storage and update isLoggedIn
   // and reset the idle logout timer
   const setAuth = useCallback(
-    (auth: authorizationType | undefined) => {
+    (auth: storedAuthorizationType | undefined) => {
       // reset timer using new auth
       resetIdleLogoutTimer(auth, setAuth);
 

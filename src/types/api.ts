@@ -31,9 +31,25 @@ export const isErrorResponseType = (unk: unknown): unk is errorResponseType => {
 //
 
 // login and refresh
-const authorization = z.object({
+// storedAuthorization is used to check the validity of an auth in session storage
+const storedAuthorization = z.object({
   user_type: z.string().min(1),
   access_token: z.string().min(1),
+  access_token_exp: z.number(),
+  session_exp: z.number().min(Date.now() / 1000, {
+    message: 'session expired',
+  }),
+});
+
+export type storedAuthorizationType = z.infer<typeof storedAuthorization>;
+export const parseStoredAuthorizationType = (
+  unk: unknown
+): storedAuthorizationType => {
+  return storedAuthorization.parse(unk);
+};
+
+// newAuthorization is used to check against backend's returned authorization
+const newAuthorization = storedAuthorization.extend({
   access_token_exp: z.number().min(Date.now() / 1000, {
     message: 'access token expired (host or client time clock issue?)',
   }),
@@ -42,13 +58,8 @@ const authorization = z.object({
   }),
 });
 
-export type authorizationType = z.infer<typeof authorization>;
-export const parseAuthorizationType = (unk: unknown): authorizationType => {
-  return authorization.parse(unk);
-};
-
 const authorizationResponse = basicGoodResponse.extend({
-  authorization: authorization,
+  authorization: newAuthorization,
 });
 
 export type authorizationResponseType = z.infer<typeof authorizationResponse>;
