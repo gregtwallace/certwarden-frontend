@@ -161,6 +161,17 @@ const EditOneACMEServer: FC = () => {
     });
   };
 
+  // text for directory if its null
+  let dir_text =
+    'Directory is null. Refresh the page if you just added this service. Otherwise, maybe the ACME service is down?';
+  if (formState.getResponseData?.acme_server.raw_directory_response !== null) {
+    dir_text = JSON.stringify(
+      formState.getResponseData?.acme_server.raw_directory_response,
+      null,
+      2
+    );
+  }
+
   return (
     <FormContainer>
       <TitleBar
@@ -245,11 +256,7 @@ const EditOneACMEServer: FC = () => {
                 label='Raw Directory Response'
                 fullWidth
                 variant='standard'
-                value={JSON.stringify(
-                  formState.getResponseData.acme_server.raw_directory_response,
-                  null,
-                  2
-                )}
+                value={dir_text}
                 sx={{ my: 1, px: 1, overflowY: 'auto' }}
                 multiline
                 slotProps={{
