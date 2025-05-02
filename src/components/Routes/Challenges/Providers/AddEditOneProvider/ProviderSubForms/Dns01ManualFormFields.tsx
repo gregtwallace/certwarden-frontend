@@ -10,36 +10,36 @@ const Dns01ManualFormFields: FC<providerSubFormPropsType> = (props) => {
 
   return (
     <>
-      {'environment' in formState.dataToSubmit.config &&
-      'create_script' in formState.dataToSubmit.config &&
-      'delete_script' in formState.dataToSubmit.config ? (
+      {'environment' in formState.configToSubmit &&
+      'create_script' in formState.configToSubmit &&
+      'delete_script' in formState.configToSubmit ? (
         <>
           <InputArrayText
-            id='dataToSubmit.config.environment'
+            id='configToSubmit.environment'
             label='Environment Variables'
             subLabel='Variable'
-            value={formState.dataToSubmit.config.environment}
+            value={formState.configToSubmit.environment}
             onChange={onChange}
             validationErrors={formState.validationErrors}
           />
 
           <InputTextField
-            id='dataToSubmit.config.create_script'
+            id='configToSubmit.create_script'
             label='Path to DNS Record Create Script'
-            value={formState.dataToSubmit.config.create_script}
+            value={formState.configToSubmit.create_script}
             onChange={onChange}
             error={
-              formState.validationErrors['dataToSubmit.config.create_script']
+              formState.validationErrors['configToSubmit.create_script']
             }
           />
 
           <InputTextField
-            id='dataToSubmit.config.delete_script'
+            id='configToSubmit.delete_script'
             label='Path to DNS Record Delete Script'
-            value={formState.dataToSubmit.config.delete_script}
+            value={formState.configToSubmit.delete_script}
             onChange={onChange}
             error={
-              formState.validationErrors['dataToSubmit.config.delete_script']
+              formState.validationErrors['configToSubmit.delete_script']
             }
           />
         </>

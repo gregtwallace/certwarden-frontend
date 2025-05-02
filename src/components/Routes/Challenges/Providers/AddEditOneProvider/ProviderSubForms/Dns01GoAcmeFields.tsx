@@ -10,26 +10,26 @@ const Dns01GoAcmeFields: FC<providerSubFormPropsType> = (props) => {
 
   return (
     <>
-      {'dns_provider_name' in formState.dataToSubmit.config &&
-      'environment' in formState.dataToSubmit.config ? (
+      {'dns_provider_name' in formState.configToSubmit &&
+      'environment' in formState.configToSubmit ? (
         <>
           <InputTextField
-            id='dataToSubmit.config.dns_provider_name'
+            id='configToSubmit.dns_provider_name'
             label='Provider&apos;s "CLI flag name" or "Code"'
-            value={formState.dataToSubmit.config.dns_provider_name}
+            value={formState.configToSubmit.dns_provider_name}
             onChange={onChange}
             error={
               formState.validationErrors[
-                'dataToSubmit.config.dns_provider_name'
+                'configToSubmit.dns_provider_name'
               ]
             }
           />
 
           <InputArrayText
-            id='dataToSubmit.config.environment'
+            id='configToSubmit.environment'
             label='Environment Variables'
             subLabel='Variable'
-            value={formState.dataToSubmit.config.environment}
+            value={formState.configToSubmit.environment}
             onChange={onChange}
             validationErrors={formState.validationErrors}
           />

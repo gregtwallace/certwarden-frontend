@@ -22,8 +22,9 @@ import ApiLoading from '../../../../UI/Api/ApiLoading';
 import Button from '../../../../UI/Button/Button';
 import DialogAlert from '../../../../UI/Dialog/DialogAlert';
 import Form from '../../../../UI/FormMui/Form';
-import InputSelect from '../../../../UI/FormMui/InputSelect';
 import InputArrayText from '../../../../UI/FormMui/InputArrayText';
+import InputSelect from '../../../../UI/FormMui/InputSelect';
+import InputTextField from '../../../../UI/FormMui/InputTextField';
 import FormContainer from '../../../../UI/FormMui/FormContainer';
 import FormFooter from '../../../../UI/FormMui/FormFooter';
 import TitleBar from '../../../../UI/TitleBar/TitleBar';
@@ -65,8 +66,10 @@ const EditOneProvider: FC = () => {
         : undefined,
       dataToSubmit: {
         domains: getState.responseData?.provider.domains ?? [''],
-        config: getState.responseData?.provider.config ?? {},
+        precheck_wait: getState.responseData?.provider.precheck_wait ?? 0,
+        postcheck_wait: getState.responseData?.provider.postcheck_wait ?? 0,
       },
+      configToSubmit: getState.responseData?.provider.config ?? {},
       sendError: undefined,
       validationErrors: {},
     }),
@@ -138,9 +141,9 @@ const EditOneProvider: FC = () => {
       'PUT',
       thisProviderUrl,
       {
+        ...formState.dataToSubmit,
         tag: formState.getResponseData?.provider.tag,
-        domains: formState.dataToSubmit.domains,
-        [provider.configName]: formState.dataToSubmit.config,
+        [provider.configName]: formState.configToSubmit,
       },
       parseProviderResponseType
     ).then(({ responseData, error }) => {
@@ -257,6 +260,21 @@ const EditOneProvider: FC = () => {
               helpURL='https://www.certwarden.com/docs/user_interface/providers/#domains'
             />
 
+            <InputTextField
+              id='dataToSubmit.precheck_wait'
+              label='Pre-Check Wait (Seconds)'
+              value={formState.dataToSubmit.precheck_wait}
+              onChange={inputChangeHandler}
+              error={formState.validationErrors['dataToSubmit.precheck_wait']}
+            />
+            <InputTextField
+              id='dataToSubmit.postcheck_wait'
+              label='Post-Check Wait (Seconds)'
+              value={formState.dataToSubmit.postcheck_wait}
+              onChange={inputChangeHandler}
+              error={formState.validationErrors['dataToSubmit.postcheck_wait']}
+            />
+
             <provider.FormComponent
               formState={formState}
               onChange={inputChangeHandler}
@@ -279,7 +297,7 @@ const EditOneProvider: FC = () => {
               disabledResetButton={
                 JSON.stringify(formState.dataToSubmit.domains) ===
                   JSON.stringify(formState.getResponseData.provider.domains) &&
-                JSON.stringify(formState.dataToSubmit.config) ===
+                JSON.stringify(formState.configToSubmit) ===
                   JSON.stringify(formState.getResponseData.provider.config)
               }
             />

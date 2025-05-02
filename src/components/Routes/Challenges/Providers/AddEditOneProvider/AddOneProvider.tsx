@@ -16,8 +16,9 @@ import ApiError from '../../../../UI/Api/ApiError';
 import Form from '../../../../UI/FormMui/Form';
 import FormFooter from '../../../../UI/FormMui/FormFooter';
 import FormInfo from '../../../../UI/FormMui/FormInfo';
-import InputSelect from '../../../../UI/FormMui/InputSelect';
 import InputArrayText from '../../../../UI/FormMui/InputArrayText';
+import InputSelect from '../../../../UI/FormMui/InputSelect';
+import InputTextField from '../../../../UI/FormMui/InputTextField';
 import FormContainer from '../../../../UI/FormMui/FormContainer';
 import TitleBar from '../../../../UI/TitleBar/TitleBar';
 
@@ -32,8 +33,10 @@ const AddOneProvider: FC = () => {
     provider_options: undefined,
     dataToSubmit: {
       domains: [''],
-      config: {},
+      precheck_wait: 0,
+      postcheck_wait: 0,
     },
+    configToSubmit: {},
     sendError: undefined,
     validationErrors: {},
   };
@@ -83,8 +86,8 @@ const AddOneProvider: FC = () => {
       'POST',
       NEW_PROVIDER_URL,
       {
-        domains: formState.dataToSubmit.domains,
-        [provider.configName]: formState.dataToSubmit.config,
+        ...formState.dataToSubmit,
+        [provider.configName]: formState.configToSubmit,
       },
       parseProviderResponseType
     ).then(({ responseData, error }) => {
@@ -132,6 +135,21 @@ const AddOneProvider: FC = () => {
               onChange={inputChangeHandler}
               validationErrors={formState.validationErrors}
               helpURL='https://www.certwarden.com/docs/user_interface/providers/#domains'
+            />
+
+            <InputTextField
+              id='dataToSubmit.precheck_wait'
+              label='Pre-Check Wait (Seconds)'
+              value={formState.dataToSubmit.precheck_wait}
+              onChange={inputChangeHandler}
+              error={formState.validationErrors['dataToSubmit.precheck_wait']}
+            />
+            <InputTextField
+              id='dataToSubmit.postcheck_wait'
+              label='Post-Check Wait (Seconds)'
+              value={formState.dataToSubmit.postcheck_wait}
+              onChange={inputChangeHandler}
+              error={formState.validationErrors['dataToSubmit.postcheck_wait']}
             />
 
             <provider.FormComponent

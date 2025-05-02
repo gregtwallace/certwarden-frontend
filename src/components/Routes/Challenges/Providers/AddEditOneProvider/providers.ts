@@ -84,7 +84,7 @@ export const providersList: provider[] = [
     configName: 'dns_01_acme_dns',
     alsoSet: [
       {
-        name: 'dataToSubmit.config',
+        name: 'configToSubmit',
         value: {
           acme_dns_address: '',
           resources: [
@@ -105,6 +105,14 @@ export const providersList: provider[] = [
         name: 'provider_options',
         value: undefined,
       },
+      {
+        name: 'dataToSubmit.precheck_wait',
+        value: 180,
+      },
+      {
+        name: 'dataToSubmit.postcheck_wait',
+        value: 0,
+      },
     ],
     providerOptionsForEdit: undefined,
     validationFunc: (formState) => {
@@ -112,42 +120,42 @@ export const providersList: provider[] = [
 
       // must specify server address
       if (
-        !('acme_dns_address' in formState.dataToSubmit.config) ||
-        formState.dataToSubmit.config.acme_dns_address === '' ||
-        !isHttpsUrlValid(formState.dataToSubmit.config.acme_dns_address)
+        !('acme_dns_address' in formState.configToSubmit) ||
+        formState.configToSubmit.acme_dns_address === '' ||
+        !isHttpsUrlValid(formState.configToSubmit.acme_dns_address)
       ) {
-        validationErrors['dataToSubmit.config.acme_dns_address'] = true;
+        validationErrors['configToSubmit.acme_dns_address'] = true;
       }
 
       // each resource must have all fields populated
-      if (!('resources' in formState.dataToSubmit.config)) {
+      if (!('resources' in formState.configToSubmit)) {
         console.error(new Error('resources missing on dns01acmedns'));
-        validationErrors['dataToSubmit.config.resources'] = true;
+        validationErrors['configToSubmit.resources'] = true;
       } else {
-        formState.dataToSubmit.config.resources.forEach((resc, rescIndex) => {
+        formState.configToSubmit.resources.forEach((resc, rescIndex) => {
           // check each resource field
           let rescError = false;
           if (!isDomainValid(resc.real_domain)) {
             validationErrors[
-              `dataToSubmit.config.resources.${rescIndex.toString()}.real_domain`
+              `configToSubmit.resources.${rescIndex.toString()}.real_domain`
             ] = true;
             rescError = true;
           }
           if (!isDomainValid(resc.full_domain)) {
             validationErrors[
-              `dataToSubmit.config.resources.${rescIndex.toString()}.full_domain`
+              `configToSubmit.resources.${rescIndex.toString()}.full_domain`
             ] = true;
             rescError = true;
           }
           if (resc.username === '') {
             validationErrors[
-              `dataToSubmit.config.resources.${rescIndex.toString()}.username`
+              `configToSubmit.resources.${rescIndex.toString()}.username`
             ] = true;
             rescError = true;
           }
           if (resc.password === '') {
             validationErrors[
-              `dataToSubmit.config.resources.${rescIndex.toString()}.password`
+              `configToSubmit.resources.${rescIndex.toString()}.password`
             ] = true;
             rescError = true;
           }
@@ -155,7 +163,7 @@ export const providersList: provider[] = [
           // set error on resource if any field failed
           if (rescError) {
             validationErrors[
-              `dataToSubmit.config.resources.${rescIndex.toString()}`
+              `configToSubmit.resources.${rescIndex.toString()}`
             ] = true;
           }
         });
@@ -175,7 +183,7 @@ export const providersList: provider[] = [
     configName: 'dns_01_acme_sh',
     alsoSet: [
       {
-        name: 'dataToSubmit.config',
+        name: 'configToSubmit',
         value: {
           acme_sh_path: '',
           dns_hook: '',
@@ -190,6 +198,14 @@ export const providersList: provider[] = [
         name: 'provider_options',
         value: undefined,
       },
+      {
+        name: 'dataToSubmit.precheck_wait',
+        value: 180,
+      },
+      {
+        name: 'dataToSubmit.postcheck_wait',
+        value: 0,
+      },
     ],
     providerOptionsForEdit: undefined,
     validationFunc: (formState) => {
@@ -197,27 +213,27 @@ export const providersList: provider[] = [
 
       // must specify path
       if (
-        !('acme_sh_path' in formState.dataToSubmit.config) ||
-        formState.dataToSubmit.config.acme_sh_path === ''
+        !('acme_sh_path' in formState.configToSubmit) ||
+        formState.configToSubmit.acme_sh_path === ''
       ) {
-        validationErrors['dataToSubmit.config.acme_sh_path'] = true;
+        validationErrors['configToSubmit.acme_sh_path'] = true;
       }
 
       // must specify hook name
       if (
-        !('dns_hook' in formState.dataToSubmit.config) ||
-        formState.dataToSubmit.config.dns_hook === ''
+        !('dns_hook' in formState.configToSubmit) ||
+        formState.configToSubmit.dns_hook === ''
       ) {
-        validationErrors['dataToSubmit.config.dns_hook'] = true;
+        validationErrors['configToSubmit.dns_hook'] = true;
       }
 
       // check env vars (if exist)
-      if ('environment' in formState.dataToSubmit.config) {
-        formState.dataToSubmit.config.environment.forEach((param, index) => {
+      if ('environment' in formState.configToSubmit) {
+        formState.configToSubmit.environment.forEach((param, index) => {
           // check each param
           if (!isEnvironmentParamValid(param)) {
             validationErrors[
-              `dataToSubmit.config.environment.${index.toString()}`
+              `configToSubmit.environment.${index.toString()}`
             ] = true;
           }
         });
@@ -238,7 +254,7 @@ export const providersList: provider[] = [
     configName: 'dns_01_cloudflare',
     alsoSet: [
       {
-        name: 'dataToSubmit.config',
+        name: 'configToSubmit',
         value: {},
       },
       {
@@ -250,6 +266,14 @@ export const providersList: provider[] = [
         value: {
           api_access_method: '',
         },
+      },
+      {
+        name: 'dataToSubmit.precheck_wait',
+        value: 180,
+      },
+      {
+        name: 'dataToSubmit.postcheck_wait',
+        value: 0,
       },
     ],
     providerOptionsForEdit: (providerConfig) => {
@@ -281,26 +305,26 @@ export const providersList: provider[] = [
 
       // if using api_token, make sure not blank
       if (
-        !('account' in formState.dataToSubmit.config) &&
-        (!('api_token' in formState.dataToSubmit.config) ||
-          formState.dataToSubmit.config.api_token === '')
+        !('account' in formState.configToSubmit) &&
+        (!('api_token' in formState.configToSubmit) ||
+          formState.configToSubmit.api_token === '')
       ) {
-        validationErrors['dataToSubmit.config.api_token'] = true;
+        validationErrors['configToSubmit.api_token'] = true;
       }
 
       // if using account, make sure email valid and global key not blank
       if (
-        'account' in formState.dataToSubmit.config &&
-        !isEmailValid(formState.dataToSubmit.config.account.email)
+        'account' in formState.configToSubmit &&
+        !isEmailValid(formState.configToSubmit.account.email)
       ) {
-        validationErrors['dataToSubmit.config.account.email'] = true;
+        validationErrors['configToSubmit.account.email'] = true;
       }
 
       if (
-        'account' in formState.dataToSubmit.config &&
-        formState.dataToSubmit.config.account.global_api_key === ''
+        'account' in formState.configToSubmit &&
+        formState.configToSubmit.account.global_api_key === ''
       ) {
-        validationErrors['dataToSubmit.config.account.global_api_key'] = true;
+        validationErrors['configToSubmit.account.global_api_key'] = true;
       }
 
       return validationErrors;
@@ -318,7 +342,7 @@ export const providersList: provider[] = [
     configName: 'dns_01_manual',
     alsoSet: [
       {
-        name: 'dataToSubmit.config',
+        name: 'configToSubmit',
         value: {
           environment: [],
           create_script: '',
@@ -333,6 +357,14 @@ export const providersList: provider[] = [
         name: 'provider_options',
         value: undefined,
       },
+      {
+        name: 'dataToSubmit.precheck_wait',
+        value: 180,
+      },
+      {
+        name: 'dataToSubmit.postcheck_wait',
+        value: 0,
+      },
     ],
     providerOptionsForEdit: undefined,
     validationFunc: (formState) => {
@@ -340,25 +372,25 @@ export const providersList: provider[] = [
 
       // must set path to create and delete
       if (
-        !('create_script' in formState.dataToSubmit.config) ||
-        formState.dataToSubmit.config.create_script === ''
+        !('create_script' in formState.configToSubmit) ||
+        formState.configToSubmit.create_script === ''
       ) {
-        validationErrors['dataToSubmit.config.create_script'] = true;
+        validationErrors['configToSubmit.create_script'] = true;
       }
       if (
-        !('delete_script' in formState.dataToSubmit.config) ||
-        formState.dataToSubmit.config.delete_script === ''
+        !('delete_script' in formState.configToSubmit) ||
+        formState.configToSubmit.delete_script === ''
       ) {
-        validationErrors['dataToSubmit.config.delete_script'] = true;
+        validationErrors['configToSubmit.delete_script'] = true;
       }
 
       // check env vars (if exist)
-      if ('environment' in formState.dataToSubmit.config) {
-        formState.dataToSubmit.config.environment.forEach((param, index) => {
+      if ('environment' in formState.configToSubmit) {
+        formState.configToSubmit.environment.forEach((param, index) => {
           // check each param
           if (!isEnvironmentParamValid(param)) {
             validationErrors[
-              `dataToSubmit.config.environment.${index.toString()}`
+              `configToSubmit.environment.${index.toString()}`
             ] = true;
           }
         });
@@ -379,7 +411,7 @@ export const providersList: provider[] = [
     configName: 'dns_01_go_acme',
     alsoSet: [
       {
-        name: 'dataToSubmit.config',
+        name: 'configToSubmit',
         value: {
           dns_provider_name: '',
           environment: [],
@@ -393,6 +425,14 @@ export const providersList: provider[] = [
         name: 'provider_options',
         value: undefined,
       },
+      {
+        name: 'dataToSubmit.precheck_wait',
+        value: 180,
+      },
+      {
+        name: 'dataToSubmit.postcheck_wait',
+        value: 0,
+      },
     ],
     providerOptionsForEdit: undefined,
     validationFunc: (formState) => {
@@ -400,19 +440,19 @@ export const providersList: provider[] = [
 
       // must specify provider name
       if (
-        !('dns_provider_name' in formState.dataToSubmit.config) ||
-        formState.dataToSubmit.config.dns_provider_name === ''
+        !('dns_provider_name' in formState.configToSubmit) ||
+        formState.configToSubmit.dns_provider_name === ''
       ) {
-        validationErrors['dataToSubmit.config.dns_provider_name'] = true;
+        validationErrors['configToSubmit.dns_provider_name'] = true;
       }
 
       // check env vars (if exist)
-      if ('environment' in formState.dataToSubmit.config) {
-        formState.dataToSubmit.config.environment.forEach((param, index) => {
+      if ('environment' in formState.configToSubmit) {
+        formState.configToSubmit.environment.forEach((param, index) => {
           // check each param
           if (!isEnvironmentParamValid(param)) {
             validationErrors[
-              `dataToSubmit.config.environment.${index.toString()}`
+              `configToSubmit.environment.${index.toString()}`
             ] = true;
           }
         });
@@ -433,7 +473,7 @@ export const providersList: provider[] = [
     configName: 'http_01_internal',
     alsoSet: [
       {
-        name: 'dataToSubmit.config',
+        name: 'configToSubmit',
         value: {
           port: '',
         },
@@ -446,6 +486,14 @@ export const providersList: provider[] = [
         name: 'provider_options',
         value: undefined,
       },
+      {
+        name: 'dataToSubmit.precheck_wait',
+        value: 0,
+      },
+      {
+        name: 'dataToSubmit.postcheck_wait',
+        value: 0,
+      },
     ],
     providerOptionsForEdit: undefined,
     validationFunc: (formState) => {
@@ -453,10 +501,10 @@ export const providersList: provider[] = [
 
       // must set a valid port number
       if (
-        !('port' in formState.dataToSubmit.config) ||
-        !isPortValid(formState.dataToSubmit.config.port)
+        !('port' in formState.configToSubmit) ||
+        !isPortValid(formState.configToSubmit.port)
       ) {
-        validationErrors['dataToSubmit.config.port'] = true;
+        validationErrors['configToSubmit.port'] = true;
       }
 
       return validationErrors;

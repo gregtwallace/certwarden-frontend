@@ -100,8 +100,10 @@ const _providerFormState = z.object({
   dataToSubmit: z.object({
     tag: z.string().optional(),
     domains: z.array(z.string()),
-    config: z.union([providerConfig, z.object({})]),
+    precheck_wait: z.number(),
+    postcheck_wait: z.number(),
   }),
+  configToSubmit: z.union([providerConfig, z.object({})]),
   sendError: z.union([
     z.object({
       statusCode: z.union([z.number(), z.string()]),

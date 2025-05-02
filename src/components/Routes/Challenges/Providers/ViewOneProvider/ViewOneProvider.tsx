@@ -4,6 +4,7 @@ import { type providerType } from '../../../../../types/api';
 import { Box } from '@mui/material';
 
 import GridItemContainer from '../../../../UI/Grid/GridItemContainer';
+import GridItemText from '../../../../UI/Grid/GridItemText';
 import FormRowRight from '../../../../UI/FormMui/FormRowRight';
 import ButtonAsLink from '../../../../UI/Button/ButtonAsLink';
 
@@ -17,6 +18,16 @@ type propTypes = {
 const ViewOneProvider: FC<propTypes> = (props) => {
   const { provider } = props;
 
+  // text for pre/post check times
+  const precheckTime =
+    provider.precheck_wait < 60
+      ? provider.precheck_wait.toString() + ' seconds'
+      : (provider.precheck_wait / 60).toFixed(1).toString() + ' minutes';
+  const postcheckTime =
+    provider.postcheck_wait < 60
+      ? provider.postcheck_wait.toString() + ' seconds'
+      : (provider.postcheck_wait / 60).toFixed(1).toString() + ' minutes';
+
   return (
     <GridItemContainer
       sx={{
@@ -27,6 +38,9 @@ const ViewOneProvider: FC<propTypes> = (props) => {
       <ProviderTitle provider={provider} />
 
       <ProviderDomainsView domains={provider.domains} />
+
+      <GridItemText>Pre-Check Wait: {precheckTime}</GridItemText>
+      <GridItemText>Post-Check Wait: {postcheckTime}</GridItemText>
 
       <Box
         sx={{

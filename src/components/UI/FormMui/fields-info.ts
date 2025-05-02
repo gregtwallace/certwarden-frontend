@@ -248,6 +248,16 @@ const fieldsInfo: fieldInfoType[] = [
       'Domain must be valid. Or for a wildcard provider use one domain set to * .',
   },
   {
+    nameRegex: /^(.+\.)?precheck_wait$/,
+    htmlType: 'number',
+    errorMessage: 'N/A',
+  },
+  {
+    nameRegex: /^(.+\.)?postcheck_wait$/,
+    htmlType: 'number',
+    errorMessage: 'N/A',
+  },
+  {
     nameRegex: /^(.+\.)?provider_type_value$/,
     htmlType: 'text',
     errorMessage: 'Provider type must be selected.',
