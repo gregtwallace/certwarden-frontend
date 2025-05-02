@@ -1,5 +1,5 @@
 // react app version
-export const frontendVersion = '0.24.9';
+export const frontendVersion = '0.25.0';
 
 // value for new records on backend
 export const newId = -1;
