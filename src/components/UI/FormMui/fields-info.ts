@@ -159,9 +159,9 @@ const fieldsInfo: fieldInfoType[] = [
   },
 
   {
-    nameRegex: /^(.+\.)?post_processing_client_enable$/,
-    htmlType: 'checkbox',
-    errorMessage: 'N/A',
+    nameRegex: /^(.+\.)?post_processing_client_address$/,
+    htmlType: 'text',
+    errorMessage: 'If specified, address must be a valid domain name.',
   },
   {
     nameRegex: /^(.+\.)?post_processing_client_key$/,

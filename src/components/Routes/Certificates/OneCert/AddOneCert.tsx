@@ -45,7 +45,6 @@ import FormContainer from '../../../UI/FormMui/FormContainer';
 import FormFooter from '../../../UI/FormMui/FormFooter';
 import FormInfo from '../../../UI/FormMui/FormInfo';
 import InputArrayText from '../../../UI/FormMui/InputArrayText';
-import InputCheckbox from '../../../UI/FormMui/InputCheckbox';
 import InputExtraExtensions from './InputExtraExtensions/InputExtraExtensions';
 import InputTextField from '../../../UI/FormMui/InputTextField';
 import TitleBar from '../../../UI/TitleBar/TitleBar';
@@ -107,7 +106,7 @@ type formObj = {
     subject_alts: string[];
     post_processing_command: string;
     post_processing_environment: string[];
-    post_processing_client_enable: boolean;
+    post_processing_client_address: string;
     preferred_root_cn: string;
     organization: string;
     organizational_unit: string;
@@ -144,7 +143,7 @@ const AddOneCert: FC = () => {
         subject_alts: [],
         post_processing_command: '',
         post_processing_environment: [],
-        post_processing_client_enable: false,
+        post_processing_client_address: '',
         preferred_root_cn: '',
         organization: '',
         organizational_unit: '',
@@ -209,6 +208,14 @@ const AddOneCert: FC = () => {
           true;
       }
     });
+
+    // post process client address
+    if (
+      formState.dataToSubmit.post_processing_client_address !== '' &&
+      !isDomainValid(formState.dataToSubmit.post_processing_client_address)
+    ) {
+      validationErrors['dataToSubmit.post_processing_client_address'] = true;
+    }
 
     // post processing env vars
     formState.dataToSubmit.post_processing_environment.forEach(
@@ -371,13 +378,17 @@ const AddOneCert: FC = () => {
               <FormInfo helpURL='https://www.certwarden.com/docs/using_certificates/client/'>
                 Cert Warden Client
               </FormInfo>
-              <InputCheckbox
-                id='dataToSubmit.post_processing_client_enable'
-                checked={formState.dataToSubmit.post_processing_client_enable}
+              <InputTextField
+                id='dataToSubmit.post_processing_client_address'
+                label='HTTPS Address of Cert Warden Client'
+                value={formState.dataToSubmit.post_processing_client_address}
                 onChange={inputChangeHandler}
-              >
-                Enable Cert Warden Client Post Processing
-              </InputCheckbox>
+                error={
+                  formState.validationErrors[
+                    'dataToSubmit.post_processing_client_address'
+                  ]
+                }
+              />
 
               <FormInfo helpURL='https://www.certwarden.com/docs/using_certificates/post_process_bin/'>
                 Script or Binary

@@ -67,6 +67,7 @@ type formObj = {
     api_key_via_url: boolean;
     post_processing_command: string;
     post_processing_environment: string[];
+    post_processing_client_address: string;
     preferred_root_cn: string;
     organization: string;
     organizational_unit: string;
@@ -131,6 +132,8 @@ const EditOneCert: FC = () => {
           certResponseData?.certificate.post_processing_command ?? '',
         post_processing_environment:
           certResponseData?.certificate.post_processing_environment ?? [],
+        post_processing_client_address:
+          certResponseData?.certificate.post_processing_client_address ?? '',
         preferred_root_cn:
           certResponseData?.certificate.preferred_root_cn ?? '',
         organization: certResponseData?.certificate.organization ?? '',
@@ -264,6 +267,14 @@ const EditOneCert: FC = () => {
           true;
       }
     });
+
+    // post process client address
+    if (
+      formState.dataToSubmit.post_processing_client_address !== '' &&
+      !isDomainValid(formState.dataToSubmit.post_processing_client_address)
+    ) {
+      validationErrors['dataToSubmit.post_processing_client_address'] = true;
+    }
 
     // post processing env vars
     formState.dataToSubmit.post_processing_environment.forEach(
@@ -473,6 +484,19 @@ const EditOneCert: FC = () => {
                   <FormInfo helpURL='https://www.certwarden.com/docs/using_certificates/client/'>
                     Cert Warden Client
                   </FormInfo>
+                  <InputTextField
+                    id='dataToSubmit.post_processing_client_address'
+                    label='HTTPS Address of Cert Warden Client'
+                    value={
+                      formState.dataToSubmit.post_processing_client_address
+                    }
+                    onChange={inputChangeHandler}
+                    error={
+                      formState.validationErrors[
+                        'dataToSubmit.post_processing_client_address'
+                      ]
+                    }
+                  />
                   <FormRowRight>
                     <InputTextField
                       id='disabled.post_processing_client_key'
@@ -480,9 +504,6 @@ const EditOneCert: FC = () => {
                       value={
                         formState.getCertResponseData.certificate
                           .post_processing_client_key
-                          ? formState.getCertResponseData.certificate
-                              .post_processing_client_key
-                          : '[Disabled]'
                       }
                       disabled={
                         formState.getCertResponseData.certificate
@@ -497,7 +518,7 @@ const EditOneCert: FC = () => {
                         color='error'
                         onClick={disableClientKeyClickHandler}
                       >
-                        Disable
+                        Clear
                       </Button>
                     )}
                     <Button
@@ -507,7 +528,7 @@ const EditOneCert: FC = () => {
                     >
                       {formState.getCertResponseData.certificate
                         .post_processing_client_key === ''
-                        ? 'Enable'
+                        ? 'Generate'
                         : 'Regen'}
                     </Button>
                   </FormRowRight>

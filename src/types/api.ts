@@ -685,6 +685,7 @@ const oneCertificateResponse = basicGoodResponse.extend({
     api_key_new: z.string().optional(),
     post_processing_command: z.string(),
     post_processing_environment: z.array(z.string()),
+    post_processing_client_address: z.string(),
     post_processing_client_key: z.string(),
     last_access: z.number(),
     created_at: z.number(),
@@ -767,8 +768,6 @@ const ordersResponse = basicGoodResponse.extend({
       certificate: z.object({
         id: z.number(),
         name: z.string(),
-        post_processing_command: z.string(),
-        post_processing_client_key: z.string(),
       }),
       status: z.string(),
       known_revoked: z.boolean(),
