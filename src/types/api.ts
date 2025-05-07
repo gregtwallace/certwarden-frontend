@@ -801,7 +801,6 @@ const orderResponse = basicGoodResponse.extend({
     certificate: z.object({
       id: z.number(),
       name: z.string(),
-      post_processing_command: z.string(),
     }),
     status: z.string(),
     known_revoked: z.boolean(),
