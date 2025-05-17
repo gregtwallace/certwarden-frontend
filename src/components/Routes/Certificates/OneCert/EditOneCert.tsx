@@ -69,6 +69,7 @@ type formObj = {
     post_processing_environment: string[];
     post_processing_client_address: string;
     preferred_root_cn: string;
+    profile: string;
     organization: string;
     organizational_unit: string;
     country: string;
@@ -136,6 +137,7 @@ const EditOneCert: FC = () => {
           certResponseData?.certificate.post_processing_client_address ?? '',
         preferred_root_cn:
           certResponseData?.certificate.preferred_root_cn ?? '',
+        profile: certResponseData?.certificate.profile ?? '',
         organization: certResponseData?.certificate.organization ?? '',
         organizational_unit:
           certResponseData?.certificate.organizational_unit ?? '',
@@ -578,6 +580,13 @@ const EditOneCert: FC = () => {
                     id='dataToSubmit.preferred_root_cn'
                     label="Preferred Root Cert's Common Name"
                     value={formState.dataToSubmit.preferred_root_cn}
+                    onChange={inputChangeHandler}
+                  />
+
+                  <InputTextField
+                    id='dataToSubmit.profile'
+                    label='ACME Profile'
+                    value={formState.dataToSubmit.profile}
                     onChange={inputChangeHandler}
                   />
 

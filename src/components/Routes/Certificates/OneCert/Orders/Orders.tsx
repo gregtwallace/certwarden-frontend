@@ -31,6 +31,7 @@ import TableRow from '@mui/material/TableRow';
 import SubjectIcon from '@mui/icons-material/Subject';
 import KeyIcon from '@mui/icons-material/Key';
 import LinkIcon from '@mui/icons-material/Link';
+import GroupIcon from '@mui/icons-material/Group';
 
 import ApiLoading from '../../../../UI/Api/ApiLoading';
 import ApiError from '../../../../UI/Api/ApiError';
@@ -411,6 +412,19 @@ const Orders: FC<propTypes> = (props) => {
                         }
                       >
                         <LinkIcon />
+                      </IconButton>
+                    )}
+
+                    {ord.profile && (
+                      <IconButton
+                        tooltip={
+                          <>
+                            Profile: <br />
+                            {ord.profile}
+                          </>
+                        }
+                      >
+                        <GroupIcon />
                       </IconButton>
                     )}
                   </TableCell>

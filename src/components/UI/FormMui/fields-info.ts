@@ -186,6 +186,12 @@ const fieldsInfo: fieldInfoType[] = [
     errorMessage: 'N/A / TODO: If ever validate CSR',
   },
   {
+    nameRegex: /^(.+\.)?profile$/,
+    htmlType: 'url',
+    errorMessage:
+      'ACME Profile must be a valid profile name advertised by the ACME server.',
+  },
+  {
     nameRegex: /^(.+\.)?country$/,
     htmlType: 'url',
     errorMessage: 'N/A / TODO: If ever validate CSR',
