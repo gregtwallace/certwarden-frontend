@@ -9,7 +9,10 @@ import {
   type frontendErrorType,
   type validationErrorsType,
 } from '../../../../types/frontend';
-import { type selectInputOption } from '../../../../helpers/input-handler';
+import {
+  type selectInputOption,
+  type alsoSetType,
+} from '../../../../helpers/input-handler';
 import { type certExtension } from './InputExtraExtensions/InputExtraExtensions';
 
 import { useCallback, useEffect, useState } from 'react';
@@ -29,10 +32,7 @@ import {
   newId,
   defaultKeyGenAlgorithmValue,
 } from '../../../../helpers/constants';
-import {
-  buildAcmeAccountOptions,
-  buildPrivateKeyOptions,
-} from '../../../../helpers/options_builders';
+import { buildPrivateKeyOptions } from '../../../../helpers/options_builders';
 
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -108,7 +108,7 @@ type formObj = {
     post_processing_environment: string[];
     post_processing_client_address: string;
     preferred_root_cn: string;
-    profile: string;
+    profile: string | null;
     organization: string;
     organizational_unit: string;
     country: string;
@@ -146,7 +146,7 @@ const AddOneCert: FC = () => {
         post_processing_environment: [],
         post_processing_client_address: '',
         preferred_root_cn: '',
-        profile: '',
+        profile: null,
         organization: '',
         organizational_unit: '',
         country: '',
@@ -231,6 +231,25 @@ const AddOneCert: FC = () => {
       }
     );
 
+    // Profiles (if not null)
+    if (
+      formState.getResponseData &&
+      formState.dataToSubmit.profile !== null &&
+      formState.dataToSubmit.profile !== ''
+    ) {
+      for (const acct of formState.getResponseData.certificate_options
+        .acme_accounts) {
+        if (acct.id == formState.dataToSubmit.acme_account_id) {
+          if (
+            !acct.acme_server.profiles ||
+            !(formState.dataToSubmit.profile in acct.acme_server.profiles)
+          ) {
+            validationErrors['dataToSubmit.profile'] = true;
+          }
+        }
+      }
+    }
+
     //TODO: CSR validation?
 
     // CSR - Extra Extensions (check each)
@@ -283,6 +302,33 @@ const AddOneCert: FC = () => {
     });
   };
 
+  // build accounts list
+  const acmeAccountsOptions: selectInputOption<number>[] = [];
+  formState.getResponseData?.certificate_options.acme_accounts.map((acct) => {
+    // by default, also set profile to null
+    let alsoSet: alsoSetType[] = [
+      {
+        name: 'dataToSubmit.profile',
+        value: null,
+      },
+    ];
+    // if account's server has profiles, set it to blank instead
+    if (acct.acme_server.profiles) {
+      alsoSet = [
+        {
+          name: 'dataToSubmit.profile',
+          value: '',
+        },
+      ];
+    }
+
+    acmeAccountsOptions.push({
+      value: acct.id,
+      name: acct.name + (acct.acme_server.is_staging ? ' (Staging)' : ''),
+      alsoSet: alsoSet,
+    });
+  });
+
   return (
     <FormContainer>
       <TitleBar
@@ -321,9 +367,7 @@ const AddOneCert: FC = () => {
             label='ACME Account'
             value={formState.dataToSubmit.acme_account_id}
             onChange={inputChangeHandler}
-            options={buildAcmeAccountOptions(
-              formState.getResponseData.certificate_options.acme_accounts
-            )}
+            options={acmeAccountsOptions}
             error={formState.validationErrors['dataToSubmit.acme_account_id']}
           />
 
@@ -440,12 +484,22 @@ const AddOneCert: FC = () => {
                 onChange={inputChangeHandler}
               />
 
-              <InputTextField
-                id='dataToSubmit.profile'
-                label='ACME Profile'
-                value={formState.dataToSubmit.profile}
-                onChange={inputChangeHandler}
-              />
+              {formState.dataToSubmit.profile !== null ? (
+                <InputTextField
+                  id='dataToSubmit.profile'
+                  label='ACME Profile'
+                  value={formState.dataToSubmit.profile}
+                  onChange={inputChangeHandler}
+                  error={formState.validationErrors['dataToSubmit.profile']}
+                />
+              ) : (
+                <InputTextField
+                  id='dataToSubmit.profile'
+                  label='ACME Profile'
+                  value='Unsupported by ACME Server'
+                  disabled
+                />
+              )}
 
               <InputTextField
                 id='dataToSubmit.country'

@@ -189,7 +189,7 @@ const fieldsInfo: fieldInfoType[] = [
     nameRegex: /^(.+\.)?profile$/,
     htmlType: 'url',
     errorMessage:
-      'ACME Profile must be a valid profile name advertised by the ACME server.',
+      'ACME Profile must be blank or a valid profile name advertised by the ACME server.',
   },
   {
     nameRegex: /^(.+\.)?country$/,

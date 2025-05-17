@@ -290,6 +290,28 @@ const EditOneCert: FC = () => {
       }
     );
 
+    // Profiles (if not blank)
+    if (formState.getOptionsResponseData && formState.getCertResponseData) {
+      if (formState.dataToSubmit.profile !== '') {
+        for (const acct of formState.getOptionsResponseData.certificate_options
+          .acme_accounts) {
+          if (
+            acct.acme_server.id ==
+            formState.getCertResponseData.certificate.acme_account.acme_server
+              .id
+          ) {
+            if (
+              !acct.acme_server.profiles ||
+              !(formState.dataToSubmit.profile in acct.acme_server.profiles)
+            ) {
+              validationErrors['dataToSubmit.profile'] = true;
+            }
+            break;
+          }
+        }
+      }
+    }
+
     //TODO: CSR validation?
 
     // CSR - Extra Extensions (check each)
@@ -340,6 +362,27 @@ const EditOneCert: FC = () => {
     });
   };
 
+  // check if account supports profiles
+  let supportsProfiles = false;
+  if (formState.getOptionsResponseData && formState.getCertResponseData) {
+    for (const acct of formState.getOptionsResponseData.certificate_options
+      .acme_accounts) {
+      if (
+        acct.acme_server.id ==
+        formState.getCertResponseData.certificate.acme_account.acme_server.id
+      ) {
+        if (
+          acct.acme_server.profiles &&
+          Object.keys(acct.acme_server.profiles).length > 0
+        ) {
+          supportsProfiles = true;
+        }
+        break;
+      }
+    }
+  }
+
+  //
   const formUnchanged =
     JSON.stringify(formState.dataToSubmit) ===
     JSON.stringify(
@@ -583,12 +626,24 @@ const EditOneCert: FC = () => {
                     onChange={inputChangeHandler}
                   />
 
-                  <InputTextField
-                    id='dataToSubmit.profile'
-                    label='ACME Profile'
-                    value={formState.dataToSubmit.profile}
-                    onChange={inputChangeHandler}
-                  />
+                  {/* supports OR with profile value not blank - in case value was set and then server stopped supporting */}
+                  {supportsProfiles ||
+                  formState.getCertResponseData.certificate.profile !== '' ? (
+                    <InputTextField
+                      id='dataToSubmit.profile'
+                      label='ACME Profile'
+                      value={formState.dataToSubmit.profile}
+                      onChange={inputChangeHandler}
+                      error={formState.validationErrors['dataToSubmit.profile']}
+                    />
+                  ) : (
+                    <InputTextField
+                      id='dataToSubmit.profile'
+                      label='ACME Profile'
+                      value='Unsupported by ACME Server'
+                      disabled
+                    />
+                  )}
 
                   <InputTextField
                     id='dataToSubmit.country'

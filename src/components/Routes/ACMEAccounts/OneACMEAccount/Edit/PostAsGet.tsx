@@ -21,10 +21,6 @@ import {
   inputHandlerFuncType,
 } from '../../../../../helpers/input-handler';
 import { isHttpsUrlValid } from '../../../../../helpers/form-validation';
-import {
-  type acmeAccount,
-  buildAcmeAccountOptions,
-} from '../../../../../helpers/options_builders';
 
 import { Paper, TextField } from '@mui/material';
 
@@ -97,16 +93,15 @@ const PostAsGet: FC = () => {
   };
 
   // build account options
-  let acctOptions: selectInputOption<number>[] = [];
-  if (getState.responseData?.acme_accounts) {
-    acctOptions = buildAcmeAccountOptions(
-      getState.responseData.acme_accounts,
-      // filter out accounts that aren't valid or don't have a kid
-      (acct: acmeAccount) => {
-        return acct.status === 'valid' && acct.kid !== '';
-      }
-    );
-  }
+  const acctOptions: selectInputOption<number>[] = [];
+  getState.responseData?.acme_accounts.map((acct) => {
+    if (acct.status === 'valid' && acct.kid !== '') {
+      acctOptions.push({
+        value: acct.id,
+        name: acct.name + (acct.acme_server.is_staging ? ' (Staging)' : ''),
+      });
+    }
+  });
 
   // if page is loaded and the account # is not acceptable, redirect
   if (getState.responseData?.acme_accounts) {

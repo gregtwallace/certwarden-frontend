@@ -659,7 +659,7 @@ const oneCertificateResponse = basicGoodResponse.extend({
       id: z.number(),
       name: z.string(),
       acme_server: z.object({
-        // id: z.number(),
+        id: z.number(),
         // name: z.string(),
         is_staging: z.boolean(),
       }),
@@ -738,7 +738,9 @@ const certificateOptionsResponse = basicGoodResponse.extend({
         id: z.number(),
         name: z.string(),
         acme_server: z.object({
+          id: z.number(),
           is_staging: z.boolean(),
+          profiles: z.record(z.string(), z.string()).optional(),
         }),
         status: z.string(),
         kid: z.string(),
