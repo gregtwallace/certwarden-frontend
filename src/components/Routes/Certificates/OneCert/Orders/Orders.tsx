@@ -419,7 +419,7 @@ const Orders: FC<propTypes> = (props) => {
                       <IconButton
                         tooltip={
                           <>
-                            Profile: <br />
+                            ACME Profile: <br />
                             {ord.profile}
                           </>
                         }
