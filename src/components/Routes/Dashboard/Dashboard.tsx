@@ -30,6 +30,8 @@ import TitleBar from '../../UI/TitleBar/TitleBar';
 
 const DASHBOARD_URL = '/v1/orders/currentvalid';
 
+// TODO: Add some kind of error / icon when a renewal url exists on the ARI so user can see issues and click the link
+
 // table headers and sortable param
 const tableHeaders: headerType[] = [
   {
@@ -117,10 +119,7 @@ const Dashboard: FC = () => {
                   </TableCell>
                   <TableCell>
                     <DateWithTooltip unixTime={order.valid_to} />{' '}
-                    <FlagExpireDays
-                      validFrom={order.valid_from}
-                      validTo={order.valid_to}
-                    />
+                    <FlagExpireDays order={order} />
                   </TableCell>
                 </TableRow>
               ))}
