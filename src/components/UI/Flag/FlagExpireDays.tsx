@@ -77,7 +77,7 @@ const FlagExpireDays: FC<propTypes> = (props) => {
           {ari.retryAfter && (
             <>
               <br />
-              Next ARI Refresh:
+              Next ARI Refresh After:
               <br />
               {ari.retryAfter.toLocaleString()}
             </>
