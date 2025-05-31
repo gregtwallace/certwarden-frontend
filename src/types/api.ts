@@ -258,42 +258,6 @@ export const parseBackupDeleteResponseType = (
 };
 
 //
-// Dashboard
-//
-
-const currentValidOrdersResponse = basicGoodResponse.extend({
-  total_records: z.number(),
-  orders: z.array(
-    z.object({
-      id: z.number(),
-      certificate: z.object({
-        id: z.number(),
-        name: z.string(),
-        acme_account: z.object({
-          acme_server: z.object({
-            is_staging: z.boolean(),
-          }),
-        }),
-        subject: z.string(),
-        api_key_via_url: z.boolean(),
-        last_access: z.number(),
-      }),
-      valid_from: z.number(),
-      valid_to: z.number(),
-    })
-  ),
-});
-
-export type currentValidOrdersResponseType = z.infer<
-  typeof currentValidOrdersResponse
->;
-export const parseCurrentValidOrdersResponseType = (
-  unk: unknown
-): currentValidOrdersResponseType => {
-  return currentValidOrdersResponse.parse(unk);
-};
-
-//
 // ACME Servers
 //
 
@@ -762,59 +726,72 @@ export const parseCertificateOptionsResponse = (
 // Orders
 //
 
-const ordersResponse = basicGoodResponse.extend({
-  total_records: z.number(),
-  orders: z.array(
-    z.object({
-      fulfillment_worker: z.number().optional(),
-      id: z.number(),
-      certificate: z.object({
+// one order
+const order = z.object({
+  fulfillment_worker: z.number().optional(),
+  id: z.number(),
+  certificate: z.object({
+    id: z.number(),
+    name: z.string(),
+    acme_account: z.object({
+      acme_server: z.object({
+        is_staging: z.boolean(),
+      }),
+    }),
+    subject: z.string(),
+    api_key_via_url: z.boolean(),
+    last_access: z.number(),
+  }),
+  status: z.string(),
+  known_revoked: z.boolean(),
+  dns_identifiers: z.array(z.string()),
+  chain_root_cn: z.union([z.string(), z.null()]),
+  profile: z.string().optional(),
+  finalized_key: z.union([
+    z
+      .object({
         id: z.number(),
         name: z.string(),
+      })
+      .optional(),
+    z.null(),
+  ]),
+  valid_from: z.union([z.number(), z.null()]),
+  valid_to: z.union([z.number(), z.null()]),
+  renewal_info: z.union([
+    z.object({
+      suggestedWindow: z.object({
+        start: z.coerce.date(),
+        end: z.coerce.date(),
       }),
-      status: z.string(),
-      known_revoked: z.boolean(),
-      dns_identifiers: z.array(z.string()),
-      chain_root_cn: z.union([z.string(), z.null()]),
-      profile: z.string().optional(),
-      finalized_key: z.union([
-        z
-          .object({
-            id: z.number(),
-            name: z.string(),
-          })
-          .optional(),
-        z.null(),
-      ]),
-      valid_to: z.union([z.number(), z.null()]),
-      created_at: z.number(),
-    })
-  ),
+      retryAfter: z.coerce.date().optional(),
+    }),
+    z.null(),
+  ]),
+  created_at: z.number(),
 });
 
-export type ordersResponseType = z.infer<typeof ordersResponse>;
-export const parseOrdersResponseType = (unk: unknown): ordersResponseType => {
-  return ordersResponse.parse(unk);
-};
+export type orderType = z.infer<typeof order>;
 
-// one order
+// one order response
 const orderResponse = basicGoodResponse.extend({
-  order: z.object({
-    fulfillment_worker: z.number().optional(),
-    id: z.number(),
-    certificate: z.object({
-      id: z.number(),
-      name: z.string(),
-    }),
-    status: z.string(),
-    known_revoked: z.boolean(),
-    valid_to: z.union([z.number(), z.null()]),
-  }),
+  order: order,
 });
 
 export type orderResponseType = z.infer<typeof orderResponse>;
 export const parseOrderResponseType = (unk: unknown): orderResponseType => {
   return orderResponse.parse(unk);
+};
+
+// multiple orders response
+const ordersResponse = basicGoodResponse.extend({
+  total_records: z.number(),
+  orders: z.array(order),
+});
+
+export type ordersResponseType = z.infer<typeof ordersResponse>;
+export const parseOrdersResponseType = (unk: unknown): ordersResponseType => {
+  return ordersResponse.parse(unk);
 };
 
 // order post process response
@@ -830,20 +807,31 @@ export const parseOrderPostProcessResponseType = (
 };
 
 //
+// Dashboard
+//
+
+const currentValidOrdersResponse = basicGoodResponse.extend({
+  total_records: z.number(),
+  orders: z.array(order),
+});
+
+export type currentValidOrdersResponseType = z.infer<
+  typeof currentValidOrdersResponse
+>;
+export const parseCurrentValidOrdersResponseType = (
+  unk: unknown
+): currentValidOrdersResponseType => {
+  return currentValidOrdersResponse.parse(unk);
+};
+
+//
 // Order Work Queues
 //
 
 const orderJob = z.object({
   added_to_queue: z.number(),
   high_priority: z.boolean(),
-  order: z.object({
-    id: z.number(),
-    certificate: z.object({
-      id: z.number(),
-      name: z.string(),
-      subject: z.string(),
-    }),
-  }),
+  order: order,
 });
 
 const queueResponse = basicGoodResponse.extend({

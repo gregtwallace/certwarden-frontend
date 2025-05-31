@@ -1,59 +1,48 @@
 import { type FC } from 'react';
+import { type orderType } from '../../../types/api';
 
 import { useTheme } from '@mui/material';
 
 import { Box, Tooltip, Typography } from '@mui/material';
-import { daysUntil, secsUntil, unixTimeToString } from '../../../helpers/time';
-
-// consts that determine when certs will be considered expiring and thus eligible
-// for auto renewal
-// KEEP IN SYNC with backend `orders/auto_ordering.go` consts
-const expiringRemainingValidFraction = 0.333;
-const expiringMinRemaining = 10 * (60 * 60 * 24); // x * seconds/day
+import { daysUntil, secsUntil } from '../../../helpers/time';
 
 // NOTE: Does NOT use common Flag component, since the styling is significantly
 // different than other flags.
 
 // prop types
 type propTypes = {
-  validFrom: number;
-  validTo: number;
+  order: orderType;
 };
 
 // component
 const FlagExpireDays: FC<propTypes> = (props) => {
-  const { validFrom, validTo } = props;
+  const { order } = props;
   const theme = useTheme();
 
-  // there are two renewal thresholds, calculate both
-  // elapsed fraction of valid time
-  const totalDurationSecs = validTo - validFrom;
+  const { valid_to: validTo, valid_from: validFrom, renewal_info: ari } = order;
 
-  const remainingValidFractionThresholdDate =
-    validTo - totalDurationSecs * expiringRemainingValidFraction;
-
-  // remaining valid time
-  const remainingValidMinThresholdDate = validTo - expiringMinRemaining;
-
-  // whichever threshold is sooner is when renewal will occur
-  const remainingValidThresholdDate = Math.min(
-    remainingValidFractionThresholdDate,
-    remainingValidMinThresholdDate
-  );
-  const daysUntilThreshold = daysUntil(remainingValidThresholdDate);
+  // if component receives bad values, render an error instead
+  if (validTo === null || validFrom === null || ari === null) {
+    console.log(
+      'error: expiration flag received null value(s), report this problem'
+    );
+    return <>Error!</>;
+  }
 
   // default color
   let bgcolorHex = theme.palette.info.main;
 
-  // renewal imminent or overdue, set error color
-  if (daysUntilThreshold <= 0) {
+  // in the renewal window == error color, within 1 week of renewal window == warn color
+  const now = new Date();
+  const nowPlus7 = new Date(Date.now() + 3600 * 1000 * 24 * 7);
+  if (ari.suggestedWindow.start < now) {
     bgcolorHex = theme.palette.error.main;
-  } else if (daysUntilThreshold <= 7) {
-    // renewal within the next week, set warning color
+  } else if (ari.suggestedWindow.start <= nowPlus7) {
     bgcolorHex = theme.palette.warning.main;
   }
 
   // for display text
+  const totalDurationSecs = validTo - validFrom;
   const daysRemainingValid = daysUntil(validTo);
 
   // for tooltip text & bar fill
@@ -78,9 +67,21 @@ const FlagExpireDays: FC<propTypes> = (props) => {
           {daysRemainingValid.toString() + ' Days ('}
           {percentValidRemaining.toString() + '%)'}
           <br />
-          Renews After:
           <br />
-          {unixTimeToString(remainingValidThresholdDate)}
+          Renewal Window:
+          <br />
+          {ari.suggestedWindow.start.toLocaleString()} to
+          <br />
+          {ari.suggestedWindow.end.toLocaleString()}
+          <br />
+          {ari.retryAfter && (
+            <>
+              <br />
+              Next ARI Refresh:
+              <br />
+              {ari.retryAfter.toLocaleString()}
+            </>
+          )}
         </>
       }
       placement='left'
