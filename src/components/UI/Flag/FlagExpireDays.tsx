@@ -29,16 +29,21 @@ const FlagExpireDays: FC<propTypes> = (props) => {
     return <>Error!</>;
   }
 
-  // default color
-  let bgcolorHex = theme.palette.info.main;
+  // colors:
+  //    > 1 week until renewal window begins : primary
+  //    < 1 week until renewal window begins, but it hasn't begun : secondary
+  //    in the renewal window : warning
+  //    past the end of the renewal window : error
+  let bgcolorHex = theme.palette.primary.main;
 
-  // in the renewal window == error color, within 1 week of renewal window == warn color
   const now = new Date();
   const nowPlus7 = new Date(Date.now() + 3600 * 1000 * 24 * 7);
-  if (ari.suggestedWindow.start < now) {
+  if (ari.suggestedWindow.end < now) {
     bgcolorHex = theme.palette.error.main;
-  } else if (ari.suggestedWindow.start <= nowPlus7) {
+  } else if (ari.suggestedWindow.start < now) {
     bgcolorHex = theme.palette.warning.main;
+  } else if (ari.suggestedWindow.start <= nowPlus7) {
+    bgcolorHex = theme.palette.secondary.main;
   }
 
   // for display text
