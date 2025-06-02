@@ -20,6 +20,7 @@ import { queryParser } from '../../UI/TableMui/query';
 import ApiLoading from '../../UI/Api/ApiLoading';
 import ApiError from '../../UI/Api/ApiError';
 import DateWithTooltip from '../../UI/DateWithTooltip/DateWithTooltip';
+import FlagARIExplanation from '../../UI/Flag/FlagARIExplanation';
 import FlagExpireDays from '../../UI/Flag/FlagExpireDays';
 import FlagLegacyAPI from '../../UI/Flag/FlagLegacyAPI';
 import FlagStaging from '../../UI/Flag/FlagStaging';
@@ -29,8 +30,6 @@ import TablePagination from '../../UI/TableMui/TablePagination';
 import TitleBar from '../../UI/TitleBar/TitleBar';
 
 const DASHBOARD_URL = '/v1/orders/currentvalid';
-
-// TODO: Add some kind of error / icon when a renewal url exists on the ARI so user can see issues and click the link
 
 // table headers and sortable param
 const tableHeaders: headerType[] = [
@@ -109,6 +108,11 @@ const Dashboard: FC = () => {
                   </TableCell>
                   <TableCell>{order.certificate.subject}</TableCell>
                   <TableCell>
+                    {order.renewal_info?.explanationURL && (
+                      <FlagARIExplanation
+                        explanationURL={order.renewal_info.explanationURL}
+                      />
+                    )}
                     {order.certificate.acme_account.acme_server.is_staging && (
                       <FlagStaging />
                     )}

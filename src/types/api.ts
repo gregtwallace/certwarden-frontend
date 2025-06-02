@@ -765,6 +765,7 @@ const order = z.object({
         end: z.coerce.date(),
       }),
       retryAfter: z.coerce.date().optional(),
+      explanationURL: z.string().optional(),
     }),
     z.null(),
   ]),
