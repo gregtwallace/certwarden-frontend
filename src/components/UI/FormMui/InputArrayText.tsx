@@ -130,7 +130,12 @@ const InputArrayText: FC<propsType> = (props) => {
         {label}
 
         {helpURL != undefined && (
-          <IconButtonAsLink tooltip='Help' to={helpURL} target='_blank'>
+          <IconButtonAsLink
+            tooltip='Help'
+            to={helpURL}
+            target='_blank'
+            rel='noreferrer'
+          >
             <HelpIcon style={{ fontSize: '17px' }} />
           </IconButtonAsLink>
         )}

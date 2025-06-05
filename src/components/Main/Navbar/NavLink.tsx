@@ -20,6 +20,7 @@ type propTypes = {
 
   to: RouterLinkProps['to'];
   target?: RouterLinkProps['target'];
+  rel?: RouterLinkProps['rel'];
 
   IconComponent: OverridableComponent<SvgIconTypeMap>;
   iconColor?: SvgIconOwnProps['color'];
@@ -30,8 +31,15 @@ type propTypes = {
 // NavLink is a single link in the Navbar. If it receives a 'to' prop
 // it renders as a Link, otherwise it renders as ListItemButton
 const NavLink: FC<propTypes> = (props) => {
-  const { children, iconColor, IconComponent, secondaryAction, target, to } =
-    props;
+  const {
+    children,
+    iconColor,
+    IconComponent,
+    rel,
+    secondaryAction,
+    target,
+    to,
+  } = props;
 
   // selected logic (is current route the 'to' route)
   const { pathname } = useLocation();
@@ -45,6 +53,7 @@ const NavLink: FC<propTypes> = (props) => {
           selected={selected}
           to={to}
           target={target}
+          rel={rel}
         >
           <ListItemIcon style={{ minWidth: '40px' }}>
             <IconComponent color={iconColor ?? 'inherit'} />
