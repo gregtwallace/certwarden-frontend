@@ -11,6 +11,7 @@ type propTypes = {
 
   to: RouterLinkProps['to'];
   target?: RouterLinkProps['target'];
+  rel?: RouterLinkProps['rel'];
 
   color?: IconButtonProps['color'];
   tooltip?: ReactNode;
@@ -18,7 +19,7 @@ type propTypes = {
 
 // component
 const IconButtonAsLink: FC<propTypes> = (props) => {
-  const { children, color, target, to, tooltip } = props;
+  const { children, color, rel, target, to, tooltip } = props;
 
   return (
     /* Note: Tooltip doesn't show anything if title is blank */
@@ -27,6 +28,7 @@ const IconButtonAsLink: FC<propTypes> = (props) => {
         component={RouterLink}
         to={to}
         target={target}
+        rel={rel}
         color={color ?? 'inherit'}
       >
         {children}

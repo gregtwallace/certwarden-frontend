@@ -25,6 +25,7 @@ const FormInfo: FC<propTypes> = (props) => {
           tooltip='Help'
           to={helpURL}
           target='_blank'
+          rel='noreferrer'
         >
           <HelpIcon style={{ fontSize: '17px' }} />
         </IconButtonAsLink>

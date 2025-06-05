@@ -43,6 +43,7 @@ const NewVersionLink: FC<propTypes> = (props) => {
           <NavLink
             to={newVersion.info.url}
             target='_blank'
+            rel='noreferrer'
             IconComponent={UpgradeIcon}
             iconColor='success'
             secondaryAction={
