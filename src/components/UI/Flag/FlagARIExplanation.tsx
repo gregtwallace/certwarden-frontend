@@ -27,7 +27,7 @@ const FlagARIExplanation: FC<propTypes> = (props) => {
             containing an `explanationURL`.
             <br />
             <br />
-            This likely indicates an anomoly such as a security event. You
+            This may indicate an anomoly such as a security event. You
             should review the information found at the URL and take any
             action(s) you deem necessary.
             <br />
