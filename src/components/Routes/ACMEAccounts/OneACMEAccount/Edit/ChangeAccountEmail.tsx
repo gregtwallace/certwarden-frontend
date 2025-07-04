@@ -98,8 +98,11 @@ const ChangeAccountEmail: FC = () => {
     // client side validation
     const validationErrors: validationErrorsType = {};
 
-    // check email (can't edit ACME to blank)
-    if (!isEmailValid(formState.dataToSubmit.email)) {
+    // if not blank, validate email format
+    if (
+      formState.dataToSubmit.email != '' &&
+      !isEmailValid(formState.dataToSubmit.email)
+    ) {
       validationErrors['dataToSubmit.email'] = true;
     }
 

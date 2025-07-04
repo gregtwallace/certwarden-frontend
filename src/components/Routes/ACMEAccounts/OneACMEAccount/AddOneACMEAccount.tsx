@@ -103,8 +103,11 @@ const AddOneACMEAccount: FC = () => {
       validationErrors['dataToSubmit.name'] = true;
     }
 
-    // check email format
-    if (!isEmailValid(formState.dataToSubmit.email)) {
+    // if not blank, validate email format
+    if (
+      formState.dataToSubmit.email != '' &&
+      !isEmailValid(formState.dataToSubmit.email)
+    ) {
       validationErrors['dataToSubmit.email'] = true;
     }
 
@@ -246,7 +249,9 @@ const AddOneACMEAccount: FC = () => {
 
           <FormFooter
             cancelHref='/acmeaccounts'
-            resetOnClick={() => {setFormState(blankForm)}}
+            resetOnClick={() => {
+              setFormState(blankForm);
+            }}
             disabledAllButtons={axiosSendState.isSending}
             disabledResetButton={
               JSON.stringify(formState.dataToSubmit) ===

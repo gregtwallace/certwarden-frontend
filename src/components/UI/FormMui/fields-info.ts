@@ -34,7 +34,7 @@ const fieldsInfo: fieldInfoType[] = [
   {
     nameRegex: /^(.+\.)?email$/,
     htmlType: 'email',
-    errorMessage: 'Email must be specified and in a valid format.',
+    errorMessage: 'E-mail must be in a valid address format.',
   },
   {
     nameRegex: /^(.+\.)?api_key(_new)?$/,

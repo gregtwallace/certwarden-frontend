@@ -22,7 +22,7 @@ import { useNavigate, useParams } from 'react-router';
 import useAxiosGet from '../../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../../hooks/useAxiosSend';
 import { inputHandlerFuncMaker } from '../../../../helpers/input-handler';
-import { isNameValid } from '../../../../helpers/form-validation';
+import { isEmailValid, isNameValid } from '../../../../helpers/form-validation';
 
 import { Box } from '@mui/material';
 import ApiError from '../../../UI/Api/ApiError';
@@ -53,6 +53,7 @@ type formObj = {
     description: string;
   };
   dataToSubmitRegister: {
+    email: string;
     eab_kid: string;
     eab_hmac_key: string;
   };
@@ -90,6 +91,7 @@ const EditOneACMEAccount: FC = () => {
         description: responseData?.acme_account.description ?? '',
       },
       dataToSubmitRegister: {
+        email: responseData?.acme_account.email ?? '',
         eab_kid: '',
         eab_hmac_key: '',
       },
@@ -159,8 +161,28 @@ const EditOneACMEAccount: FC = () => {
 
   // register ACME account handler
   const registerClickHandler: MouseEventHandler = () => {
+    // client side validation
+    const validationErrors: validationErrorsType = {};
+
+    // if not blank, validate email format
+    if (
+      formState.dataToSubmitRegister.email != '' &&
+      !isEmailValid(formState.dataToSubmitRegister.email)
+    ) {
+      validationErrors['dataToSubmitRegister.email'] = true;
+    }
+
     // dont check EAB - if re-adding an existing account that is already bound,
     // these fields are not necessary
+
+    setFormState((prevState) => ({
+      ...prevState,
+      validationErrors: validationErrors,
+    }));
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
+    // client side validation -- end
 
     apiCall<acmeAccountRegisterResponseType>(
       'POST',
@@ -334,12 +356,25 @@ const EditOneACMEAccount: FC = () => {
               onChange={inputChangeHandler}
             />
 
-            <InputTextField
-              id='disabled.email'
-              label='Contact E-Mail Address'
-              value={formState.getResponseData.acme_account.email}
-              disabled
-            />
+            {/* Render editable email field when registration isn't done yet; this is
+            needed to be able to correct issues like `Accounts must have at least one
+            contact.` when the user didn't specify an email during initial account add */}
+            {canRegister ? (
+              <InputTextField
+                id='dataToSubmitRegister.email'
+                label='Contact E-Mail Address'
+                value={formState.dataToSubmitRegister.email}
+                onChange={inputChangeHandler}
+                error={formState.validationErrors['dataToSubmitRegister.email']}
+              />
+            ) : (
+              <InputTextField
+                id='disabled.email'
+                label='Contact E-Mail Address'
+                value={formState.getResponseData.acme_account.email}
+                disabled
+              />
+            )}
 
             <FormRowRight>
               <ButtonAsLink
