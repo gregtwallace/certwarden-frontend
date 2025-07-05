@@ -48,6 +48,9 @@ export const buildAcmeServerOptions = (
 type privateKeyType = {
   id: number;
   name: string;
+  algorithm: {
+    name: string;
+  };
 };
 
 type privateKeyWithAlgType = privateKeyType & {
@@ -66,7 +69,8 @@ export const buildPrivateKeyOptions = (
   if (currentKey) {
     privateKeys.push({
       value: currentKey.id,
-      name: currentKey.name + ' - Current',
+      name:
+        currentKey.name + ' (' + currentKey.algorithm.name + ')' + ' - Current',
     });
   }
 

@@ -618,6 +618,9 @@ const oneCertificateResponse = basicGoodResponse.extend({
     private_key: z.object({
       id: z.number(),
       name: z.string(),
+      algorithm: z.object({
+        name: z.string(),
+      }),
     }),
     acme_account: z.object({
       id: z.number(),
