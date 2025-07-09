@@ -65,9 +65,9 @@ const useAxiosWithToken = (): { axiosInstance: AxiosInstance } => {
     // add the Authorization header to all Private requests
     const requestIntercept = axiosInstance.interceptors.request.use(
       (config) => {
-        if (!config.headers.Authorization) {
-          config.headers.Authorization = getAccessToken();
-        }
+        // set Authorization if it isn't already set
+        config.headers.Authorization ??= getAccessToken();
+
         return config;
       },
       (error: AxiosError) => error
