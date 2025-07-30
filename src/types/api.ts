@@ -882,8 +882,7 @@ const providerBase = z.object({
   tag: z.string(),
   type: z.string(),
   domains: z.array(z.string()),
-  precheck_wait: z.number(),
-  postcheck_wait: z.number(),
+  post_resource_provision_wait: z.number(),
   // provider is this + config: {}
 });
 

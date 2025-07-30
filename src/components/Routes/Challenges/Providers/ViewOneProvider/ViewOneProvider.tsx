@@ -18,15 +18,11 @@ type propTypes = {
 const ViewOneProvider: FC<propTypes> = (props) => {
   const { provider } = props;
 
-  // text for pre/post check times
-  const precheckTime =
-    provider.precheck_wait < 60
-      ? provider.precheck_wait.toString() + ' seconds'
-      : (provider.precheck_wait / 60).toFixed(1).toString() + ' minutes';
-  const postcheckTime =
-    provider.postcheck_wait < 60
-      ? provider.postcheck_wait.toString() + ' seconds'
-      : (provider.postcheck_wait / 60).toFixed(1).toString() + ' minutes';
+  // text wait time
+  const waitTime =
+    provider.post_resource_provision_wait < 60
+      ? provider.post_resource_provision_wait.toString() + ' seconds'
+      : (provider.post_resource_provision_wait / 60).toFixed(1).toString() + ' minutes';
 
   return (
     <GridItemContainer
@@ -39,8 +35,7 @@ const ViewOneProvider: FC<propTypes> = (props) => {
 
       <ProviderDomainsView domains={provider.domains} />
 
-      <GridItemText>Pre-Check Wait: {precheckTime}</GridItemText>
-      <GridItemText>Post-Check Wait: {postcheckTime}</GridItemText>
+      <GridItemText>Post Provision Wait: {waitTime}</GridItemText>
 
       <Box
         sx={{

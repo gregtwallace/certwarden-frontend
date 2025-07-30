@@ -106,12 +106,8 @@ export const providersList: provider[] = [
         value: undefined,
       },
       {
-        name: 'dataToSubmit.precheck_wait',
-        value: 180,
-      },
-      {
-        name: 'dataToSubmit.postcheck_wait',
-        value: 0,
+        name: 'dataToSubmit.post_resource_provision_wait',
+        value: 300,
       },
     ],
     providerOptionsForEdit: undefined,
@@ -199,12 +195,8 @@ export const providersList: provider[] = [
         value: undefined,
       },
       {
-        name: 'dataToSubmit.precheck_wait',
-        value: 180,
-      },
-      {
-        name: 'dataToSubmit.postcheck_wait',
-        value: 0,
+        name: 'dataToSubmit.post_resource_provision_wait',
+        value: 300,
       },
     ],
     providerOptionsForEdit: undefined,
@@ -268,12 +260,8 @@ export const providersList: provider[] = [
         },
       },
       {
-        name: 'dataToSubmit.precheck_wait',
-        value: 180,
-      },
-      {
-        name: 'dataToSubmit.postcheck_wait',
-        value: 0,
+        name: 'dataToSubmit.post_resource_provision_wait',
+        value: 300,
       },
     ],
     providerOptionsForEdit: (providerConfig) => {
@@ -358,12 +346,8 @@ export const providersList: provider[] = [
         value: undefined,
       },
       {
-        name: 'dataToSubmit.precheck_wait',
-        value: 180,
-      },
-      {
-        name: 'dataToSubmit.postcheck_wait',
-        value: 0,
+        name: 'dataToSubmit.post_resource_provision_wait',
+        value: 300,
       },
     ],
     providerOptionsForEdit: undefined,
@@ -426,12 +410,8 @@ export const providersList: provider[] = [
         value: undefined,
       },
       {
-        name: 'dataToSubmit.precheck_wait',
-        value: 180,
-      },
-      {
-        name: 'dataToSubmit.postcheck_wait',
-        value: 0,
+        name: 'dataToSubmit.post_resource_provision_wait',
+        value: 300,
       },
     ],
     providerOptionsForEdit: undefined,
@@ -487,12 +467,8 @@ export const providersList: provider[] = [
         value: undefined,
       },
       {
-        name: 'dataToSubmit.precheck_wait',
-        value: 0,
-      },
-      {
-        name: 'dataToSubmit.postcheck_wait',
-        value: 0,
+        name: 'dataToSubmit.post_resource_provision_wait',
+        value: 5,
       },
     ],
     providerOptionsForEdit: undefined,

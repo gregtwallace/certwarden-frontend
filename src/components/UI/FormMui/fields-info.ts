@@ -254,12 +254,7 @@ const fieldsInfo: fieldInfoType[] = [
       'Domain must be valid. Or for a wildcard provider use one domain set to * .',
   },
   {
-    nameRegex: /^(.+\.)?precheck_wait$/,
-    htmlType: 'number',
-    errorMessage: 'N/A',
-  },
-  {
-    nameRegex: /^(.+\.)?postcheck_wait$/,
+    nameRegex: /^(.+\.)?post_resource_provision_wait$/,
     htmlType: 'number',
     errorMessage: 'N/A',
   },

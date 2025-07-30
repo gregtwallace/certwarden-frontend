@@ -33,8 +33,7 @@ const AddOneProvider: FC = () => {
     provider_options: undefined,
     dataToSubmit: {
       domains: [''],
-      precheck_wait: 0,
-      postcheck_wait: 0,
+      post_resource_provision_wait: 0,
     },
     configToSubmit: {},
     sendError: undefined,
@@ -138,18 +137,11 @@ const AddOneProvider: FC = () => {
             />
 
             <InputTextField
-              id='dataToSubmit.precheck_wait'
-              label='Pre-Check Wait (Seconds)'
-              value={formState.dataToSubmit.precheck_wait}
+              id='dataToSubmit.post_resource_provision_wait'
+              label='Post Provision Wait (Seconds)'
+              value={formState.dataToSubmit.post_resource_provision_wait}
               onChange={inputChangeHandler}
-              error={formState.validationErrors['dataToSubmit.precheck_wait']}
-            />
-            <InputTextField
-              id='dataToSubmit.postcheck_wait'
-              label='Post-Check Wait (Seconds)'
-              value={formState.dataToSubmit.postcheck_wait}
-              onChange={inputChangeHandler}
-              error={formState.validationErrors['dataToSubmit.postcheck_wait']}
+              error={formState.validationErrors['dataToSubmit.post_resource_provision_wait']}
             />
 
             <provider.FormComponent
