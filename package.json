@@ -1,7 +1,7 @@
 {
   "name": "certwarden-frontend",
   "private": true,
-  "version": "0.28.0-a1",
+  "version": "0.28.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
