@@ -109,6 +109,8 @@ type formObj = {
     post_processing_client_address: string;
     preferred_root_cn: string;
     profile: string | null;
+    tech_phone: string;
+    tech_email: string;
     organization: string;
     organizational_unit: string;
     country: string;
@@ -147,6 +149,8 @@ const AddOneCert: FC = () => {
         post_processing_client_address: '',
         preferred_root_cn: '',
         profile: null,
+        tech_phone: '',
+        tech_email: '',
         organization: '',
         organizational_unit: '',
         country: '',
@@ -401,6 +405,20 @@ const AddOneCert: FC = () => {
             value={formState.dataToSubmit.subject}
             onChange={inputChangeHandler}
             error={formState.validationErrors['dataToSubmit.subject']}
+          />
+
+          <InputTextField
+            id='dataToSubmit.tech_phone'
+            label='Technical Contact Phone Number'
+            value={formState.dataToSubmit.tech_phone}
+            onChange={inputChangeHandler}
+          />
+
+          <InputTextField
+            id='dataToSubmit.tech_email'
+            label='Technical Contact Email Address'
+            value={formState.dataToSubmit.tech_email}
+            onChange={inputChangeHandler}
           />
 
           <InputArrayText
