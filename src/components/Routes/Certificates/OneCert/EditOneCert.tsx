@@ -70,6 +70,8 @@ type formObj = {
     post_processing_client_address: string;
     preferred_root_cn: string;
     profile: string;
+		tech_phone: string;
+		tech_email: string;
     organization: string;
     organizational_unit: string;
     country: string;
@@ -129,6 +131,10 @@ const EditOneCert: FC = () => {
         private_key_id: certResponseData?.certificate.private_key.id ?? -1,
         subject_alts: certResponseData?.certificate.subject_alts ?? [],
         api_key_via_url: certResponseData?.certificate.api_key_via_url ?? false,
+        tech_phone:
+          certResponseData?.certificate.tech_phone ?? '',
+        tech_email:
+          certResponseData?.certificate.tech_email ?? '',
         post_processing_command:
           certResponseData?.certificate.post_processing_command ?? '',
         post_processing_environment:
@@ -506,6 +512,20 @@ const EditOneCert: FC = () => {
                 label='Subject (and Common Name)'
                 value={formState.getCertResponseData.certificate.subject}
                 disabled
+              />
+
+              <InputTextField
+                id='dataToSubmit.tech_phone'
+                label='Technical Contact Phone'
+                value={formState.dataToSubmit.tech_phone}
+                onChange={inputChangeHandler}
+              />
+
+              <InputTextField
+                id='dataToSubmit.tech_email'
+                label='Technical Contact Email Address'
+                value={formState.dataToSubmit.tech_email}
+                onChange={inputChangeHandler}
               />
 
               <InputArrayText
