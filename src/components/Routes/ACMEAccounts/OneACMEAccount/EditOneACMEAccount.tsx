@@ -266,8 +266,7 @@ const EditOneACMEAccount: FC = () => {
 
   // vars for conditionally showing certain actions
   const canDoAccountActions =
-    formState.getResponseData &&
-    formState.getResponseData.acme_account.status === 'valid' &&
+    formState.getResponseData?.acme_account.status === 'valid' &&
     formState.getResponseData.acme_account.kid !== '';
 
   const canRegister =

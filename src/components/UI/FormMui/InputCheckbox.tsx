@@ -41,7 +41,7 @@ const InputCheckbox: FC<propTypes> = (props) => {
                 : undefined
             }
             value={checked ? 'on' : 'off'}
-            checked={!!checked}
+            checked={checked}
             disabled={!!disabled}
           />
         }
