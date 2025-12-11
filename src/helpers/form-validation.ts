@@ -45,6 +45,45 @@ export const isDomainValid = (
   return false;
 };
 
+// isDomainAndPortValid validates if the string is a valid fqdn, with an optional colon followed
+// by a port number
+export const isDomainAndPortValid = (domain: string): boolean => {
+  // split on colon
+  const splitDomain = domain.split(':');
+
+  // bad split, no domain
+  if (splitDomain[0] === undefined) {
+    return false;
+  }
+  // bad split, too many pieces
+  if (splitDomain.length > 2) {
+    return false;
+  }
+
+  // port?
+  if (splitDomain.length === 2) {
+    // shouldn't ever happen
+    if (splitDomain[1] === undefined) {
+      return false;
+    }
+
+    // validate port
+    const portNumb = parseInt(splitDomain[1]);
+    if (portNumb < 0 || portNumb > 65535) {
+      return false;
+    }
+  }
+
+  // valid domain regex
+  const regex =
+    /^(([A-Za-z0-9][A-Za-z0-9-]{0,61}\.)*([A-Za-z0-9][A-Za-z0-9-]{0,61}\.)[A-Za-z][A-Za-z0-9-]{0,61}[A-Za-z0-9])$/;
+  if (regex.exec(splitDomain[0])) {
+    return true;
+  }
+
+  return false;
+};
+
 // isEmailValid returns true if the string is a validly formatted email address
 export const isEmailValid = (email: string): boolean => {
   // split on the @ symbol

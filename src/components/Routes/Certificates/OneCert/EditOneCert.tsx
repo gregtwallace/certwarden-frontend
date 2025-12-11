@@ -21,6 +21,7 @@ import useAxiosSend from '../../../../hooks/useAxiosSend';
 import { inputHandlerFuncMaker } from '../../../../helpers/input-handler';
 import {
   isDomainValid,
+  isDomainAndPortValid,
   isEnvironmentParamValid,
   isHexStringValid,
   isNameValid,
@@ -273,7 +274,7 @@ const EditOneCert: FC = () => {
     // post process client address
     if (
       formState.dataToSubmit.post_processing_client_address !== '' &&
-      !isDomainValid(formState.dataToSubmit.post_processing_client_address)
+      !isDomainAndPortValid(formState.dataToSubmit.post_processing_client_address)
     ) {
       validationErrors['dataToSubmit.post_processing_client_address'] = true;
     }
