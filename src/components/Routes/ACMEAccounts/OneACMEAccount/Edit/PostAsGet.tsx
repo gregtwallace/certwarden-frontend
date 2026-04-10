@@ -1,4 +1,4 @@
-import { type FC, type FormEventHandler } from 'react';
+import { type FC, type SubmitEventHandler } from 'react';
 import {
   type acmeAccountsResponseType,
   parseAcmeAccountsResponseType,
@@ -58,7 +58,7 @@ const PostAsGet: FC = () => {
 
   const { getState } = useAxiosGet<acmeAccountsResponseType>(
     ACME_ACCOUNTS_URL,
-    parseAcmeAccountsResponseType
+    parseAcmeAccountsResponseType,
   );
 
   const { axiosSendState, apiCall } = useAxiosSend();
@@ -81,7 +81,7 @@ const PostAsGet: FC = () => {
   // data change handler for account selection (special to update url)
   const inputAcctSelectChangeHandler: inputHandlerFuncType = (
     event,
-    convertValueTo
+    convertValueTo,
   ) => {
     // this should not be necessary
     if (typeof event.target.value !== 'number') {
@@ -115,7 +115,7 @@ const PostAsGet: FC = () => {
   }
 
   // form submission handler
-  const submitFormHandler: FormEventHandler = (event) => {
+  const submitFormHandler: SubmitEventHandler = (event) => {
     event.preventDefault();
 
     // client side validation
@@ -139,7 +139,7 @@ const PostAsGet: FC = () => {
       'POST',
       `/v1/acmeaccounts/${formState.dontSubmit.acme_account_id.toString()}/post-as-get`,
       formState.dataToSubmit,
-      parsePostAsGetResponseType
+      parsePostAsGetResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         setFormState((prevState) => ({
@@ -189,7 +189,7 @@ const PostAsGet: FC = () => {
               label='Description'
               value={
                 getState.responseData.acme_accounts.find(
-                  (acct) => acct.id === formState.dontSubmit.acme_account_id
+                  (acct) => acct.id === formState.dontSubmit.acme_account_id,
                 )?.description ?? ''
               }
               disabled
@@ -200,7 +200,7 @@ const PostAsGet: FC = () => {
               label='Account URL / KID'
               value={
                 getState.responseData.acme_accounts.find(
-                  (acct) => acct.id === formState.dontSubmit.acme_account_id
+                  (acct) => acct.id === formState.dontSubmit.acme_account_id,
                 )?.kid ?? ''
               }
               disabled

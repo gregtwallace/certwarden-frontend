@@ -1,4 +1,8 @@
-import { type FC, type FormEventHandler, type MouseEventHandler } from 'react';
+import {
+  type FC,
+  type SubmitEventHandler,
+  type MouseEventHandler,
+} from 'react';
 import {
   type privateKeyDeleteResponseType,
   parsePrivateKeyDeleteResponseType,
@@ -60,7 +64,7 @@ const EditOnePrivateKey: FC = () => {
 
   const { getState } = useAxiosGet<onePrivateKeyResponseType>(
     thisPrivateKeyUrl,
-    parseOnePrivateKeyResponseType
+    parseOnePrivateKeyResponseType,
   );
 
   const { axiosSendState, apiCall, downloadFile } = useAxiosSend();
@@ -70,7 +74,7 @@ const EditOnePrivateKey: FC = () => {
   const initialForm = useCallback(
     (
       responseData: onePrivateKeyResponseType | undefined,
-      error: frontendErrorType | undefined
+      error: frontendErrorType | undefined,
     ) => ({
       getResponseData: responseData,
       getError: error,
@@ -83,10 +87,10 @@ const EditOnePrivateKey: FC = () => {
       sendError: undefined,
       validationErrors: {},
     }),
-    []
+    [],
   );
   const [formState, setFormState] = useState<formObj>(
-    initialForm(undefined, undefined)
+    initialForm(undefined, undefined),
   );
 
   // set initial form after api loads
@@ -113,7 +117,7 @@ const EditOnePrivateKey: FC = () => {
       method,
       thisPrivateKeyApiKeyUrl,
       {},
-      parseOnePrivateKeyResponseType
+      parseOnePrivateKeyResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         // update get response with update info
@@ -149,7 +153,7 @@ const EditOnePrivateKey: FC = () => {
       'DELETE',
       thisPrivateKeyUrl,
       {},
-      parsePrivateKeyDeleteResponseType
+      parsePrivateKeyDeleteResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate('/privatekeys');
@@ -164,7 +168,7 @@ const EditOnePrivateKey: FC = () => {
   };
 
   // form submission handler
-  const submitFormHandler: FormEventHandler = (event) => {
+  const submitFormHandler: SubmitEventHandler = (event) => {
     event.preventDefault();
 
     // client side validation
@@ -188,7 +192,7 @@ const EditOnePrivateKey: FC = () => {
       'PUT',
       thisPrivateKeyUrl,
       formState.dataToSubmit,
-      parseOnePrivateKeyResponseType
+      parseOnePrivateKeyResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate('/privatekeys');
@@ -351,7 +355,7 @@ const EditOnePrivateKey: FC = () => {
               cancelHref='/privatekeys'
               resetOnClick={() => {
                 setFormState((prevState) =>
-                  initialForm(prevState.getResponseData, prevState.getError)
+                  initialForm(prevState.getResponseData, prevState.getError),
                 );
               }}
               disabledAllButtons={axiosSendState.isSending}
@@ -359,7 +363,7 @@ const EditOnePrivateKey: FC = () => {
                 JSON.stringify(formState.dataToSubmit) ===
                 JSON.stringify(
                   initialForm(formState.getResponseData, formState.getError)
-                    .dataToSubmit
+                    .dataToSubmit,
                 )
               }
               lastAccess={formState.getResponseData.private_key.last_access}

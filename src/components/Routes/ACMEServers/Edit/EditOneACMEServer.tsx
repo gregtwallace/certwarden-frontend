@@ -1,4 +1,8 @@
-import { type FC, type FormEventHandler, type MouseEventHandler } from 'react';
+import {
+  type FC,
+  type SubmitEventHandler,
+  type MouseEventHandler,
+} from 'react';
 import {
   type oneAcmeServerResponseType,
   parseOneAcmeServerResponseType,
@@ -64,7 +68,7 @@ const EditOneACMEServer: FC = () => {
 
   const { getState } = useAxiosGet<oneAcmeServerResponseType>(
     thisAcmeServerUrl,
-    parseOneAcmeServerResponseType
+    parseOneAcmeServerResponseType,
   );
 
   const { axiosSendState, apiCall } = useAxiosSend();
@@ -83,7 +87,7 @@ const EditOneACMEServer: FC = () => {
       sendError: undefined,
       validationErrors: {},
     }),
-    [getState]
+    [getState],
   );
   const [formState, setFormState] = useState<formObj>(makeStartingForm());
 
@@ -103,7 +107,7 @@ const EditOneACMEServer: FC = () => {
       'DELETE',
       thisAcmeServerUrl,
       {},
-      parseOneAcmeServerDeleteResponse
+      parseOneAcmeServerDeleteResponse,
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate('/acmeservers');
@@ -118,7 +122,7 @@ const EditOneACMEServer: FC = () => {
   };
 
   // form submission handler
-  const submitFormHandler: FormEventHandler = (event) => {
+  const submitFormHandler: SubmitEventHandler = (event) => {
     event.preventDefault();
 
     // form validation
@@ -147,7 +151,7 @@ const EditOneACMEServer: FC = () => {
       'PUT',
       thisAcmeServerUrl,
       formState.dataToSubmit,
-      parseOneAcmeServerResponseType
+      parseOneAcmeServerResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate('/acmeservers');
@@ -168,7 +172,7 @@ const EditOneACMEServer: FC = () => {
     dir_text = JSON.stringify(
       formState.getResponseData?.acme_server.raw_directory_response,
       null,
-      2
+      2,
     );
   }
 

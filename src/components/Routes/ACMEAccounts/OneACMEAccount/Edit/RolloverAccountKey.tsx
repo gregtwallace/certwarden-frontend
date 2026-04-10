@@ -1,4 +1,4 @@
-import { type FC, type FormEventHandler } from 'react';
+import { type FC, type SubmitEventHandler } from 'react';
 import {
   type oneAcmeAccountResponseType,
   parseOneAcmeAccountResponseType,
@@ -56,14 +56,14 @@ const RolloverAccountKey: FC = () => {
   // fetch current state
   const { getState: getAccountState } = useAxiosGet<oneAcmeAccountResponseType>(
     thisAccountUrl,
-    parseOneAcmeAccountResponseType
+    parseOneAcmeAccountResponseType,
   );
 
   // get config options
   const { getState: getOptionsState } =
     useAxiosGet<acmeAccountOptionsResponseType>(
       ACCOUNT_OPTIONS_URL,
-      parseAcmeAccountOptionsResponse
+      parseAcmeAccountOptionsResponse,
     );
 
   const { axiosSendState, apiCall } = useAxiosSend();
@@ -75,7 +75,7 @@ const RolloverAccountKey: FC = () => {
       accountResponseData: oneAcmeAccountResponseType | undefined,
       accountError: frontendErrorType | undefined,
       optionsResponseData: acmeAccountOptionsResponseType | undefined,
-      optionsError: frontendErrorType | undefined
+      optionsError: frontendErrorType | undefined,
     ): formObj => ({
       getAccountResponseData: accountResponseData,
       getAccountError: accountError,
@@ -87,10 +87,10 @@ const RolloverAccountKey: FC = () => {
       sendError: undefined,
       validationErrors: {},
     }),
-    []
+    [],
   );
   const [formState, setFormState] = useState<formObj>(
-    initialForm(undefined, undefined, undefined, undefined)
+    initialForm(undefined, undefined, undefined, undefined),
   );
 
   // set initial form after api loads
@@ -109,8 +109,8 @@ const RolloverAccountKey: FC = () => {
         getAccountState.responseData,
         getAccountState.error,
         getOptionsState.responseData,
-        getOptionsState.error
-      )
+        getOptionsState.error,
+      ),
     );
   }, [
     id,
@@ -125,7 +125,7 @@ const RolloverAccountKey: FC = () => {
   const inputChangeHandler = inputHandlerFuncMaker(setFormState);
 
   // form submission handler
-  const submitFormHandler: FormEventHandler = (event) => {
+  const submitFormHandler: SubmitEventHandler = (event) => {
     event.preventDefault();
 
     // client side validation
@@ -149,7 +149,7 @@ const RolloverAccountKey: FC = () => {
       'PUT',
       thisAccountKeyChangeUrl,
       formState.dataToSubmit,
-      parseOneAcmeAccountResponseType
+      parseOneAcmeAccountResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate(`/acmeaccounts/${id}`);
@@ -227,7 +227,8 @@ const RolloverAccountKey: FC = () => {
             value={formState.dataToSubmit.private_key_id}
             onChange={inputChangeHandler}
             options={buildPrivateKeyOptions(
-              formState.getOptionsResponseData.acme_account_options.private_keys
+              formState.getOptionsResponseData.acme_account_options
+                .private_keys,
             )}
             error={formState.validationErrors['dataToSubmit.private_key_id']}
           />
@@ -248,8 +249,8 @@ const RolloverAccountKey: FC = () => {
                   prevState.getAccountResponseData,
                   prevState.getAccountError,
                   prevState.getOptionsResponseData,
-                  prevState.getOptionsError
-                )
+                  prevState.getOptionsError,
+                ),
               );
             }}
             disabledAllButtons={axiosSendState.isSending}
@@ -260,8 +261,8 @@ const RolloverAccountKey: FC = () => {
                   formState.getAccountResponseData,
                   formState.getAccountError,
                   formState.getOptionsResponseData,
-                  formState.getOptionsError
-                ).dataToSubmit
+                  formState.getOptionsError,
+                ).dataToSubmit,
               )
             }
           />

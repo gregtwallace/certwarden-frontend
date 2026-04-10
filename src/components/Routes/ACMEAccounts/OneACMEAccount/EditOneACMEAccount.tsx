@@ -1,4 +1,8 @@
-import { type FC, type FormEventHandler, type MouseEventHandler } from 'react';
+import {
+  type FC,
+  type SubmitEventHandler,
+  type MouseEventHandler,
+} from 'react';
 import {
   type acmeAccountDeleteResponseType,
   parseAcmeAccountDeleteResponseType,
@@ -72,7 +76,7 @@ const EditOneACMEAccount: FC = () => {
   // fetch account
   const { getState, updateGet } = useAxiosGet<oneAcmeAccountResponseType>(
     thisAcmeAccountUrl,
-    parseOneAcmeAccountResponseType
+    parseOneAcmeAccountResponseType,
   );
 
   const { axiosSendState, apiCall } = useAxiosSend();
@@ -82,7 +86,7 @@ const EditOneACMEAccount: FC = () => {
   const makeBlankForm = useCallback(
     (
       responseData: oneAcmeAccountResponseType | undefined,
-      error: frontendErrorType | undefined
+      error: frontendErrorType | undefined,
     ) => ({
       getResponseData: responseData,
       getError: error,
@@ -98,10 +102,10 @@ const EditOneACMEAccount: FC = () => {
       sendError: undefined,
       validationErrors: {},
     }),
-    []
+    [],
   );
   const [formState, setFormState] = useState<formObj>(
-    makeBlankForm(undefined, undefined)
+    makeBlankForm(undefined, undefined),
   );
 
   // set initial form after api loads
@@ -121,7 +125,7 @@ const EditOneACMEAccount: FC = () => {
       'DELETE',
       thisAcmeAccountUrl,
       {},
-      parseAcmeAccountDeleteResponseType
+      parseAcmeAccountDeleteResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate('/acmeaccounts');
@@ -145,7 +149,7 @@ const EditOneACMEAccount: FC = () => {
       'POST',
       thisAcmeAccountUrl + '/deactivate',
       {},
-      parseAcmeAccountDeactivateResponseType
+      parseAcmeAccountDeactivateResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         updateGet();
@@ -188,7 +192,7 @@ const EditOneACMEAccount: FC = () => {
       'POST',
       thisAcmeAccountUrl + '/register',
       formState.dataToSubmitRegister,
-      parseAcmeAccountRegisterResponseType
+      parseAcmeAccountRegisterResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         updateGet();
@@ -211,7 +215,7 @@ const EditOneACMEAccount: FC = () => {
       'POST',
       thisAcmeAccountUrl + '/refresh',
       {},
-      parseAcmeAccountRefreshResponseType
+      parseAcmeAccountRefreshResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         updateGet();
@@ -226,7 +230,7 @@ const EditOneACMEAccount: FC = () => {
   };
 
   // form submission handler
-  const submitFormHandler: FormEventHandler = (event) => {
+  const submitFormHandler: SubmitEventHandler = (event) => {
     event.preventDefault();
 
     // client side validation
@@ -250,7 +254,7 @@ const EditOneACMEAccount: FC = () => {
       'PUT',
       thisAcmeAccountUrl,
       formState.dataToSubmitEdit,
-      parseOneAcmeAccountResponseType
+      parseOneAcmeAccountResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate('/acmeaccounts');
@@ -536,7 +540,7 @@ const EditOneACMEAccount: FC = () => {
               cancelHref='/acmeaccounts'
               resetOnClick={() => {
                 setFormState((prevState) =>
-                  makeBlankForm(prevState.getResponseData, prevState.getError)
+                  makeBlankForm(prevState.getResponseData, prevState.getError),
                 );
               }}
               disabledAllButtons={axiosSendState.isSending}
@@ -544,7 +548,7 @@ const EditOneACMEAccount: FC = () => {
                 JSON.stringify(formState.dataToSubmitEdit) ===
                 JSON.stringify(
                   makeBlankForm(formState.getResponseData, formState.getError)
-                    .dataToSubmitEdit
+                    .dataToSubmitEdit,
                 )
               }
               createdAt={formState.getResponseData.acme_account.created_at}

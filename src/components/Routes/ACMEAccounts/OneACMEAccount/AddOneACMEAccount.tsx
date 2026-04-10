@@ -1,4 +1,4 @@
-import { type FC, type FormEventHandler } from 'react';
+import { type FC, type SubmitEventHandler } from 'react';
 import {
   type acmeAccountOptionsResponseType,
   parseAcmeAccountOptionsResponse,
@@ -58,7 +58,7 @@ const AddOneACMEAccount: FC = () => {
   // fetch new options
   const { getState } = useAxiosGet<acmeAccountOptionsResponseType>(
     ACME_ACCOUNT_OPTIONS_URL,
-    parseAcmeAccountOptionsResponse
+    parseAcmeAccountOptionsResponse,
   );
 
   const { axiosSendState, apiCall } = useAxiosSend();
@@ -79,7 +79,7 @@ const AddOneACMEAccount: FC = () => {
       sendError: undefined,
       validationErrors: {},
     }),
-    [getState]
+    [getState],
   );
   const [formState, setFormState] = useState(blankForm);
 
@@ -92,7 +92,7 @@ const AddOneACMEAccount: FC = () => {
   const inputChangeHandler = inputHandlerFuncMaker(setFormState);
 
   // submit handler
-  const submitFormHandler: FormEventHandler = (event) => {
+  const submitFormHandler: SubmitEventHandler = (event) => {
     event.preventDefault();
 
     // form validation
@@ -139,7 +139,7 @@ const AddOneACMEAccount: FC = () => {
       'POST',
       NEW_ACME_ACCOUNT_URL,
       formState.dataToSubmit,
-      parseOneAcmeAccountResponseType
+      parseOneAcmeAccountResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate(`/acmeaccounts/${responseData.acme_account.id.toString()}`);
@@ -156,7 +156,7 @@ const AddOneACMEAccount: FC = () => {
   // logic to get tos_url (or undefined)
   const tos_url =
     formState.getResponseData?.acme_account_options.acme_servers.find(
-      (serv) => serv.id === formState.dataToSubmit.acme_server_id
+      (serv) => serv.id === formState.dataToSubmit.acme_server_id,
     )?.terms_of_service;
 
   return (
@@ -206,7 +206,7 @@ const AddOneACMEAccount: FC = () => {
             value={formState.dataToSubmit.acme_server_id}
             onChange={inputChangeHandler}
             options={buildAcmeServerOptions(
-              formState.getResponseData.acme_account_options.acme_servers
+              formState.getResponseData.acme_account_options.acme_servers,
             )}
             error={formState.validationErrors['dataToSubmit.acme_server_id']}
           />
@@ -217,7 +217,7 @@ const AddOneACMEAccount: FC = () => {
             value={formState.dataToSubmit.private_key_id}
             onChange={inputChangeHandler}
             options={buildPrivateKeyOptions(
-              formState.getResponseData.acme_account_options.private_keys
+              formState.getResponseData.acme_account_options.private_keys,
             )}
             error={formState.validationErrors['dataToSubmit.private_key_id']}
           />

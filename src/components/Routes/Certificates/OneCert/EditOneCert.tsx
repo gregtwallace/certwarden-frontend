@@ -1,4 +1,8 @@
-import { type FC, type FormEventHandler, type MouseEventHandler } from 'react';
+import {
+  type FC,
+  type SubmitEventHandler,
+  type MouseEventHandler,
+} from 'react';
 import {
   type oneCertificateResponseType,
   parseOneCertificateResponseType,
@@ -102,14 +106,14 @@ const EditOneCert: FC = () => {
   // fetch current state
   const { getState: getCertState } = useAxiosGet<oneCertificateResponseType>(
     thisCertUrl,
-    parseOneCertificateResponseType
+    parseOneCertificateResponseType,
   );
 
   // get config options
   const { getState: getOptionsState } =
     useAxiosGet<certificateOptionsResponseType>(
       CERTIFICATE_OPTIONS_URL,
-      parseCertificateOptionsResponse
+      parseCertificateOptionsResponse,
     );
 
   // initialForm uses the cert response to create a starting form object
@@ -118,7 +122,7 @@ const EditOneCert: FC = () => {
       certResponseData: oneCertificateResponseType | undefined,
       certError: frontendErrorType | undefined,
       optionsResponseData: certificateOptionsResponseType | undefined,
-      optionsError: frontendErrorType | undefined
+      optionsError: frontendErrorType | undefined,
     ) => ({
       getCertResponseData: certResponseData,
       getCertError: certError,
@@ -151,10 +155,10 @@ const EditOneCert: FC = () => {
       sendError: undefined,
       validationErrors: {},
     }),
-    []
+    [],
   );
   const [formState, setFormState] = useState<formObj>(
-    initialForm(undefined, undefined, undefined, undefined)
+    initialForm(undefined, undefined, undefined, undefined),
   );
 
   // set initial form after api loads
@@ -164,8 +168,8 @@ const EditOneCert: FC = () => {
         getCertState.responseData,
         getCertState.error,
         getOptionsState.responseData,
-        getOptionsState.error
-      )
+        getOptionsState.error,
+      ),
     );
   }, [setFormState, initialForm, getCertState, getOptionsState]);
 
@@ -180,7 +184,7 @@ const EditOneCert: FC = () => {
       'DELETE',
       thisCertUrl,
       {},
-      parseCertificateDeleteResponseType
+      parseCertificateDeleteResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate('/certificates');
@@ -207,7 +211,7 @@ const EditOneCert: FC = () => {
   // common key call for key rotation (both api and client key)
   const keyRotation = (
     method: 'POST' | 'DELETE',
-    keyType: 'api' | 'client'
+    keyType: 'api' | 'client',
   ): void => {
     const callPath =
       keyType === 'api' ? thisCertApiKeyUrl : thisCertClientKeyUrl;
@@ -216,7 +220,7 @@ const EditOneCert: FC = () => {
       method,
       callPath,
       {},
-      parseOneCertificateResponseType
+      parseOneCertificateResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         // update get response with updated info
@@ -252,7 +256,7 @@ const EditOneCert: FC = () => {
   };
 
   // form submission handler
-  const submitFormHandler: FormEventHandler = (event) => {
+  const submitFormHandler: SubmitEventHandler = (event) => {
     event.preventDefault();
 
     // form validation
@@ -274,7 +278,9 @@ const EditOneCert: FC = () => {
     // post process client address
     if (
       formState.dataToSubmit.post_processing_client_address !== '' &&
-      !isDomainAndPortValid(formState.dataToSubmit.post_processing_client_address)
+      !isDomainAndPortValid(
+        formState.dataToSubmit.post_processing_client_address,
+      )
     ) {
       validationErrors['dataToSubmit.post_processing_client_address'] = true;
     }
@@ -288,7 +294,7 @@ const EditOneCert: FC = () => {
             `dataToSubmit.post_processing_environment.${index.toString()}`
           ] = true;
         }
-      }
+      },
     );
 
     // Profiles (if not blank)
@@ -349,7 +355,7 @@ const EditOneCert: FC = () => {
       'PUT',
       thisCertUrl,
       formState.dataToSubmit,
-      parseOneCertificateResponseType
+      parseOneCertificateResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate('/certificates');
@@ -391,8 +397,8 @@ const EditOneCert: FC = () => {
         formState.getCertResponseData,
         formState.getCertError,
         formState.getOptionsResponseData,
-        formState.getOptionsError
-      ).dataToSubmit
+        formState.getOptionsError,
+      ).dataToSubmit,
     );
 
   return (
@@ -498,7 +504,7 @@ const EditOneCert: FC = () => {
                 options={buildPrivateKeyOptions(
                   formState.getOptionsResponseData.certificate_options
                     .private_keys,
-                  formState.getCertResponseData.certificate.private_key
+                  formState.getCertResponseData.certificate.private_key,
                 )}
               />
 
@@ -758,8 +764,8 @@ const EditOneCert: FC = () => {
                       prevState.getCertResponseData,
                       prevState.getCertError,
                       prevState.getOptionsResponseData,
-                      prevState.getOptionsError
-                    )
+                      prevState.getOptionsError,
+                    ),
                   );
                 }}
                 disabledAllButtons={axiosSendState.isSending}

@@ -1,4 +1,4 @@
-import { type FC, type FormEventHandler } from 'react';
+import { type FC, type SubmitEventHandler } from 'react';
 import {
   type domainAliasesType,
   type domainAliasesResponseType,
@@ -41,7 +41,7 @@ type formObj = {
 const EditAliases: FC = () => {
   const { getState } = useAxiosGet<domainAliasesResponseType>(
     CHALLENGES_DOMAIN_ALIASES,
-    parseDomainAliasesResponseType
+    parseDomainAliasesResponseType,
   );
   const { axiosSendState, apiCall } = useAxiosSend();
   const navigate = useNavigate();
@@ -56,7 +56,7 @@ const EditAliases: FC = () => {
       sendError: undefined,
       validationErrors: {},
     }),
-    [getState]
+    [getState],
   );
   const [formState, setFormState] = useState<formObj>(makeStartingForm());
 
@@ -69,7 +69,7 @@ const EditAliases: FC = () => {
   const inputChangeHandler = inputHandlerFuncMaker(setFormState);
 
   // form submission handler
-  const submitFormHandler: FormEventHandler = (event) => {
+  const submitFormHandler: SubmitEventHandler = (event) => {
     event.preventDefault();
 
     // form validation
@@ -122,7 +122,7 @@ const EditAliases: FC = () => {
       'POST',
       CHALLENGES_DOMAIN_ALIASES,
       formState.dataToSubmit,
-      parseDomainAliasesResponseType
+      parseDomainAliasesResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate('/challenges/providers');

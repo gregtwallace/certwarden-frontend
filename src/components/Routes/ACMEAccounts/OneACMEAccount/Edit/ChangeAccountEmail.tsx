@@ -1,4 +1,4 @@
-import { type FC, type FormEventHandler } from 'react';
+import { type FC, type SubmitEventHandler } from 'react';
 import {
   type oneAcmeAccountResponseType,
   parseOneAcmeAccountResponseType,
@@ -48,7 +48,7 @@ const ChangeAccountEmail: FC = () => {
 
   const { getState } = useAxiosGet<oneAcmeAccountResponseType>(
     thisAccountUrl,
-    parseOneAcmeAccountResponseType
+    parseOneAcmeAccountResponseType,
   );
 
   const { axiosSendState, apiCall } = useAxiosSend();
@@ -58,7 +58,7 @@ const ChangeAccountEmail: FC = () => {
   const initialForm = useCallback(
     (
       responseData: oneAcmeAccountResponseType | undefined,
-      error: frontendErrorType | undefined
+      error: frontendErrorType | undefined,
     ) => ({
       getResponseData: responseData,
       getError: error,
@@ -68,10 +68,10 @@ const ChangeAccountEmail: FC = () => {
       sendError: undefined,
       validationErrors: {},
     }),
-    []
+    [],
   );
   const [formState, setFormState] = useState<formObj>(
-    initialForm(undefined, undefined)
+    initialForm(undefined, undefined),
   );
 
   // set initial form after api loads
@@ -92,7 +92,7 @@ const ChangeAccountEmail: FC = () => {
   const inputChangeHandler = inputHandlerFuncMaker(setFormState);
 
   // form submission handler
-  const submitFormHandler: FormEventHandler = (event) => {
+  const submitFormHandler: SubmitEventHandler = (event) => {
     event.preventDefault();
 
     // client side validation
@@ -119,7 +119,7 @@ const ChangeAccountEmail: FC = () => {
       'PUT',
       thisAccountEmailUrl,
       formState.dataToSubmit,
-      parseOneAcmeAccountResponseType
+      parseOneAcmeAccountResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate(`/acmeaccounts/${id}`);
@@ -182,7 +182,7 @@ const ChangeAccountEmail: FC = () => {
             cancelHref={`/acmeaccounts/${id}`}
             resetOnClick={() => {
               setFormState((prevState) =>
-                initialForm(prevState.getResponseData, prevState.getError)
+                initialForm(prevState.getResponseData, prevState.getError),
               );
             }}
             disabledAllButtons={axiosSendState.isSending}
@@ -190,7 +190,7 @@ const ChangeAccountEmail: FC = () => {
               JSON.stringify(formState.dataToSubmit) ===
               JSON.stringify(
                 initialForm(formState.getResponseData, formState.getError)
-                  .dataToSubmit
+                  .dataToSubmit,
               )
             }
           />
