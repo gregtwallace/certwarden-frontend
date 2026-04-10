@@ -22,6 +22,7 @@ import Dns01AcmeShFormFields from './ProviderSubForms/Dns01AcmeShFormFields';
 import Dns01CloudflareFormFields from './ProviderSubForms/Dns01CloudflareFormFields';
 import Dns01GoAcmeFields from './ProviderSubForms/Dns01GoAcmeFields';
 import Dns01ManualFormFields from './ProviderSubForms/Dns01ManualFormFields';
+import DnsPersist01ManualFormFields from './ProviderSubForms/DnsPersist01ManualFormFields';
 
 type provider = {
   value: string;
@@ -32,7 +33,7 @@ type provider = {
   alsoSet: alsoSetType[] | undefined;
   providerOptionsForEdit:
     | ((
-        providerConfig: providerConfigType | undefined
+        providerConfig: providerConfigType | undefined,
       ) => Record<string, unknown> | undefined)
     | undefined;
   validationFunc: (formState: providerFormStateType) => validationErrorsType;
@@ -224,9 +225,8 @@ export const providersList: provider[] = [
         formState.configToSubmit.environment.forEach((param, index) => {
           // check each param
           if (!isEnvironmentParamValid(param)) {
-            validationErrors[
-              `configToSubmit.environment.${index.toString()}`
-            ] = true;
+            validationErrors[`configToSubmit.environment.${index.toString()}`] =
+              true;
           }
         });
       }
@@ -373,9 +373,8 @@ export const providersList: provider[] = [
         formState.configToSubmit.environment.forEach((param, index) => {
           // check each param
           if (!isEnvironmentParamValid(param)) {
-            validationErrors[
-              `configToSubmit.environment.${index.toString()}`
-            ] = true;
+            validationErrors[`configToSubmit.environment.${index.toString()}`] =
+              true;
           }
         });
       }
@@ -431,9 +430,8 @@ export const providersList: provider[] = [
         formState.configToSubmit.environment.forEach((param, index) => {
           // check each param
           if (!isEnvironmentParamValid(param)) {
-            validationErrors[
-              `configToSubmit.environment.${index.toString()}`
-            ] = true;
+            validationErrors[`configToSubmit.environment.${index.toString()}`] =
+              true;
           }
         });
       }
@@ -488,6 +486,37 @@ export const providersList: provider[] = [
 
     helpUrl:
       'https://www.certwarden.com/docs/user_interface/providers/http01_internal/',
+  },
+
+  {
+    value: 'dnspersist01manual',
+    name: 'DNS-PERSIST-01 Manual',
+    supportsWindows: true,
+    FormComponent: DnsPersist01ManualFormFields,
+    configName: 'dns_persist_01_manual',
+    alsoSet: [
+      {
+        name: 'configToSubmit',
+        value: {},
+      },
+      {
+        name: 'validationErrors',
+        value: {},
+      },
+      {
+        name: 'provider_options',
+        value: undefined,
+      },
+      {
+        name: 'dataToSubmit.post_resource_provision_wait',
+        value: 0,
+      },
+    ],
+    providerOptionsForEdit: undefined,
+    validationFunc: (_formState) => ({}),
+
+    helpUrl:
+      'https://www.certwarden.com/docs/user_interface/providers/dnspersist01_manual/',
   },
 ];
 

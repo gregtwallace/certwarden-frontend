@@ -43,7 +43,7 @@ const storedAuthorization = z.object({
 
 export type storedAuthorizationType = z.infer<typeof storedAuthorization>;
 export const parseStoredAuthorizationType = (
-  unk: unknown
+  unk: unknown,
 ): storedAuthorizationType => {
   return storedAuthorization.parse(unk);
 };
@@ -64,7 +64,7 @@ const authorizationResponse = basicGoodResponse.extend({
 
 export type authorizationResponseType = z.infer<typeof authorizationResponse>;
 export const parseAuthorizationResponseType = (
-  unk: unknown
+  unk: unknown,
 ): authorizationResponseType => {
   return authorizationResponse.parse(unk);
 };
@@ -94,7 +94,7 @@ const authStatusResponse = basicGoodResponse.extend({
 
 export type authStatusResponseType = z.infer<typeof authStatusResponse>;
 export const parseAuthStatusResponseType = (
-  unk: unknown
+  unk: unknown,
 ): authStatusResponseType => {
   return authStatusResponse.parse(unk);
 };
@@ -127,7 +127,7 @@ const newVersionResponse = basicGoodResponse.extend({
 
 export type newVersionResponseType = z.infer<typeof newVersionResponse>;
 export const parseNewVersionResponseType = (
-  unk: unknown
+  unk: unknown,
 ): newVersionResponseType => {
   return newVersionResponse.parse(unk);
 };
@@ -169,7 +169,7 @@ const backendStatusResponse = basicGoodResponse.extend({
 
 export type backendStatusResponseType = z.infer<typeof backendStatusResponse>;
 export const parseBackendStatusResponse = (
-  unk: unknown
+  unk: unknown,
 ): backendStatusResponseType => {
   return backendStatusResponse.parse(unk);
 };
@@ -181,7 +181,7 @@ const changePasswordResponse = basicGoodResponse.extend({
 
 export type changePasswordResponseType = z.infer<typeof changePasswordResponse>;
 export const parseChangePasswordResponse = (
-  unk: unknown
+  unk: unknown,
 ): changePasswordResponseType => {
   return changePasswordResponse.parse(unk);
 };
@@ -229,7 +229,7 @@ export type backupAllOnDiskResponseType = z.infer<
   typeof backupAllOnDiskResponse
 >;
 export const parseBackupAllOnDiskResponseType = (
-  unk: unknown
+  unk: unknown,
 ): backupAllOnDiskResponseType => {
   return backupAllOnDiskResponse.parse(unk);
 };
@@ -241,7 +241,7 @@ const backupMakeResponse = basicGoodResponse.extend({
 
 export type backupMakeResponseType = z.infer<typeof backupMakeResponse>;
 export const parseBackupMakeResponseType = (
-  unk: unknown
+  unk: unknown,
 ): backupMakeResponseType => {
   return backupMakeResponse.parse(unk);
 };
@@ -252,7 +252,7 @@ const backupDeleteResponse = basicGoodResponse.extend({
 
 export type backupDeleteResponseType = z.infer<typeof backupDeleteResponse>;
 export const parseBackupDeleteResponseType = (
-  unk: unknown
+  unk: unknown,
 ): backupDeleteResponseType => {
   return backupDeleteResponse.parse(unk);
 };
@@ -270,13 +270,13 @@ const acmeServersResponse = basicGoodResponse.extend({
       description: z.string(),
       is_staging: z.boolean(),
       external_account_required: z.boolean(),
-    })
+    }),
   ),
 });
 
 export type acmeServersResponseType = z.infer<typeof acmeServersResponse>;
 export const parseAcmeServersResponseType = (
-  unk: unknown
+  unk: unknown,
 ): acmeServersResponseType => {
   return acmeServersResponse.parse(unk);
 };
@@ -296,7 +296,7 @@ const oneAcmeServerResponse = basicGoodResponse.extend({
 });
 export type oneAcmeServerResponseType = z.infer<typeof oneAcmeServerResponse>;
 export const parseOneAcmeServerResponseType = (
-  unk: unknown
+  unk: unknown,
 ): oneAcmeServerResponseType => {
   return oneAcmeServerResponse.parse(unk);
 };
@@ -308,7 +308,7 @@ export type oneAcmeServerDeleteResponseType = z.infer<
   typeof oneAcmeServerDeleteResponse
 >;
 export const parseOneAcmeServerDeleteResponse = (
-  unk: unknown
+  unk: unknown,
 ): oneAcmeServerDeleteResponseType => {
   return oneAcmeServerDeleteResponse.parse(unk);
 };
@@ -331,13 +331,13 @@ const privateKeysResponse = basicGoodResponse.extend({
       api_key_disabled: z.boolean(),
       api_key_via_url: z.boolean(),
       last_access: z.number(),
-    })
+    }),
   ),
 });
 
 export type privateKeysResponseType = z.infer<typeof privateKeysResponse>;
 export const parsePrivateKeysResponseType = (
-  unk: unknown
+  unk: unknown,
 ): privateKeysResponseType => {
   return privateKeysResponse.parse(unk);
 };
@@ -363,7 +363,7 @@ const onePrivateKeyResponse = basicGoodResponse.extend({
 
 export type onePrivateKeyResponseType = z.infer<typeof onePrivateKeyResponse>;
 export const parseOnePrivateKeyResponseType = (
-  unk: unknown
+  unk: unknown,
 ): onePrivateKeyResponseType => {
   return onePrivateKeyResponse.parse(unk);
 };
@@ -376,7 +376,7 @@ export type privateKeyDeleteResponseType = z.infer<
   typeof privateKeyDeleteResponse
 >;
 export const parsePrivateKeyDeleteResponseType = (
-  unk: unknown
+  unk: unknown,
 ): privateKeyDeleteResponseType => {
   return privateKeyDeleteResponse.parse(unk);
 };
@@ -387,7 +387,7 @@ const privateKeyOptionsResponse = basicGoodResponse.extend({
       z.object({
         value: z.string(),
         name: z.string(),
-      })
+      }),
     ),
   }),
 });
@@ -396,7 +396,7 @@ export type privateKeyOptionsResponseType = z.infer<
   typeof privateKeyOptionsResponse
 >;
 export const parsePrivateKeyOptionsResponseType = (
-  unk: unknown
+  unk: unknown,
 ): privateKeyOptionsResponseType => {
   return privateKeyOptionsResponse.parse(unk);
 };
@@ -422,13 +422,13 @@ const acmeAccountsResponse = basicGoodResponse.extend({
       status: z.string(),
       email: z.string(),
       kid: z.string(),
-    })
+    }),
   ),
 });
 
 export type acmeAccountsResponseType = z.infer<typeof acmeAccountsResponse>;
 export const parseAcmeAccountsResponseType = (
-  unk: unknown
+  unk: unknown,
 ): acmeAccountsResponseType => {
   return acmeAccountsResponse.parse(unk);
 };
@@ -462,7 +462,7 @@ const oneAcmeAccountResponse = basicGoodResponse.extend({
 
 export type oneAcmeAccountResponseType = z.infer<typeof oneAcmeAccountResponse>;
 export const parseOneAcmeAccountResponseType = (
-  unk: unknown
+  unk: unknown,
 ): oneAcmeAccountResponseType => {
   return oneAcmeAccountResponse.parse(unk);
 };
@@ -476,7 +476,7 @@ export type acmeAccountDeleteResponseType = z.infer<
   typeof acmeAccountDeleteResponse
 >;
 export const parseAcmeAccountDeleteResponseType = (
-  unk: unknown
+  unk: unknown,
 ): acmeAccountDeleteResponseType => {
   return acmeAccountDeleteResponse.parse(unk);
 };
@@ -490,7 +490,7 @@ export type acmeAccountRegisterResponseType = z.infer<
   typeof acmeAccountRegisterResponse
 >;
 export const parseAcmeAccountRegisterResponseType = (
-  unk: unknown
+  unk: unknown,
 ): acmeAccountRegisterResponseType => {
   return acmeAccountRegisterResponse.parse(unk);
 };
@@ -504,7 +504,7 @@ export type acmeAccountRefreshResponseType = z.infer<
   typeof acmeAccountRefreshResponse
 >;
 export const parseAcmeAccountRefreshResponseType = (
-  unk: unknown
+  unk: unknown,
 ): acmeAccountRefreshResponseType => {
   return acmeAccountRefreshResponse.parse(unk);
 };
@@ -518,7 +518,7 @@ export type acmeAccountDeactivateResponseType = z.infer<
   typeof acmeAccountDeactivateResponse
 >;
 export const parseAcmeAccountDeactivateResponseType = (
-  unk: unknown
+  unk: unknown,
 ): acmeAccountDeactivateResponseType => {
   return acmeAccountDeactivateResponse.parse(unk);
 };
@@ -533,7 +533,7 @@ const postAsGetResponse = basicGoodResponse.extend({
 
 export type postAsGetResponseType = z.infer<typeof postAsGetResponse>;
 export const parsePostAsGetResponseType = (
-  unk: unknown
+  unk: unknown,
 ): postAsGetResponseType => {
   return postAsGetResponse.parse(unk);
 };
@@ -547,7 +547,7 @@ const acmeAccountOptionsResponse = basicGoodResponse.extend({
         name: z.string(),
         is_staging: z.boolean(),
         terms_of_service: z.string(),
-      })
+      }),
     ),
     private_keys: z.array(
       z.object({
@@ -556,7 +556,7 @@ const acmeAccountOptionsResponse = basicGoodResponse.extend({
         algorithm: z.object({
           name: z.string(),
         }),
-      })
+      }),
     ),
   }),
 });
@@ -565,7 +565,7 @@ export type acmeAccountOptionsResponseType = z.infer<
   typeof acmeAccountOptionsResponse
 >;
 export const parseAcmeAccountOptionsResponse = (
-  unk: unknown
+  unk: unknown,
 ): acmeAccountOptionsResponseType => {
   return acmeAccountOptionsResponse.parse(unk);
 };
@@ -598,13 +598,13 @@ const certificatesResponse = basicGoodResponse.extend({
       subject: z.string(),
       api_key_via_url: z.boolean(),
       last_access: z.number(),
-    })
+    }),
   ),
 });
 
 export type certificatesResponseType = z.infer<typeof certificatesResponse>;
 export const parseCertificatesResponseType = (
-  unk: unknown
+  unk: unknown,
 ): certificatesResponseType => {
   return certificatesResponse.parse(unk);
 };
@@ -645,7 +645,7 @@ const oneCertificateResponse = basicGoodResponse.extend({
         oid: z.string(),
         critical: z.boolean(),
         value_hex: z.string(),
-      })
+      }),
     ),
     preferred_root_cn: z.string(),
     profile: z.string(),
@@ -663,7 +663,7 @@ const oneCertificateResponse = basicGoodResponse.extend({
 
 export type oneCertificateResponseType = z.infer<typeof oneCertificateResponse>;
 export const parseOneCertificateResponseType = (
-  unk: unknown
+  unk: unknown,
 ): oneCertificateResponseType => {
   return oneCertificateResponse.parse(unk);
 };
@@ -677,7 +677,7 @@ export type certificateDeleteResponseType = z.infer<
   typeof certificateDeleteResponse
 >;
 export const parseCertificateDeleteResponseType = (
-  unk: unknown
+  unk: unknown,
 ): certificateDeleteResponseType => {
   return certificateDeleteResponse.parse(unk);
 };
@@ -692,13 +692,13 @@ const certificateOptionsResponse = basicGoodResponse.extend({
         algorithm: z.object({
           name: z.string(),
         }),
-      })
+      }),
     ),
     key_algorithms: z.array(
       z.object({
         value: z.string(),
         name: z.string(),
-      })
+      }),
     ),
     acme_accounts: z.array(
       z.object({
@@ -711,7 +711,7 @@ const certificateOptionsResponse = basicGoodResponse.extend({
         }),
         status: z.string(),
         kid: z.string(),
-      })
+      }),
     ),
   }),
 });
@@ -720,7 +720,7 @@ export type certificateOptionsResponseType = z.infer<
   typeof certificateOptionsResponse
 >;
 export const parseCertificateOptionsResponse = (
-  unk: unknown
+  unk: unknown,
 ): certificateOptionsResponseType => {
   return certificateOptionsResponse.parse(unk);
 };
@@ -805,7 +805,7 @@ export type orderPostProcessResponseType = z.infer<
   typeof orderPostProcessResponse
 >;
 export const parseOrderPostProcessResponseType = (
-  unk: unknown
+  unk: unknown,
 ): orderPostProcessResponseType => {
   return orderPostProcessResponse.parse(unk);
 };
@@ -823,7 +823,7 @@ export type currentValidOrdersResponseType = z.infer<
   typeof currentValidOrdersResponse
 >;
 export const parseCurrentValidOrdersResponseType = (
-  unk: unknown
+  unk: unknown,
 ): currentValidOrdersResponseType => {
   return currentValidOrdersResponse.parse(unk);
 };
@@ -856,7 +856,7 @@ const domainAliases = z.array(
   z.object({
     challenge_domain: z.string(),
     provision_domain: z.string(),
-  })
+  }),
 );
 
 export type domainAliasesType = z.infer<typeof domainAliases>;
@@ -868,7 +868,7 @@ const domainAliasesResponse = basicGoodResponse.extend({
 
 export type domainAliasesResponseType = z.infer<typeof domainAliasesResponse>;
 export const parseDomainAliasesResponseType = (
-  unk: unknown
+  unk: unknown,
 ): domainAliasesResponseType => {
   return domainAliasesResponse.parse(unk);
 };
@@ -912,7 +912,7 @@ const providerDns01AcmeDns = providerBase.extend({
         full_domain: z.string(),
         username: z.string(),
         password: z.string(),
-      })
+      }),
     ),
   }),
 });
@@ -951,6 +951,9 @@ const providerDns01GoAcme = providerBase.extend({
   }),
 });
 
+// dns persist 01: manual
+const providerDnsPersist01Manual = providerBase.extend({});
+
 const provider = z.union([
   providerHttp01Internal,
   providerDns01Manual,
@@ -958,6 +961,7 @@ const provider = z.union([
   providerDns01AcmeSh,
   providerDns01Cloudflare,
   providerDns01GoAcme,
+  providerDnsPersist01Manual,
 ]);
 export type providerType = z.infer<typeof provider>;
 
@@ -968,7 +972,7 @@ const providersResponse = basicGoodResponse.extend({
 
 export type providersResponseType = z.infer<typeof providersResponse>;
 export const parseProvidersResponseType = (
-  unk: unknown
+  unk: unknown,
 ): providersResponseType => {
   return providersResponse.parse(unk);
 };
@@ -978,7 +982,7 @@ const providerResponse = basicGoodResponse.extend({
 });
 export type providerResponseType = z.infer<typeof providerResponse>;
 export const parseProviderResponseType = (
-  unk: unknown
+  unk: unknown,
 ): providerResponseType => {
   return providerResponse.parse(unk);
 };
@@ -990,7 +994,7 @@ export type oneProviderDeleteResponseType = z.infer<
   typeof oneProviderDeleteResponse
 >;
 export const parseOneProviderDeleteResponse = (
-  unk: unknown
+  unk: unknown,
 ): oneProviderDeleteResponseType => {
   return oneProviderDeleteResponse.parse(unk);
 };
@@ -1015,7 +1019,7 @@ const parseObjectWithApiKeys = (unk: unknown): objectWithApiKeysType => {
 // this parser allows multiple object types to be addressed by the one api key
 // edit page
 export const parseObjectWithApiKeysResponse = (
-  unk: unknown
+  unk: unknown,
 ): objectWithApiKeysType => {
   // private key response
   try {
