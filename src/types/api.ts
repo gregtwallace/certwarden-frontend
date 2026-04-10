@@ -952,7 +952,9 @@ const providerDns01GoAcme = providerBase.extend({
 });
 
 // dns persist 01: manual
-const providerDnsPersist01Manual = providerBase.extend({});
+const providerDnsPersist01Manual = providerBase.extend({
+  config: z.object({}),
+});
 
 const provider = z.union([
   providerHttp01Internal,
