@@ -649,6 +649,8 @@ const oneCertificateResponse = basicGoodResponse.extend({
     ),
     preferred_root_cn: z.string(),
     profile: z.string(),
+    tech_phone: z.string(),
+    tech_email: z.string(),
     api_key: z.string(),
     api_key_new: z.string().optional(),
     post_processing_command: z.string(),
