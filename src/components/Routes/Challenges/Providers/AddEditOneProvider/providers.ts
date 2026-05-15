@@ -182,7 +182,7 @@ export const providersList: provider[] = [
       {
         name: 'configToSubmit',
         value: {
-          acme_sh_path: '',
+          acme_sh_path: './scripts/acme.sh',
           dns_hook: '',
           environment: [],
         },
