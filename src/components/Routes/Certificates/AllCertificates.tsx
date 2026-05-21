@@ -1,9 +1,10 @@
-import { type FC } from 'react';
+import { type FC, useState } from 'react';
 import {
   type certificatesResponseType,
   parseCertificatesResponseType,
 } from '../../../types/api';
 import { type headerType } from '../../UI/TableMui/TableHeaderRow';
+import { type IFuseOptions } from 'fuse.js';
 
 import { Link as RouterLink, useSearchParams } from 'react-router';
 
@@ -26,10 +27,18 @@ import FlagLegacyAPI from '../../UI/Flag/FlagLegacyAPI';
 import FlagStaging from '../../UI/Flag/FlagStaging';
 import TableContainer from '../../UI/TableMui/TableContainer';
 import TableHeaderRow from '../../UI/TableMui/TableHeaderRow';
+import TableSearch from '../../UI/TableMui/TableSearch';
 import TitleBar from '../../UI/TitleBar/TitleBar';
 import TablePagination from '../../UI/TableMui/TablePagination';
+import useDebounce from '../../../hooks/useDebounce';
+import useFuseSearch from '../../../hooks/useFuseSearch';
 
 const CERTIFICATES_URL = '/v1/certificates';
+
+const fuseOptions: IFuseOptions<certificatesResponseType['certificates'][number]> = {
+  keys: ['name', 'subject', 'private_key.name', 'acme_account.name'],
+  threshold: 0.3,
+};
 
 // table headers and sortable param
 const tableHeaders: headerType[] = [
@@ -70,10 +79,35 @@ const AllCertificates: FC = () => {
   const [searchParams] = useSearchParams();
   const { page, rowsPerPage, queryParams } = queryParser(searchParams, 'name');
 
+  // fuzzy search state
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 200);
+
+  // when search is active, fetch all records; otherwise use normal paginated fetch
+  const fetchUrl =
+    debouncedSearchTerm !== ''
+      ? `${CERTIFICATES_URL}?limit=0&sort=name.asc`
+      : `${CERTIFICATES_URL}?${queryParams}`;
+
   const { getState } = useAxiosGet<certificatesResponseType>(
-    `${CERTIFICATES_URL}?${queryParams}`,
+    fetchUrl,
     parseCertificatesResponseType
   );
+
+  const allCertificates = getState.responseData?.certificates ?? [];
+  const filteredCertificates = useFuseSearch(
+    allCertificates,
+    debouncedSearchTerm,
+    fuseOptions
+  );
+
+  const isSearchActive = debouncedSearchTerm !== '';
+  const displayedCertificates = isSearchActive
+    ? filteredCertificates.slice(page * rowsPerPage, (page + 1) * rowsPerPage)
+    : allCertificates;
+  const totalCount = isSearchActive
+    ? filteredCertificates.length
+    : (getState.responseData?.total_records ?? 0);
 
   return (
     <TableContainer>
@@ -85,6 +119,12 @@ const AllCertificates: FC = () => {
           New Certificate
         </ButtonAsLink>
       </TitleBar>
+
+      <TableSearch
+        value={searchTerm}
+        onChange={setSearchTerm}
+        {...(isSearchActive ? { resultCount: filteredCertificates.length } : {})}
+      />
 
       {!getState.responseData && !getState.error && <ApiLoading />}
 
@@ -102,7 +142,14 @@ const AllCertificates: FC = () => {
               <TableHeaderRow headers={tableHeaders} />
             </TableHead>
             <TableBody>
-              {getState.responseData.certificates.map((cert) => (
+              {displayedCertificates.length === 0 && isSearchActive && (
+                <TableRow>
+                  <TableCell colSpan={tableHeaders.length} align='center'>
+                    No certificates match &ldquo;{debouncedSearchTerm}&rdquo;
+                  </TableCell>
+                </TableRow>
+              )}
+              {displayedCertificates.map((cert) => (
                 <TableRow key={cert.id}>
                   <TableCell>
                     <Link
@@ -149,7 +196,7 @@ const AllCertificates: FC = () => {
           <TablePagination
             page={page}
             rowsPerPage={rowsPerPage}
-            count={getState.responseData.total_records}
+            count={totalCount}
           />
         </>
       )}
