@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
 import Fuse, { type IFuseOptions } from 'fuse.js';
+import { useMemo } from 'react';
 
 const useFuseSearch = <T>(
   data: T[],

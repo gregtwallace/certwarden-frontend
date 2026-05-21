@@ -1,16 +1,16 @@
+import { type IFuseOptions } from 'fuse.js';
 import { type FC, useState } from 'react';
 import {
   type certificatesResponseType,
   parseCertificatesResponseType,
 } from '../../../types/api';
 import { type headerType } from '../../UI/TableMui/TableHeaderRow';
-import { type IFuseOptions } from 'fuse.js';
 
 import { Link as RouterLink, useSearchParams } from 'react-router';
 
+import { newId } from '../../../helpers/constants';
 import useAxiosGet from '../../../hooks/useAxiosGet';
 import { queryParser } from '../../UI/TableMui/query';
-import { newId } from '../../../helpers/constants';
 
 import Link from '@mui/material/Link';
 import Table from '@mui/material/Table';
@@ -19,19 +19,19 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
-import ApiLoading from '../../UI/Api/ApiLoading';
+import useDebounce from '../../../hooks/useDebounce';
+import useFuseSearch from '../../../hooks/useFuseSearch';
 import ApiError from '../../UI/Api/ApiError';
+import ApiLoading from '../../UI/Api/ApiLoading';
 import ButtonAsLink from '../../UI/Button/ButtonAsLink';
 import DateWithTooltip from '../../UI/DateWithTooltip/DateWithTooltip';
 import FlagLegacyAPI from '../../UI/Flag/FlagLegacyAPI';
 import FlagStaging from '../../UI/Flag/FlagStaging';
 import TableContainer from '../../UI/TableMui/TableContainer';
 import TableHeaderRow from '../../UI/TableMui/TableHeaderRow';
+import TablePagination from '../../UI/TableMui/TablePagination';
 import TableSearch from '../../UI/TableMui/TableSearch';
 import TitleBar from '../../UI/TitleBar/TitleBar';
-import TablePagination from '../../UI/TableMui/TablePagination';
-import useDebounce from '../../../hooks/useDebounce';
-import useFuseSearch from '../../../hooks/useFuseSearch';
 
 const CERTIFICATES_URL = '/v1/certificates';
 
