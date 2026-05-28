@@ -1,35 +1,44 @@
-import { type FC } from 'react';
+import { type IFuseOptions } from 'fuse.js';
+import { type FC, useState } from 'react';
 import {
   type privateKeysResponseType,
   parsePrivateKeysResponseType,
 } from '../../../types/api';
 import { type headerType } from '../../UI/TableMui/TableHeaderRow';
 
-import { Link as RouterLink, useSearchParams } from 'react-router';
 import { Link } from '@mui/material';
+import { Link as RouterLink, useSearchParams } from 'react-router';
 
+import { TableCell } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import { TableCell } from '@mui/material';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
+import { newId } from '../../../helpers/constants';
 import useAxiosGet from '../../../hooks/useAxiosGet';
 import { queryParser } from '../../UI/TableMui/query';
-import { newId } from '../../../helpers/constants';
 
-import ApiLoading from '../../UI/Api/ApiLoading';
+import useDebounce from '../../../hooks/useDebounce';
+import useFuseSearch from '../../../hooks/useFuseSearch';
 import ApiError from '../../UI/Api/ApiError';
+import ApiLoading from '../../UI/Api/ApiLoading';
 import ButtonAsLink from '../../UI/Button/ButtonAsLink';
 import DateWithTooltip from '../../UI/DateWithTooltip/DateWithTooltip';
 import FlagAPIDisabled from '../../UI/Flag/FlagAPIDisabled';
 import FlagLegacyAPI from '../../UI/Flag/FlagLegacyAPI';
 import TableContainer from '../../UI/TableMui/TableContainer';
 import TableHeaderRow from '../../UI/TableMui/TableHeaderRow';
-import TitleBar from '../../UI/TitleBar/TitleBar';
 import TablePagination from '../../UI/TableMui/TablePagination';
+import TableSearch from '../../UI/TableMui/TableSearch';
+import TitleBar from '../../UI/TitleBar/TitleBar';
 
 const PRIVATE_KEYS_URL = '/v1/privatekeys';
+
+const fuseOptions: IFuseOptions<privateKeysResponseType['private_keys'][number]> = {
+  keys: ['name', 'description', 'algorithm.name'],
+  threshold: 0.3,
+};
 
 // table headers and sortable param
 const tableHeaders: headerType[] = [
@@ -65,10 +74,31 @@ const AllPrivateKeys: FC = () => {
   const [searchParams] = useSearchParams();
   const { page, rowsPerPage, queryParams } = queryParser(searchParams, 'name');
 
+  // fuzzy search state
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 200);
+
+  // when search is active, fetch all records; otherwise use normal paginated fetch
+  const fetchUrl =
+    debouncedSearchTerm !== ''
+      ? `${PRIVATE_KEYS_URL}?limit=0&sort=name.asc`
+      : `${PRIVATE_KEYS_URL}?${queryParams}`;
+
   const { getState } = useAxiosGet<privateKeysResponseType>(
-    `${PRIVATE_KEYS_URL}?${queryParams}`,
+    fetchUrl,
     parsePrivateKeysResponseType
   );
+
+  const allKeys = getState.responseData?.private_keys ?? [];
+  const filteredKeys = useFuseSearch(allKeys, debouncedSearchTerm, fuseOptions);
+
+  const isSearchActive = debouncedSearchTerm !== '';
+  const displayedKeys = isSearchActive
+    ? filteredKeys.slice(page * rowsPerPage, (page + 1) * rowsPerPage)
+    : allKeys;
+  const totalCount = isSearchActive
+    ? filteredKeys.length
+    : (getState.responseData?.total_records ?? 0);
 
   return (
     <TableContainer>
@@ -78,6 +108,12 @@ const AllPrivateKeys: FC = () => {
       >
         <ButtonAsLink to={`/privatekeys/${newId.toString()}`}>New Key</ButtonAsLink>
       </TitleBar>
+
+      <TableSearch
+        value={searchTerm}
+        onChange={setSearchTerm}
+        {...(isSearchActive ? { resultCount: filteredKeys.length } : {})}
+      />
 
       {!getState.responseData && !getState.error && <ApiLoading />}
 
@@ -95,7 +131,14 @@ const AllPrivateKeys: FC = () => {
               <TableHeaderRow headers={tableHeaders} />
             </TableHead>
             <TableBody>
-              {getState.responseData.private_keys.map((key) => (
+              {displayedKeys.length === 0 && isSearchActive && (
+                <TableRow>
+                  <TableCell colSpan={tableHeaders.length} align='center'>
+                    No keys match &ldquo;{debouncedSearchTerm}&rdquo;
+                  </TableCell>
+                </TableRow>
+              )}
+              {displayedKeys.map((key) => (
                 <TableRow key={key.id}>
                   <TableCell>
                     <Link component={RouterLink} to={'/privatekeys/' + key.id.toString()}>
@@ -118,7 +161,7 @@ const AllPrivateKeys: FC = () => {
           <TablePagination
             page={page}
             rowsPerPage={rowsPerPage}
-            count={getState.responseData.total_records}
+            count={totalCount}
           />
         </>
       )}

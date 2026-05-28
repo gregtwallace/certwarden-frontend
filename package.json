@@ -13,6 +13,7 @@
     "@mui/icons-material": "^6.5.0",
     "@mui/material": "^6.5.0",
     "axios": "^1.16.0",
+    "fuse.js": "^7.3.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-router": "^7.14.0",
@@ -41,5 +42,10 @@
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.58.1",
     "vite": "^6.4.2"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }
