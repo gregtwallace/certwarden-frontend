@@ -161,6 +161,7 @@ const useAxiosSend = (): useAxiosSendReturnType => {
         // dev log response
         if (showDebugInfo) {
           // insert payload object so it is an object instead of stringified
+          // @ts-expect-error force this to an object so its easier to read debug in web console
           response.config.data = payloadObj;
 
           console.log(
