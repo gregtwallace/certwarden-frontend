@@ -4,7 +4,7 @@ import { type storedAuthorizationType, parseStoredAuthorizationType } from '../t
 import { createContext, useCallback, useEffect, useState } from 'react';
 
 // global idle logout timer
-let logoutTimer: number;
+let logoutTimer: undefined | ReturnType<typeof setTimeout>;
 
 const resetIdleLogoutTimer = (
   auth: storedAuthorizationType | undefined,
