@@ -139,9 +139,12 @@ export const parseNewVersionResponseType = (
 const logEntry = z.object({
   level: z.string(),
   ts: z.string().datetime({ offset: true }),
-  caller: z.string(),
+  logger: z.string().optional(),
+  caller: z.string().optional(),
   msg: z.string(),
 });
+
+export type logEntryType = z.infer<typeof logEntry>;
 
 const logResponse = basicGoodResponse.extend({
   log_entries: z.array(logEntry),

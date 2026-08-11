@@ -1,5 +1,9 @@
 import { type FC, type MouseEventHandler } from 'react';
-import { type logResponseType, parseLogResponseType } from '../../../types/api';
+import {
+  type logEntryType,
+  type logResponseType,
+  parseLogResponseType,
+} from '../../../types/api';
 import { type frontendErrorType } from '../../../types/frontend';
 
 import { useState } from 'react';
@@ -20,7 +24,7 @@ const DOWNLOAD_LOGS_URL = '/v1/app/logs';
 const LogViewer: FC = () => {
   const { getState } = useAxiosGet<logResponseType>(
     VIEW_LOG_URL,
-    parseLogResponseType
+    parseLogResponseType,
   );
 
   const { axiosSendState, downloadFile } = useAxiosSend();
@@ -32,6 +36,22 @@ const LogViewer: FC = () => {
     downloadFile(DOWNLOAD_LOGS_URL).then(({ error }) => {
       setDownloadError(error);
     });
+  };
+
+  // logEntryMapper provides a friendly output string for a log entry
+  const logEntryMapper = (entry: logEntryType) => {
+    const logger = entry.logger ? ', ' + entry.logger : '';
+    const caller = entry.caller ? ', ' + entry.caller : '';
+
+    return (
+      iso8601StringToPretty(entry.ts) +
+      ', ' +
+      entry.level +
+      logger +
+      caller +
+      ', ' +
+      entry.msg
+    );
   };
 
   return (
@@ -80,16 +100,7 @@ const LogViewer: FC = () => {
             fullWidth
             variant='standard'
             value={getState.responseData.log_entries
-              .map(
-                (entry) =>
-                  iso8601StringToPretty(entry.ts) +
-                  ', ' +
-                  entry.level +
-                  ', ' +
-                  entry.caller +
-                  ', ' +
-                  entry.msg
-              )
+              .map(logEntryMapper)
               .reverse()
               .join('\n')}
             sx={{ my: 1, px: 1, overflowY: 'auto' }}
