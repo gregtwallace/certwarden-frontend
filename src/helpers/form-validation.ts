@@ -13,7 +13,7 @@ export const isNameValid = (name: string): boolean => {
   }
 
   // match anything not valid ( A-Z, a-z, 0-9, -_.~ )
-  const regex = /[^-_.~A-z0-9]|[\^]/g;
+  const regex = /[^-_.~A-Za-z0-9]/g;
   if (name.match(regex)) {
     return false;
   }
