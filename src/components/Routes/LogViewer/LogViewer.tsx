@@ -9,7 +9,7 @@ import { type frontendErrorType } from '../../../types/frontend';
 import { useState } from 'react';
 import useAxiosGet from '../../../hooks/useAxiosGet';
 import useAxiosSend from '../../../hooks/useAxiosSend';
-import { iso8601StringToPretty } from '../../../helpers/time';
+import { dateToStandardizedString } from '../../../helpers/time';
 
 import { Paper, TextField as MuiTextField } from '@mui/material';
 
@@ -43,15 +43,9 @@ const LogViewer: FC = () => {
     const logger = entry.logger ? ', ' + entry.logger : '';
     const caller = entry.caller ? ', ' + entry.caller : '';
 
-    return (
-      iso8601StringToPretty(entry.ts) +
-      ', ' +
-      entry.level +
-      logger +
-      caller +
-      ', ' +
-      entry.msg
-    );
+    const ts = dateToStandardizedString(entry.ts);
+
+    return ts + ', ' + entry.level + logger + caller + ', ' + entry.msg;
   };
 
   return (
