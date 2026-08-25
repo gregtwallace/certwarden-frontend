@@ -1,5 +1,5 @@
-// resolve locale once, global scope
-const locale =
+// locale is a func instead of a const for testing purposes
+const getLocale = () =>
   (navigator.languages.length > 0 ? navigator.languages : navigator.language) ||
   'en-US';
 
@@ -13,7 +13,7 @@ const timeFormat: Intl.DateTimeFormatOptions = {
   hour: '2-digit',
   minute: '2-digit',
   second: '2-digit',
-  timeZoneName: 'shortGeneric',
+  timeZoneName: 'shortOffset',
 };
 
 // type for what type of date string to render
@@ -41,12 +41,12 @@ export const dateToStandardizedString = (
   content: dateStringType = 'both',
 ): string => {
   if (content === 'dateOnly') {
-    return date.toLocaleDateString(locale, dateFormat);
+    return date.toLocaleDateString(getLocale(), dateFormat);
   }
 
   if (content === 'timeOnly') {
-    return date.toLocaleTimeString(locale, timeFormat);
+    return date.toLocaleTimeString(getLocale(), timeFormat);
   }
 
-  return date.toLocaleString(locale, { ...timeFormat, ...dateFormat });
+  return date.toLocaleString(getLocale(), { ...timeFormat, ...dateFormat });
 };
