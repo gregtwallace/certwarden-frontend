@@ -138,7 +138,7 @@ export const parseNewVersionResponseType = (
 
 const logEntry = z.object({
   level: z.string(),
-  ts: z.string().datetime({ offset: true }),
+  ts: z.coerce.date(),
   logger: z.string().optional(),
   caller: z.string().optional(),
   msg: z.string(),

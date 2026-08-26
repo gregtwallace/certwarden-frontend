@@ -2,16 +2,7 @@ import { type FC } from 'react';
 
 import { Tooltip } from '@mui/material';
 
-import { unixTimeToString } from '../../../helpers/time';
-
-const dateWithTimeFormat: Intl.DateTimeFormatOptions = {
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-  hour: 'numeric',
-  minute: '2-digit',
-  second: '2-digit',
-};
+import { unixTimeToStandardizedString } from '../../../helpers/time';
 
 // prop types
 type propTypes = {
@@ -21,16 +12,18 @@ type propTypes = {
 const DateWithTooltip: FC<propTypes> = (props) => {
   const { unixTime } = props;
 
+  // if null time, this component isn't rendered
+  if (!unixTime) {
+    return <></>;
+  }
+
+  // convert time to text and render
+  const fullDateString = unixTimeToStandardizedString(unixTime, 'both');
+  const justDateString = unixTimeToStandardizedString(unixTime, 'dateOnly');
+
   return (
-    <Tooltip
-      title={
-        unixTime !== null &&
-        unixTime > 0 &&
-        unixTimeToString(unixTime, dateWithTimeFormat)
-      }
-      placement='right'
-    >
-      <span>{unixTimeToString(unixTime)}</span>
+    <Tooltip title={fullDateString} placement='right'>
+      <span>{justDateString}</span>
     </Tooltip>
   );
 };
