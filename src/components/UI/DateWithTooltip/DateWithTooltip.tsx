@@ -7,14 +7,15 @@ import { unixTimeToStandardizedString } from '../../../helpers/time';
 // prop types
 type propTypes = {
   unixTime: number | null;
+  altMessage?: string;
 };
 
 const DateWithTooltip: FC<propTypes> = (props) => {
-  const { unixTime } = props;
+  const { altMessage, unixTime } = props;
 
-  // if null time, this component isn't rendered
+  // if null time, render nothing or the specified alternate message (e.g., 'Never')
   if (!unixTime) {
-    return <></>;
+    return <>{altMessage}</>;
   }
 
   // convert time to text and render

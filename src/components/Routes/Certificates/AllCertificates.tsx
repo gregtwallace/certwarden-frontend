@@ -140,7 +140,7 @@ const AllCertificates: FC = () => {
                     </Link>
                   </TableCell>
                   <TableCell>
-                    <DateWithTooltip unixTime={cert.last_access} />
+                    <DateWithTooltip unixTime={cert.last_access} altMessage='Never' />
                   </TableCell>
                 </TableRow>
               ))}

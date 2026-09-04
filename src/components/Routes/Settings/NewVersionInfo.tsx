@@ -73,7 +73,7 @@ const NewVersionInfo: FC = () => {
 
           <GridItemText>
             Last Checked:{' '}
-            <DateWithTooltip unixTime={newVersion.last_checked_time} />
+            <DateWithTooltip unixTime={newVersion.last_checked_time} altMessage='Unknown' />
           </GridItemText>
 
           <GridItemRowRight>
