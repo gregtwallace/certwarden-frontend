@@ -109,7 +109,7 @@ const AllPrivateKeys: FC = () => {
                   </TableCell>
                   <TableCell>{key.algorithm.name}</TableCell>
                   <TableCell>
-                    <DateWithTooltip unixTime={key.last_access} />
+                    <DateWithTooltip unixTime={key.last_access} altMessage='Never' />
                   </TableCell>
                 </TableRow>
               ))}
