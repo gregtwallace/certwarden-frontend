@@ -99,17 +99,22 @@ os.makedirs(path_output)
 print("building certwarden-frontend ...")
 
 # build binary
-# result = subprocess.run(["npm", "ci"], cwd=path_src_frontend, shell=True)
+# result = subprocess.run(["npm.cmd", "ci"], cwd=path_src_frontend)
 # if result.returncode != 0:
 #   print(f"build certwarden-frontend npm ci failed")
 #   exit(-2)
 
-result = subprocess.run(["npm", "run", "build"], cwd=path_src_frontend, shell=True)
+result = subprocess.run(["npm.cmd", "run", "build"], cwd=path_src_frontend)
 if result.returncode != 0:
   print(f"build certwarden-frontend failed")
   exit(-2)
 
 # move dist to the appropriate output location
 shutil.move(os.path.join(path_src_frontend, "dist"), os.path.join(path_output, "frontend_build"))
+
+# write HEAD
+if gitHead:
+  with open(path_output + "/HEAD-frontend", "a") as f:
+    f.write(gitHead)
 
 print("exiting certwarden-frontend build script")
