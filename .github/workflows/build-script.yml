@@ -1,0 +1,42 @@
+name: run build script
+
+on:
+  workflow_dispatch:
+  push:
+
+env:
+  GITHUB_REF: ${{ github.ref }}
+
+permissions:
+  contents: read
+
+jobs:
+  run-build:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        python-version: ["3.14"]
+
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v6
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ env.GITHUB_REF }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.node-version'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Build using build script
+        run: python build.py --gitrequired
