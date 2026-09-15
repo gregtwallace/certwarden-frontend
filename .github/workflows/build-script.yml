@@ -39,4 +39,4 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Build using build script
-        run: python build.py
+        run: python build.py --gitrequired
