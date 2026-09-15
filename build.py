@@ -116,7 +116,7 @@ shutil.move(os.path.join(path_src_frontend, "dist"), os.path.join(path_output, "
 
 # write HEAD
 if gitHead:
-  with open(path_output + "/HEAD-frontend", "a") as f:
+  with open(os.path.join(path_output, "HEAD-frontend"), "a") as f:
     f.write(gitHead)
 
 print("exiting certwarden-frontend build script")
