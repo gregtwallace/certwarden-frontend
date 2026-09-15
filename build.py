@@ -5,7 +5,6 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
-import tarfile
 
 # Usage
 # python3 ./build_release.py [--gitrequired]
@@ -54,7 +53,7 @@ path_src_frontend = os.path.dirname(os.path.realpath(__file__))
 path_src = Path(__file__).parents[1]
 path_root = Path(__file__).parents[2]
 
-path_output = os.path.join(path_root, "_out", "frontend")
+path_output = os.path.join(path_root, "_cw_out", "frontend")
 
 # parse args
 parser = argparse.ArgumentParser()
@@ -98,13 +97,16 @@ os.makedirs(path_output)
 # build target
 print("building certwarden-frontend ...")
 
+# necessary because subprocess.run "npm" in PowerShell doesn't work properly
+npm_cmd = shutil.which("npm")
+
 # build binary
-# result = subprocess.run(["npm", "ci"], cwd=path_src_frontend)
+# result = subprocess.run([npm_cmd, "ci"], cwd=path_src_frontend)
 # if result.returncode != 0:
 #   print(f"build certwarden-frontend npm ci failed")
 #   exit(-2)
 
-result = subprocess.run(["npm", "run", "build"], cwd=path_src_frontend)
+result = subprocess.run([npm_cmd, "run", "build"], cwd=path_src_frontend)
 if result.returncode != 0:
   print(f"build certwarden-frontend failed")
   exit(-2)
