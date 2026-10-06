@@ -25,3 +25,9 @@ dist-ssr
 
 # environment
 *.env
+
+# build output
+/_out
+
+# python cacje
+/__pycache__
