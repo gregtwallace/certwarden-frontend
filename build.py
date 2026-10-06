@@ -71,9 +71,9 @@ def build(git_required):
   version_string = get_frontend_version()
 
   # try to get hash
-  gitHead = get_commit()
-  if gitHead != "":
-    version_string += "_(" + gitHead[:7] + ")"
+  git_head = get_commit()
+  if git_head != "":
+    version_string += "_(" + git_head[:7] + ")"
   else:
     print("failed to get git hash")
     if git_required:
@@ -111,9 +111,9 @@ def build(git_required):
   shutil.move(os.path.join(PATH_SRC, "dist"), os.path.join(path_output, "frontend_build"))
 
   # write HEAD
-  if gitHead:
+  if git_head:
     with open(os.path.join(path_output, "HEAD-frontend"), "a") as f:
-      f.write(gitHead)
+      f.write(git_head)
 
 ##
 ### Main Script
