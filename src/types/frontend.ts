@@ -98,7 +98,7 @@ const _providerFormState = z.object({
       }),
     })
     .optional(),
-  getError: z.union([frontendError, z.undefined()]),
+  getError: frontendError.optional(), // used for editing a provider, not used in adding one
   provider_type_value: z.string(),
   provider_options: z.union([z.record(z.string(), z.unknown()), z.undefined()]),
   dataToSubmit: z.object({
