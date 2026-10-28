@@ -37,7 +37,7 @@ const storedAuthorization = z.object({
   access_token: z.string().min(1),
   access_token_exp: z.number(),
   session_exp: z.number().min(Date.now() / 1000, {
-    message: 'session expired',
+    error: 'session expired',
   }),
 });
 
@@ -51,10 +51,10 @@ export const parseStoredAuthorizationType = (
 // newAuthorization is used to check against backend's returned authorization
 const newAuthorization = storedAuthorization.extend({
   access_token_exp: z.number().min(Date.now() / 1000, {
-    message: 'access token expired (host or client time clock issue?)',
+    error: 'access token expired (host or client time clock issue?)',
   }),
   session_exp: z.number().min(Date.now() / 1000, {
-    message: 'session expired (host or client time clock issue?)',
+    error: 'session expired (host or client time clock issue?)',
   }),
 });
 
@@ -292,7 +292,7 @@ const oneAcmeServerResponse = basicGoodResponse.extend({
     directory_url: z.string(),
     is_staging: z.boolean(),
     external_account_required: z.boolean(),
-    raw_directory_response: z.null().or(z.object({}).passthrough()),
+    raw_directory_response: z.null().or(z.looseObject({})),
     created_at: z.number(),
     updated_at: z.number(),
   }),
