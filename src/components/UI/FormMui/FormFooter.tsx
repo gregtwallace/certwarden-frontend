@@ -23,7 +23,7 @@ const FooterInfo: FC<propTypesInfo> = (props) => {
 
 // prop types
 type propTypesFooter = {
-  lastAccess?: number;
+  lastAccess?: number | null;
   createdAt?: number;
   updatedAt?: number;
 
@@ -50,7 +50,7 @@ const FormFooter: FC<propTypesFooter> = (props) => {
       <Box sx={{ flexGrow: 1 }}>
         {lastAccess !== undefined && (
           <FooterInfo>
-            Last API Access: <DateWithTooltip unixTime={lastAccess} />
+            Last API Access: <DateWithTooltip unixTime={lastAccess} altMessage='Never' />
           </FooterInfo>
         )}
 

@@ -1,0 +1,34 @@
+name: typescript type check
+
+on:
+  workflow_dispatch:
+  push:
+
+env:
+  GITHUB_REF: ${{ github.ref }}
+
+permissions:
+  contents: read
+
+jobs:
+  run-typecheck:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v6
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ env.GITHUB_REF }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.node-version'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Typescript type check it
+        run: npm run typecheck

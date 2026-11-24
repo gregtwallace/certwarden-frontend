@@ -218,7 +218,7 @@ const BackupOnDisk: FC = () => {
                     <TableCell>{(file.size / 1000000).toFixed(2)} MB</TableCell>
                     <TableCell>
                       {file.created_at ? (
-                        <DateWithTooltip unixTime={file.created_at} />
+                        <DateWithTooltip unixTime={file.created_at} altMessage='Unknown' />
                       ) : (
                         <DateWithTooltip unixTime={file.modtime} />
                       )}

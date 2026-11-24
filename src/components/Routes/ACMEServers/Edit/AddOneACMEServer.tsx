@@ -1,4 +1,4 @@
-import { type FC, type FormEventHandler } from 'react';
+import { type FC, type SubmitEventHandler } from 'react';
 import {
   type oneAcmeServerResponseType,
   parseOneAcmeServerResponseType,
@@ -60,7 +60,7 @@ const AddOneACMEServer: FC = () => {
   const inputChangeHandler = inputHandlerFuncMaker(setFormState);
 
   // form submission handler
-  const submitFormHandler: FormEventHandler = (event) => {
+  const submitFormHandler: SubmitEventHandler = (event) => {
     event.preventDefault();
 
     // form validation
@@ -89,7 +89,7 @@ const AddOneACMEServer: FC = () => {
       'POST',
       NEW_ACME_SERVER_URL,
       formState.dataToSubmit,
-      parseOneAcmeServerResponseType
+      parseOneAcmeServerResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate(`/acmeservers/${responseData.acme_server.id.toString()}`);

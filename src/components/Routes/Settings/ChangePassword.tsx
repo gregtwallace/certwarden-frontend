@@ -1,4 +1,4 @@
-import { type FC, type FormEventHandler } from 'react';
+import { type FC, type SubmitEventHandler } from 'react';
 import {
   type frontendErrorType,
   type validationErrorsType,
@@ -56,7 +56,7 @@ const ChangePassword: FC = () => {
   const inputChangeHandler = inputHandlerFuncMaker(setFormState);
 
   // form submission handler
-  const submitFormHandler: FormEventHandler = (event) => {
+  const submitFormHandler: SubmitEventHandler = (event) => {
     event.preventDefault();
 
     // form validation
@@ -93,7 +93,7 @@ const ChangePassword: FC = () => {
       'PUT',
       CHANGE_PASSWORD_URL,
       formState.dataToSubmit,
-      parseChangePasswordResponse
+      parseChangePasswordResponse,
     ).then(({ responseData, error }) => {
       // clear form and set success or error
       setFormState({
@@ -145,7 +145,9 @@ const ChangePassword: FC = () => {
         {formState.sendSuccess && <ApiSuccess>Password changed.</ApiSuccess>}
 
         <FormFooter
-          resetOnClick={() => {setFormState(blankFormState)}}
+          resetOnClick={() => {
+            setFormState(blankFormState);
+          }}
           disabledAllButtons={axiosSendState.isSending}
         />
       </Form>

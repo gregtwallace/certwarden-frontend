@@ -119,10 +119,10 @@ const Dashboard: FC = () => {
                     {order.certificate.api_key_via_url && <FlagLegacyAPI />}
                   </TableCell>
                   <TableCell>
-                    <DateWithTooltip unixTime={order.certificate.last_access} />
+                    <DateWithTooltip unixTime={order.certificate.last_access} altMessage='Never' />
                   </TableCell>
                   <TableCell>
-                    <DateWithTooltip unixTime={order.valid_to} />{' '}
+                    <DateWithTooltip unixTime={order.valid_to} altMessage='Error!'/>{' '}
                     <FlagExpireDays order={order} />
                   </TableCell>
                 </TableRow>

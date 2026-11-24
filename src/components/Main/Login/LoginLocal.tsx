@@ -1,4 +1,4 @@
-import { type FC, type FormEventHandler } from 'react';
+import { type FC, type SubmitEventHandler } from 'react';
 import {
   type authorizationResponseType,
   parseAuthorizationResponseType,
@@ -52,7 +52,7 @@ const LoginLocal: FC = () => {
   const inputChangeHandler = inputHandlerFuncMaker(setFormState);
 
   // submit login form
-  const submitFormHandler: FormEventHandler = (event) => {
+  const submitFormHandler: SubmitEventHandler = (event) => {
     event.preventDefault();
 
     // form validation
@@ -81,7 +81,7 @@ const LoginLocal: FC = () => {
       'POST',
       LOGIN_URL,
       formState.dataToSubmit,
-      parseAuthorizationResponseType
+      parseAuthorizationResponseType,
     ).then(({ responseData, error }) => {
       // set auth if success
       if (responseData) {

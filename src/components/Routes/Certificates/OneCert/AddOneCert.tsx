@@ -1,4 +1,4 @@
-import { type FC, type FormEventHandler } from 'react';
+import { type FC, type SubmitEventHandler } from 'react';
 import {
   type certificateOptionsResponseType,
   parseCertificateOptionsResponse,
@@ -23,6 +23,7 @@ import useAxiosSend from '../../../../hooks/useAxiosSend';
 import { inputHandlerFuncMaker } from '../../../../helpers/input-handler';
 import {
   isDomainValid,
+  isDomainAndPortValid,
   isEnvironmentParamValid,
   isHexStringValid,
   isNameValid,
@@ -62,7 +63,7 @@ type privateKeyType = {
 };
 
 const buildCustomPrivateKeyOptions = (
-  availableKeys: privateKeyType[]
+  availableKeys: privateKeyType[],
 ): selectInputOption<number>[] => {
   // make generate option
   const keyOptions: selectInputOption<number>[] = [
@@ -88,7 +89,7 @@ const buildCustomPrivateKeyOptions = (
           value: undefined,
         },
       ],
-    }))
+    })),
   );
 };
 
@@ -126,7 +127,7 @@ const AddOneCert: FC = () => {
   // fetch new cert options
   const { getState } = useAxiosGet<certificateOptionsResponseType>(
     CERTIFICATE_OPTIONS_URL,
-    parseCertificateOptionsResponse
+    parseCertificateOptionsResponse,
   );
 
   const { axiosSendState, apiCall } = useAxiosSend();
@@ -161,7 +162,7 @@ const AddOneCert: FC = () => {
       sendError: undefined,
       validationErrors: {},
     }),
-    [getState]
+    [getState],
   );
   const [formState, setFormState] = useState(makeBlankForm());
 
@@ -174,7 +175,7 @@ const AddOneCert: FC = () => {
   const inputChangeHandler = inputHandlerFuncMaker(setFormState);
 
   // form submission handler
-  const submitFormHandler: FormEventHandler = (event) => {
+  const submitFormHandler: SubmitEventHandler = (event) => {
     event.preventDefault();
 
     // form validation
@@ -218,7 +219,9 @@ const AddOneCert: FC = () => {
     // post process client address
     if (
       formState.dataToSubmit.post_processing_client_address !== '' &&
-      !isDomainValid(formState.dataToSubmit.post_processing_client_address)
+      !isDomainAndPortValid(
+        formState.dataToSubmit.post_processing_client_address,
+      )
     ) {
       validationErrors['dataToSubmit.post_processing_client_address'] = true;
     }
@@ -232,7 +235,7 @@ const AddOneCert: FC = () => {
             `dataToSubmit.post_processing_environment.${index.toString()}`
           ] = true;
         }
-      }
+      },
     );
 
     // Profiles (if not null)
@@ -292,7 +295,7 @@ const AddOneCert: FC = () => {
       'POST',
       NEW_CERTIFICATE_URL,
       formState.dataToSubmit,
-      parseOneCertificateResponseType
+      parseOneCertificateResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate(`/certificates/${responseData.certificate.id.toString()}`);
@@ -381,7 +384,7 @@ const AddOneCert: FC = () => {
             value={formState.dataToSubmit.private_key_id}
             onChange={inputChangeHandler}
             options={buildCustomPrivateKeyOptions(
-              formState.getResponseData.certificate_options.private_keys
+              formState.getResponseData.certificate_options.private_keys,
             )}
             error={formState.validationErrors['dataToSubmit.private_key_id']}
           />

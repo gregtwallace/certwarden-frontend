@@ -13,7 +13,7 @@ export const isNameValid = (name: string): boolean => {
   }
 
   // match anything not valid ( A-Z, a-z, 0-9, -_.~ )
-  const regex = /[^-_.~A-z0-9]|[\^]/g;
+  const regex = /[^-_.~A-Za-z0-9]/g;
   if (name.match(regex)) {
     return false;
   }
@@ -39,6 +39,45 @@ export const isDomainValid = (
   const regex =
     /^(([A-Za-z0-9][A-Za-z0-9-]{0,61}\.)*([A-Za-z0-9][A-Za-z0-9-]{0,61}\.)[A-Za-z][A-Za-z0-9-]{0,61}[A-Za-z0-9])$/;
   if (regex.exec(domain)) {
+    return true;
+  }
+
+  return false;
+};
+
+// isDomainAndPortValid validates if the string is a valid fqdn, with an optional colon followed
+// by a port number
+export const isDomainAndPortValid = (domain: string): boolean => {
+  // split on colon
+  const splitDomain = domain.split(':');
+
+  // bad split, no domain
+  if (splitDomain[0] === undefined) {
+    return false;
+  }
+  // bad split, too many pieces
+  if (splitDomain.length > 2) {
+    return false;
+  }
+
+  // port?
+  if (splitDomain.length === 2) {
+    // shouldn't ever happen
+    if (splitDomain[1] === undefined) {
+      return false;
+    }
+
+    // validate port
+    const portNumb = parseInt(splitDomain[1]);
+    if (portNumb < 0 || portNumb > 65535) {
+      return false;
+    }
+  }
+
+  // valid domain regex
+  const regex =
+    /^(([A-Za-z0-9][A-Za-z0-9-]{0,61}\.)*([A-Za-z0-9][A-Za-z0-9-]{0,61}\.)[A-Za-z][A-Za-z0-9-]{0,61}[A-Za-z0-9])$/;
+  if (regex.exec(splitDomain[0])) {
     return true;
   }
 

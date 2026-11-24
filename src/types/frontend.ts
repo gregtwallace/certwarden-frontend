@@ -40,7 +40,7 @@ const providerDns01AcmeDnsConfig = z.object({
       full_domain: z.string(),
       username: z.string(),
       password: z.string(),
-    })
+    }),
   ),
 });
 
@@ -70,6 +70,9 @@ const providerDns01GoAcme = z.object({
   environment: z.array(z.string()),
 });
 
+// dns persist 01: manual
+const providerDnsPersist01Manual = z.object({});
+
 const providerConfig = z.union([
   providerHttp01InternalConfig,
   providerDns01ManualConfig,
@@ -77,6 +80,7 @@ const providerConfig = z.union([
   providerDns01AcmeShConfig,
   providerDns01CloudflareConfig,
   providerDns01GoAcme,
+  providerDnsPersist01Manual,
 ]);
 
 export type providerConfigType = z.infer<typeof providerConfig>;
@@ -94,7 +98,7 @@ const _providerFormState = z.object({
       }),
     })
     .optional(),
-  getError: z.union([frontendError, z.undefined()]),
+  getError: frontendError.optional(), // used for editing a provider, not used in adding one
   provider_type_value: z.string(),
   provider_options: z.union([z.record(z.string(), z.unknown()), z.undefined()]),
   dataToSubmit: z.object({

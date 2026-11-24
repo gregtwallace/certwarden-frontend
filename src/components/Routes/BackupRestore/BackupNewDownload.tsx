@@ -1,4 +1,4 @@
-import { type FC, type FormEventHandler } from 'react';
+import { type FC, type SubmitEventHandler } from 'react';
 import {
   type frontendErrorType,
   type validationErrorsType,
@@ -48,7 +48,7 @@ const BackupNewDownload: FC = () => {
   const inputChangeHandler = inputHandlerFuncMaker(setFormState);
 
   // download a backup of current state
-  const downloadNewBackupHandler: FormEventHandler = (event) => {
+  const downloadNewBackupHandler: SubmitEventHandler = (event) => {
     event.preventDefault();
 
     // no validation needed
@@ -57,7 +57,7 @@ const BackupNewDownload: FC = () => {
       BACKUP_NEW_DOWNLOAD_URL +
         `?withondiskbackups=${
           formState.query.with_on_disk_backups ? 'true' : 'false'
-        }`
+        }`,
     ).then(({ error }) => {
       setFormState((prevState) => ({
         ...prevState,

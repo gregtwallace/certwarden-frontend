@@ -1,4 +1,4 @@
-import { type FC, type FormEventHandler } from 'react';
+import { type FC, type SubmitEventHandler } from 'react';
 import {
   type objectWithApiKeysType,
   parseObjectWithApiKeysResponse,
@@ -50,7 +50,7 @@ const EditAPIKeysPage: FC<propTypes> = (props) => {
 
   const { getState } = useAxiosGet<objectWithApiKeysType>(
     `/v1/${objectType}/${id}`,
-    parseObjectWithApiKeysResponse
+    parseObjectWithApiKeysResponse,
   );
 
   const { axiosSendState, apiCall } = useAxiosSend();
@@ -60,7 +60,7 @@ const EditAPIKeysPage: FC<propTypes> = (props) => {
   const initialForm = useCallback(
     (
       responseData: objectWithApiKeysType | undefined,
-      error: frontendErrorType | undefined
+      error: frontendErrorType | undefined,
     ) => ({
       getResponseData: responseData,
       getError: error,
@@ -71,10 +71,10 @@ const EditAPIKeysPage: FC<propTypes> = (props) => {
       sendError: undefined,
       validationErrors: {},
     }),
-    []
+    [],
   );
   const [formState, setFormState] = useState<formObj>(
-    initialForm(undefined, undefined)
+    initialForm(undefined, undefined),
   );
 
   // set initial form after api loads
@@ -86,7 +86,7 @@ const EditAPIKeysPage: FC<propTypes> = (props) => {
   const inputChangeHandler = inputHandlerFuncMaker(setFormState);
 
   // form submission handler
-  const submitFormHandler: FormEventHandler = (event) => {
+  const submitFormHandler: SubmitEventHandler = (event) => {
     event.preventDefault();
 
     // client side validation
@@ -117,7 +117,7 @@ const EditAPIKeysPage: FC<propTypes> = (props) => {
       'PUT',
       `/v1/${objectType}/${id}`,
       formState.dataToSubmit,
-      parseObjectWithApiKeysResponse
+      parseObjectWithApiKeysResponse,
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate(`/${objectType}/${id}`);
@@ -211,7 +211,7 @@ const EditAPIKeysPage: FC<propTypes> = (props) => {
             cancelHref={`/${objectType}/${id}`}
             resetOnClick={() => {
               setFormState((prevState) =>
-                initialForm(prevState.getResponseData, prevState.getError)
+                initialForm(prevState.getResponseData, prevState.getError),
               );
             }}
             disabledAllButtons={axiosSendState.isSending}
@@ -219,7 +219,7 @@ const EditAPIKeysPage: FC<propTypes> = (props) => {
               JSON.stringify(formState.dataToSubmit) ===
               JSON.stringify(
                 initialForm(formState.getResponseData, formState.getError)
-                  .dataToSubmit
+                  .dataToSubmit,
               )
             }
           />

@@ -22,7 +22,7 @@ const ViewOneProvider: FC<propTypes> = (props) => {
   const waitTime =
     provider.post_resource_provision_wait < 60
       ? provider.post_resource_provision_wait.toString() + ' seconds'
-      : (provider.post_resource_provision_wait / 60).toFixed(1).toString() + ' minutes';
+      : (provider.post_resource_provision_wait / 60).toFixed(1) + ' minutes';
 
   return (
     <GridItemContainer

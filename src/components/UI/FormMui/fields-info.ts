@@ -161,7 +161,7 @@ const fieldsInfo: fieldInfoType[] = [
   {
     nameRegex: /^(.+\.)?post_processing_client_address$/,
     htmlType: 'text',
-    errorMessage: 'If specified, address must be a valid domain name.',
+    errorMessage: 'If specified, address must be a valid domain name or domain:port.',
   },
   {
     nameRegex: /^(.+\.)?post_processing_client_key$/,

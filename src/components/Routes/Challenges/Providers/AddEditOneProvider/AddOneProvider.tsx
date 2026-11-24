@@ -1,4 +1,4 @@
-import { type FC, type FormEventHandler } from 'react';
+import { type FC, type SubmitEventHandler } from 'react';
 import {
   type providerResponseType,
   parseProviderResponseType,
@@ -48,7 +48,7 @@ const AddOneProvider: FC = () => {
   const inputChangeHandler = inputHandlerFuncMaker(setFormState);
 
   // form submission handler
-  const submitFormHandler: FormEventHandler = (event) => {
+  const submitFormHandler: SubmitEventHandler = (event) => {
     event.preventDefault();
 
     // form provider type specific validation
@@ -88,7 +88,7 @@ const AddOneProvider: FC = () => {
         ...formState.dataToSubmit,
         [provider.configName]: formState.configToSubmit,
       },
-      parseProviderResponseType
+      parseProviderResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate('/challenges/providers');
@@ -141,7 +141,11 @@ const AddOneProvider: FC = () => {
               label='Post Provision Wait (Seconds)'
               value={formState.dataToSubmit.post_resource_provision_wait}
               onChange={inputChangeHandler}
-              error={formState.validationErrors['dataToSubmit.post_resource_provision_wait']}
+              error={
+                formState.validationErrors[
+                  'dataToSubmit.post_resource_provision_wait'
+                ]
+              }
             />
 
             <provider.FormComponent

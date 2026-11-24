@@ -4,10 +4,21 @@ import { type orderType } from '../../../types/api';
 import { useTheme } from '@mui/material';
 
 import { Box, Tooltip, Typography } from '@mui/material';
-import { daysUntil, secsUntil } from '../../../helpers/time';
+
+import { dateToStandardizedString } from '../../../helpers/time';
 
 // NOTE: Does NOT use common Flag component, since the styling is significantly
 // different than other flags.
+
+// function to return number of seconds until the specified time
+const secsUntil = (unixTime: number): number => {
+  return unixTime - Math.floor(Date.now() / 1000);
+};
+
+// function to return number of days until the specified time
+const daysUntil = (unixTime: number): number => {
+  return Math.floor(secsUntil(unixTime) / (3600 * 24));
+};
 
 // prop types
 type propTypes = {
@@ -24,7 +35,7 @@ const FlagExpireDays: FC<propTypes> = (props) => {
   // if component receives bad values, render an error instead
   if (validTo === null || validFrom === null || ari === null) {
     console.log(
-      'error: expiration flag received null value(s), report this problem'
+      'error: expiration flag received null value(s), report this problem',
     );
     return <>Error!</>;
   }
@@ -52,7 +63,7 @@ const FlagExpireDays: FC<propTypes> = (props) => {
 
   // for tooltip text & bar fill
   const percentValidRemaining = Math.floor(
-    (secsUntil(validTo) / totalDurationSecs) * 100
+    (secsUntil(validTo) / totalDurationSecs) * 100,
   );
 
   // linear gradient background string
@@ -75,16 +86,16 @@ const FlagExpireDays: FC<propTypes> = (props) => {
           <br />
           Renewal Window:
           <br />
-          {ari.suggestedWindow.start.toLocaleString()} to
+          {dateToStandardizedString(ari.suggestedWindow.start, 'both')} to
           <br />
-          {ari.suggestedWindow.end.toLocaleString()}
+          {dateToStandardizedString(ari.suggestedWindow.end, 'both')}
           <br />
           {ari.retryAfter && (
             <>
               <br />
               Next ARI Refresh After:
               <br />
-              {ari.retryAfter.toLocaleString()}
+              {dateToStandardizedString(ari.retryAfter, 'both')}
             </>
           )}
         </>

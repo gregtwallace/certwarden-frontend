@@ -1,4 +1,8 @@
-import { type FC, type FormEventHandler, type MouseEventHandler } from 'react';
+import {
+  type FC,
+  type SubmitEventHandler,
+  type MouseEventHandler,
+} from 'react';
 import {
   type providerResponseType,
   parseProviderResponseType,
@@ -48,7 +52,7 @@ const EditOneProvider: FC = () => {
 
   const { getState } = useAxiosGet<providerResponseType>(
     thisProviderUrl,
-    parseProviderResponseType
+    parseProviderResponseType,
   );
 
   // get provider type
@@ -61,18 +65,19 @@ const EditOneProvider: FC = () => {
       provider_type_value: getState.responseData?.provider.type ?? '',
       provider_options: provider.providerOptionsForEdit
         ? provider.providerOptionsForEdit(
-            getState.responseData?.provider.config
+            getState.responseData?.provider.config,
           )
         : undefined,
       dataToSubmit: {
         domains: getState.responseData?.provider.domains ?? [''],
-        post_resource_provision_wait: getState.responseData?.provider.post_resource_provision_wait ?? 0,
+        post_resource_provision_wait:
+          getState.responseData?.provider.post_resource_provision_wait ?? 0,
       },
       configToSubmit: getState.responseData?.provider.config ?? {},
       sendError: undefined,
       validationErrors: {},
     }),
-    [getState, provider]
+    [getState, provider],
   );
   const [formState, setFormState] =
     useState<providerFormStateType>(makeStartingForm());
@@ -93,7 +98,7 @@ const EditOneProvider: FC = () => {
       'DELETE',
       thisProviderUrl,
       { tag: formState.getResponseData?.provider.tag },
-      parseOneProviderDeleteResponse
+      parseOneProviderDeleteResponse,
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate('/challenges/providers');
@@ -108,7 +113,7 @@ const EditOneProvider: FC = () => {
   };
 
   // form submit
-  const submitFormHandler: FormEventHandler = (event) => {
+  const submitFormHandler: SubmitEventHandler = (event) => {
     event.preventDefault();
 
     // form provider type specific validation
@@ -144,7 +149,7 @@ const EditOneProvider: FC = () => {
         tag: formState.getResponseData?.provider.tag,
         [provider.configName]: formState.configToSubmit,
       },
-      parseProviderResponseType
+      parseProviderResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate('/challenges/providers');
@@ -264,7 +269,11 @@ const EditOneProvider: FC = () => {
               label='Post Provision Wait (Seconds)'
               value={formState.dataToSubmit.post_resource_provision_wait}
               onChange={inputChangeHandler}
-              error={formState.validationErrors['dataToSubmit.post_resource_provision_wait']}
+              error={
+                formState.validationErrors[
+                  'dataToSubmit.post_resource_provision_wait'
+                ]
+              }
             />
 
             <provider.FormComponent

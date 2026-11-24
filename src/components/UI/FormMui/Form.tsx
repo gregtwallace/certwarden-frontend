@@ -1,11 +1,11 @@
-import { type FC, type FormEventHandler, type ReactNode } from 'react';
+import { type FC, type SubmitEventHandler, type ReactNode } from 'react';
 
 import { Box } from '@mui/material';
 
 // prop types
 type propTypes = {
   children: ReactNode;
-  onSubmit: FormEventHandler;
+  onSubmit: SubmitEventHandler;
 };
 
 // component

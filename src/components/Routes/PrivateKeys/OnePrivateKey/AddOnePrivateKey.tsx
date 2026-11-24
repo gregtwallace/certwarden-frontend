@@ -1,4 +1,4 @@
-import { type FC, type FormEventHandler } from 'react';
+import { type FC, type SubmitEventHandler } from 'react';
 import {
   type privateKeyOptionsResponseType,
   parsePrivateKeyOptionsResponseType,
@@ -84,7 +84,7 @@ const AddOnePrivateKey: FC = () => {
   // fetch valid options (for private keys this is the algorithms list)
   const { getState } = useAxiosGet<privateKeyOptionsResponseType>(
     PRIVATE_KEY_OPTIONS_URL,
-    parsePrivateKeyOptionsResponseType
+    parsePrivateKeyOptionsResponseType,
   );
 
   const { axiosSendState, apiCall } = useAxiosSend();
@@ -108,7 +108,7 @@ const AddOnePrivateKey: FC = () => {
   const inputChangeHandler = inputHandlerFuncMaker(setFormState);
 
   // form submission handler
-  const submitFormHandler: FormEventHandler = (event) => {
+  const submitFormHandler: SubmitEventHandler = (event) => {
     event.preventDefault();
 
     // form validation
@@ -150,7 +150,7 @@ const AddOnePrivateKey: FC = () => {
       'POST',
       NEW_PRIVATE_KEY_URL,
       formState.dataToSubmit,
-      parseOnePrivateKeyResponseType
+      parseOnePrivateKeyResponseType,
     ).then(({ responseData, error }) => {
       if (responseData) {
         navigate(`/privatekeys/${responseData.private_key.id.toString()}`);
@@ -246,7 +246,9 @@ const AddOnePrivateKey: FC = () => {
 
           <FormFooter
             cancelHref='/privatekeys'
-            resetOnClick={() => {setFormState(blankForm)}}
+            resetOnClick={() => {
+              setFormState(blankForm);
+            }}
             disabledAllButtons={axiosSendState.isSending}
             disabledResetButton={
               JSON.stringify(formState.dataToSubmit) ===

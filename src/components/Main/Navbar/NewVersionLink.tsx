@@ -23,7 +23,7 @@ const NewVersionLink: FC<propTypes> = (props) => {
   // if update notice is closed, save version to local storage and don't remind
   // until next version
   const [ignoreVersion, setIgnoreVersion] = useState(
-    localStorage.getItem('ignore_update_version')
+    localStorage.getItem('ignore_update_version'),
   );
 
   // close update notice, save to local storage
@@ -36,8 +36,7 @@ const NewVersionLink: FC<propTypes> = (props) => {
 
   return (
     <>
-      {newVersion &&
-        newVersion.available &&
+      {newVersion?.available &&
         newVersion.info &&
         ignoreVersion != newVersion.info.version && (
           <NavLink
