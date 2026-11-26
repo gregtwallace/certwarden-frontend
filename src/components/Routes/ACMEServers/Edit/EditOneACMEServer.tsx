@@ -167,7 +167,7 @@ const EditOneACMEServer: FC = () => {
 
   // text for directory if its null
   let dir_text =
-    'Directory is null. Refresh the page if you just added this service. Otherwise, maybe the ACME service is down?';
+    'Directory is null. Doublecheck the Directory URL. It is also possible the ACME Server is down. Try refreshing this page.';
   if (formState.getResponseData?.acme_server.raw_directory_response !== null) {
     dir_text = JSON.stringify(
       formState.getResponseData?.acme_server.raw_directory_response,
