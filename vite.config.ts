@@ -4,18 +4,16 @@ import react from '@vitejs/plugin-react';
 // https://vite.dev/config/
 export default defineConfig({
   build: {
-    rollupOptions: {
+    rolldownOptions: {
       output: {
-        manualChunks: (id) => {
-          if (id.includes('node_modules')) {
-            // if emotion/sheet
-            if (id.includes('emotion/sheet')) {
-              return 'emotion_sheet';
-            }
-          }
-
-          // return (void)
-          return
+        codeSplitting: {
+          groups: [
+            {
+              name: 'emotion_sheet',
+              test: /node_modules[\\/]@emotion[\\/]sheet/,
+              priority: 20,
+            },
+          ],
         },
       },
     },
